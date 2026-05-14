@@ -10,14 +10,14 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-        body { background-color: #120A1E; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden;}
+        body { background-color: #120A1E; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column;}
         .container { width: 90%; max-width: 400px; padding: 20px; }
         
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
         .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; transition: 0.3s; padding: 10px; border-radius: 15px;}
         .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
         
-        /* Cute Avatars (Pixel Art Style) */
+        /* Cute Avatars */
         .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
         .immu-pic { background-image: url('https://api.dicebear.com/7.x/pixel-art/svg?seed=Immu&backgroundColor=b6e3f4'); border-color: #4ade80; }
         .sappii-pic { background-image: url('https://api.dicebear.com/7.x/pixel-art/svg?seed=Sappii&backgroundColor=ffdfbf'); border-color: #FF4B72; }
@@ -28,12 +28,23 @@
 
         .card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; }
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; }
-        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
+        button:active { transform: scale(0.98); }
         
+        .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; }
+        .reset-btn:hover { background: rgba(255, 75, 114, 0.1); }
+
         .masked-word { font-size: 24px; letter-spacing: 5px; margin: 25px 0; color: #4ade80; font-weight: bold; }
         .audio-btn { background-color: #FF4B72; width: 50px; height: 50px; border-radius: 50%; margin: 10px auto; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 20px; }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
         .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
+
+        /* Modal Popup Styles */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
+        .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(255, 75, 114, 0.2);}
+        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-btn-group button { margin-top: 0; }
+        .btn-cancel { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 15px; padding: 10px;}
     </style>
 </head>
 <body>
@@ -57,8 +68,21 @@
         </div>
     </div>
 
-    <div id="gameContent">
+    <div id="gameContent"></div>
+
+    <button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
+</div>
+
+<div id="resetModal" class="modal hidden">
+    <div class="modal-content">
+        <h3 style="margin-top: 0; color: #fff;">Who will start?</h3>
+        <p style="font-size: 13px; color: #aaa;">Scores will become 0. Choose who will set the first movie!</p>
+        <div class="modal-btn-group">
+            <button onclick="confirmReset('immu')" style="background: #4ade80; color: #120A1E;">Immu 👦</button>
+            <button onclick="confirmReset('sappii')">Sappii 👧</button>
         </div>
+        <button class="btn-cancel" onclick="closeResetModal()">Cancel</button>
+    </div>
 </div>
 
 <script>
@@ -77,62 +101,67 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Identify current user from URL (?u=immu or ?u=sappii)
     const urlParams = new URLSearchParams(window.location.search);
-    const myName = urlParams.get('u') || "immu"; // default to immu
+    const myName = (urlParams.get('u') || "immu").toLowerCase(); 
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let gameState = {};
 
     db.ref('gameState').on('value', (snapshot) => {
-        gameState = snapshot.val() || { turn: "immu", status: "set", score1: 0, score2: 0 };
+        const data = snapshot.val() || {};
+        
+        gameState = {
+            turn: data.turn || "immu",
+            status: data.status || "set",
+            score1: data.score1 || 0,
+            score2: data.score2 || 0,
+            movie: data.movie || "",
+            hint: data.hint || ""
+        };
         renderUI();
     });
 
     function renderUI() {
         const container = document.getElementById('gameContent');
         
-        // Update Scores
-        document.getElementById('immuScore').innerText = gameState.score1 || 0;
-        document.getElementById('sappiiScore').innerText = gameState.score2 || 0;
+        document.getElementById('immuScore').innerText = gameState.score1;
+        document.getElementById('sappiiScore').innerText = gameState.score2;
 
-        // Update Turn Indicators
         document.getElementById('box-immu').classList.toggle('active-turn', gameState.turn === 'immu');
         document.getElementById('box-sappii').classList.toggle('active-turn', gameState.turn === 'sappii');
         document.getElementById('turn-immu').classList.toggle('hidden', gameState.turn !== 'immu');
         document.getElementById('turn-sappii').classList.toggle('hidden', gameState.turn !== 'sappii');
 
+        const displayTurnName = gameState.turn === "immu" ? "Immu" : "Sappii";
+        const displayPartnerName = partnerName === "immu" ? "Immu" : "Sappii";
+
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
-                // MY TURN TO SET
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
-                        <p style="font-size: 12px; color: #aaa;">Enter a movie for ${partnerName} to guess!</p>
+                        <p style="font-size: 12px; color: #aaa;">Enter a movie for ${displayPartnerName} to guess!</p>
                         <input type="text" id="movieInput" placeholder="Movie Name">
                         <input type="text" id="hintInput" placeholder="Add a hint">
                         <button onclick="setMovie()">Start Game 🚀</button>
                     </div>`;
             } else {
-                // WAITING FOR PARTNER
                 container.innerHTML = `
                     <div class="card">
                         <h3>⏳ Waiting...</h3>
-                        <p>${gameState.turn} is choosing a movie for you!</p>
+                        <p>${displayTurnName} is choosing a movie for you!</p>
                         <div style="margin: 20px 0;">🎬 🍿 🎬</div>
                     </div>`;
             }
         } else if (gameState.status === "guessing") {
             if (gameState.turn === myName) {
-                // I SET THE MOVIE, NOW WAITING FOR PARTNER TO GUESS
                 container.innerHTML = `
                     <div class="card">
                         <h3>🍿 Guessing...</h3>
-                        <p>${partnerName} is trying to guess your movie!</p>
+                        <p>${displayPartnerName} is trying to guess your movie!</p>
                         <div class="masked-word">${maskMovie(gameState.movie)}</div>
                     </div>`;
             } else {
-                // MY TURN TO GUESS
                 container.innerHTML = `
                     <div class="card">
                         <h3>🤔 What's the Movie?</h3>
@@ -160,22 +189,43 @@
         const g = document.getElementById('guessInput').value.toUpperCase().trim();
         if (g === gameState.movie.toUpperCase()) {
             alert("Correct! 🎉 Turn switching...");
-            // Update Score for the guesser
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1);
             
-            // SWITCH TURN and Reset to 'set' status
             db.ref('gameState').update({ 
-                turn: myName, // The person who just guessed correctly gets to SET the next movie
+                turn: myName, // Switch turn to the person who just guessed correctly
                 status: "set", 
-                movie: "" 
+                movie: "",
+                hint: ""
             });
         } else {
             document.getElementById('feedback').innerText = "Wrong! Try again 🥺";
         }
     }
 
+    // Modal Functions
+    function openResetModal() {
+        document.getElementById('resetModal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+        document.getElementById('resetModal').classList.add('hidden');
+    }
+
+    function confirmReset(starter) {
+        db.ref('gameState').set({
+            turn: starter, // Immu or Sappii based on button clicked
+            status: "set",
+            score1: 0,
+            score2: 0,
+            movie: "",
+            hint: ""
+        });
+        closeResetModal();
+    }
+
     function maskMovie(movie) {
+        if(!movie) return "";
         return movie.split(' ').map(word => {
             if (word.length <= 2) return word;
             return word[0] + ' _ '.repeat(word.length - 2) + word[word.length - 1];
