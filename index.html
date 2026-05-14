@@ -16,293 +16,506 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
 
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
 }
 
 body{
+
     background:#120A1E;
     color:white;
     font-family:'Poppins','Latha',sans-serif;
+
     display:flex;
     justify-content:center;
-    align-items:flex-start;
+
     min-height:100vh;
-    margin:0;
-    padding:12px 0;
+
     overflow-x:hidden;
+
+    padding:12px 0;
+
 }
 
 .container{
+
     width:92%;
-    max-width:390px;
+    max-width:380px;
+
 }
 
+/* TOP */
+
 .vs-container{
+
     display:flex;
     justify-content:space-around;
     align-items:center;
-    margin-bottom:18px;
+
+    margin-bottom:16px;
+
 }
 
 .player-box{
+
     text-align:center;
+
 }
 
 .avatar{
-    width:62px;
-    height:62px;
+
+    width:58px;
+    height:58px;
+
     border-radius:50%;
+
     background-size:cover;
     background-position:center;
+
     border:3px solid #FF4B72;
+
 }
 
 .immu-pic{
+
     background-image:url('1000242624.jpg');
+
 }
 
 .sappii-pic{
+
     background-image:url('1000242625.jpg');
+
 }
 
 .player-name{
-    margin-top:6px;
-    font-size:13px;
+
+    margin-top:5px;
+
+    font-size:12px;
     font-weight:600;
+
 }
 
 .score-val{
-    font-size:32px;
+
+    font-size:28px;
     font-weight:bold;
+
     color:#FF4B72;
+
 }
 
 .vs-badge{
-    background:#3A2359;
-    width:42px;
-    height:42px;
+
+    width:38px;
+    height:38px;
+
     border-radius:50%;
+
+    background:#3A2359;
+
     display:flex;
     justify-content:center;
     align-items:center;
-    color:#ccc;
-    font-size:12px;
+
+    font-size:11px;
+    color:#bbb;
+
 }
 
-.card{
-    background:#1D102E;
-    border-radius:28px;
-    padding:22px;
-    box-shadow:0 0 30px rgba(255,75,114,0.12);
-    margin-bottom:18px;
-}
-
-.card h2{
-    margin-top:0;
-    font-size:20px;
-    text-align:center;
-}
-
-input{
-    width:100%;
-    padding:15px;
-    border-radius:16px;
-    border:1px solid #3A2359;
-    background:#120A1E;
-    color:white;
-    font-size:15px;
-    margin-top:12px;
-    outline:none;
-}
-
-input::placeholder{
-    color:#777;
-}
-
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(135deg,#FF4B72,#FF7694);
-    color:white;
-    font-size:17px;
-    font-weight:600;
-    margin-top:16px;
-    cursor:pointer;
-}
-
-.give-up-btn{
-    background:transparent;
-    border:1px solid #666;
-    color:#ccc;
-}
-
-.masked-word{
-    font-size:32px;
-    color:#4ade80;
-    text-align:center;
-    margin:18px 0 12px;
-    font-weight:bold;
-    line-height:1.5;
-    word-break:break-word;
-}
-
-.letter-count{
-    text-align:center;
-    color:#aaa;
-    margin-bottom:10px;
-    font-size:13px;
-}
-
-.preview{
-    color:#4ade80;
-    font-size:24px;
-    text-align:center;
-    margin-top:12px;
-    font-weight:bold;
-    min-height:34px;
-    word-break:break-word;
-}
-
-.chat-container{
-    height:135px;
-    overflow-y:auto;
-    background:#120A1E;
-    border-radius:14px;
-    padding:10px;
-    margin-bottom:10px;
-}
-
-.chat-msg{
-    padding:9px 12px;
-    border-radius:12px;
-    margin-bottom:7px;
-    font-size:12px;
-    line-height:1.4;
-    word-break:break-word;
-}
-
-.msg-mine{
-    background:#FF4B72;
-    text-align:right;
-}
-
-.msg-partner{
-    background:#2D1A45;
-}
-
-.chat-input-row{
-    display:flex;
-    gap:8px;
-}
-
-.chat-input-row input{
-    margin-top:0;
-    padding:12px;
-}
-
-.chat-input-row button{
-    width:auto;
-    padding:12px 15px;
-    margin-top:0;
-    font-size:14px;
-}
+/* EMOJI */
 
 .emoji-bar{
+
     display:flex;
     justify-content:space-evenly;
-    margin-bottom:18px;
+
+    margin-bottom:16px;
+
 }
 
 .emoji-btn{
-    width:54px;
-    height:54px;
+
+    width:52px;
+    height:52px;
+
     border-radius:50%;
+
     border:1px solid #FF4B72;
+
     background:#1D102E;
+
+    font-size:23px;
+
     color:white;
-    font-size:24px;
-    margin-top:0;
-    padding:0;
+
+    cursor:pointer;
+
 }
 
+/* CARD */
+
+.card{
+
+    background:#1D102E;
+
+    border-radius:26px;
+
+    padding:22px;
+
+    margin-bottom:18px;
+
+    box-shadow:
+    0 0 25px rgba(255,75,114,0.10);
+
+}
+
+.card h2{
+
+    text-align:center;
+
+    font-size:18px;
+
+    margin-bottom:18px;
+
+}
+
+/* MASK */
+
+.masked-word{
+
+    text-align:center;
+
+    color:#4ade80;
+
+    font-size:30px;
+    font-weight:bold;
+
+    margin-bottom:14px;
+
+    line-height:1.5;
+
+    word-break:break-word;
+
+}
+
+.letter-count{
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#999;
+
+    margin-bottom:10px;
+
+}
+
+/* INPUT */
+
+input{
+
+    width:100%;
+
+    background:#120A1E;
+
+    border:1px solid #3A2359;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+    margin-top:12px;
+
+}
+
+input::placeholder{
+
+    color:#777;
+
+}
+
+/* BUTTON */
+
+button{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:16px;
+
+    padding:15px;
+
+    font-size:16px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    margin-top:14px;
+
+    color:white;
+
+    background:
+    linear-gradient(
+    135deg,
+    #FF4B72,
+    #FF7694
+    );
+
+}
+
+.give-up-btn{
+
+    background:transparent;
+
+    border:1px solid #777;
+
+    color:#ccc;
+
+}
+
+/* PREVIEW */
+
+.preview{
+
+    color:#4ade80;
+
+    text-align:center;
+
+    font-size:24px;
+    font-weight:bold;
+
+    min-height:34px;
+
+    margin-top:10px;
+
+    word-break:break-word;
+
+}
+
+/* CHAT */
+
+.chat-container{
+
+    background:#120A1E;
+
+    border-radius:14px;
+
+    padding:10px;
+
+    height:130px;
+
+    overflow-y:auto;
+
+    margin-bottom:10px;
+
+}
+
+.chat-msg{
+
+    padding:9px 12px;
+
+    border-radius:12px;
+
+    margin-bottom:8px;
+
+    font-size:12px;
+
+    word-break:break-word;
+
+    line-height:1.4;
+
+}
+
+.msg-mine{
+
+    background:#FF4B72;
+
+    text-align:right;
+
+}
+
+.msg-partner{
+
+    background:#2D1A45;
+
+}
+
+.chat-input-row{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.chat-input-row input{
+
+    margin-top:0;
+
+}
+
+.chat-input-row button{
+
+    width:auto;
+
+    padding:12px 15px;
+
+    margin-top:0;
+
+    font-size:14px;
+
+}
+
+/* FLOAT EMOJI */
+
 .floating-emoji{
+
     position:fixed;
-    bottom:80px;
-    font-size:34px;
-    animation:floatUp 2.5s ease-out forwards;
-    z-index:9999;
+
+    bottom:70px;
+
+    font-size:32px;
+
     pointer-events:none;
+
+    z-index:9999;
+
+    animation:floatUp 2.5s ease-out forwards;
+
 }
 
 @keyframes floatUp{
 
     0%{
-        transform:translateY(0) scale(1);
+
+        transform:
+        translateY(0)
+        scale(1);
+
         opacity:1;
+
     }
 
     100%{
-        transform:translateY(-220px) scale(1.5);
+
+        transform:
+        translateY(-220px)
+        scale(1.6);
+
         opacity:0;
+
     }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
+<!-- TOP -->
+
 <div class="vs-container">
 
 <div class="player-box">
+
 <div class="avatar immu-pic"></div>
-<div class="player-name">immu</div>
-<div id="immuScore" class="score-val">0</div>
+
+<div class="player-name">
+immu
 </div>
 
-<div class="vs-badge">VS</div>
+<div id="immuScore"
+class="score-val">
+0
+</div>
+
+</div>
+
+<div class="vs-badge">
+VS
+</div>
 
 <div class="player-box">
+
 <div class="avatar sappii-pic"></div>
-<div class="player-name">sappii</div>
-<div id="sappiiScore" class="score-val">0</div>
+
+<div class="player-name">
+sappii
+</div>
+
+<div id="sappiiScore"
+class="score-val">
+0
 </div>
 
 </div>
+
+</div>
+
+<!-- EMOJI -->
 
 <div class="emoji-bar">
 
-<button class="emoji-btn" onclick="sendReaction('❤️')">❤️</button>
+<button class="emoji-btn"
+onclick="sendReaction('❤️')">
+❤️
+</button>
 
-<button class="emoji-btn" onclick="sendReaction('😂')">😂</button>
+<button class="emoji-btn"
+onclick="sendReaction('😂')">
+😂
+</button>
 
-<button class="emoji-btn" onclick="sendReaction('🥺')">🥺</button>
+<button class="emoji-btn"
+onclick="sendReaction('🥺')">
+🥺
+</button>
 
-<button class="emoji-btn" onclick="sendReaction('🔥')">🔥</button>
+<button class="emoji-btn"
+onclick="sendReaction('🔥')">
+🔥
+</button>
 
 </div>
 
 <div id="gameContent"></div>
 
+<!-- CHAT -->
+
 <div class="card">
 
-<h3>Couple Chat 💬</h3>
+<h3 style="margin-bottom:12px;">
+Couple Chat 💬
+</h3>
 
-<div class="chat-container" id="chatMessages"></div>
+<div class="chat-container"
+id="chatMessages"></div>
 
 <div class="chat-input-row">
 
-<input type="text"
+<input
+type="text"
 id="chatInput"
 placeholder="Type a message..."
 onkeypress="handleChatEnter(event)">
 
-<button onclick="sendMessage()">Send</button>
+<button onclick="sendMessage()">
+Send
+</button>
 
 </div>
 
@@ -311,6 +524,8 @@ onkeypress="handleChatEnter(event)">
 </div>
 
 <script>
+
+/* TAMIL */
 
 const tamilMap = {
 
@@ -325,79 +540,41 @@ const tamilMap = {
 "ai":"ஐ",
 "o":"ஒ",
 "oo":"ஓ",
-"au":"ஔ",
 
 "ka":"க",
 "kaa":"கா",
 "ki":"கி",
-"kii":"கீ",
 "ku":"கு",
-"kuu":"கூ",
-"ke":"கெ",
-"kee":"கே",
-"kai":"கை",
-"ko":"கொ",
-"koo":"கோ",
-
-"nga":"ங",
 
 "cha":"ச",
-"chaa":"சா",
 "chi":"சி",
 
-"ja":"ஜ",
-
 "ta":"ட",
-"taa":"டா",
-
 "tha":"த",
-"thaa":"தா",
 "thi":"தி",
-"thii":"தீ",
-"thu":"து",
-"the":"தெ",
-"thee":"தே",
-"thai":"தை",
-"tho":"தொ",
-"thoo":"தோ",
+"thaa":"தா",
 
 "na":"ந",
-"naa":"நா",
 
 "pa":"ப",
-"paa":"பா",
 "pi":"பி",
 
 "ma":"ம",
-"maa":"மா",
 
 "ya":"ய",
-"yaa":"யா",
 
 "ra":"ர",
-"raa":"ரா",
 
 "la":"ல",
-"laa":"லா",
 
 "va":"வ",
-"vaa":"வா",
 "vi":"வி",
 
 "zha":"ழ",
-"zhaa":"ழா",
 "zhi":"ழி",
 
-"La":"ள",
-
-"Ra":"ற",
-
-"nna":"ன",
-
 "am":"ம்",
-"an":"ன்",
-"ar":"ர்",
-"al":"ல்"
+"an":"ன்"
 
 };
 
@@ -412,24 +589,32 @@ function transliterate(text){
 
         for(let len = 5; len >= 1; len--){
 
-            let chunk = text.substring(i, i + len);
+            let chunk =
+            text.substring(i,i+len);
 
             if(tamilMap[chunk]){
 
                 result += tamilMap[chunk];
+
                 i += len;
+
                 found = true;
+
                 break;
 
             }
 
-            let lower = chunk.toLowerCase();
+            let lower =
+            chunk.toLowerCase();
 
             if(tamilMap[lower]){
 
                 result += tamilMap[lower];
+
                 i += len;
+
                 found = true;
+
                 break;
 
             }
@@ -439,6 +624,7 @@ function transliterate(text){
         if(!found){
 
             result += text[i];
+
             i++;
 
         }
@@ -446,80 +632,105 @@ function transliterate(text){
     }
 
     return result;
-}
-
-function liveTamilPreview(text, elementId){
-
-    document.getElementById(elementId).innerText =
-    transliterate(text);
 
 }
+
+function liveTamilPreview(
+text,
+elementId
+){
+
+document.getElementById(
+elementId
+).innerText =
+transliterate(text);
+
+}
+
+/* MASK */
 
 function splitTamilLetters(word){
 
-    return word.match(
-        /(?:[\u0B95-\u0BB9][\u0BBE-\u0BCD]*)|[\u0B80-\u0BFF]/g
-    ) || [];
+return word.match(
+/(?:[\u0B95-\u0BB9][\u0BBE-\u0BCD]*)|[\u0B80-\u0BFF]/g
+) || [];
 
 }
 
 function maskTamil(str){
 
-    if(!str) return "";
+if(!str) return "";
 
-    const words = str.trim().split(/\s+/);
+const words =
+str.trim().split(/\s+/);
 
-    return words.map(word => {
+return words.map(word=>{
 
-        const chars = splitTamilLetters(word);
+const chars =
+splitTamilLetters(word);
 
-        if(chars.length <= 2){
-            return word;
-        }
+if(chars.length <= 2){
 
-        return chars.map((char,index)=>{
+return word;
 
-            if(
-                index === 0 ||
-                index === chars.length - 1
-            ){
-                return char;
-            }
+}
 
-            return "_";
+return chars.map((char,index)=>{
 
-        }).join(" ");
+if(
+index === 0 ||
+index === chars.length - 1
+){
 
-    }).join("   ");
+return char;
+
+}
+
+return "_";
+
+}).join(" ");
+
+}).join("   ");
 
 }
 
 function getLetterCount(str){
 
-    if(!str) return 0;
+if(!str) return 0;
 
-    const chars =
-    splitTamilLetters(str.replace(/\s/g,''));
+const chars =
+splitTamilLetters(
+str.replace(/\s/g,'')
+);
 
-    return chars.length;
+return chars.length;
 
 }
 
+/* FIREBASE */
+
 const firebaseConfig = {
 
-apiKey:"AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
+apiKey:
+"AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
 
-authDomain:"moviename-26960.firebaseapp.com",
+authDomain:
+"moviename-26960.firebaseapp.com",
 
-databaseURL:"https://moviename-26960-default-rtdb.firebaseio.com",
+databaseURL:
+"https://moviename-26960-default-rtdb.firebaseio.com",
 
-projectId:"moviename-26960",
+projectId:
+"moviename-26960",
 
-storageBucket:"moviename-26960.firebasestorage.app",
+storageBucket:
+"moviename-26960.firebasestorage.app",
 
-messagingSenderId:"745803258160",
+messagingSenderId:
+"745803258160",
 
-appId:"1:745803258160:web:94974f7633fd84a1f3d0f5"
+appId:
+"1:745803258160:web:94974f7633fd84a1f3d0f5"
 
 };
 
@@ -528,16 +739,21 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 const urlParams =
-new URLSearchParams(window.location.search);
+new URLSearchParams(
+window.location.search
+);
 
 const myName =
-(urlParams.get('u') || "immu").toLowerCase();
+(urlParams.get('u')
+|| "immu").toLowerCase();
 
 let gameState = {};
 
-db.ref('gameState').on('value',(snapshot)=>{
+db.ref('gameState')
+.on('value',(snapshot)=>{
 
-const data = snapshot.val() || {};
+const data =
+snapshot.val() || {};
 
 gameState = {
 
@@ -559,15 +775,23 @@ renderUI();
 
 });
 
+/* UI */
+
 function renderUI(){
 
 const container =
-document.getElementById('gameContent');
+document.getElementById(
+'gameContent'
+);
 
-document.getElementById('immuScore').innerText =
+document.getElementById(
+'immuScore'
+).innerText =
 gameState.score1;
 
-document.getElementById('sappiiScore').innerText =
+document.getElementById(
+'sappiiScore'
+).innerText =
 gameState.score2;
 
 if(gameState.status === "set"){
@@ -580,14 +804,22 @@ container.innerHTML = `
 
 <h2>🎬 Your Turn</h2>
 
-<input type="text"
+<input
+type="text"
 id="movieInput"
 placeholder="Movie Name"
-oninput="liveTamilPreview(this.value,'moviePreview')">
+oninput="
+liveTamilPreview(
+this.value,
+'moviePreview'
+)
+">
 
-<div id="moviePreview" class="preview"></div>
+<div id="moviePreview"
+class="preview"></div>
 
-<input type="text"
+<input
+type="text"
 id="hintInput"
 placeholder="Add a hint">
 
@@ -596,14 +828,19 @@ Start Game 🚀
 </button>
 
 </div>
+
 `;
 
 }else{
 
 container.innerHTML = `
+
 <div class="card">
+
 <h2>⏳ Waiting...</h2>
+
 </div>
+
 `;
 
 }
@@ -611,11 +848,14 @@ container.innerHTML = `
 }else{
 
 const letterCount =
-getLetterCount(gameState.movie);
+getLetterCount(
+gameState.movie
+);
 
 if(gameState.turn === myName){
 
 container.innerHTML = `
+
 <div class="card">
 
 <h2>🍿 Guessing...</h2>
@@ -629,6 +869,7 @@ ${letterCount} Letters
 </div>
 
 </div>
+
 `;
 
 }else{
@@ -643,30 +884,47 @@ container.innerHTML = `
 ${maskTamil(gameState.movie)}
 </div>
 
-<p style="text-align:center;color:#FF4B72;">
+<p style="
+text-align:center;
+color:#FF4B72;
+margin-bottom:12px;
+">
 💡 Hint: ${gameState.hint}
 </p>
 
-<input type="text"
+<input
+type="text"
 id="guessInput"
 placeholder="Type in Tanglish"
-oninput="liveTamilPreview(this.value,'livePreview')">
+oninput="
+liveTamilPreview(
+this.value,
+'livePreview'
+)
+">
 
-<div id="livePreview" class="preview"></div>
+<div id="livePreview"
+class="preview"></div>
 
 <button onclick="checkGuess()">
 Submit
 </button>
 
-<button class="give-up-btn"
+<button
+class="give-up-btn"
 onclick="giveUp()">
 Theriyala 🥺
 </button>
 
 <p id="feedback"
-style="text-align:center;"></p>
+style="
+text-align:center;
+margin-top:14px;
+">
+</p>
 
 </div>
+
 `;
 
 }
@@ -675,23 +933,32 @@ style="text-align:center;"></p>
 
 }
 
+/* GAME */
+
 function setMovie(){
 
 const raw =
-document.getElementById('movieInput').value;
+document.getElementById(
+'movieInput'
+).value;
 
 const tamilMovie =
 transliterate(raw);
 
 const hint =
-document.getElementById('hintInput').value;
+document.getElementById(
+'hintInput'
+).value;
 
 if(!raw) return;
 
-db.ref('gameState').update({
+db.ref('gameState')
+.update({
 
 movie:tamilMovie,
+
 hint:hint,
+
 status:"guessing"
 
 });
@@ -701,25 +968,36 @@ status:"guessing"
 function checkGuess(){
 
 const raw =
-document.getElementById('guessInput').value;
+document.getElementById(
+'guessInput'
+).value;
 
 const tamilGuess =
 transliterate(raw);
 
-if(tamilGuess === gameState.movie){
+if(
+tamilGuess ===
+gameState.movie
+){
 
 const scoreKey =
 (myName === "immu")
 ? 'score1'
 : 'score2';
 
-db.ref(`gameState/${scoreKey}`)
-.transaction(s => (s || 0) + 1);
+db.ref(
+`gameState/${scoreKey}`
+).transaction(
+s => (s || 0) + 1
+);
 
-db.ref('gameState').update({
+db.ref('gameState')
+.update({
 
 turn:myName,
+
 status:"set",
+
 movie:""
 
 });
@@ -728,7 +1006,9 @@ sendReaction('🎉');
 
 }else{
 
-document.getElementById('feedback').innerText =
+document.getElementById(
+'feedback'
+).innerText =
 "Wrong! Try again 🥺";
 
 }
@@ -737,15 +1017,21 @@ document.getElementById('feedback').innerText =
 
 function giveUp(){
 
-document.getElementById('feedback').innerText =
-"Answer: " + gameState.movie;
+document.getElementById(
+'feedback'
+).innerText =
+"Answer: " +
+gameState.movie;
 
 setTimeout(()=>{
 
-db.ref('gameState').update({
+db.ref('gameState')
+.update({
 
 turn:myName,
+
 status:"set",
+
 movie:""
 
 });
@@ -754,12 +1040,17 @@ movie:""
 
 }
 
-const chatRef = db.ref('chat');
+/* CHAT */
+
+const chatRef =
+db.ref('chat');
 
 function sendMessage(){
 
 const input =
-document.getElementById('chatInput');
+document.getElementById(
+'chatInput'
+);
 
 const text =
 input.value.trim();
@@ -769,7 +1060,9 @@ if(!text) return;
 chatRef.push({
 
 sender:myName,
+
 text:text,
+
 timestamp:Date.now()
 
 });
@@ -781,40 +1074,53 @@ input.value = '';
 function handleChatEnter(e){
 
 if(e.key === 'Enter'){
+
 sendMessage();
+
 }
 
 }
 
 chatRef.limitToLast(30)
-.on('child_added',(snapshot)=>{
+.on('child_added',
+(snapshot)=>{
 
-const msg = snapshot.val();
+const msg =
+snapshot.val();
 
 const chatBox =
-document.getElementById('chatMessages');
+document.getElementById(
+'chatMessages'
+);
 
 const isMine =
 msg.sender === myName;
-
-const className =
-isMine ? 'msg-mine' : 'msg-partner';
 
 const msgDiv =
 document.createElement('div');
 
 msgDiv.className =
-`chat-msg ${className}`;
+`chat-msg ${
+isMine
+? 'msg-mine'
+: 'msg-partner'
+}`;
 
 msgDiv.textContent =
-`${isMine ? 'You' : msg.sender}: ${msg.text}`;
+`${isMine
+? 'You'
+: msg.sender}: ${msg.text}`;
 
-chatBox.appendChild(msgDiv);
+chatBox.appendChild(
+msgDiv
+);
 
 chatBox.scrollTop =
 chatBox.scrollHeight;
 
 });
+
+/* REACTION */
 
 const reactionRef =
 db.ref('reactions');
@@ -824,7 +1130,9 @@ function sendReaction(emoji){
 reactionRef.push({
 
 emoji:emoji,
+
 sender:myName,
+
 timestamp:Date.now()
 
 });
@@ -832,32 +1140,48 @@ timestamp:Date.now()
 }
 
 reactionRef.limitToLast(1)
-.on('child_added',(snapshot)=>{
+.on('child_added',
+(snapshot)=>{
 
-const data = snapshot.val();
+const data =
+snapshot.val();
 
-if(Date.now() - data.timestamp < 3000){
+if(
+Date.now() -
+data.timestamp
+< 3000
+){
 
-createFloatingEmoji(data.emoji);
+createFloatingEmoji(
+data.emoji
+);
 
 }
 
 });
 
-function createFloatingEmoji(emoji){
+function createFloatingEmoji(
+emoji
+){
 
 const emojiEl =
-document.createElement('div');
+document.createElement(
+'div'
+);
 
 emojiEl.className =
 'floating-emoji';
 
-emojiEl.innerText = emoji;
+emojiEl.innerText =
+emoji;
 
 emojiEl.style.left =
-Math.random() * 80 + 10 + '%';
+Math.random() * 80
++ 10 + '%';
 
-document.body.appendChild(emojiEl);
+document.body.appendChild(
+emojiEl
+);
 
 setTimeout(()=>{
 
