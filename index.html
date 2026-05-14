@@ -38,6 +38,9 @@
         button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
         button:active { transform: scale(0.98); }
         
+        .random-btn { background: transparent; border: 1px dashed #4ade80; color: #4ade80; margin: 0 0 10px 0; padding: 10px; font-size: 13px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .random-btn:active { transform: scale(0.98); background: rgba(74, 222, 128, 0.1); }
+        
         .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
         .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; width: auto;}
 
@@ -84,7 +87,7 @@
         <div id="box-immu" class="player-box">
             <div class="avatar immu-pic"></div>
             <div class="name-container">
-                <span id="status-immu" class="status-dot offline"></span> <!-- Default Offline -->
+                <span id="status-immu" class="status-dot offline"></span>
                 <div class="player-name">immu</div>
             </div>
             <div id="immuScore" class="score-val">0</div>
@@ -96,7 +99,7 @@
         <div id="box-sappii" class="player-box">
             <div class="avatar sappii-pic"></div>
             <div class="name-container">
-                <span id="status-sappii" class="status-dot offline"></span> <!-- Default Offline -->
+                <span id="status-sappii" class="status-dot offline"></span>
                 <div class="player-name">Sappii</div>
             </div>
             <div id="sappiiScore" class="score-val">0</div>
@@ -110,13 +113,9 @@
     <!-- CHAT BOX SECTION -->
     <div class="chat-container card">
         <h3 style="margin-top:0; font-size:16px;">💬 Real-time Chat</h3>
-        <div id="chatMessages" class="chat-messages">
-            <!-- Messages will be injected here by JS -->
-        </div>
+        <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
-            <div id="emojiPicker" class="emoji-picker hidden">
-                <!-- Emojis will be injected here by JS -->
-            </div>
+            <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type in Tamil...">
             <div class="chat-btn-group">
                 <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">😊</button>
@@ -143,7 +142,7 @@
 </div>
 
 <script>
-    // Simple Tanglish to Tamil mapping (basic, standard mapping only)
+    // Simple Tanglish to Tamil mapping
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
@@ -186,7 +185,7 @@
         return result;
     }
 
-    // --- PASTE YOUR FIREBASE CONFIG HERE ---
+    // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
         authDomain: "moviename-26960.firebaseapp.com",
@@ -231,7 +230,16 @@
 
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🎬 Your Turn</h3><p style="font-size:11px;color:#aaa;">Type in Tanglish (Example: Vikram)</p><input type="text" id="movieInput" placeholder="Movie Name"><input type="text" id="hintInput" placeholder="Add a hint"><button onclick="setMovie()">Start Game 🚀</button></div>`;
+                // ADDED RANDOM MOVIE BUTTON HERE
+                container.innerHTML = `
+                    <div class="card">
+                        <h3>🎬 Your Turn</h3>
+                        <p style="font-size:11px;color:#aaa;">Type in Tanglish (Example: Vikram)</p>
+                        <input type="text" id="movieInput" placeholder="Movie Name">
+                        <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
+                        <input type="text" id="hintInput" placeholder="Add a hint">
+                        <button onclick="setMovie()">Start Game 🚀</button>
+                    </div>`;
             } else {
                 container.innerHTML = `<div class="card"><h3>⏳ Waiting...</h3><p>${gameState.turn} is choosing a movie!</p></div>`;
             }
@@ -244,6 +252,41 @@
                 container.innerHTML = `<div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type in Tanglish"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>`;
             }
         }
+    }
+
+    // MASSIVE RANDOM MOVIE COLLECTION
+    function suggestRandomMovie() {
+        const movieArray = [
+            // Vijay Hits
+            "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Kadhalukku Mariyadhai", "Sachien", "Thulladha Manamum Thullum",
+            // Ajith Hits
+            "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Yennai Arindhaal", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
+            // Rajinikanth Hits
+            "Baasha", "Muthu", "Padayappa", "Sivaji", "Enthiran", "Jailer", "Arunachalam", "Annamalai", "Kaala", "Kabali", "Petta", "Darbar", "Annaatthe", "Thalapathi", "Chandramukhi", "Vettaiyan",
+            // Kamal Haasan Hits
+            "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Vettaiyaadu Vilaiyaadu", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi", "Indian 2",
+            // Suriya Hits
+            "Ayan", "Singam", "24", "Soorarai Pottru", "Jai Bhim", "Ghajini", "Kaakha Kaakha", "Vaaranam Aayiram", "Pithamagan", "Kanguva", "Thaanaa Serndha Koottam", "Masss", "Anjaan",
+            // Karthi Hits
+            "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Theeran Adhigaaram Ondru", "Madras", "Sulthan", "Ponniyin Selvan", "Japan", "Meiyazhagan", "Sardar", "Kadaikutty Singam",
+            // Dhanush Hits
+            "Asuran", "Vada Chennai", "Karnan", "Aadukalam", "Polladhavan", "Velaiilla Pattadhari", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Captain Miller", "Kodi", "Anegan",
+            // Sivakarthikeyan Hits
+            "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo", "Rajini Murugan", "Varuthapadatha Valibar Sangam", "Ethir Neechal", "Velaikkaran", "Namma Veettu Pillai",
+            // Vijay Sethupathi Hits
+            "Maharaja", "Vikram Vedha", "96", "Pizza", "Soodhu Kavvum", "Naduvula Konjam Pakkatha Kaanom", "Naanum Rowdy Dhaan", "Super Deluxe", "Kavan", "Sethupathi", "Idharkuthane Aasaipattai Balakumara",
+            // 90s, 2000s & Modern Blockbusters
+            "Love Today", "Alaipayuthey", "Vinnaithaandi Varuvaayaa", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Pariyerum Perumal", "Sarpatta Parambarai", "Minnale", "Ayutha Ezhuthu", "Aramm", "Airaa", "Mookuthi Amman", "Kolamavu Kokila", "Manjummel Boys", "Premalu", "Irudhi Suttru", "Kaaka Muttai", "Subramaniapuram", "Chennai 600028", "Goa", "Mouna Ragam", "Lubber Pandhu"
+        ];
+        
+        // Pick a random movie
+        const randomIndex = Math.floor(Math.random() * movieArray.length);
+        const selectedMovie = movieArray[randomIndex];
+        
+        // Fill the input box silently
+        document.getElementById('movieInput').value = selectedMovie;
+        // Optional: Provide a fun default hint based on the random generator
+        document.getElementById('hintInput').value = "Guess pannu papom! 😉";
     }
 
     function setMovie() {
@@ -273,14 +316,12 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500);
     }
 
-    // Count pure letters excluding spaces
     function getLetterCount(str) {
         if(!str) return 0;
         const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
         return clusters.filter(c => c !== ' ').length;
     }
 
-    // Advanced Tamil Letter masking
     function maskTamil(str) {
         if(!str) return "";
         const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
@@ -296,20 +337,15 @@
     function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movie: "", hint: "" }); closeResetModal(); }
 
     // --- ONLINE STATUS PRESENCE LOGIC ---
-    // Handle database connection state
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
-            // Update *my* presence status
             const myPresenceRef = db.ref(`presence/${myName}`);
             myPresenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
             myPresenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-            
-            // Mark *my* dot in HTML as online immediately
             document.getElementById(`status-${myName}`).className = 'status-dot online';
         }
     });
 
-    // Listen for *partner's* presence status
     db.ref(`presence/${partnerName}`).on('value', (snapshot) => {
         const data = snapshot.val();
         const partnerDot = document.getElementById(`status-${partnerName}`);
@@ -320,9 +356,7 @@
         }
     });
 
-
     // --- CHAT BOX LOGIC ---
-    // Listen for new messages
     db.ref('chatMessages').on('child_added', (snapshot) => {
         const data = snapshot.val();
         const chatMessagesDiv = document.getElementById('chatMessages');
@@ -331,17 +365,13 @@
         const isMine = data.sender === myName;
         messageDiv.className = isMine ? 'message my-message' : 'message partner-message';
         
-        // Convert timestamp
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         const displayName = isMine ? 'You' : data.sender;
         
-        messageDiv.innerHTML = `
-            <div class="message-sender">${displayName} (${time})</div>
-            <div class="message-text">${data.text}</div>
-        `;
+        messageDiv.innerHTML = `<div class="message-sender">${displayName} (${time})</div><div class="message-text">${data.text}</div>`;
         
         chatMessagesDiv.appendChild(messageDiv);
-        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; // Auto-scroll to bottom
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
     });
 
     function sendChatMessage() {
@@ -355,22 +385,19 @@
             timestamp: firebase.database.ServerValue.TIMESTAMP
         });
         
-        chatInput.value = ""; // Clear input
-        closeEmojiPicker(); // Hide picker on send
+        chatInput.value = ""; 
+        closeEmojiPicker(); 
     }
 
-    // Also support enter key for sending
     document.getElementById('chatInput').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             sendChatMessage();
         }
     });
 
-
     // --- EMOJI PICKER LOGIC ---
     const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
     
-    // Populate emoji picker
     window.addEventListener('load', () => {
         const picker = document.getElementById('emojiPicker');
         emojis.forEach(emoji => {
@@ -380,22 +407,15 @@
             btn.onclick = () => { appendEmoji(emoji); };
             picker.appendChild(btn);
         });
-        renderUI(); // Initial game UI render
+        renderUI();
     });
 
-    function toggleEmojiPicker() {
-        document.getElementById('emojiPicker').classList.toggle('hidden');
-    }
-
-    function closeEmojiPicker() {
-        document.getElementById('emojiPicker').classList.add('hidden');
-    }
-
+    function toggleEmojiPicker() { document.getElementById('emojiPicker').classList.toggle('hidden'); }
+    function closeEmojiPicker() { document.getElementById('emojiPicker').classList.add('hidden'); }
     function appendEmoji(emoji) {
         const chatInput = document.getElementById('chatInput');
         chatInput.value += emoji;
         chatInput.focus();
-        // Option to close on emoji click: closeEmojiPicker();
     }
 </script>
 </body>
