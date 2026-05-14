@@ -31,6 +31,9 @@
         button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
         button:active { transform: scale(0.98); }
         
+        .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
+        .give-up-btn:hover { background: rgba(255,255,255,0.1); }
+        
         .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; }
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); }
 
@@ -172,7 +175,8 @@
                         </p>
                         <input type="text" id="guessInput" placeholder="Your Answer">
                         <button onclick="checkGuess()">Submit Answer</button>
-                        <p id="feedback"></p>
+                        <button class="give-up-btn" onclick="giveUp()">Theriyala 🥺 (Give Up)</button>
+                        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
                     </div>`;
             }
         }
@@ -188,19 +192,42 @@
     function checkGuess() {
         const g = document.getElementById('guessInput').value.toUpperCase().trim();
         if (g === gameState.movie.toUpperCase()) {
-            alert("Correct! 🎉 Turn switching...");
+            const feedback = document.getElementById('feedback');
+            feedback.style.color = "#4ade80";
+            feedback.innerText = "Correct! 🎉 Turn switching...";
+            
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1);
             
+            setTimeout(() => {
+                db.ref('gameState').update({ 
+                    turn: myName, 
+                    status: "set", 
+                    movie: "",
+                    hint: ""
+                });
+            }, 1500);
+        } else {
+            document.getElementById('feedback').style.color = "#FF4B72";
+            document.getElementById('feedback').innerText = "Wrong! Try again 🥺";
+        }
+    }
+
+    // Puthusa add panna Give Up logic
+    function giveUp() {
+        const feedback = document.getElementById('feedback');
+        feedback.style.color = "#FF4B72";
+        feedback.innerText = "The movie was: " + gameState.movie + " 🎥";
+        
+        // 2.5 seconds answer-a paathutu adutha turn ku pogum
+        setTimeout(() => {
             db.ref('gameState').update({ 
-                turn: myName, // Switch turn to the person who just guessed correctly
+                turn: myName, // Switch turn
                 status: "set", 
                 movie: "",
                 hint: ""
             });
-        } else {
-            document.getElementById('feedback').innerText = "Wrong! Try again 🥺";
-        }
+        }, 2500);
     }
 
     // Modal Functions
@@ -214,7 +241,7 @@
 
     function confirmReset(starter) {
         db.ref('gameState').set({
-            turn: starter, // Immu or Sappii based on button clicked
+            turn: starter,
             status: "set",
             score1: 0,
             score2: 0,
