@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ta">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -24,13 +26,11 @@ body{
     margin:0;
     padding:20px 0;
     overflow-x:hidden;
-    flex-direction:column;
 }
 
 .container{
     width:90%;
     max-width:400px;
-    padding:20px;
 }
 
 .vs-container{
@@ -42,221 +42,145 @@ body{
 
 .player-box{
     text-align:center;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:5px;
-    width:90px;
-    padding:10px;
-    border-radius:15px;
-}
-
-.active-turn{
-    background:rgba(255,75,114,0.15);
-    border:1px solid #FF4B72;
 }
 
 .avatar{
-    width:65px;
-    height:65px;
+    width:70px;
+    height:70px;
     border-radius:50%;
-    border:3px solid #3A2359;
     background-size:cover;
     background-position:center;
-    background-color:#1D102E;
+    border:3px solid #FF4B72;
 }
 
 .immu-pic{
     background-image:url('1000242624.jpg');
-    border-color:#4ade80;
 }
 
 .sappii-pic{
     background-image:url('1000242625.jpg');
-    border-color:#FF4B72;
 }
 
 .player-name{
-    font-size:13px;
+    margin-top:10px;
+    font-size:14px;
     font-weight:600;
 }
 
 .score-val{
-    font-size:24px;
+    font-size:42px;
     font-weight:bold;
     color:#FF4B72;
 }
 
 .vs-badge{
     background:#3A2359;
-    padding:6px 12px;
+    width:50px;
+    height:50px;
     border-radius:50%;
-    font-size:12px;
-    color:#aaa;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#ccc;
 }
 
 .card{
     background:#1D102E;
-    border-radius:25px;
-    padding:25px;
-    box-shadow:0 10px 40px rgba(0,0,0,0.6);
-    text-align:center;
-    border:1px solid #2D1A45;
+    border-radius:30px;
+    padding:30px;
+    box-shadow:0 0 40px rgba(255,75,114,0.15);
     margin-bottom:20px;
 }
 
 input{
     width:100%;
-    padding:15px;
-    margin:10px 0;
-    border-radius:12px;
+    padding:18px;
+    border-radius:18px;
     border:1px solid #3A2359;
     background:#120A1E;
     color:white;
+    font-size:16px;
     box-sizing:border-box;
-    font-family:inherit;
+    margin-top:15px;
 }
 
 button{
     width:100%;
-    padding:15px;
-    margin-top:10px;
-    background:linear-gradient(135deg,#FF4B72,#FF7694);
+    padding:18px;
     border:none;
-    border-radius:12px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#FF4B72,#FF7694);
     color:white;
+    font-size:18px;
     font-weight:600;
+    margin-top:20px;
     cursor:pointer;
-    font-size:16px;
 }
 
 .give-up-btn{
     background:transparent;
-    border:1px solid #aaa;
-    color:#aaa;
-}
-
-.reset-btn{
-    background:transparent;
-    border:1px solid #FF4B72;
-    color:#FF4B72;
-    margin-top:10px;
-    font-size:14px;
-    padding:10px;
+    border:1px solid #777;
+    color:#ccc;
 }
 
 .masked-word{
-    font-size:24px;
-    letter-spacing:3px;
-    margin:15px 0 5px 0;
+    font-size:42px;
     color:#4ade80;
+    text-align:center;
+    margin:20px 0;
     font-weight:bold;
-    font-family:'Latha',sans-serif;
-    word-wrap:break-word;
+    word-break:break-word;
 }
 
 .letter-count{
-    font-size:12px;
-    color:#aaa;
-    margin-bottom:20px;
-    font-weight:600;
-    background:#2D1A45;
-    display:inline-block;
-    padding:4px 12px;
-    border-radius:20px;
-}
-
-.hidden{
-    display:none !important;
-}
-
-.turn-indicator{
-    font-size:11px;
-    color:#4ade80;
-    font-weight:bold;
-    margin-top:5px;
-    text-transform:uppercase;
-}
-
-.modal{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(18,10,30,0.9);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:1000;
-    padding:20px;
-}
-
-.modal-content{
-    background:#1D102E;
-    padding:25px;
-    border-radius:20px;
     text-align:center;
-    border:1px solid #FF4B72;
-    width:100%;
-    max-width:320px;
+    color:#aaa;
+    margin-bottom:15px;
 }
 
-.modal-btn-group{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
+.preview{
+    color:#4ade80;
+    font-size:28px;
+    text-align:center;
+    margin-top:15px;
+    font-weight:bold;
+    min-height:40px;
 }
 
 .chat-container{
-    text-align:left;
+    height:150px;
+    overflow-y:auto;
     background:#120A1E;
     border-radius:15px;
     padding:10px;
-    height:150px;
-    overflow-y:auto;
     margin-bottom:10px;
-    border:1px solid #3A2359;
-    display:flex;
-    flex-direction:column;
-    gap:5px;
 }
 
 .chat-msg{
-    font-size:12px;
-    padding:8px 12px;
+    padding:10px;
     border-radius:12px;
-    max-width:80%;
-    word-wrap:break-word;
+    margin-bottom:8px;
+    font-size:13px;
 }
 
 .msg-mine{
     background:#FF4B72;
-    color:white;
-    align-self:flex-end;
+    text-align:right;
 }
 
 .msg-partner{
     background:#2D1A45;
-    color:white;
-    align-self:flex-start;
 }
 
 .chat-input-row{
     display:flex;
-    gap:5px;
-}
-
-.chat-input-row input{
-    margin:0;
-    padding:10px;
+    gap:10px;
 }
 
 .chat-input-row button{
-    margin:0;
     width:auto;
-    padding:10px 15px;
-    font-size:14px;
+    padding:15px;
+    margin-top:0;
 }
 
 .emoji-bar{
@@ -266,36 +190,36 @@ button{
 }
 
 .emoji-btn{
-    background:#1D102E;
-    border:1px solid #FF4B72;
+    width:65px;
+    height:65px;
     border-radius:50%;
-    width:50px;
-    height:50px;
-    font-size:24px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    border:1px solid #FF4B72;
+    background:#1D102E;
+    color:white;
+    font-size:30px;
 }
 
 .floating-emoji{
     position:fixed;
     bottom:80px;
-    font-size:35px;
-    pointer-events:none;
+    font-size:40px;
     animation:floatUp 2.5s ease-out forwards;
-    z-index:2000;
+    z-index:9999;
+    pointer-events:none;
 }
 
 @keyframes floatUp{
+
     0%{
         transform:translateY(0) scale(1);
         opacity:1;
     }
 
     100%{
-        transform:translateY(-250px) scale(1.5);
+        transform:translateY(-250px) scale(1.8);
         opacity:0;
     }
+
 }
 
 </style>
@@ -307,128 +231,137 @@ button{
 
 <div class="vs-container">
 
-<div id="box-immu" class="player-box">
+<div class="player-box">
 <div class="avatar immu-pic"></div>
 <div class="player-name">immu</div>
 <div id="immuScore" class="score-val">0</div>
-<div id="turn-immu" class="turn-indicator hidden">SETTING...</div>
 </div>
 
 <div class="vs-badge">VS</div>
 
-<div id="box-sappii" class="player-box">
+<div class="player-box">
 <div class="avatar sappii-pic"></div>
 <div class="player-name">sappii</div>
 <div id="sappiiScore" class="score-val">0</div>
-<div id="turn-sappii" class="turn-indicator hidden">SETTING...</div>
 </div>
 
 </div>
 
 <div class="emoji-bar">
+
 <button class="emoji-btn" onclick="sendReaction('❤️')">❤️</button>
+
 <button class="emoji-btn" onclick="sendReaction('😂')">😂</button>
+
 <button class="emoji-btn" onclick="sendReaction('🥺')">🥺</button>
+
 <button class="emoji-btn" onclick="sendReaction('🔥')">🔥</button>
+
 </div>
 
 <div id="gameContent"></div>
 
-<div class="card" style="padding:15px;">
+<div class="card">
 
-<h4 style="margin:0 0 10px 0;font-size:14px;text-align:left;color:#aaa;">
-Couple Chat 💬
-</h4>
+<h3>Couple Chat 💬</h3>
 
 <div class="chat-container" id="chatMessages"></div>
 
 <div class="chat-input-row">
-<input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+
+<input type="text"
+id="chatInput"
+placeholder="Type a message..."
+onkeypress="handleChatEnter(event)">
+
 <button onclick="sendMessage()">Send</button>
-</div>
 
 </div>
 
-<button class="reset-btn" onclick="openResetModal()">
-Reset Game 🔄
-</button>
-
 </div>
 
-<div id="resetModal" class="modal hidden">
-
-<div class="modal-content">
-
-<h3 style="margin-top:0;color:#fff;">
-Who will start?
-</h3>
-
-<p style="font-size:13px;color:#aaa;">
-Scores will reset
-</p>
-
-<div class="modal-btn-group">
-<button onclick="confirmReset('immu')" style="background:#4ade80;color:#120A1E;">
-Immu 👦
-</button>
-
-<button onclick="confirmReset('sappii')">
-Sappii 👧
-</button>
-</div>
-
-<button onclick="closeResetModal()" style="background:none;border:none;color:#aaa;margin-top:10px;">
-Cancel
-</button>
-
-</div>
 </div>
 
 <script>
 
-const tamilMapping = {
+const tamilMap = {
 
-'a':'அ',
-'aa':'ஆ',
-'i':'இ',
-'ee':'ஈ',
-'u':'உ',
-'oo':'ஊ',
-'e':'எ',
-'ai':'ஐ',
-'o':'ஒ',
+"a":"அ",
+"aa":"ஆ",
+"i":"இ",
+"ii":"ஈ",
+"u":"உ",
+"uu":"ஊ",
+"e":"எ",
+"ee":"ஏ",
+"ai":"ஐ",
+"o":"ஒ",
+"oo":"ஓ",
+"au":"ஔ",
 
-'ka':'க',
-'ki':'கி',
-'ku':'கு',
-'ke':'கெ',
-'kai':'கை',
-'ko':'கொ',
+"ka":"க",
+"kaa":"கா",
+"ki":"கி",
+"kii":"கீ",
+"ku":"கு",
+"kuu":"கூ",
+"ke":"கெ",
+"kee":"கே",
+"kai":"கை",
+"ko":"கொ",
+"koo":"கோ",
 
-'nga':'ங',
-'cha':'ச',
-'nja':'ஞ',
+"nga":"ங",
+"cha":"ச",
+"ja":"ஜ",
 
-'ta':'ட',
-'na':'ண',
+"ta":"ட",
+"taa":"டா",
 
-'tha':'த',
-'nha':'ந',
+"tha":"த",
+"thaa":"தா",
+"thi":"தி",
+"thee":"தே",
+"thai":"தை",
+"tho":"தொ",
+"thoo":"தோ",
 
-'pa':'ப',
-'ma':'ம',
+"na":"ந",
+"naa":"நா",
 
-'ya':'ய',
-'ra':'ர',
-'la':'ல',
-'va':'வ',
+"pa":"ப",
+"paa":"பா",
 
-'zha':'ழ',
+"ma":"ம",
+"maa":"மா",
 
-'La':'ள',
-'Ra':'ற',
+"ya":"ய",
+"yaa":"யா",
 
-'nna':'ன'
+"ra":"ர",
+"raa":"ரா",
+
+"la":"ல",
+"laa":"லா",
+
+"va":"வ",
+"vaa":"வா",
+
+"zha":"ழ",
+"zhi":"ழி",
+
+"La":"ள",
+"Laa":"ளா",
+
+"Ra":"ற",
+"Raa":"றா",
+
+"nna":"ன",
+
+"am":"ம்",
+"an":"ன்",
+"ar":"ர்",
+"al":"ல்"
 
 };
 
@@ -441,31 +374,37 @@ function transliterate(text){
 
         let found = false;
 
-        for(let len = 4; len >= 1; len--){
+        for(let len = 5; len >= 1; len--){
 
             let chunk = text.substring(i, i + len);
 
-            if(tamilMapping[chunk]){
-                result += tamilMapping[chunk];
+            if(tamilMap[chunk]){
+
+                result += tamilMap[chunk];
                 i += len;
                 found = true;
                 break;
+
             }
 
-            const lowerChunk = chunk.toLowerCase();
+            let lower = chunk.toLowerCase();
 
-            if(tamilMapping[lowerChunk]){
-                result += tamilMapping[lowerChunk];
+            if(tamilMap[lower]){
+
+                result += tamilMap[lower];
                 i += len;
                 found = true;
                 break;
+
             }
 
         }
 
         if(!found){
+
             result += text[i];
             i++;
+
         }
 
     }
@@ -474,8 +413,60 @@ function transliterate(text){
 }
 
 function liveTamilPreview(text, elementId){
+
     document.getElementById(elementId).innerText =
     transliterate(text);
+
+}
+
+function splitTamilLetters(word){
+
+    return word.match(
+        /(?:[\u0B95-\u0BB9][\u0BBE-\u0BCD]*)|[\u0B80-\u0BFF]/g
+    ) || [];
+
+}
+
+function maskTamil(str){
+
+    if(!str) return "";
+
+    const words = str.trim().split(/\s+/);
+
+    return words.map(word => {
+
+        const chars = splitTamilLetters(word);
+
+        if(chars.length <= 2){
+            return word;
+        }
+
+        return chars.map((char,index)=>{
+
+            if(
+                index === 0 ||
+                index === chars.length - 1
+            ){
+                return char;
+            }
+
+            return "_";
+
+        }).join(" ");
+
+    }).join("   ");
+
+}
+
+function getLetterCount(str){
+
+    if(!str) return 0;
+
+    const chars =
+    splitTamilLetters(str.replace(/\s/g,''));
+
+    return chars.length;
+
 }
 
 const firebaseConfig = {
@@ -551,15 +542,14 @@ container.innerHTML = `
 
 <div class="card">
 
-<h3>🎬 Your Turn</h3>
+<h2>🎬 Your Turn</h2>
 
 <input type="text"
 id="movieInput"
 placeholder="Movie Name"
 oninput="liveTamilPreview(this.value,'moviePreview')">
 
-<p id="moviePreview"
-style="color:#4ade80;font-size:18px;font-weight:bold;"></p>
+<div id="moviePreview" class="preview"></div>
 
 <input type="text"
 id="hintInput"
@@ -576,7 +566,7 @@ Start Game 🚀
 
 container.innerHTML = `
 <div class="card">
-<h3>⏳ Waiting...</h3>
+<h2>⏳ Waiting...</h2>
 </div>
 `;
 
@@ -592,7 +582,7 @@ if(gameState.turn === myName){
 container.innerHTML = `
 <div class="card">
 
-<h3>🍿 Guessing...</h3>
+<h2>🍿 Guessing...</h2>
 
 <div class="masked-word">
 ${maskTamil(gameState.movie)}
@@ -611,13 +601,13 @@ container.innerHTML = `
 
 <div class="card">
 
-<h3>🤔 Guess!</h3>
+<h2>🤔 Guess!</h2>
 
 <div class="masked-word">
 ${maskTamil(gameState.movie)}
 </div>
 
-<p style="color:#FF4B72;">
+<p style="text-align:center;color:#FF4B72;">
 💡 Hint: ${gameState.hint}
 </p>
 
@@ -626,8 +616,7 @@ id="guessInput"
 placeholder="Type in Tanglish"
 oninput="liveTamilPreview(this.value,'livePreview')">
 
-<p id="livePreview"
-style="color:#4ade80;font-size:18px;font-weight:bold;"></p>
+<div id="livePreview" class="preview"></div>
 
 <button onclick="checkGuess()">
 Submit
@@ -638,7 +627,8 @@ onclick="giveUp()">
 Theriyala 🥺
 </button>
 
-<p id="feedback"></p>
+<p id="feedback"
+style="text-align:center;"></p>
 
 </div>
 `;
@@ -728,73 +718,6 @@ movie:""
 
 }
 
-function getLetterCount(str){
-
-if(!str) return 0;
-
-return str.replace(/\s/g,'').length;
-
-}
-
-function maskTamil(str){
-
-if(!str) return "";
-
-const words =
-str.trim().split(/\s+/);
-
-return words.map(word => {
-
-const chars = [...word];
-
-if(chars.length <= 2){
-return word;
-}
-
-return chars.map((c,index)=>{
-
-if(
-index === 0 ||
-index === chars.length - 1
-){
-return c;
-}
-
-return "_";
-
-}).join(" ");
-
-}).join("   ");
-
-}
-
-function openResetModal(){
-document.getElementById('resetModal')
-.classList.remove('hidden');
-}
-
-function closeResetModal(){
-document.getElementById('resetModal')
-.classList.add('hidden');
-}
-
-function confirmReset(starter){
-
-db.ref('gameState').set({
-
-turn:starter,
-status:"set",
-score1:0,
-score2:0,
-movie:"",
-hint:""
-
-});
-
-closeResetModal();
-
-}
-
 const chatRef = db.ref('chat');
 
 function sendMessage(){
@@ -802,7 +725,8 @@ function sendMessage(){
 const input =
 document.getElementById('chatInput');
 
-const text = input.value.trim();
+const text =
+input.value.trim();
 
 if(!text) return;
 
@@ -826,7 +750,8 @@ sendMessage();
 
 }
 
-chatRef.limitToLast(30).on('child_added',(snapshot)=>{
+chatRef.limitToLast(30)
+.on('child_added',(snapshot)=>{
 
 const msg = snapshot.val();
 
