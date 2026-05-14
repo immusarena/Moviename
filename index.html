@@ -1,77 +1,223 @@
+<!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple Movie Game 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        
+        body {
+            background-color: #120A1E;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .card {
+            background-color: #1D102E;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        h2 { text-align: center; font-size: 18px; margin-top: 0; }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #120A1E;
+            border: 1px solid #3A2359;
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #FF4B72, #FF7694);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { opacity: 0.9; }
+        .hidden { display: none; }
+        
+        /* Guess Screen Styles */
+        .masked-word {
+            font-size: 24px;
+            letter-spacing: 5px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        .audio-btn {
+            background-color: #3A2359;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .hint-box {
+            background-color: #2D1A45;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .hint-box span { color: #FF4B72; font-weight: bold; }
+        #shareLink { word-break: break-all; font-size: 12px; color: #aaa; margin-top: 10px; }
+        
+    </style>
+</head>
+<body>
 
-        <div class="result">
+<div class="container">
+    <div class="header">
+        <h1>💖 Couple Movie Game</h1>
+        <p style="color: #aaa; font-size: 14px; margin-top: 5px;">Guess the movie together</p>
+    </div>
 
-            <div id="hiddenMovie">
-                _ _ _ _
-            </div>
+    <!-- SET MOVIE SCREEN (For You) -->
+    <div id="setScreen" class="card">
+        <h2>🎬 Set Movie</h2>
+        <p style="text-align: center; font-size: 13px; color: #aaa;">You enter the movie. Your partner will guess!</p>
+        <input type="text" id="movieInput" placeholder="Enter movie name (e.g., 3 Idiots)">
+        <input type="text" id="hintInput" placeholder="Enter a hint (Optional)">
+        <button onclick="generateGameLink()">Create Magic Link</button>
+        <div id="linkContainer" class="hidden" style="margin-top: 20px; text-align: center;">
+            <p style="font-size: 14px; color: #4ade80;">Link Created! Copy & share with her:</p>
+            <input type="text" id="shareLink" readonly>
+            <button onclick="copyLink()" style="margin-top: 10px; background: #3A2359;">Copy Link</button>
+        </div>
+    </div>
 
-            <div class="small">
-                First & Last letter only visible 😘
-            </div>
+    <!-- GUESS MOVIE SCREEN (For Her) -->
+    <div id="guessScreen" class="card hidden">
+        <h2>🍿 Guess the Movie</h2>
+        <div class="masked-word" id="maskedDisplay"></div>
+        
+        <div class="audio-btn" onclick="speakMovie()">
+            🔊
+        </div>
+        <p style="text-align: center; font-size: 12px; color: #aaa; margin-top: -10px;">Tap to hear the movie name</p>
 
+        <div class="hint-box" id="hintDisplay">
+            <span>💡 Hint:</span> <span id="hintText" style="color: white; font-weight: normal;"></span>
         </div>
 
-        <button onclick="startVoice()">
-            🎤 Speak Movie Name
-        </button>
-
+        <input type="text" id="guessInput" placeholder="Type your answer...">
+        <button onclick="checkGuess()">Submit</button>
+        
+        <div id="resultMessage" style="text-align: center; margin-top: 15px; font-weight: bold;"></div>
     </div>
-
-    <div class="footer">
-        Couple Game 💕
-    </div>
-
 </div>
 
 <script>
+    let actualMovie = "";
 
-function hideMovie(){
+    // Check if URL has game data
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameData = urlParams.get('game');
 
-    let movie = document.getElementById("movieInput").value.trim();
+        if (gameData) {
+            // Setup Guess Screen
+            document.getElementById('setScreen').classList.add('hidden');
+            document.getElementById('guessScreen').classList.remove('hidden');
+            
+            try {
+                const decodedData = JSON.parse(atob(gameData));
+                actualMovie = decodedData.m.toUpperCase();
+                
+                // Mask the movie name (First and last letter of each word shown)
+                const masked = actualMovie.split(' ').map(word => {
+                    if (word.length <= 2) return word;
+                    return word[0] + ' _ '.repeat(word.length - 2) + word[word.length - 1];
+                }).join(' &nbsp;&nbsp; ');
+                
+                document.getElementById('maskedDisplay').innerHTML = masked;
 
-    if(movie.length < 2){
-        alert("Enter bigger movie name 😅");
-        return;
+                // Show hint if available
+                if (decodedData.h) {
+                    document.getElementById('hintText').innerText = decodedData.h;
+                } else {
+                    document.getElementById('hintDisplay').style.display = 'none';
+                }
+            } catch(e) {
+                alert("Invalid Game Link!");
+            }
+        }
+    };
+
+    function generateGameLink() {
+        const movie = document.getElementById('movieInput').value;
+        const hint = document.getElementById('hintInput').value;
+        
+        if(!movie) return alert("Please enter a movie name!");
+
+        const data = { m: movie, h: hint };
+        const encoded = btoa(JSON.stringify(data)); // Encode to Base64
+        const link = window.location.href.split('?')[0] + '?game=' + encoded;
+        
+        document.getElementById('linkContainer').classList.remove('hidden');
+        document.getElementById('shareLink').value = link;
     }
 
-    let hidden = "";
-
-    for(let i=0; i<movie.length; i++){
-
-        if(movie[i] === " "){
-            hidden += "  ";
-        }
-        else if(i === 0 || i === movie.length-1){
-            hidden += movie[i];
-        }
-        else{
-            hidden += "-";
-        }
-
+    function copyLink() {
+        const linkInput = document.getElementById('shareLink');
+        linkInput.select();
+        document.execCommand("copy");
+        alert("Link copied! Send it to your GF! 💌");
     }
 
-    document.getElementById("hiddenMovie").innerText = hidden;
-
-}
-
-function startVoice(){
-
-    const movie = document.getElementById("movieInput").value;
-
-    if(movie === ""){
-        alert("First enter movie name 🎬");
-        return;
+    function speakMovie() {
+        const utterance = new SpeechSynthesisUtterance(actualMovie);
+        // You can change language here, e.g., utterance.lang = 'ta-IN' for Tamil accent
+        window.speechSynthesis.speak(utterance);
     }
 
-    let speech = new SpeechSynthesisUtterance(movie);
-    speech.lang = "en-US";
-    speech.rate = 0.9;
-
-    speechSynthesis.speak(speech);
-
-}
-
+    function checkGuess() {
+        const guess = document.getElementById('guessInput').value.toUpperCase().trim();
+        const msgDiv = document.getElementById('resultMessage');
+        
+        if (guess === actualMovie) {
+            msgDiv.style.color = "#4ade80";
+            msgDiv.innerText = "🎉 Super! Correct Guess! 💕";
+        } else {
+            msgDiv.style.color = "#FF4B72";
+            msgDiv.innerText = "Oops! Try again 🥺";
+        }
+    }
 </script>
 
 </body>
