@@ -17,9 +17,10 @@
         .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px;}
         .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
         
-        .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
-        .immu-pic { background-image: url('https://api.dicebear.com/7.x/pixel-art/svg?seed=Immu&backgroundColor=b6e3f4'); border-color: #4ade80; }
-        .sappii-pic { background-image: url('https://api.dicebear.com/7.x/pixel-art/svg?seed=Sappii&backgroundColor=ffdfbf'); border-color: #FF4B72; }
+        /* CUSTOM AVATARS (Unga Photos) */
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
+        .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; }
+        .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; }
         
         .player-name { font-size: 13px; font-weight: 600; color: #fff; }
         .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
@@ -32,7 +33,9 @@
         .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
         .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; }
 
-        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 25px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; }
+        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; }
+        .letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px;}
+        
         .hidden { display: none !important; }
         .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
 
@@ -76,7 +79,7 @@
 </div>
 
 <script>
-    // Simple Tanglish to Tamil Transliteration Mapping
+    // Tanglish to Tamil Mapping
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
@@ -169,17 +172,19 @@
                 container.innerHTML = `<div class="card"><h3>⏳ Waiting...</h3><p>${gameState.turn} is choosing a movie!</p></div>`;
             }
         } else if (gameState.status === "guessing") {
+            const letterCount = getLetterCount(gameState.movie);
+            
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div></div>`;
+                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
             } else {
-                container.innerHTML = `<div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type in Tanglish"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>`;
+                container.innerHTML = `<div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type in Tanglish"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>`;
             }
         }
     }
 
     function setMovie() {
         const raw = document.getElementById('movieInput').value;
-        const tamilMovie = transliterate(raw); // Convert to Tamil
+        const tamilMovie = transliterate(raw);
         const h = document.getElementById('hintInput').value;
         if(!raw) return alert("Enter movie!");
         db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" });
@@ -187,7 +192,7 @@
 
     function checkGuess() {
         const guessRaw = document.getElementById('guessInput').value;
-        const tamilGuess = transliterate(guessRaw); // Convert guess to Tamil
+        const tamilGuess = transliterate(guessRaw);
         if (tamilGuess === gameState.movie) {
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1);
@@ -204,10 +209,15 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500);
     }
 
-    // Tamil Cluster Recognition for Masking
+    // Count pure letters excluding spaces
+    function getLetterCount(str) {
+        if(!str) return 0;
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
+        return clusters.filter(c => c !== ' ').length;
+    }
+
     function maskTamil(str) {
         if(!str) return "";
-        // Regex to split Tamil characters correctly (clusters)
         const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
         return clusters.map((c, i) => {
             if(c === " ") return "&nbsp;&nbsp;";
