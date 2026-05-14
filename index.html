@@ -106,53 +106,6 @@
         }
 
         .hidden { display: none !important; }
-
-        .chat-container {
-            text-align: left;
-            background: #120A1E;
-            border-radius: 15px;
-            padding: 10px;
-            height: 150px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            border: 1px solid #3A2359;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .chat-msg {
-            font-size: 12px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            max-width: 80%;
-        }
-
-        .msg-mine { background: #FF4B72; align-self: flex-end; }
-        .msg-partner { background: #2D1A45; align-self: flex-start; }
-
-        .emoji-bar { display: flex; justify-content: space-evenly; margin-bottom: 20px; }
-
-        .emoji-btn {
-            background: #1D102E;
-            border: 1px solid #FF4B72;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-        }
-
-        .floating-emoji {
-            position: fixed;
-            bottom: 80px;
-            font-size: 35px;
-            animation: floatUp 2.5s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-250px); opacity: 0; }
-        }
     </style>
 </head>
 
@@ -176,152 +129,121 @@
         </div>
     </div>
 
-    <div class="emoji-bar">
-        <button class="emoji-btn" onclick="sendReaction('❤️')">❤️</button>
-        <button class="emoji-btn" onclick="sendReaction('😂')">😂</button>
-        <button class="emoji-btn" onclick="sendReaction('🥺')">🥺</button>
-        <button class="emoji-btn" onclick="sendReaction('🔥')">🔥</button>
-    </div>
-
     <div id="gameContent"></div>
 
-    <div class="card">
-        <h4 style="text-align:left;color:#aaa">Chat 💬</h4>
-        <div class="chat-container" id="chatMessages"></div>
-        <input id="chatInput" onkeypress="handleChatEnter(event)" placeholder="message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
-
-    <button class="reset-btn" onclick="openResetModal()">Reset</button>
 </div>
 
 <script>
-const tamilMapping = { a:'அ', aa:'ஆ', i:'இ', ee:'ஈ', u:'உ', oo:'ஊ', ka:'க', ki:'கி', pa:'ப', ma:'ம', etc:'எ' };
-
-function transliterate(text){
-    let res='',i=0,t=text.toLowerCase();
-    while(i<t.length){
-        let found=false;
-        for(let l=3;l>=1;l--){
-            let c=t.substring(i,i+l);
-            if(tamilMapping[c]){res+=tamilMapping[c];i+=l;found=true;break;}
-        }
-        if(!found){res+=t[i];i++;}
-    }
-    return res;
-}
-
 const firebaseConfig = {
- apiKey:"xxx",
- databaseURL:"https://moviename-26960-default-rtdb.firebaseio.com",
- projectId:"moviename-26960"
+    apiKey: "xxx",
+    databaseURL: "https://moviename-26960-default-rtdb.firebaseio.com",
+    projectId: "moviename-26960"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
+const db = firebase.database();
 
-const myName=new URLSearchParams(location.search).get('u')||'immu';
+const myName = new URLSearchParams(location.search).get('u') || 'immu';
 
-let gameState={};
+let gameState = {};
 
-db.ref('gameState').on('value',s=>{
- gameState=s.val()||{turn:'immu',status:'set',score1:0,score2:0,movie:'',hint:''};
- renderUI();
+db.ref('gameState').on('value', s => {
+    gameState = s.val() || { turn:'immu', status:'set', score1:0, score2:0, movie:'', hint:'' };
+    renderUI();
 });
 
 function renderUI(){
-document.getElementById('immuScore').innerText=gameState.score1;
-document.getElementById('sappiiScore').innerText=gameState.score2;
 
-document.getElementById('box-immu').classList.toggle('active-turn',gameState.turn==='immu');
-document.getElementById('box-sappii').classList.toggle('active-turn',gameState.turn==='sappii');
+document.getElementById('immuScore').innerText = gameState.score1;
+document.getElementById('sappiiScore').innerText = gameState.score2;
 
-let c=document.getElementById('gameContent');
+let c = document.getElementById('gameContent');
 
-if(gameState.status==='set'){
- if(gameState.turn===myName){
- c.innerHTML=`
- <div class="card">
- <h3>Your turn</h3>
- <input id="movie" oninput="preview(this.value)" placeholder="movie">
- <p id="prev"></p>
- <input id="hint" placeholder="hint">
- <button onclick="setMovie()">Start</button>
- </div>`;
- }else c.innerHTML=`<div class="card">Waiting...</div>`;
+if(gameState.status === 'set'){
+    if(gameState.turn === myName){
+        c.innerHTML = `
+        <div class="card">
+            <h3>Your turn</h3>
+
+            <!-- ✅ TAMIL GOOGLE KEYBOARD SUPPORT -->
+            <input id="movie"
+                   lang="ta"
+                   inputmode="text"
+                   autocomplete="off"
+                   placeholder="Movie name (Tamil / English)">
+
+            <input id="hint"
+                   lang="ta"
+                   inputmode="text"
+                   placeholder="Hint">
+
+            <button onclick="setMovie()">Start</button>
+        </div>`;
+    } else {
+        c.innerHTML = `<div class="card">Waiting opponent...</div>`;
+    }
 }
 
-else if(gameState.status==='guessing'){
- if(gameState.turn===myName){
- c.innerHTML=`<div class="card"><div class="masked-word">${mask(gameState.movie)}</div></div>`;
- }else{
- c.innerHTML=`
- <div class="card">
- <div class="masked-word">${mask(gameState.movie)}</div>
- <input id="guess" oninput="live(this.value)">
- <p id="live"></p>
- <button onclick="checkGuess()">Submit</button>
- <button class="give-up-btn" onclick="giveUp()">Give Up</button>
- <p id="fb"></p>
- </div>`;
- }
+else if(gameState.status === 'guessing'){
+    if(gameState.turn === myName){
+        c.innerHTML = `<div class="card"><div class="masked-word">${mask(gameState.movie)}</div></div>`;
+    } else {
+        c.innerHTML = `
+        <div class="card">
+            <div class="masked-word">${mask(gameState.movie)}</div>
+
+            <!-- ✅ TAMIL INPUT ENABLED -->
+            <input id="guess"
+                   lang="ta"
+                   inputmode="text"
+                   autocomplete="off"
+                   placeholder="Type guess in Tamil / Tanglish">
+
+            <button onclick="checkGuess()">Submit</button>
+            <button class="give-up-btn" onclick="giveUp()">Give Up</button>
+            <p id="fb"></p>
+        </div>`;
+    }
 }
 }
 
 function setMovie(){
-let m=document.getElementById('movie').value;
-let h=document.getElementById('hint').value;
+let m = document.getElementById('movie').value;
+let h = document.getElementById('hint').value;
 
 db.ref('gameState').update({
- movie:m,
- hint:h,
- status:'guessing',
- turn: myName==='immu'?'sappii':'immu'
+    movie: m,
+    hint: h,
+    status: 'guessing',
+    turn: myName === 'immu' ? 'sappii' : 'immu'
 });
 }
 
-function mask(m){return m.split('').map(x=>x===' '?' ':'*').join('');}
+function mask(m){
+return m.split('').map(x => x === ' ' ? ' ' : '*').join('');
+}
 
 function checkGuess(){
-let g=document.getElementById('guess').value.toLowerCase();
-if(g===gameState.movie.toLowerCase()){
- db.ref('gameState').update({
-  status:'set',
-  score1: gameState.turn==='immu'?gameState.score1:gameState.score1+1,
-  score2: gameState.turn==='sappii'?gameState.score2:gameState.score2+1
- });
+let g = document.getElementById('guess').value.toLowerCase();
+
+if(g === gameState.movie.toLowerCase()){
+    db.ref('gameState').update({
+        status: 'set',
+        score1: gameState.turn === 'immu' ? gameState.score1 : gameState.score1 + 1,
+        score2: gameState.turn === 'sappii' ? gameState.score2 : gameState.score2 + 1
+    });
+} else {
+    document.getElementById('fb').innerText = "Wrong answer";
 }
-else document.getElementById('fb').innerText="Wrong";
 }
 
 function giveUp(){
-db.ref('gameState').update({status:'set',turn:gameState.turn});
-}
-
-function sendMessage(){
-let msg=document.getElementById('chatInput').value;
-db.ref('chat').push({user:myName,msg});
-document.getElementById('chatInput').value='';
-}
-
-db.ref('chat').on('child_added',s=>{
-let d=s.val();
-let div=document.createElement('div');
-div.className='chat-msg '+(d.user===myName?'msg-mine':'msg-partner');
-div.innerText=d.msg;
-document.getElementById('chatMessages').appendChild(div);
+db.ref('gameState').update({
+    status: 'set',
+    turn: gameState.turn
 });
-
-function sendReaction(e){
-let el=document.createElement('div');
-el.className='floating-emoji';
-el.innerText=e;
-document.body.appendChild(el);
-setTimeout(()=>el.remove(),2500);
 }
-
-function handleChatEnter(e){if(e.key==='Enter')sendMessage();}
-
 </script>
+
 </body>
 </html>
