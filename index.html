@@ -14,20 +14,24 @@
         body { background-color: #120A1E; color: white; font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; }
         .container { width: 90%; max-width: 400px; padding: 20px; }
         
+        /* Toast Notification Styling */
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #4ade80; color: #120A1E; padding: 12px 24px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 2000; pointer-events: none; }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
         /* VS Scoreboard Styling */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
         .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px;}
         .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
         
-        /* Custom Avatars with Online Status Dot */
+        /* Custom Avatars */
         .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
-        .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; } /* Boy Avatar */
-        .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; } /* Girl Avatar */
+        .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; } 
+        .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; } 
         
         .name-container { display: flex; align-items: center; gap: 6px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #fff; transition: background-color 0.3s; }
-        .online { background-color: #4ade80; } /* Green for online */
-        .offline { background-color: #aaa; } /* Gray for offline */
+        .online { background-color: #4ade80; } 
+        .offline { background-color: #aaa; } 
 
         .player-name { font-size: 13px; font-weight: 600; color: #fff; }
         .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
@@ -71,18 +75,18 @@
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
         .emoji-item:hover { transform: scale(1.2); }
 
-        /* Modal Popup Styles */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(255, 75, 114, 0.2);}
         .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .modal-btn-group button { margin-top: 0; }
         .btn-cancel { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 15px; padding: 10px;}
     </style>
 </head>
 <body>
 
+<!-- Notification Toast -->
+<div id="toast" class="toast">💬 New Message!</div>
+
 <div class="container">
-    <!-- VS SCOREBOARD -->
     <div class="vs-container">
         <div id="box-immu" class="player-box">
             <div class="avatar immu-pic"></div>
@@ -107,10 +111,8 @@
         </div>
     </div>
 
-    <!-- MAIN GAME AREA -->
     <div id="gameContent"></div>
 
-    <!-- CHAT BOX SECTION -->
     <div class="chat-container card">
         <h3 style="margin-top:0; font-size:16px;">💬 Real-time Chat</h3>
         <div id="chatMessages" class="chat-messages"></div>
@@ -124,11 +126,9 @@
         </div>
     </div>
 
-    <!-- RESET BUTTON -->
     <button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
 </div>
 
-<!-- RESET MODAL POPUP -->
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
         <h3 style="margin-top: 0; color: #fff;">Who will start?</h3>
@@ -142,23 +142,30 @@
 </div>
 
 <script>
-    // Simple Tanglish to Tamil mapping
+    // Updated engine with missing english letters (b, d, g, s, j, w, sh)
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
+        'g': 'க்', 'ga': 'க', 'gaa': 'கா', 'gi': 'கி', 'gee': 'கீ', 'gu': 'கு', 'goo': 'கூ', 'ge': 'கெ', 'gae': 'கே', 'gai': 'கை', 'go': 'கொ', 'goa': 'கோ',
         'ng': 'ங்', 'nga': 'ங', 'ngaa': 'ஙா', 'ngi': 'ஙி', 'ngee': 'ஙீ', 'ngu': 'ஙு', 'ngoo': 'ஙூ', 'nge': 'ஙெ', 'ngae': 'ஙே', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoa': 'ஙோ',
         'ch': 'ச்', 'cha': 'ச', 'chaa': 'சா', 'chi': 'சி', 'chee': 'சீ', 'chu': 'சு', 'choo': 'சூ', 'che': 'செ', 'chae': 'சே', 'chai': 'சை', 'cho': 'சொ', 'choa': 'சோ',
+        's': 'ஸ்', 'sa': 'ச', 'saa': 'சா', 'si': 'சி', 'see': 'சீ', 'su': 'சு', 'soo': 'சூ', 'se': 'செ', 'sae': 'சே', 'sai': 'சை', 'so': 'சொ', 'soa': 'சோ',
+        'sh': 'ஷ்', 'sha': 'ஷ', 'shaa': 'ஷா', 'shi': 'ஷி', 'shee': 'ஷீ', 'shu': 'ஷு', 'shoo': 'ஷூ', 'she': 'ஷெ', 'shae': 'ஷே', 'shai': 'ஷை', 'sho': 'ஷொ', 'shoa': 'ஷோ',
+        'j': 'ஜ்', 'ja': 'ஜ', 'jaa': 'ஜா', 'ji': 'ஜி', 'jee': 'ஜீ', 'ju': 'ஜு', 'joo': 'ஜூ', 'je': 'ஜெ', 'jae': 'ஜே', 'jai': 'ஜை', 'jo': 'ஜொ', 'joa': 'ஜோ',
         'nj': 'ஞ்', 'nja': 'ஞ', 'njaa': 'ஞா', 'nji': 'ஞி', 'njee': 'ஞீ', 'nju': 'ஞு', 'njoo': 'ஞூ', 'nje': 'ஞெ', 'njae': 'ஞே', 'njai': 'ஞை', 'njo': 'ஞொ', 'njoa': 'ஞோ',
         't': 'ட்', 'ta': 'ட', 'taa': 'டா', 'ti': 'டி', 'tee': 'டீ', 'tu': 'டு', 'too': 'டூ', 'te': 'டெ', 'tae': 'டே', 'tai': 'டை', 'to': 'டொ', 'toa': 'டோ',
+        'd': 'ட்', 'da': 'ட', 'daa': 'டா', 'di': 'டி', 'dee': 'டீ', 'du': 'டு', 'doo': 'டூ', 'de': 'டெ', 'dae': 'டே', 'dai': 'டை', 'do': 'டொ', 'doa': 'டோ',
         'n': 'ண்', 'na': 'ண', 'naa': 'ணா', 'ni': 'ணி', 'nee': 'ணீ', 'nu': 'ணு', 'noo': 'ணூ', 'ne': 'ணெ', 'nae': 'ணே', 'nai': 'ணை', 'no': 'ணொ', 'noa': 'டோ',
         'th': 'த்', 'tha': 'த', 'thaa': 'தா', 'thi': 'தி', 'thee': 'தீ', 'thu': 'து', 'thoo': 'தூ', 'the': 'தெ', 'thae': 'தே', 'thai': 'தை', 'tho': 'தொ', 'thoa': 'தோ',
         'nh': 'ந்', 'nha': 'ந', 'nhaa': 'நா', 'nhi': 'நி', 'nhee': 'நீ', 'nhu': 'நு', 'nhoo': 'நூ', 'nhe': 'நெ', 'nhae': 'நே', 'nhai': 'நை', 'nho': 'நொ', 'nhoa': 'நோ',
         'p': 'ப்', 'pa': 'ப', 'paa': 'பா', 'pi': 'பி', 'pee': 'பீ', 'pu': 'பு', 'poo': 'பூ', 'pe': 'பெ', 'pae': 'பே', 'pai': 'பை', 'po': 'பொ', 'poa': 'போ',
+        'b': 'ப்', 'ba': 'ப', 'baa': 'பா', 'bi': 'பி', 'bee': 'பீ', 'bu': 'பு', 'boo': 'பூ', 'be': 'பெ', 'bae': 'பே', 'bai': 'பை', 'bo': 'பொ', 'boa': 'போ',
         'm': 'ம்', 'ma': 'ம', 'maa': 'மா', 'mi': 'மி', 'mee': 'மீ', 'mu': 'மு', 'moo': 'மூ', 'me': 'மெ', 'mae': 'மே', 'mai': 'மை', 'mo': 'மொ', 'moa': 'மோ',
         'y': 'ய்', 'ya': 'ய', 'yaa': 'யா', 'yi': 'யி', 'yee': 'யீ', 'yu': 'யு', 'yoo': 'யூ', 'ye': 'யெ', 'yae': 'யே', 'yai': 'யை', 'yo': 'யொ', 'yoa': 'யோ',
         'r': 'ர்', 'ra': 'ர', 'raa': 'ரா', 'ri': 'ரி', 'ree': 'ரீ', 'ru': 'ரு', 'roo': 'ரூ', 're': 'ரெ', 'rae': 'ரே', 'rai': 'ரை', 'ro': 'ரொ', 'roa': 'ரோ',
         'l': 'ல்', 'la': 'ல', 'laa': 'லா', 'li': 'லி', 'lee': 'லீ', 'lu': 'லு', 'loo': 'லூ', 'le': 'லெ', 'lae': 'லே', 'lai': 'லை', 'lo': 'லொ', 'loa': 'லோ',
         'v': 'வ்', 'va': 'வ', 'vaa': 'வா', 'vi': 'வி', 'vee': 'வீ', 'vu': 'வு', 'voo': 'வூ', 've': 'வெ', 'vae': 'வே', 'vai': 'வை', 'vo': 'வொ', 'voa': 'வோ',
+        'w': 'வ்', 'wa': 'வ', 'waa': 'வா', 'wi': 'வி', 'wee': 'வீ', 'wu': 'வு', 'woo': 'வூ', 'we': 'வெ', 'wae': 'வே', 'wai': 'வை', 'wo': 'வொ', 'woa': 'வோ',
         'zh': 'ழ்', 'zha': 'ழ', 'zhaa': 'ழா', 'zhi': 'ழி', 'zhee': 'ழீ', 'zhu': 'ழு', 'zhoo': 'ழூ', 'zhe': 'ழெ', 'zhae': 'ழே', 'zhai': 'ழை', 'zho': 'ழொ', 'zhoa': 'ழோ',
         'L': 'ள்', 'La': 'ள', 'Laa': 'ளா', 'Li': 'ளி', 'Lee': 'ளீ', 'Lu': 'ளு', 'Loo': 'ளூ', 'Le': 'ளெ', 'Lae': 'ளே', 'Lai': 'ளை', 'Lo': 'ளொ', 'Loa': 'ளோ',
         'R': 'ற்', 'Ra': 'ற', 'Raa': 'றா', 'Ri': 'றி', 'Ree': 'றீ', 'Ru': 'று', 'Roo': 'றூ', 'Re': 'றெ', 'Rae': 'றே', 'Rai': 'றை', 'Ro': 'றொ', 'Roa': 'றோ',
@@ -185,7 +192,6 @@
         return result;
     }
 
-    // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
         authDomain: "moviename-26960.firebaseapp.com",
@@ -208,14 +214,7 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        gameState = {
-            turn: data.turn || "immu",
-            status: data.status || "set",
-            score1: data.score1 || 0,
-            score2: data.score2 || 0,
-            movie: data.movie || "",
-            hint: data.hint || ""
-        };
+        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movie: data.movie || "", hint: data.hint || "" };
         renderUI();
     });
 
@@ -230,7 +229,6 @@
 
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
-                // ADDED RANDOM MOVIE BUTTON HERE
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
@@ -254,43 +252,22 @@
         }
     }
 
-    // MASSIVE RANDOM MOVIE COLLECTION
     function suggestRandomMovie() {
         const movieArray = [
-            // Vijay Hits
-            "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Kadhalukku Mariyadhai", "Sachien", "Thulladha Manamum Thullum",
-            // Ajith Hits
-            "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Yennai Arindhaal", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
-            // Rajinikanth Hits
+            "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Sachien",
+            "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
             "Baasha", "Muthu", "Padayappa", "Sivaji", "Enthiran", "Jailer", "Arunachalam", "Annamalai", "Kaala", "Kabali", "Petta", "Darbar", "Annaatthe", "Thalapathi", "Chandramukhi", "Vettaiyan",
-            // Kamal Haasan Hits
-            "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Vettaiyaadu Vilaiyaadu", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi", "Indian 2",
-            // Suriya Hits
-            "Ayan", "Singam", "24", "Soorarai Pottru", "Jai Bhim", "Ghajini", "Kaakha Kaakha", "Vaaranam Aayiram", "Pithamagan", "Kanguva", "Thaanaa Serndha Koottam", "Masss", "Anjaan",
-            // Karthi Hits
-            "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Theeran Adhigaaram Ondru", "Madras", "Sulthan", "Ponniyin Selvan", "Japan", "Meiyazhagan", "Sardar", "Kadaikutty Singam",
-            // Dhanush Hits
-            "Asuran", "Vada Chennai", "Karnan", "Aadukalam", "Polladhavan", "Velaiilla Pattadhari", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Captain Miller", "Kodi", "Anegan",
-            // Sivakarthikeyan Hits
-            "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo", "Rajini Murugan", "Varuthapadatha Valibar Sangam", "Ethir Neechal", "Velaikkaran", "Namma Veettu Pillai",
-            // Vijay Sethupathi Hits
-            "Maharaja", "Vikram Vedha", "96", "Pizza", "Soodhu Kavvum", "Naduvula Konjam Pakkatha Kaanom", "Naanum Rowdy Dhaan", "Super Deluxe", "Kavan", "Sethupathi", "Idharkuthane Aasaipattai Balakumara",
-            // 90s, 2000s & Modern Blockbusters
-            "Love Today", "Alaipayuthey", "Vinnaithaandi Varuvaayaa", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Pariyerum Perumal", "Sarpatta Parambarai", "Minnale", "Ayutha Ezhuthu", "Aramm", "Airaa", "Mookuthi Amman", "Kolamavu Kokila", "Manjummel Boys", "Premalu", "Irudhi Suttru", "Kaaka Muttai", "Subramaniapuram", "Chennai 600028", "Goa", "Mouna Ragam", "Lubber Pandhu"
+            "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi",
+            "Ayan", "Singam", "Jai Bhim", "Ghajini", "Pithamagan", "Kanguva", "Masss", "Anjaan", "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Madras", "Sulthan", "Japan", "Meiyazhagan", "Sardar",
+            "Asuran", "Karnan", "Aadukalam", "Polladhavan", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Kodi", "Anegan", "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo",
+            "Maharaja", "Vikram Vedha", "Pizza", "Soodhu Kavvum", "Kavan", "Sethupathi", "Love Today", "Alaipayuthey", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Minnale", "Aramm", "Airaa", "Manjummel Boys", "Premalu"
         ];
-        
-        // Pick a random movie
-        const randomIndex = Math.floor(Math.random() * movieArray.length);
-        const selectedMovie = movieArray[randomIndex];
-        
-        // Fill the input box silently
-        document.getElementById('movieInput').value = selectedMovie;
-        // Optional: Provide a fun default hint based on the random generator
+        document.getElementById('movieInput').value = movieArray[Math.floor(Math.random() * movieArray.length)];
         document.getElementById('hintInput').value = "Guess pannu papom! 😉";
     }
 
     function setMovie() {
-        const raw = document.getElementById('movieInput').value;
+        const raw = document.getElementById('movieInput').value.trim(); // Trim extra spaces
         const tamilMovie = transliterate(raw);
         const h = document.getElementById('hintInput').value;
         if(!raw) return alert("Enter movie!");
@@ -298,7 +275,7 @@
     }
 
     function checkGuess() {
-        const guessRaw = document.getElementById('guessInput').value;
+        const guessRaw = document.getElementById('guessInput').value.trim();
         const tamilGuess = transliterate(guessRaw);
         if (tamilGuess === gameState.movie) {
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
@@ -318,25 +295,27 @@
 
     function getLetterCount(str) {
         if(!str) return 0;
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
         return clusters.filter(c => c !== ' ').length;
     }
 
+    // FIXED MASKING LOGIC (No Extra Dashes & Handles Spaces Perfectly)
     function maskTamil(str) {
         if(!str) return "";
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
-        return clusters.map((c, i) => {
-            if(c === " ") return "&nbsp;&nbsp;";
-            if(i === 0 || i === clusters.length - 1) return c;
-            return "_";
-        }).join(" ");
+        const words = str.split(" ");
+        return words.map(word => {
+            const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
+            return clusters.map((c, i) => {
+                if(i === 0 || i === clusters.length - 1) return c;
+                return "_";
+            }).join(" ");
+        }).join("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
 
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movie: "", hint: "" }); closeResetModal(); }
 
-    // --- ONLINE STATUS PRESENCE LOGIC ---
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
             const myPresenceRef = db.ref(`presence/${myName}`);
@@ -348,30 +327,44 @@
 
     db.ref(`presence/${partnerName}`).on('value', (snapshot) => {
         const data = snapshot.val();
-        const partnerDot = document.getElementById(`status-${partnerName}`);
-        if (data && data.online) {
-            partnerDot.className = 'status-dot online';
-        } else {
-            partnerDot.className = 'status-dot offline';
-        }
+        document.getElementById(`status-${partnerName}`).className = data && data.online ? 'status-dot online' : 'status-dot offline';
     });
 
-    // --- CHAT BOX LOGIC ---
+    // --- NOTIFICATION & CHAT LOGIC ---
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.innerText = msg;
+        toast.classList.add('show');
+        
+        // Play small popup sound
+        try {
+            const audio = new Audio("https://actions.google.com/sounds/v1/communication/bubble_pop.ogg");
+            audio.play();
+        } catch(e){}
+
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    let initialLoad = true;
+    db.ref('chatMessages').once('value', () => { setTimeout(() => { initialLoad = false; }, 1000); });
+
     db.ref('chatMessages').on('child_added', (snapshot) => {
         const data = snapshot.val();
         const chatMessagesDiv = document.getElementById('chatMessages');
+        const isMine = data.sender === myName;
         
         const messageDiv = document.createElement('div');
-        const isMine = data.sender === myName;
         messageDiv.className = isMine ? 'message my-message' : 'message partner-message';
-        
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const displayName = isMine ? 'You' : data.sender;
         
-        messageDiv.innerHTML = `<div class="message-sender">${displayName} (${time})</div><div class="message-text">${data.text}</div>`;
-        
+        messageDiv.innerHTML = `<div class="message-sender">${isMine ? 'You' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+
+        // Trigger Notification if Partner sent the message and it's not the initial load
+        if (!initialLoad && !isMine) {
+            showToast(`💬 ${data.sender} sent a message!`);
+        }
     });
 
     function sendChatMessage() {
@@ -379,32 +372,19 @@
         const text = chatInput.value.trim();
         if(!text) return;
         
-        db.ref('chatMessages').push({
-            sender: myName,
-            text: text,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        });
-        
-        chatInput.value = ""; 
-        closeEmojiPicker(); 
+        db.ref('chatMessages').push({ sender: myName, text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        chatInput.value = ""; closeEmojiPicker(); 
     }
 
-    document.getElementById('chatInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            sendChatMessage();
-        }
-    });
+    document.getElementById('chatInput').addEventListener('keypress', e => { if (e.key === 'Enter') sendChatMessage(); });
 
-    // --- EMOJI PICKER LOGIC ---
     const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
-    
     window.addEventListener('load', () => {
         const picker = document.getElementById('emojiPicker');
         emojis.forEach(emoji => {
             const btn = document.createElement('button');
-            btn.className = 'emoji-item';
-            btn.innerText = emoji;
-            btn.onclick = () => { appendEmoji(emoji); };
+            btn.className = 'emoji-item'; btn.innerText = emoji;
+            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); };
             picker.appendChild(btn);
         });
         renderUI();
@@ -412,11 +392,6 @@
 
     function toggleEmojiPicker() { document.getElementById('emojiPicker').classList.toggle('hidden'); }
     function closeEmojiPicker() { document.getElementById('emojiPicker').classList.add('hidden'); }
-    function appendEmoji(emoji) {
-        const chatInput = document.getElementById('chatInput');
-        chatInput.value += emoji;
-        chatInput.focus();
-    }
 </script>
 </body>
 </html>
