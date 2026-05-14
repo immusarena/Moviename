@@ -1,0 +1,78 @@
+<html lang="en">
+
+        <div class="result">
+
+            <div id="hiddenMovie">
+                _ _ _ _
+            </div>
+
+            <div class="small">
+                First & Last letter only visible 😘
+            </div>
+
+        </div>
+
+        <button onclick="startVoice()">
+            🎤 Speak Movie Name
+        </button>
+
+    </div>
+
+    <div class="footer">
+        Couple Game 💕
+    </div>
+
+</div>
+
+<script>
+
+function hideMovie(){
+
+    let movie = document.getElementById("movieInput").value.trim();
+
+    if(movie.length < 2){
+        alert("Enter bigger movie name 😅");
+        return;
+    }
+
+    let hidden = "";
+
+    for(let i=0; i<movie.length; i++){
+
+        if(movie[i] === " "){
+            hidden += "  ";
+        }
+        else if(i === 0 || i === movie.length-1){
+            hidden += movie[i];
+        }
+        else{
+            hidden += "-";
+        }
+
+    }
+
+    document.getElementById("hiddenMovie").innerText = hidden;
+
+}
+
+function startVoice(){
+
+    const movie = document.getElementById("movieInput").value;
+
+    if(movie === ""){
+        alert("First enter movie name 🎬");
+        return;
+    }
+
+    let speech = new SpeechSynthesisUtterance(movie);
+    speech.lang = "en-US";
+    speech.rate = 0.9;
+
+    speechSynthesis.speak(speech);
+
+}
+
+</script>
+
+</body>
+</html>
