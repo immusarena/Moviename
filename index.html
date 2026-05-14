@@ -1,192 +1,343 @@
 <!DOCTYPE html>
 <html lang="ta">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tamil Couple Movie Game 💖</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
-        body { background-color: #120A1E; color: white; font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column;}
-        .container { width: 90%; max-width: 400px; padding: 20px; }
-        
-        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
-        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px;}
-        .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
-        
-        /* CUSTOM AVATARS */
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
-        .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; }
-        .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; }
-        
-        .player-name { font-size: 13px; font-weight: 600; color: #fff; }
-        .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
-        .vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; color: #aaa; }
-
-        .card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; }
-        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; }
-        
-        .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
-        .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; }
-
-        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; }
-        .letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px;}
-        
-        .hidden { display: none !important; }
-        .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
-
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; }
-        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-time Couple Movie Game 💖</title>
+​<!-- Firebase CDN Links -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+​<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
+body { background-color: #120A1E; color: white; font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; }
+.container { width: 90%; max-width: 400px; padding: 20px; }
+​/* VS Scoreboard Styling */
+.vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
+.player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px;}
+.active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
+​/* Custom Avatars with Online Status Dot /
+.avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
+.immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; } / Boy Avatar /
+.sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; } / Girl Avatar */
+​.name-container { display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #fff; transition: background-color 0.3s; }
+.online { background-color: #4ade80; } /* Green for online /
+.offline { background-color: #aaa; } / Gray for offline */
+​.player-name { font-size: 13px; font-weight: 600; color: #fff; }
+.score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
+.vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; color: #aaa; }
+​.card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; margin-bottom: 15px; }
+input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; font-size: 14px;}
+button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
+button:active { transform: scale(0.98); }
+​.give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
+.reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 30px; font-size: 14px; padding: 10px; width: auto;}
+​.masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+.letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;}
+​.hidden { display: none !important; }
+.turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
+​/* Chat Box Styling */
+.chat-container { text-align: left; }
+.chat-messages { height: 180px; overflow-y: auto; padding: 10px; border: 1px solid #3A2359; border-radius: 10px; background: #120A1E; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;}
+.message { padding: 8px 12px; border-radius: 12px; max-width: 80%; display: inline-block;}
+.message-sender { font-size: 10px; color: #FF4B72; font-weight: 600; margin-bottom: 3px;}
+.my-message { background: linear-gradient(135deg, #FF4B72, #FF7694); align-self: flex-end; color: #fff; }
+.partner-message { background: #3A2359; align-self: flex-start; color: #fff; }
+​.chat-input-group { display: flex; gap: 8px; align-items: center; position: relative;}
+.chat-input { margin: 0; }
+.chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
+.chat-icon-btn { background: none; border: none; font-size: 20px; color: #FF4B72; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
+.chat-icon-btn:hover { transform: scale(1.1); }
+.chat-icon-btn#emojiBtn { color: #fff;}
+.chat-send-btn { width: auto; padding: 10px 15px; margin-top: 0;}
+​/* Emoji Picker Styling */
+.emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: #1D102E; border: 1px solid #FF4B72; border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+.emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
+.emoji-item:hover { transform: scale(1.2); }
+​/* Modal Popup Styles */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
+.modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(255, 75, 114, 0.2);}
+.modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+.modal-btn-group button { margin-top: 0; }
+.btn-cancel { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 15px; padding: 10px;}
+</style>
 </head>
 <body>
-
-<div class="container">
-    <div class="vs-container">
-        <div id="box-immu" class="player-box">
-            <div class="avatar immu-pic"></div>
-            <div class="player-name">immu</div>
-            <div id="immuScore" class="score-val">0</div>
-            <div id="turn-immu" class="turn-indicator hidden">SETTING...</div>
-        </div>
-        <div class="vs-badge">VS</div>
-        <div id="box-sappii" class="player-box">
-            <div class="avatar sappii-pic"></div>
-            <div class="player-name">Sappii</div>
-            <div id="sappiiScore" class="score-val">0</div>
-            <div id="turn-sappii" class="turn-indicator hidden">SETTING...</div>
-        </div>
-    </div>
-    <div id="gameContent"></div>
-    <button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
+​<div class="container">
+<!-- VS SCOREBOARD -->
+<div class="vs-container">
+<div id="box-immu" class="player-box">
+<div class="avatar immu-pic"></div>
+<div class="name-container">
+<span id="status-immu" class="status-dot offline"></span> <!-- Default Offline -->
+<div class="player-name">immu</div>
 </div>
-
+<div id="immuScore" class="score-val">0</div>
+<div id="turn-immu" class="turn-indicator hidden">SETTING...</div>
+</div>
+​<div class="vs-badge">VS</div>
+​<div id="box-sappii" class="player-box">
+<div class="avatar sappii-pic"></div>
+<div class="name-container">
+<span id="status-sappii" class="status-dot offline"></span> <!-- Default Offline -->
+<div class="player-name">Sappii</div>
+</div>
+<div id="sappiiScore" class="score-val">0</div>
+<div id="turn-sappii" class="turn-indicator hidden">SETTING...</div>
+</div>
+</div>
+​<!-- MAIN GAME AREA -->
+<div id="gameContent"></div>
+​<!-- CHAT BOX SECTION -->
+<div class="chat-container card">
+<h3 style="margin-top:0; font-size:16px;">💬 Real-time Chat</h3>
+<div id="chatMessages" class="chat-messages">
+<!-- Messages will be injected here by JS -->
+</div>
+<div class="chat-input-group">
+<div id="emojiPicker" class="emoji-picker hidden">
+<!-- Emojis will be injected here by JS -->
+</div>
+<input type="text" id="chatInput" class="chat-input" placeholder="Type in Tamil...">
+<div class="chat-btn-group">
+<button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">😊</button>
+<button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
+</div>
+</div>
+</div>
+​<!-- RESET BUTTON -->
+<button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
+</div>
+​<!-- RESET MODAL POPUP -->
 <div id="resetModal" class="modal hidden">
-    <div class="modal-content">
-        <h3 style="margin-top: 0; color: #fff;">Who will start?</h3>
-        <p style="font-size: 13px; color: #aaa;">Scores will reset. Pick a starter!</p>
-        <div class="modal-btn-group">
-            <button onclick="confirmReset('immu')" style="background: #4ade80; color: #120A1E;">Immu 👦</button>
-            <button onclick="confirmReset('sappii')">Sappii 👧</button>
-        </div>
-        <button onclick="closeResetModal()" style="background:none; border:none; color:#aaa; margin-top:10px;">Cancel</button>
-    </div>
+<div class="modal-content">
+<h3 style="margin-top: 0; color: #fff;">Who will start?</h3>
+<p style="font-size: 13px; color: #aaa;">Scores will reset. Pick a starter!</p>
+<div class="modal-btn-group">
+<button onclick="confirmReset('immu')" style="background: #4ade80; color: #120A1E;">Immu 👦</button>
+<button onclick="confirmReset('sappii')">Sappii 👧</button>
 </div>
-
-<script>
-    // Firebase Config
-    const firebaseConfig = {
-        apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
-        authDomain: "moviename-26960.firebaseapp.com",
-        databaseURL: "https://moviename-26960-default-rtdb.firebaseio.com",
-        projectId: "moviename-26960",
-        storageBucket: "moviename-26960.firebasestorage.app",
-        messagingSenderId: "745803258160",
-        appId: "1:745803258160:web:94974f7633fd84a1f3d0f5",
-        measurementId: "G-FSX18NDWSY"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const myName = (urlParams.get('u') || "immu").toLowerCase(); 
-    const partnerName = (myName === "immu") ? "sappii" : "immu";
-
-    let gameState = {};
-
-    db.ref('gameState').on('value', (snapshot) => {
-        const data = snapshot.val() || {};
-        gameState = {
-            turn: data.turn || "immu",
-            status: data.status || "set",
-            score1: data.score1 || 0,
-            score2: data.score2 || 0,
-            movie: data.movie || "",
-            hint: data.hint || ""
-        };
-        renderUI();
-    });
-
-    function renderUI() {
-        const container = document.getElementById('gameContent');
-        document.getElementById('immuScore').innerText = gameState.score1;
-        document.getElementById('sappiiScore').innerText = gameState.score2;
-        document.getElementById('box-immu').classList.toggle('active-turn', gameState.turn === 'immu');
-        document.getElementById('box-sappii').classList.toggle('active-turn', gameState.turn === 'sappii');
-        document.getElementById('turn-immu').classList.toggle('hidden', gameState.turn !== 'immu');
-        document.getElementById('turn-sappii').classList.toggle('hidden', gameState.turn !== 'sappii');
-
-        if (gameState.status === "set") {
-            if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🎬 Your Turn</h3><p style="font-size:11px;color:#aaa;">Type Tamil Name using Google Keyboard</p><input type="text" id="movieInput" placeholder="Movie Name (in Tamil)"><input type="text" id="hintInput" placeholder="Add a hint"><button onclick="setMovie()">Start Game 🚀</button></div>`;
-            } else {
-                container.innerHTML = `<div class="card"><h3>⏳ Waiting...</h3><p>${gameState.turn} is choosing a movie!</p></div>`;
-            }
-        } else if (gameState.status === "guessing") {
-            const letterCount = getLetterCount(gameState.movie);
-            
-            if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
-            } else {
-                container.innerHTML = `<div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type answer in Tamil"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>`;
-            }
-        }
-    }
-
-    function setMovie() {
-        // Ippo user type cheyyunna raw tamil text direct aayi save aakum
-        const tamilMovie = document.getElementById('movieInput').value.trim();
-        const h = document.getElementById('hintInput').value.trim();
-        if(!tamilMovie) return alert("Enter movie!");
-        db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" });
-    }
-
-    function checkGuess() {
-        // Guess cheyyunnathum direct tamil text aayirikkanam
-        const tamilGuess = document.getElementById('guessInput').value.trim();
-        if (tamilGuess === gameState.movie) {
-            const scoreKey = (myName === "immu") ? 'score1' : 'score2';
-            db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1);
-            db.ref('gameState').update({ turn: myName, status: "set", movie: "" });
-        } else {
-            document.getElementById('feedback').innerText = "Wrong! Try again 🥺";
-        }
-    }
-
-    function giveUp() {
-        document.getElementById('feedback').innerText = "Answer: " + gameState.movie;
-        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
-        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
-        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500);
-    }
-
-    // Count pure letters excluding spaces
-    function getLetterCount(str) {
-        if(!str) return 0;
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
-        return clusters.filter(c => c !== ' ').length;
-    }
-
-    // Advanced Tamil Letter masking
-    function maskTamil(str) {
-        if(!str) return "";
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
-        return clusters.map((c, i) => {
-            if(c === " ") return "&nbsp;&nbsp;";
-            if(i === 0 || i === clusters.length - 1) return c;
-            return "_";
-        }).join(" ");
-    }
-
-    function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
-    function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
-    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movie: "", hint: "" }); closeResetModal(); }
+<button class="btn-cancel" onclick="closeResetModal()">Cancel</button>
+</div>
+</div>
+​<script>
+// Simple Tanglish to Tamil mapping (basic, basic, standard mapping only)
+const tamilMapping = {
+'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
+'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
+'ng': 'ங்', 'nga': 'ங', 'ngaa': 'ஙா', 'ngi': 'ஙி', 'ngee': 'ஙீ', 'ngu': 'ஙு', 'ngoo': 'ஙூ', 'nge': 'ஙெ', 'ngae': 'ஙே', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoa': 'ஙோ',
+'ch': 'ச்', 'cha': 'ச', 'chaa': 'சா', 'chi': 'சி', 'chee': 'சீ', 'chu': 'சு', 'choo': 'சூ', 'che': 'செ', 'chae': 'சே', 'chai': 'சை', 'cho': 'சொ', 'choa': 'சோ',
+'nj': 'ஞ்', 'nja': 'ஞ', 'njaa': 'ஞா', 'nji': 'ஞி', 'njee': 'ஞீ', 'nju': 'ஞு', 'njoo': 'ஞூ', 'nje': 'ஞெ', 'njae': 'ஞே', 'njai': 'ஞை', 'njo': 'ஞொ', 'njoa': 'ஞோ',
+'t': 'ட்', 'ta': 'ட', 'taa': 'டா', 'ti': 'டி', 'tee': 'டீ', 'tu': 'டு', 'too': 'டூ', 'te': 'டெ', 'tae': 'டே', 'tai': 'டை', 'to': 'டொ', 'toa': 'டோ',
+'n': 'ண்', 'na': 'ண', 'naa': 'ணா', 'ni': 'ணி', 'nee': 'ணீ', 'nu': 'ணு', 'noo': 'ணூ', 'ne': 'ணெ', 'nae': 'ணே', 'nai': 'ணை', 'no': 'ணொ', 'noa': 'நோ',
+'th': 'த்', 'tha': 'த', 'thaa': 'தா', 'thi': 'தி', 'thee': 'தீ', 'thu': 'து', 'thoo': 'தூ', 'the': 'தெ', 'thae': 'தே', 'thai': 'தை', 'tho': 'தொ', 'thoa': 'தோ',
+'nh': 'ந்', 'nha': 'ந', 'nhaa': 'நா', 'nhi': 'நி', 'nhee': 'நீ', 'nhu': 'நு', 'nhoo': 'நூ', 'nhe': 'நெ', 'nhae': 'நே', 'nhai': 'நை', 'nho': 'நொ', 'nhoa': 'நோ',
+'p': 'ப்', 'pa': 'ப', 'paa': 'பா', 'pi': 'பி', 'pee': 'பீ', 'pu': 'பு', 'poo': 'பூ', 'pe': 'பெ', 'pae': 'பே', 'pai': 'பை', 'po': 'பொ', 'poa': 'போ',
+'m': 'ம்', 'ma': 'ம', 'maa': 'மா', 'mi': 'மி', 'mee': 'மீ', 'mu': 'மு', 'moo': 'மூ', 'me': 'மெ', 'mae': 'மே', 'mai': 'மை', 'mo': 'மொ', 'moa': 'மோ',
+'y': 'ய்', 'ya': 'ய', 'yaa': 'யா', 'yi': 'யி', 'yee': 'யீ', 'yu': 'யு', 'yoo': 'யூ', 'ye': 'யெ', 'yae': 'யே', 'yai': 'யை', 'yo': 'யொ', 'yoa': 'யோ',
+'r': 'ர்', 'ra': 'ர', 'raa': 'ரா', 'ri': 'ரி', 'ree': 'ரீ', 'ru': 'ரு', 'roo': 'ரூ', 're': 'ரெ', 'rae': 'ரே', 'rai': 'ரை', 'ro': 'ரொ', 'roa': 'ரோ',
+'l': 'ல்', 'la': 'ல', 'laa': 'லா', 'li': 'லி', 'lee': 'லீ', 'lu': 'லு', 'loo': 'லூ', 'le': 'லெ', 'lae': 'லே', 'lai': 'லை', 'lo': 'ளொ', 'loa': 'லோ',
+'v': 'வ்', 'va': 'வ', 'vaa': 'வா', 'vi': 'வி', 'vee': 'வீ', 'vu': 'வு', 'voo': 'வூ', 've': 'வெ', 'vae': 'வே', 'vai': 'வை', 'vo': 'வொ', 'voa': 'வோ',
+'zh': 'ழ்', 'zha': 'ழ', 'zhaa': 'ழா', 'zhi': 'ழி', 'zhee': 'ழீ', 'zhu': 'ழு', 'zhoo': 'ழூ', 'zhe': 'ழெ', 'zhae': 'ழே', 'zhai': 'ழை', 'zho': 'ழொ', 'zhoa': 'ழோ',
+'L': 'ள்', 'La': 'ள', 'Laa': 'ளா', 'Li': 'ளி', 'Lee': 'ளீ', 'Lu': 'ளு', 'Loo': 'ளூ', 'Le': 'ளெ', 'Lae': 'ளே', 'Lai': 'ளை', 'Lo': 'ளொ', 'Loa': 'ளோ',
+'R': 'ற்', 'Ra': 'ற', 'Raa': 'றா', 'Ri': 'றி', 'Ree': 'றீ', 'Ru': 'று', 'Roo': 'றூ', 'Re': 'றெ', 'Rae': 'றே', 'Rai': 'றை', 'Ro': 'றொ', 'Roa': 'றோ',
+'nn': 'ன்', 'nna': 'ன', 'nnaa': 'னா', 'nni': 'னி', 'nnee': 'னீ', 'nnu': 'னு', 'nnoo': 'னூ', 'nne': 'னெ', 'nnae': 'னே', 'nnai': 'னை', 'nno': 'னொ', 'nnoa': 'னோ'
+};
+​function transliterate(text) {
+let result = "";
+let i = 0;
+const lower = text.toLowerCase();
+while (i < lower.length) {
+let found = false;
+for (let len = 3; len >= 1; len--) {
+let chunk = lower.substring(i, i + len);
+if (tamilMapping[chunk]) {
+result += tamilMapping[chunk];
+i += len;
+found = true;
+break;
+}
+}
+if (!found) { result += text[i]; i++; }
+}
+return result;
+}
+​// --- PASTE YOUR FIREBASE CONFIG HERE ---
+const firebaseConfig = {
+apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
+authDomain: "moviename-26960.firebaseapp.com",
+databaseURL: "https://moviename-26960-default-rtdb.firebaseio.com",
+projectId: "moviename-26960",
+storageBucket: "moviename-26960.firebasestorage.app",
+messagingSenderId: "745803258160",
+appId: "1:745803258160:web:94974f7633fd84a1f3d0f5",
+measurementId: "G-FSX18NDWSY"
+};
+​firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+​const urlParams = new URLSearchParams(window.location.search);
+const myName = (urlParams.get('u') || "immu").toLowerCase();
+const partnerName = (myName === "immu") ? "sappii" : "immu";
+​let gameState = {};
+​db.ref('gameState').on('value', (snapshot) => {
+const data = snapshot.val() || {};
+gameState = {
+turn: data.turn || "immu",
+status: data.status || "set",
+score1: data.score1 || 0,
+score2: data.score2 || 0,
+movie: data.movie || "",
+hint: data.hint || ""
+};
+renderUI();
+});
+​function renderUI() {
+const container = document.getElementById('gameContent');
+document.getElementById('immuScore').innerText = gameState.score1;
+document.getElementById('sappiiScore').innerText = gameState.score2;
+document.getElementById('box-immu').classList.toggle('active-turn', gameState.turn === 'immu');
+document.getElementById('box-sappii').classList.toggle('active-turn', gameState.turn === 'sappii');
+document.getElementById('turn-immu').classList.toggle('hidden', gameState.turn !== 'immu');
+document.getElementById('turn-sappii').classList.toggle('hidden', gameState.turn !== 'sappii');
+​if (gameState.status === "set") {
+if (gameState.turn === myName) {
+container.innerHTML = <div class="card"><h3>🎬 Your Turn</h3><p style="font-size:11px;color:#aaa;">Type in Tanglish (Example: Vikram)</p><input type="text" id="movieInput" placeholder="Movie Name"><input type="text" id="hintInput" placeholder="Add a hint"><button onclick="setMovie()">Start Game 🚀</button></div>;
+} else {
+container.innerHTML = <div class="card"><h3>⏳ Waiting...</h3><p>${gameState.turn} is choosing a movie!</p></div>;
+}
+} else if (gameState.status === "guessing") {
+const letterCount = getLetterCount(gameState.movie);
+​if (gameState.turn === myName) {
+container.innerHTML = <div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div></div>;
+} else {
+container.innerHTML = <div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type in Tanglish"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>;
+}
+}
+}
+​function setMovie() {
+const raw = document.getElementById('movieInput').value;
+const tamilMovie = transliterate(raw);
+const h = document.getElementById('hintInput').value;
+if(!raw) return alert("Enter movie!");
+db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" });
+}
+​function checkGuess() {
+const guessRaw = document.getElementById('guessInput').value;
+const tamilGuess = transliterate(guessRaw);
+if (tamilGuess === gameState.movie) {
+const scoreKey = (myName === "immu") ? 'score1' : 'score2';
+db.ref(gameState/${scoreKey}).transaction(s => (s || 0) + 1);
+db.ref('gameState').update({ turn: myName, status: "set", movie: "" });
+} else {
+document.getElementById('feedback').innerText = "Wrong! ("+tamilGuess+") Try again 🥺";
+}
+}
+​function giveUp() {
+document.getElementById('feedback').innerText = "Answer: " + gameState.movie;
+const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
+db.ref(gameState/${partnerScoreKey}).transaction(s => (s || 0) + 1);
+setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500);
+}
+​// Count pure letters excluding spaces
+function getLetterCount(str) {
+if(!str) return 0;
+const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
+return clusters.filter(c => c !== ' ').length;
+}
+​// Advanced Tamil Letter masking
+function maskTamil(str) {
+if(!str) return "";
+const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|./g) || [];
+return clusters.map((c, i) => {
+if(c === " ") return "  ";
+if(i === 0 || i === clusters.length - 1) return c;
+return "_";
+}).join(" ");
+}
+​function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
+function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
+function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movie: "", hint: "" }); closeResetModal(); }
+​// --- ONLINE STATUS PRESENTENCE LOGIC ---
+// Handle database connection state
+db.ref('.info/connected').on('value', (snapshot) => {
+if (snapshot.val() === true) {
+// Update my presence status
+const myPresenceRef = db.ref(presence/${myName});
+myPresenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+myPresenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+​// Mark my dot in HTML as online immediately
+document.getElementById(status-${myName}).className = 'status-dot online';
+}
+});
+​// Listen for partner's presence status
+db.ref(presence/${partnerName}).on('value', (snapshot) => {
+const data = snapshot.val();
+const partnerDot = document.getElementById(status-${partnerName});
+if (data && data.online) {
+partnerDot.className = 'status-dot online';
+} else {
+partnerDot.className = 'status-dot offline';
+}
+});
+​// --- CHAT BOX LOGIC ---
+// Listen for new messages
+db.ref('chatMessages').on('child_added', (snapshot) => {
+const data = snapshot.val();
+const chatMessagesDiv = document.getElementById('chatMessages');
+​const messageDiv = document.createElement('div');
+const isMine = data.sender === myName;
+messageDiv.className = isMine ? 'message my-message' : 'message partner-message';
+​// Convert timestamp
+const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const displayName = isMine ? 'You' : data.sender;
+​messageDiv.innerHTML = <div class="message-sender">${displayName} (${time})</div> <div class="message-text">${data.text}</div>;
+​chatMessagesDiv.appendChild(messageDiv);
+chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight; // Auto-scroll to bottom
+});
+​function sendChatMessage() {
+const chatInput = document.getElementById('chatInput');
+const text = chatInput.value.trim();
+if(!text) return;
+​db.ref('chatMessages').push({
+sender: myName,
+text: text,
+timestamp: firebase.database.ServerValue.TIMESTAMP
+});
+​chatInput.value = ""; // Clear input
+closeEmojiPicker(); // Hide picker on send
+}
+​// Also support enter key for sending
+document.getElementById('chatInput').addEventListener('keypress', function (e) {
+if (e.key === 'Enter') {
+sendChatMessage();
+}
+});
+​// --- EMOJI PICKER LOGIC ---
+const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
+​// Populate emoji picker
+window.addEventListener('load', () => {
+const picker = document.getElementById('emojiPicker');
+emojis.forEach(emoji => {
+const btn = document.createElement('button');
+btn.className = 'emoji-item';
+btn.innerText = emoji;
+btn.onclick = () => { appendEmoji(emoji); };
+picker.appendChild(btn);
+});
+renderUI(); // Initial game UI render
+});
+​function toggleEmojiPicker() {
+document.getElementById('emojiPicker').classList.toggle('hidden');
+}
+​function closeEmojiPicker() {
+document.getElementById('emojiPicker').classList.add('hidden');
+}
+​function appendEmoji(emoji) {
+const chatInput = document.getElementById('chatInput');
+chatInput.value += emoji;
+chatInput.focus();
+// Option to close on emoji click: closeEmojiPicker();
+}
 </script>
 </body>
 </html>
