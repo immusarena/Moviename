@@ -32,10 +32,10 @@ body {
 
 .container {
     width: 90%;
-    max-width: 400px;
+    max-width: 420px;
 }
 
-/* VS */
+/* VS SECTION */
 .vs-container {
     display: flex;
     justify-content: space-around;
@@ -48,19 +48,19 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90px;
+    width: 95px;
     padding: 10px;
     border-radius: 15px;
     position: relative;
 }
 
-/* 🔥 TURN HIGHLIGHT UPGRADED */
 .active-turn {
     background: rgba(255, 75, 114, 0.15);
     border: 1px solid #FF4B72;
     box-shadow: 0 0 15px #FF4B72;
 }
 
+/* AVATAR */
 .avatar {
     width: 65px;
     height: 65px;
@@ -73,11 +73,11 @@ body {
 .immu-pic { background-image: url('1000242624.jpg'); }
 .sappii-pic { background-image: url('1000242625.jpg'); }
 
-/* 🟢 ONLINE DOT */
+/* ONLINE DOT */
 .online-dot {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
+    bottom: 5px;
+    right: 5px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -85,20 +85,12 @@ body {
     border: 2px solid #120A1E;
 }
 
-/* turn border on avatar */
 .avatar.active {
     box-shadow: 0 0 0 3px #4ade80, 0 0 15px #4ade80;
 }
 
-.player-name {
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.score-val {
-    font-size: 22px;
-    color: #FF4B72;
-}
+.player-name { font-size: 13px; font-weight: 600; }
+.score-val { font-size: 22px; color: #FF4B72; }
 
 .card {
     background: #1D102E;
@@ -128,6 +120,34 @@ button {
     border-radius: 12px;
     color: white;
     font-weight: 600;
+}
+
+/* CHAT */
+.chat-container {
+    height: 150px;
+    overflow-y: auto;
+    background: #120A1E;
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid #3A2359;
+}
+
+.chat-msg {
+    font-size: 12px;
+    margin: 5px 0;
+}
+
+.msg-mine { color: #FF4B72; text-align: right; }
+.msg-partner { color: white; }
+
+/* EMOJI */
+.emoji-btn {
+    background: #1D102E;
+    border: 1px solid #FF4B72;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
 }
 
 .floating-emoji {
@@ -172,11 +192,28 @@ button {
 
 </div>
 
+<!-- EMOJI -->
+<div style="display:flex;justify-content:space-around;margin-bottom:10px;">
+    <button class="emoji-btn" onclick="sendReaction('❤️')">❤️</button>
+    <button class="emoji-btn" onclick="sendReaction('😂')">😂</button>
+    <button class="emoji-btn" onclick="sendReaction('🥺')">🥺</button>
+    <button class="emoji-btn" onclick="sendReaction('🔥')">🔥</button>
+</div>
+
 <div id="gameContent"></div>
+
+<!-- CHAT -->
+<div class="card">
+<h4>Chat 💬</h4>
+<div class="chat-container" id="chatMessages"></div>
+<input id="chatInput" placeholder="Type..." onkeypress="if(event.key==='Enter') sendMessage()">
+<button onclick="sendMessage()">Send</button>
+</div>
 
 </div>
 
 <script>
+
 const firebaseConfig = {
 apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
 authDomain: "moviename-26960.firebaseapp.com",
@@ -190,60 +227,68 @@ appId: "1:745803258160:web:94974f7633fd84a1f3d0f5"
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const myName = new URLSearchParams(window.location.search).get('u') || "immu";
+const urlParams = new URLSearchParams(window.location.search);
+const myName = (urlParams.get('u') || "immu").toLowerCase();
 
 /* ---------------- ONLINE STATUS ---------------- */
-function setOnlineStatus() {
-    const statusRef = db.ref("status/" + myName);
+function setOnline() {
+    const ref = db.ref("status/" + myName);
 
     db.ref(".info/connected").on("value", snap => {
-        if (snap.val() === true) {
-            statusRef.set("online");
-            statusRef.onDisconnect().set("offline");
+        if (snap.val()) {
+            ref.set("online");
+            ref.onDisconnect().set("offline");
         }
     });
 }
+setOnline();
 
-setOnlineStatus();
-
-/* listen status */
 db.ref("status").on("value", snap => {
-    const data = snap.val() || {};
-
-    updateStatusUI("immu", data.immu);
-    updateStatusUI("sappii", data.sappii);
+    const d = snap.val() || {};
+    updateStatus("immu", d.immu);
+    updateStatus("sappii", d.sappii);
 });
 
-function updateStatusUI(user, status) {
+function updateStatus(user, status) {
     const el = document.getElementById(user + "Status");
-
     if (!el) return;
-
     el.style.background = status === "online" ? "#4ade80" : "gray";
 }
 
-/* ---------------- TURN UI ---------------- */
+/* ---------------- TURN ---------------- */
 db.ref("gameState").on("value", snap => {
-    const data = snap.val() || {};
+    const d = snap.val() || {};
 
-    highlightTurn(data.turn);
-    document.getElementById("immuScore").innerText = data.score1 || 0;
-    document.getElementById("sappiiScore").innerText = data.score2 || 0;
+    document.getElementById("immuScore").innerText = d.score1 || 0;
+    document.getElementById("sappiiScore").innerText = d.score2 || 0;
+
+    document.getElementById("box-immu").classList.toggle("active-turn", d.turn === "immu");
+    document.getElementById("box-sappii").classList.toggle("active-turn", d.turn === "sappii");
+
+    document.getElementById("immuAvatar").classList.toggle("active", d.turn === "immu");
+    document.getElementById("sappiiAvatar").classList.toggle("active", d.turn === "sappii");
 });
 
-function highlightTurn(turn) {
-    const immuBox = document.getElementById("box-immu");
-    const sappiiBox = document.getElementById("box-sappii");
+/* ---------------- CHAT ---------------- */
+const chatRef = db.ref("chat");
 
-    const immuAvatar = document.getElementById("immuAvatar");
-    const sappiiAvatar = document.getElementById("sappiiAvatar");
+function sendMessage() {
+    const i = document.getElementById("chatInput");
+    if (!i.value) return;
 
-    immuBox.classList.toggle("active-turn", turn === "immu");
-    sappiiBox.classList.toggle("active-turn", turn === "sappii");
-
-    immuAvatar.classList.toggle("active", turn === "immu");
-    sappiiAvatar.classList.toggle("active", turn === "sappii");
+    chatRef.push({ sender: myName, text: i.value });
+    i.value = "";
 }
+
+chatRef.on("child_added", snap => {
+    const m = snap.val();
+    const div = document.createElement("div");
+
+    div.className = "chat-msg " + (m.sender === myName ? "msg-mine" : "msg-partner");
+    div.innerText = m.sender + ": " + m.text;
+
+    document.getElementById("chatMessages").appendChild(div);
+});
 
 /* ---------------- EMOJI ---------------- */
 const reactionRef = db.ref("reactions");
@@ -254,19 +299,21 @@ function sendReaction(e) {
 
 reactionRef.on("child_added", snap => {
     const d = snap.val();
-    if (Date.now() - d.time < 3000) {
-        createEmoji(d.emoji);
-    }
+    if (Date.now() - d.time < 3000) createEmoji(d.emoji);
 });
 
 function createEmoji(e) {
     const el = document.createElement("div");
     el.className = "floating-emoji";
     el.innerText = e;
+
     el.style.left = Math.random() * window.innerWidth + "px";
+
     document.body.appendChild(el);
+
     setTimeout(() => el.remove(), 2500);
 }
+
 </script>
 
 </body>
