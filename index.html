@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Couple Movie Game 💖</title>
-    
+
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
-
-        html, body {
-            width: 100%;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
 
         body {
             background-color: #120A1E;
@@ -31,58 +25,133 @@
             flex-direction: column;
         }
 
-        .container {
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-        }
-        
+        .container { width: 90%; max-width: 400px; padding: 20px; }
+
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
-        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px;}
+
+        .player-box {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 90px;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
         .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
-        
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
+
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; }
+
         .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; }
         .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; }
-        
-        .player-name { font-size: 13px; font-weight: 600; color: #fff; text-transform: capitalize; }
+
+        .player-name { font-size: 13px; font-weight: 600; }
         .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
-        .vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; color: #aaa; }
 
-        .card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; margin-bottom: 20px;}
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; }
-        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; }
-        
-        .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
-        .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 10px; font-size: 14px; padding: 10px; }
+        .vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; }
 
-        .masked-word { font-size: 24px; letter-spacing: 3px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; word-wrap: break-word;}
-        .letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px;}
-        
+        .card {
+            background-color: #1D102E;
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #2D1A45;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid #3A2359;
+            background-color: #120A1E;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #FF4B72, #FF7694);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .give-up-btn {
+            background: transparent;
+            border: 1px solid #aaa;
+            color: #aaa;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #FF4B72;
+            color: #FF4B72;
+        }
+
+        .masked-word {
+            font-size: 24px;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            color: #4ade80;
+            font-weight: bold;
+            word-wrap: break-word;
+        }
+
         .hidden { display: none !important; }
-        .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; }
-        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .chat-container {
+            text-align: left;
+            background: #120A1E;
+            border-radius: 15px;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #3A2359;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-        .chat-container { text-align: left; background: #120A1E; border-radius: 15px; padding: 10px; height: 150px; overflow-y: auto; margin-bottom: 10px; border: 1px solid #3A2359; display: flex; flex-direction: column; gap: 5px; }
-        .chat-msg { font-size: 12px; padding: 8px 12px; border-radius: 12px; max-width: 80%; word-wrap: break-word; }
-        .msg-mine { background: #FF4B72; color: white; align-self: flex-end; border-bottom-right-radius: 2px;}
-        .msg-partner { background: #2D1A45; color: white; align-self: flex-start; border-bottom-left-radius: 2px;}
-        
-        .chat-input-row { display: flex; gap: 5px; }
-        .chat-input-row input { margin: 0; padding: 10px; }
-        .chat-input-row button { margin: 0; width: auto; padding: 10px 15px; font-size: 14px; }
+        .chat-msg {
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+        }
+
+        .msg-mine { background: #FF4B72; align-self: flex-end; }
+        .msg-partner { background: #2D1A45; align-self: flex-start; }
 
         .emoji-bar { display: flex; justify-content: space-evenly; margin-bottom: 20px; }
-        .emoji-btn { background: #1D102E; border: 1px solid #FF4B72; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; display: flex; justify-content: center; align-items: center; margin: 0; padding: 0; cursor: pointer; transition: transform 0.2s;}
-        .emoji-btn:active { transform: scale(0.9); }
-        
-        .floating-emoji { position: fixed; bottom: 80px; font-size: 35px; pointer-events: none; animation: floatUp 2.5s ease-out forwards; z-index: 2000; }
+
+        .emoji-btn {
+            background: #1D102E;
+            border: 1px solid #FF4B72;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .floating-emoji {
+            position: fixed;
+            bottom: 80px;
+            font-size: 35px;
+            animation: floatUp 2.5s ease-out forwards;
+        }
+
         @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-250px) scale(1.5); opacity: 0; }
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-250px); opacity: 0; }
         }
     </style>
 </head>
@@ -96,7 +165,6 @@
             <div class="avatar immu-pic"></div>
             <div class="player-name">immu</div>
             <div id="immuScore" class="score-val">0</div>
-            <div id="turn-immu" class="turn-indicator hidden">SETTING...</div>
         </div>
 
         <div class="vs-badge">VS</div>
@@ -105,7 +173,6 @@
             <div class="avatar sappii-pic"></div>
             <div class="player-name">Sappii</div>
             <div id="sappiiScore" class="score-val">0</div>
-            <div id="turn-sappii" class="turn-indicator hidden">SETTING...</div>
         </div>
     </div>
 
@@ -118,137 +185,143 @@
 
     <div id="gameContent"></div>
 
-    <div class="card" style="padding: 15px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 14px; text-align: left; color: #aaa;">Couple Chat 💬</h4>
+    <div class="card">
+        <h4 style="text-align:left;color:#aaa">Chat 💬</h4>
         <div class="chat-container" id="chatMessages"></div>
-        <div class="chat-input-row">
-            <input type="text" id="chatInput" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+        <input id="chatInput" onkeypress="handleChatEnter(event)" placeholder="message...">
+        <button onclick="sendMessage()">Send</button>
     </div>
 
-    <button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
-
-</div>
-
-<div id="resetModal" class="modal hidden">
-    <div class="modal-content">
-        <h3 style="margin-top: 0; color: #fff;">Who will start?</h3>
-        <p style="font-size: 13px; color: #aaa;">Scores will reset. Pick a starter!</p>
-        <div class="modal-btn-group">
-            <button onclick="confirmReset('immu')" style="background: #4ade80; color: #120A1E;">Immu 👦</button>
-            <button onclick="confirmReset('sappii')">Sappii 👧</button>
-        </div>
-        <button onclick="closeResetModal()" style="background:none; border:none; color:#aaa; margin-top:10px;">Cancel</button>
-    </div>
+    <button class="reset-btn" onclick="openResetModal()">Reset</button>
 </div>
 
 <script>
+const tamilMapping = { a:'அ', aa:'ஆ', i:'இ', ee:'ஈ', u:'உ', oo:'ஊ', ka:'க', ki:'கி', pa:'ப', ma:'ம', etc:'எ' };
+
+function transliterate(text){
+    let res='',i=0,t=text.toLowerCase();
+    while(i<t.length){
+        let found=false;
+        for(let l=3;l>=1;l--){
+            let c=t.substring(i,i+l);
+            if(tamilMapping[c]){res+=tamilMapping[c];i+=l;found=true;break;}
+        }
+        if(!found){res+=t[i];i++;}
+    }
+    return res;
+}
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
-    authDomain: "moviename-26960.firebaseapp.com",
-    databaseURL: "https://moviename-26960-default-rtdb.firebaseio.com",
-    projectId: "moviename-26960",
-    storageBucket: "moviename-26960.firebasestorage.app",
-    messagingSenderId: "745803258160",
-    appId: "1:745803258160:web:94974f7633fd84a1f3d0f5"
+ apiKey:"xxx",
+ databaseURL:"https://moviename-26960-default-rtdb.firebaseio.com",
+ projectId:"moviename-26960"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db=firebase.database();
 
-const urlParams = new URLSearchParams(window.location.search);
-const myName = (urlParams.get('u') || "immu").toLowerCase();
+const myName=new URLSearchParams(location.search).get('u')||'immu';
 
-let gameState = {};
+let gameState={};
 
-db.ref('gameState').on('value', (snapshot) => {
-    const data = snapshot.val() || {};
-    gameState = data;
-    renderUI();
+db.ref('gameState').on('value',s=>{
+ gameState=s.val()||{turn:'immu',status:'set',score1:0,score2:0,movie:'',hint:''};
+ renderUI();
 });
 
-function renderUI() {
-    document.getElementById('immuScore').innerText = gameState.score1 || 0;
-    document.getElementById('sappiiScore').innerText = gameState.score2 || 0;
+function renderUI(){
+document.getElementById('immuScore').innerText=gameState.score1;
+document.getElementById('sappiiScore').innerText=gameState.score2;
 
-    const container = document.getElementById('gameContent');
+document.getElementById('box-immu').classList.toggle('active-turn',gameState.turn==='immu');
+document.getElementById('box-sappii').classList.toggle('active-turn',gameState.turn==='sappii');
 
-    container.innerHTML = `
-        <div class="card">
-            <h3>${gameState.status || "Game"}</h3>
-        </div>
-    `;
+let c=document.getElementById('gameContent');
+
+if(gameState.status==='set'){
+ if(gameState.turn===myName){
+ c.innerHTML=`
+ <div class="card">
+ <h3>Your turn</h3>
+ <input id="movie" oninput="preview(this.value)" placeholder="movie">
+ <p id="prev"></p>
+ <input id="hint" placeholder="hint">
+ <button onclick="setMovie()">Start</button>
+ </div>`;
+ }else c.innerHTML=`<div class="card">Waiting...</div>`;
 }
 
-/* CHAT */
-const chatRef = db.ref('chat');
-
-function sendMessage() {
-    const input = document.getElementById('chatInput');
-    if(!input.value) return;
-
-    chatRef.push({
-        sender: myName,
-        text: input.value
-    });
-
-    input.value = '';
+else if(gameState.status==='guessing'){
+ if(gameState.turn===myName){
+ c.innerHTML=`<div class="card"><div class="masked-word">${mask(gameState.movie)}</div></div>`;
+ }else{
+ c.innerHTML=`
+ <div class="card">
+ <div class="masked-word">${mask(gameState.movie)}</div>
+ <input id="guess" oninput="live(this.value)">
+ <p id="live"></p>
+ <button onclick="checkGuess()">Submit</button>
+ <button class="give-up-btn" onclick="giveUp()">Give Up</button>
+ <p id="fb"></p>
+ </div>`;
+ }
+}
 }
 
-chatRef.on('child_added', snap => {
-    const msg = snap.val();
+function setMovie(){
+let m=document.getElementById('movie').value;
+let h=document.getElementById('hint').value;
 
-    const div = document.createElement('div');
-    div.className = "chat-msg " + (msg.sender === myName ? "msg-mine" : "msg-partner");
-    div.innerText = msg.sender + ": " + msg.text;
+db.ref('gameState').update({
+ movie:m,
+ hint:h,
+ status:'guessing',
+ turn: myName==='immu'?'sappii':'immu'
+});
+}
 
-    document.getElementById('chatMessages').appendChild(div);
+function mask(m){return m.split('').map(x=>x===' '?' ':'*').join('');}
+
+function checkGuess(){
+let g=document.getElementById('guess').value.toLowerCase();
+if(g===gameState.movie.toLowerCase()){
+ db.ref('gameState').update({
+  status:'set',
+  score1: gameState.turn==='immu'?gameState.score1:gameState.score1+1,
+  score2: gameState.turn==='sappii'?gameState.score2:gameState.score2+1
+ });
+}
+else document.getElementById('fb').innerText="Wrong";
+}
+
+function giveUp(){
+db.ref('gameState').update({status:'set',turn:gameState.turn});
+}
+
+function sendMessage(){
+let msg=document.getElementById('chatInput').value;
+db.ref('chat').push({user:myName,msg});
+document.getElementById('chatInput').value='';
+}
+
+db.ref('chat').on('child_added',s=>{
+let d=s.val();
+let div=document.createElement('div');
+div.className='chat-msg '+(d.user===myName?'msg-mine':'msg-partner');
+div.innerText=d.msg;
+document.getElementById('chatMessages').appendChild(div);
 });
 
-/* EMOJI */
-const reactionRef = db.ref('reactions');
-
-function sendReaction(e) {
-    reactionRef.push({
-        emoji: e,
-        time: Date.now()
-    });
+function sendReaction(e){
+let el=document.createElement('div');
+el.className='floating-emoji';
+el.innerText=e;
+document.body.appendChild(el);
+setTimeout(()=>el.remove(),2500);
 }
 
-reactionRef.on('child_added', snap => {
-    const data = snap.val();
+function handleChatEnter(e){if(e.key==='Enter')sendMessage();}
 
-    if(Date.now() - data.time < 3000) {
-        createEmoji(data.emoji);
-    }
-});
-
-/* ✅ FIXED FUNCTION */
-function createEmoji(e) {
-    const el = document.createElement('div');
-    el.className = "floating-emoji";
-    el.innerText = e;
-
-    el.style.left = Math.random() * (window.innerWidth - 50) + "px";
-
-    document.body.appendChild(el);
-
-    setTimeout(() => {
-        el.remove();
-    }, 2500);
-}
-
-/* RESET */
-function resetGame() {
-    db.ref("gameState").set({
-        turn: "immu",
-        score1: 0,
-        score2: 0,
-        status: "set"
-    });
-}
 </script>
-
 </body>
 </html>
