@@ -3,219 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple Movie Game 💖</title>
+    <title>Real-time Couple Movie Game 💖</title>
+    
+    <!-- Firebase CDN Links -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-        
-        body {
-            background-color: #120A1E;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 24px;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .card {
-            background-color: #1D102E;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-        }
-        h2 { text-align: center; font-size: 18px; margin-top: 0; }
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            background-color: #120A1E;
-            border: 1px solid #3A2359;
-            color: white;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-        button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #FF4B72, #FF7694);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        body { background-color: #120A1E; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { width: 90%; max-width: 400px; padding: 20px; }
+        .card { background-color: #1D102E; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; background: #2D1A45; padding: 15px; border-radius: 15px; }
+        .score-box { font-size: 14px; }
+        .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
+        .vs-badge { background: #3A2359; padding: 5px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;}
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #3A2359; background: #120A1E; color: white; box-sizing: border-box; font-family: inherit;}
+        button { width: 100%; padding: 12px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 16px;}
         button:hover { opacity: 0.9; }
+        .masked-word { font-size: 22px; letter-spacing: 4px; margin: 20px 0; color: #4ade80; font-weight: bold;}
         .hidden { display: none; }
-        
-        /* Guess Screen Styles */
-        .masked-word {
-            font-size: 24px;
-            letter-spacing: 5px;
-            text-align: center;
-            margin: 20px 0;
-            font-weight: 600;
-        }
-        .audio-btn {
-            background-color: #3A2359;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin: 0 auto 20px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        .hint-box {
-            background-color: #2D1A45;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .hint-box span { color: #FF4B72; font-weight: bold; }
-        #shareLink { word-break: break-all; font-size: 12px; color: #aaa; margin-top: 10px; }
-        
+        .audio-btn { background-color: #3A2359; width: 40px; height: 40px; border-radius: 50%; margin: 10px auto; display: flex; justify-content: center; align-items: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>💖 Couple Movie Game</h1>
-        <p style="color: #aaa; font-size: 14px; margin-top: 5px;">Guess the movie together</p>
+    <div class="vs-container">
+        <div class="score-box">
+            <div>You</div>
+            <div id="myScore" class="score-val">0</div>
+        </div>
+        <div class="vs-badge">VS</div>
+        <div class="score-box">
+            <div>Partner</div>
+            <div id="partnerScore" class="score-val">0</div>
+        </div>
     </div>
 
-    <!-- SET MOVIE SCREEN (For You) -->
+    <!-- SET MOVIE SCREEN -->
     <div id="setScreen" class="card">
-        <h2>🎬 Set Movie</h2>
-        <p style="text-align: center; font-size: 13px; color: #aaa;">You enter the movie. Your partner will guess!</p>
+        <h3>🎬 Set Movie</h3>
+        <p style="font-size: 12px; color: #aaa; margin-top: -10px;">Type a movie for her to guess!</p>
         <input type="text" id="movieInput" placeholder="Enter movie name (e.g., 3 Idiots)">
-        <input type="text" id="hintInput" placeholder="Enter a hint (Optional)">
-        <button onclick="generateGameLink()">Create Magic Link</button>
-        <div id="linkContainer" class="hidden" style="margin-top: 20px; text-align: center;">
-            <p style="font-size: 14px; color: #4ade80;">Link Created! Copy & share with her:</p>
-            <input type="text" id="shareLink" readonly>
-            <button onclick="copyLink()" style="margin-top: 10px; background: #3A2359;">Copy Link</button>
-        </div>
+        <input type="text" id="hintInput" placeholder="Enter hint (Optional)">
+        <button onclick="setMovie()">Send to Partner 🚀</button>
     </div>
 
-    <!-- GUESS MOVIE SCREEN (For Her) -->
+    <!-- GUESS MOVIE SCREEN -->
     <div id="guessScreen" class="card hidden">
-        <h2>🍿 Guess the Movie</h2>
-        <div class="masked-word" id="maskedDisplay"></div>
+        <h3>🍿 Guess the Movie!</h3>
+        <div class="masked-word" id="maskedDisplay">_ _ _ _ _</div>
         
-        <div class="audio-btn" onclick="speakMovie()">
-            🔊
-        </div>
-        <p style="text-align: center; font-size: 12px; color: #aaa; margin-top: -10px;">Tap to hear the movie name</p>
-
-        <div class="hint-box" id="hintDisplay">
-            <span>💡 Hint:</span> <span id="hintText" style="color: white; font-weight: normal;"></span>
-        </div>
-
-        <input type="text" id="guessInput" placeholder="Type your answer...">
-        <button onclick="checkGuess()">Submit</button>
+        <div class="audio-btn" onclick="speakMovie()">🔊</div>
         
-        <div id="resultMessage" style="text-align: center; margin-top: 15px; font-weight: bold;"></div>
+        <p id="hintText" style="font-size: 14px; color: #FF4B72; font-weight: bold;"></p>
+        
+        <input type="text" id="guessInput" placeholder="Type your answer here...">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
     </div>
 </div>
 
 <script>
-    let actualMovie = "";
+    // Unga Firebase Config
+    const firebaseConfig = {
+        apiKey: "AIzaSyCdhWff4X_XHvoIw_mhFDGRjy9vC4ymFc4",
+        authDomain: "moviename-26960.firebaseapp.com",
+        databaseURL: "https://moviename-26960-default-rtdb.firebaseio.com",
+        projectId: "moviename-26960",
+        storageBucket: "moviename-26960.firebasestorage.app",
+        messagingSenderId: "745803258160",
+        appId: "1:745803258160:web:94974f7633fd84a1f3d0f5",
+        measurementId: "G-FSX18NDWSY"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    // Check if URL has game data
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameData = urlParams.get('game');
-
-        if (gameData) {
-            // Setup Guess Screen
-            document.getElementById('setScreen').classList.add('hidden');
-            document.getElementById('guessScreen').classList.remove('hidden');
+    let currentMovie = "";
+    
+    // Real-time listener: Database change aana udane screen update aagum
+    db.ref('gameState').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            currentMovie = (data.movie || "").toUpperCase();
             
-            try {
-                const decodedData = JSON.parse(atob(gameData));
-                actualMovie = decodedData.m.toUpperCase();
+            // Score Update
+            document.getElementById('myScore').innerText = data.score1 || 0;
+            document.getElementById('partnerScore').innerText = data.score2 || 0;
+            
+            // Screen Switch based on status
+            if (data.status === "guessing" && currentMovie !== "") {
+                document.getElementById('setScreen').classList.add('hidden');
+                document.getElementById('guessScreen').classList.remove('hidden');
+                updateMaskedDisplay(currentMovie);
                 
-                // Mask the movie name (First and last letter of each word shown)
-                const masked = actualMovie.split(' ').map(word => {
-                    if (word.length <= 2) return word;
-                    return word[0] + ' _ '.repeat(word.length - 2) + word[word.length - 1];
-                }).join(' &nbsp;&nbsp; ');
-                
-                document.getElementById('maskedDisplay').innerHTML = masked;
-
-                // Show hint if available
-                if (decodedData.h) {
-                    document.getElementById('hintText').innerText = decodedData.h;
+                if(data.hint) {
+                    document.getElementById('hintText').innerText = "💡 Hint: " + data.hint;
                 } else {
-                    document.getElementById('hintDisplay').style.display = 'none';
+                    document.getElementById('hintText').innerText = "";
                 }
-            } catch(e) {
-                alert("Invalid Game Link!");
+                
+                // Clear old inputs
+                document.getElementById('movieInput').value = "";
+                document.getElementById('hintInput').value = "";
+                document.getElementById('feedback').innerText = "";
+                document.getElementById('guessInput').value = "";
+                
+            } else {
+                document.getElementById('setScreen').classList.remove('hidden');
+                document.getElementById('guessScreen').classList.add('hidden');
             }
         }
-    };
+    });
 
-    function generateGameLink() {
+    function setMovie() {
         const movie = document.getElementById('movieInput').value;
         const hint = document.getElementById('hintInput').value;
-        
         if(!movie) return alert("Please enter a movie name!");
 
-        const data = { m: movie, h: hint };
-        const encoded = btoa(JSON.stringify(data)); // Encode to Base64
-        const link = window.location.href.split('?')[0] + '?game=' + encoded;
-        
-        document.getElementById('linkContainer').classList.remove('hidden');
-        document.getElementById('shareLink').value = link;
+        // Send data to Firebase
+        db.ref('gameState').update({
+            movie: movie,
+            hint: hint,
+            status: "guessing"
+        });
     }
 
-    function copyLink() {
-        const linkInput = document.getElementById('shareLink');
-        linkInput.select();
-        document.execCommand("copy");
-        alert("Link copied! Send it to your GF! 💌");
+    function updateMaskedDisplay(movie) {
+        // First and last letter visible, others hidden
+        const masked = movie.split(' ').map(word => {
+            if (word.length <= 2) return word;
+            return word[0] + ' _ '.repeat(word.length - 2) + word[word.length - 1];
+        }).join(' &nbsp;&nbsp; ');
+        document.getElementById('maskedDisplay').innerHTML = masked;
     }
 
     function speakMovie() {
-        const utterance = new SpeechSynthesisUtterance(actualMovie);
-        // You can change language here, e.g., utterance.lang = 'ta-IN' for Tamil accent
-        window.speechSynthesis.speak(utterance);
+        if(currentMovie) {
+            const utterance = new SpeechSynthesisUtterance(currentMovie);
+            window.speechSynthesis.speak(utterance);
+        }
     }
 
     function checkGuess() {
         const guess = document.getElementById('guessInput').value.toUpperCase().trim();
-        const msgDiv = document.getElementById('resultMessage');
+        const feedbackMessage = document.getElementById('feedback');
         
-        if (guess === actualMovie) {
-            msgDiv.style.color = "#4ade80";
-            msgDiv.innerText = "🎉 Super! Correct Guess! 💕";
+        if (guess === currentMovie) {
+            feedbackMessage.style.color = "#4ade80";
+            feedbackMessage.innerText = "Correct! 🎉";
+            
+            // Update partner score in Firebase
+            db.ref('gameState/score2').transaction(currentScore => (currentScore || 0) + 1);
+            
+            // Reset game to Set Movie screen after 2 seconds
+            setTimeout(() => {
+                db.ref('gameState').update({ status: "set", movie: "" });
+            }, 2000);
+            
         } else {
-            msgDiv.style.color = "#FF4B72";
-            msgDiv.innerText = "Oops! Try again 🥺";
+            feedbackMessage.style.color = "#FF4B72";
+            feedbackMessage.innerText = "Wrong! Try again 🥺";
         }
     }
 </script>
