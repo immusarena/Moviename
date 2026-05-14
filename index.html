@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-time Couple Movie Game 💖</title>
     
-    <!-- Firebase CDN Links -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
@@ -13,55 +12,69 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
         body { background-color: #120A1E; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .container { width: 90%; max-width: 400px; padding: 20px; }
-        .card { background-color: #1D102E; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; background: #2D1A45; padding: 15px; border-radius: 15px; }
-        .score-box { font-size: 14px; }
-        .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
-        .vs-badge { background: #3A2359; padding: 5px 10px; border-radius: 10px; font-size: 12px; font-weight: bold;}
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #3A2359; background: #120A1E; color: white; box-sizing: border-box; font-family: inherit;}
-        button { width: 100%; padding: 12px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; font-size: 16px;}
-        button:hover { opacity: 0.9; }
-        .masked-word { font-size: 22px; letter-spacing: 4px; margin: 20px 0; color: #4ade80; font-weight: bold;}
+        
+        /* VS Scoreboard Styling */
+        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; padding: 10px; }
+        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 80px; }
+        
+        /* Avatar Placeholder (Based on your pic) */
+        .avatar { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #FF4B72; background-size: cover; background-position: center; background-color: #3A2359; }
+        .immu-pic { background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'); } /* Boy Avatar */
+        .sappii-pic { background-image: url('https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka'); } /* Girl Avatar */
+        
+        .player-name { font-size: 12px; color: #aaa; margin-top: 5px; }
+        .score-val { font-size: 28px; font-weight: bold; color: white; margin-top: -5px; }
+        .vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; font-weight: bold; color: #aaa; border: 1px solid #2D1A45; }
+
+        .card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; font-size: 14px; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3); }
+        
+        .masked-word { font-size: 24px; letter-spacing: 5px; margin: 25px 0; color: #4ade80; font-weight: bold; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+        .audio-btn { background-color: #FF4B72; width: 55px; height: 55px; border-radius: 50%; margin: 10px auto; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 20px; box-shadow: 0 0 20px rgba(255, 75, 114, 0.4); }
         .hidden { display: none; }
-        .audio-btn { background-color: #3A2359; width: 40px; height: 40px; border-radius: 50%; margin: 10px auto; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        #feedback { margin-top: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="vs-container">
-        <div class="score-box">
-            <div>You</div>
-            <div id="myScore" class="score-val">0</div>
+        <div class="player-box">
+            <div class="avatar immu-pic"></div>
+            <div class="player-name">immu</div>
+            <div id="immuScore" class="score-val">0</div>
         </div>
+        
         <div class="vs-badge">VS</div>
-        <div class="score-box">
-            <div>Partner</div>
-            <div id="partnerScore" class="score-val">0</div>
+        
+        <div class="player-box">
+            <div class="avatar sappii-pic"></div>
+            <div class="player-name">Sappii</div>
+            <div id="sappiiScore" class="score-val">0</div>
         </div>
     </div>
 
-    <!-- SET MOVIE SCREEN -->
     <div id="setScreen" class="card">
-        <h3>🎬 Set Movie</h3>
-        <p style="font-size: 12px; color: #aaa; margin-top: -10px;">Type a movie for her to guess!</p>
-        <input type="text" id="movieInput" placeholder="Enter movie name (e.g., 3 Idiots)">
-        <input type="text" id="hintInput" placeholder="Enter hint (Optional)">
-        <button onclick="setMovie()">Send to Partner 🚀</button>
+        <h3 style="margin-top: 0;">🎬 Set Movie</h3>
+        <p style="font-size: 12px; color: #aaa; margin-bottom: 20px;">Enter a movie name for <b>Sappii</b> to guess!</p>
+        <input type="text" id="movieInput" placeholder="Movie Name (e.g., 3 Idiots)">
+        <input type="text" id="hintInput" placeholder="Add a hint...">
+        <button onclick="setMovie()">Send to Sappii 🚀</button>
     </div>
 
-    <!-- GUESS MOVIE SCREEN -->
     <div id="guessScreen" class="card hidden">
-        <h3>🍿 Guess the Movie!</h3>
+        <h3 style="margin-top: 0;">🍿 Guess the Movie!</h3>
         <div class="masked-word" id="maskedDisplay">_ _ _ _ _</div>
         
         <div class="audio-btn" onclick="speakMovie()">🔊</div>
+        <p style="font-size: 11px; color: #aaa; margin-top: -5px;">Tap to hear the name</p>
         
-        <p id="hintText" style="font-size: 14px; color: #FF4B72; font-weight: bold;"></p>
+        <p id="hintText" style="font-size: 14px; color: #FF4B72; background: rgba(255,75,114,0.1); padding: 10px; border-radius: 10px; margin-bottom: 20px;"></p>
         
-        <input type="text" id="guessInput" placeholder="Type your answer here...">
-        <button onclick="checkGuess()">Submit Guess</button>
-        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
+        <input type="text" id="guessInput" placeholder="Your Answer...">
+        <button onclick="checkGuess()">Submit Answer</button>
+        <p id="feedback"></p>
     </div>
 </div>
 
@@ -78,40 +91,25 @@
         measurementId: "G-FSX18NDWSY"
     };
     
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     let currentMovie = "";
     
-    // Real-time listener: Database change aana udane screen update aagum
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
             currentMovie = (data.movie || "").toUpperCase();
             
             // Score Update
-            document.getElementById('myScore').innerText = data.score1 || 0;
-            document.getElementById('partnerScore').innerText = data.score2 || 0;
+            document.getElementById('immuScore').innerText = data.score1 || 0;
+            document.getElementById('sappiiScore').innerText = data.score2 || 0;
             
-            // Screen Switch based on status
             if (data.status === "guessing" && currentMovie !== "") {
                 document.getElementById('setScreen').classList.add('hidden');
                 document.getElementById('guessScreen').classList.remove('hidden');
                 updateMaskedDisplay(currentMovie);
-                
-                if(data.hint) {
-                    document.getElementById('hintText').innerText = "💡 Hint: " + data.hint;
-                } else {
-                    document.getElementById('hintText').innerText = "";
-                }
-                
-                // Clear old inputs
-                document.getElementById('movieInput').value = "";
-                document.getElementById('hintInput').value = "";
-                document.getElementById('feedback').innerText = "";
-                document.getElementById('guessInput').value = "";
-                
+                document.getElementById('hintText').innerText = data.hint ? "💡 Hint: " + data.hint : "No hint provided";
             } else {
                 document.getElementById('setScreen').classList.remove('hidden');
                 document.getElementById('guessScreen').classList.add('hidden');
@@ -122,22 +120,24 @@
     function setMovie() {
         const movie = document.getElementById('movieInput').value;
         const hint = document.getElementById('hintInput').value;
-        if(!movie) return alert("Please enter a movie name!");
+        if(!movie) return alert("Movie name enter pannunga!");
 
-        // Send data to Firebase
         db.ref('gameState').update({
             movie: movie,
             hint: hint,
             status: "guessing"
         });
+        
+        // Clear inputs
+        document.getElementById('movieInput').value = "";
+        document.getElementById('hintInput').value = "";
     }
 
     function updateMaskedDisplay(movie) {
-        // First and last letter visible, others hidden
         const masked = movie.split(' ').map(word => {
             if (word.length <= 2) return word;
             return word[0] + ' _ '.repeat(word.length - 2) + word[word.length - 1];
-        }).join(' &nbsp;&nbsp; ');
+        }).join('&nbsp;&nbsp;');
         document.getElementById('maskedDisplay').innerHTML = masked;
     }
 
@@ -150,23 +150,22 @@
 
     function checkGuess() {
         const guess = document.getElementById('guessInput').value.toUpperCase().trim();
-        const feedbackMessage = document.getElementById('feedback');
+        const feedback = document.getElementById('feedback');
         
         if (guess === currentMovie) {
-            feedbackMessage.style.color = "#4ade80";
-            feedbackMessage.innerText = "Correct! 🎉";
+            feedback.style.color = "#4ade80";
+            feedback.innerText = "Correct! Sappii wins a point! 🎉";
             
-            // Update partner score in Firebase
-            db.ref('gameState/score2').transaction(currentScore => (currentScore || 0) + 1);
+            // Update Sappii's score (assuming she is the guesser)
+            db.ref('gameState/score2').transaction(s => (s || 0) + 1);
             
-            // Reset game to Set Movie screen after 2 seconds
             setTimeout(() => {
                 db.ref('gameState').update({ status: "set", movie: "" });
+                document.getElementById('guessInput').value = "";
             }, 2000);
-            
         } else {
-            feedbackMessage.style.color = "#FF4B72";
-            feedbackMessage.innerText = "Wrong! Try again 🥺";
+            feedback.style.color = "#FF4B72";
+            feedback.innerText = "Wrong guess! Try again 🥺";
         }
     }
 </script>
