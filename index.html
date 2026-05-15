@@ -9,106 +9,164 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Latha&display=swap');
         
         /* CSS Variables for Dynamic Themes */
         :root {
-            --bg-color: #120A1E;
-            --card-bg: #1D102E;
+            --bg-color: #0d0614;
+            --card-bg: rgba(29, 16, 46, 0.7);
             --primary-color: #FF4B72;
             --secondary-color: #FF7694;
             --accent-color: #4ade80;
-            --border-color: #3A2359;
+            --border-color: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
+            --glow-shadow: rgba(255, 75, 114, 0.4);
         }
 
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; transition: background-color 0.5s ease; }
-        .container { width: 90%; max-width: 400px; padding: 20px; }
+        body { 
+            background: radial-gradient(circle at top left, #2b1340, var(--bg-color)); 
+            background-attachment: fixed;
+            color: var(--text-main); 
+            font-family: 'Poppins', 'Latha', sans-serif; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; 
+            transition: background 0.5s ease; 
+        }
+
+        .container { width: 90%; max-width: 420px; padding: 20px; animation: slideUp 0.6s ease-out forwards; }
         
+        /* Keyframes */
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); }
+            50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); }
+            100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); }
+        }
+        @keyframes pulseGlowAccent {
+            0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); }
+            50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); }
+            100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); }
+        }
+
         /* Toast Notification Styling */
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--accent-color); color: #120A1E; padding: 12px 24px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 2000; pointer-events: none; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* Home Page */
-        .app-title { text-align: center; color: var(--primary-color); font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px var(--primary-color); margin-bottom: 10px; font-weight: bold; transition: color 0.5s ease;}
-        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
-        .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 15px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
-        .game-menu-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--primary-color); }
-        .game-menu-btn.blue { border-color: var(--accent-color); }
-        .game-menu-btn.blue:hover { box-shadow: 0 0 15px var(--accent-color); }
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 34px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); }
+        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 30px; font-weight: 600; letter-spacing: 1px;}
         
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
-        .back-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; width: auto; transition: 0.2s; }
-        .game-title-badge { background: var(--border-color); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--primary-color); }
+        .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 20px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 18px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
+        .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
+        .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
         
-        /* Updated Theme Button */
-        .theme-btn { background: var(--card-bg); border: 2px solid var(--accent-color); width: 45px; height: 45px; border-radius: 50%; font-size: 22px; cursor: pointer; transition: 0.3s; margin-left: auto; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
-        .theme-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-color); }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;}
+        .back-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 18px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; backdrop-filter: blur(10px); }
+        .back-btn:hover { background: rgba(255,255,255,0.1); }
+        .game-title-badge { background: rgba(255, 75, 114, 0.1); border: 1px solid var(--primary-color); padding: 6px 15px; border-radius: 12px; font-size: 13px; font-weight: bold; color: var(--primary-color); box-shadow: 0 0 15px rgba(255, 75, 114, 0.2); }
+        
+        .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); width: 45px; height: 45px; border-radius: 50%; font-size: 22px; cursor: pointer; transition: all 0.3s ease; margin-left: auto; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
+        .theme-btn:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 0 20px var(--accent-color); border-color: var(--accent-color); }
 
         /* VS Scoreboard */
-        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 15px; }
-        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px; transition: 0.3s; border: 2px solid transparent;}
-        .active-turn { border: 2px solid var(--primary-color); box-shadow: 0 0 15px var(--primary-color); background: var(--card-bg); }
-        .racing-turn { border: 2px solid var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: var(--card-bg); }
+        .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; }
+        .player-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 95px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
+        .active-turn { animation: pulseGlow 2s infinite; border: 1px solid var(--primary-color); transform: scale(1.05); }
+        .racing-turn { animation: pulseGlowAccent 2s infinite; border: 1px solid var(--accent-color); transform: scale(1.05); }
         
         /* Avatars */
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--border-color); background-size: cover; background-position: center; background-color: var(--card-bg); }
-        .immu-pic { background-image: url('1000242624.jpg'); border-color: var(--accent-color); } 
-        .sappii-pic { background-image: url('1000242625.jpg'); border-color: var(--primary-color); } 
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E; transition: 0.3s; }
+        .immu-pic { background-image: url('1000242624.jpg'); } 
+        .sappii-pic { background-image: url('1000242625.jpg'); } 
+        .active-turn .sappii-pic { border-color: var(--primary-color); }
+        .active-turn .immu-pic { border-color: var(--primary-color); }
+        .racing-turn .avatar { border-color: var(--accent-color); }
         
-        .name-container { display: flex; align-items: center; gap: 6px; }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #fff; transition: background-color 0.3s; }
-        .online { background-color: #4ade80; } 
-        .offline { background-color: #aaa; } 
-        .player-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
-        .score-val { font-size: 24px; font-weight: bold; color: var(--primary-color); }
-        .vs-badge { background: var(--border-color); padding: 6px 12px; border-radius: 50%; font-size: 12px; color: var(--text-muted); }
+        .name-container { display: flex; align-items: center; gap: 6px; margin-top: 5px;}
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--card-bg); transition: background-color 0.3s; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+        .online { background-color: #4ade80; box-shadow: 0 0 10px #4ade80;} 
+        .offline { background-color: #555; } 
+        .player-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
+        .score-val { font-size: 26px; font-weight: 800; color: var(--primary-color); text-shadow: 0 2px 10px var(--glow-shadow); }
+        .vs-badge { background: linear-gradient(135deg, #3A2359, #1D102E); padding: 8px 15px; border-radius: 50%; font-size: 14px; font-weight: bold; color: var(--text-muted); border: 1px solid var(--border-color); box-shadow: 0 5px 15px rgba(0,0,0,0.5);}
 
         /* Cards & Inputs */
-        .card { background-color: var(--card-bg); border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center; border: 1px solid var(--border-color); margin-bottom: 15px; transition: 0.5s ease; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 14px; text-align: center;}
-        input:focus { outline: none; border-color: var(--primary-color); }
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
+        .card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%); pointer-events: none; }
         
-        .letter-box { font-size: 24px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); }
-        .order-btn { background: var(--bg-color); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 5px 0; padding: 12px; }
+        input { width: 100%; padding: 16px; margin: 10px 0; border-radius: 15px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 15px; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);}
+        input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
+        input::placeholder { color: #777; }
+        
+        .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
+        .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 15px;}
+        .order-btn:hover { background: rgba(74, 222, 128, 0.1); transform: scale(1.02); }
 
-        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
-        button:active { transform: scale(0.98); }
-        .random-btn { background: transparent; border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 10px; font-size: 13px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .give-up-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 10px; }
-        .reset-btn { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); margin-top: 20px; font-size: 14px; padding: 10px; width: auto;}
+        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; font-size: 16px; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
+        button:active { transform: scale(0.96); }
+        
+        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 14px; width: 100%; box-shadow: none; }
+        .random-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
+        .give-up-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
+        .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
+        .reset-btn { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); box-shadow: none; margin-top: 20px; font-size: 14px; padding: 12px; width: auto; border-radius: 20px;}
+        .reset-btn:hover { background: rgba(255, 75, 114, 0.1); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: var(--accent-color); font-weight: bold; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(0,0,0,0.3); }
-        .letter-count { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; background: var(--border-color); display: inline-block; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;}
-        .preview-text { color: var(--accent-color); font-size: 20px; font-weight: bold; margin: 5px 0 10px 0; min-height: 30px; font-family: 'Latha', sans-serif;}
+        .masked-word { font-size: 32px; letter-spacing: 6px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 20px rgba(74, 222, 128, 0.5); }
+        .letter-count { font-size: 12px; color: #fff; margin-bottom: 20px; font-weight: 600; background: var(--accent-color); color: #000; display: inline-block; padding: 5px 15px; border-radius: 20px; text-transform: uppercase; box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);}
+        .preview-text { color: var(--accent-color); font-size: 22px; font-weight: 800; margin: 5px 0 15px 0; min-height: 33px; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);}
 
         .hidden { display: none !important; }
-        .turn-indicator { font-size: 11px; color: var(--accent-color); font-weight: bold; margin-top: 5px; text-transform: uppercase;}
+        .turn-indicator { font-size: 11px; color: var(--accent-color); font-weight: bold; margin-top: 8px; text-transform: uppercase; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px;}
 
-        /* Chat Box */
-        .chat-container { text-align: left; }
-        .chat-messages { height: 180px; overflow-y: auto; padding: 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-color); margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;}
-        .message { padding: 8px 12px; border-radius: 12px; max-width: 80%; display: inline-block;}
-        .message-sender { font-size: 10px; color: var(--primary-color); font-weight: 600; margin-bottom: 3px;}
-        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; }
-        .partner-message { background: var(--border-color); align-self: flex-start; color: var(--text-main); }
-        .system-message { background: var(--border-color); color: var(--accent-color); align-self: center; font-size: 12px; text-align: center; border: 1px solid var(--accent-color); box-shadow: 0 0 10px rgba(0,0,0,0.2);}
-        .cheat-message { background: #3f0000; color: #ff4444; align-self: center; font-size: 12px; font-weight: bold; text-align: center; border: 1px solid #ff4444; box-shadow: 0 0 10px rgba(255,0,0,0.3);}
+        /* Modern Chat Box */
+        .chat-container { text-align: left; padding: 20px; }
+        .chat-container h3 { margin-bottom: 15px; color: var(--text-main); font-weight: 600;}
+        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 15px; background: rgba(0,0,0,0.2); margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
-        .chat-input-group { display: flex; gap: 8px; align-items: center; position: relative;}
-        .chat-input { margin: 0; text-align: left; }
+        /* Modern Bubbles */
+        .message { padding: 10px 16px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        .message-sender { font-size: 10px; font-weight: bold; margin-bottom: 4px; opacity: 0.8;}
+        .message-text { font-size: 14px; line-height: 1.4; word-wrap: break-word;}
+        
+        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 20px 20px 0 20px; }
+        .partner-message { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 20px 20px 20px 0; }
+        
+        .system-message { background: rgba(74, 222, 128, 0.1); color: var(--accent-color); align-self: center; font-size: 12px; text-align: center; border: 1px solid var(--accent-color); border-radius: 20px; padding: 8px 15px; max-width: 90%;}
+        .cheat-message { background: rgba(255, 68, 68, 0.15); color: #ff4d4d; align-self: center; font-size: 12px; font-weight: bold; text-align: center; border: 1px solid #ff4d4d; border-radius: 20px; padding: 8px 15px; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); max-width: 90%;}
+        
+        /* Chat Inputs */
+        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 30px; padding: 5px 5px 5px 15px;}
+        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 14px;}
+        .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
-        .chat-icon-btn { background: none; border: none; font-size: 20px; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
-        .chat-send-btn { width: auto; padding: 10px 15px; margin-top: 0;}
-        .emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
+        .chat-icon-btn { background: none; border: none; font-size: 22px; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
+        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); transform: scale(1.1); box-shadow: none;}
+        .chat-send-btn { width: auto; padding: 10px 20px; margin-top: 0; border-radius: 25px; box-shadow: 0 4px 15px var(--glow-shadow);}
+
+        /* Emoji Picker */
+        .emoji-picker { position: absolute; bottom: 120%; right: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--primary-color); border-radius: 20px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
+        .emoji-item { font-size: 24px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
+        .emoji-item:hover { transform: scale(1.3); box-shadow: none; background: transparent;}
 
         /* Modal */
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
-        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--primary-color); width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);}
-        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 15px; padding: 10px;}
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
+        .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 25px; text-align: center; border: 1px solid var(--primary-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
+        .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 15px; box-shadow: none;}
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white;}
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
     </style>
 </head>
 <body>
@@ -120,10 +178,10 @@
         <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">💖</button>
     </div>
 
-    <h1 class="app-title">Namma Games 💖</h1>
-    <p class="app-subtitle">Choose a game to play together!</p>
+    <h1 class="app-title">Namma Games</h1>
+    <p class="app-subtitle">Choose a game to play together! ✨</p>
     
-    <div class="card" style="padding: 30px 20px;">
+    <div class="card" style="padding: 35px 20px;">
         <button class="game-menu-btn" onclick="openGame('movie')">🎬 Movie Guessing</button>
         <button class="game-menu-btn blue" onclick="openGame('word')">🔠 Word Race Game</button>
     </div>
@@ -131,7 +189,7 @@
 
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
-        <button class="back-btn" onclick="goHome()">⬅ Back</button>
+        <button class="back-btn" onclick="goHome()">⬅ Back to Hub</button>
         <div id="activeGameBadge" class="game-title-badge">Game</div>
     </div>
 
@@ -163,11 +221,11 @@
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
-        <h3 style="margin-top:0; font-size:16px;">💬 Real-time Chat</h3>
+        <h3>💬 Real-time Chat</h3>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
             <div id="emojiPicker" class="emoji-picker hidden"></div>
-            <input type="text" id="chatInput" class="chat-input" placeholder="Type message...">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
                 <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">😊</button>
                 <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
@@ -175,19 +233,21 @@
         </div>
     </div>
 
-    <button class="reset-btn" onclick="openResetModal()">Reset Game Scores 🔄</button>
+    <div style="text-align: center;">
+        <button class="reset-btn" onclick="openResetModal()">Reset Game Scores 🔄</button>
+    </div>
 </div>
 
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
-        <h3 style="margin-top: 0; color: var(--text-main);">Reset Game</h3>
+        <h3 style="margin-top: 0; color: var(--text-main); font-weight:bold;">Reset Game?</h3>
         <p style="font-size: 13px; color: var(--text-muted);">Scores will reset for the current game.</p>
         <div class="modal-btn-group" id="movieResetBtns">
-            <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E;">Immu Start</button>
+            <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">Immu Start</button>
             <button onclick="confirmReset('sappii')">Sappii Start</button>
         </div>
         <div class="modal-btn-group hidden" id="wordResetBtns">
-            <button onclick="confirmResetWord()" style="background: var(--accent-color); color: #120A1E;">Yes, Reset</button>
+            <button onclick="confirmResetWord()" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">Yes, Reset</button>
         </div>
         <button class="btn-cancel" onclick="closeResetModal()">Cancel</button>
     </div>
@@ -217,13 +277,13 @@
     let wordGameState = {}; 
     let selectedPerfectTamil = ""; 
 
-    // --- 🎨 THEME SYSTEM ---
+    // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
-        { icon: "💖", vars: { '--bg-color': '#120A1E', '--card-bg': '#1D102E', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': '#3A2359', '--text-main': '#ffffff', '--text-muted': '#aaaaaa' } },
-        { icon: "🌊", vars: { '--bg-color': '#0B132B', '--card-bg': '#1C2541', '--primary-color': '#3A506B', '--secondary-color': '#5BC0BE', '--accent-color': '#6FFFE9', '--border-color': '#3A506B', '--text-main': '#ffffff', '--text-muted': '#8a9ab3' } },
-        { icon: "🌃", vars: { '--bg-color': '#000000', '--card-bg': '#121212', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': '#2B2B2B', '--text-main': '#ffffff', '--text-muted': '#888888' } },
-        { icon: "🍃", vars: { '--bg-color': '#0F1712', '--card-bg': '#172219', '--primary-color': '#4ade80', '--secondary-color': '#22c55e', '--accent-color': '#fbbf24', '--border-color': '#233226', '--text-main': '#e0eade', '--text-muted': '#819385' } },
-        { icon: "✨", vars: { '--bg-color': '#1a1814', '--card-bg': '#2a2620', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': '#4a4435', '--text-main': '#fffefc', '--text-muted': '#a39c8f' } }
+        { icon: "💖", vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#aaaaaa', '--glow-shadow': 'rgba(255, 75, 114, 0.4)' } },
+        { icon: "🌊", vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#8a9ab3', '--glow-shadow': 'rgba(0, 210, 255, 0.4)' } },
+        { icon: "🌃", vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)', '--text-main': '#ffffff', '--text-muted': '#888888', '--glow-shadow': 'rgba(255, 0, 60, 0.4)' } },
+        { icon: "🍃", vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#e0eade', '--text-muted': '#819385', '--glow-shadow': 'rgba(34, 197, 94, 0.4)' } },
+        { icon: "✨", vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#fffefc', '--text-muted': '#a39c8f', '--glow-shadow': 'rgba(245, 158, 11, 0.4)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
@@ -240,7 +300,7 @@
         localStorage.setItem('appTheme', currentThemeIndex);
         applyTheme(currentThemeIndex);
     }
-    applyTheme(currentThemeIndex); // Apply on load
+    applyTheme(currentThemeIndex);
 
     // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
@@ -362,7 +422,7 @@
             if (gameState.turn === myName) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3>🎬 Your Turn</h3>
+                        <h3 style="margin-top:0;">🎬 Your Turn</h3>
                         <p style="font-size:11px;color:var(--text-muted);">Type English spelling (e.g. Master)</p>
                         <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
@@ -376,14 +436,14 @@
         } else if (gameState.status === "guessing") {
             const letterCount = getLetterCount(gameState.movieTamil);
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
+                container.innerHTML = `<div class="card"><h3 style="margin-top:0;">🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3>🤔 Guess the Movie!</h3>
+                        <h3 style="margin-top:0;">🤔 Guess the Movie!</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} Letters</div>
-                        <p style="color:var(--primary-color);">💡 Hint: ${gameState.hint || "No hint"}</p>
+                        <p style="color:var(--primary-color); font-weight:bold;">💡 Hint: ${gameState.hint || "No hint"}</p>
                         <input type="text" id="guessInput" placeholder="Type normal English spelling (e.g. Master)">
                         <button onclick="checkGuess()">Submit Answer</button>
                         <button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button>
@@ -440,6 +500,7 @@
     
     function giveUp() { 
         document.getElementById('feedback').innerText = "Answer: " + (gameState.movieEng || "").toUpperCase(); 
+        document.getElementById('feedback').style.color = "var(--accent-color)";
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
@@ -483,7 +544,7 @@
             if (!myLetter) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3>🔠 Your Letter?</h3>
+                        <h3 style="margin-top:0;">🔠 Your Letter?</h3>
                         <p style="color:var(--text-muted); font-size: 13px;">Type ONE English letter (A-Z)</p>
                         <input type="text" id="letterInput" maxlength="1" placeholder="e.g. S or K" class="letter-box">
                         <button onclick="submitLetter()">Send Letter</button>
@@ -498,7 +559,7 @@
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="color:var(--accent-color);">Both Letters Ready!</h3>
+                        <h3 style="color:var(--accent-color); margin-top:0;">Both Letters Ready!</h3>
                         <p style="font-size:13px; color:var(--text-muted);">First letter ethu, Last letter ethu?</p>
                         <button class="order-btn" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
                             Start with <b style="color:white; font-size:18px;">${wordGameState.p1Letter.toUpperCase()}</b> and end with <b style="color:white; font-size:18px;">${wordGameState.p2Letter.toUpperCase()}</b>
@@ -510,11 +571,11 @@
             }
         } else if (wordGameState.status === "race_phase") {
             container.innerHTML = `
-                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);">
+                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 30px rgba(74, 222, 128, 0.15);">
                     <h3 style="margin-top:0;">🏁 Form a Word!</h3>
                     <p style="font-size: 16px;">Starts with <b class="letter-box" style="font-size: 30px;">${wordGameState.startLetter.toUpperCase()}</b> & Ends with <b class="letter-box" style="font-size: 30px;">${wordGameState.endLetter.toUpperCase()}</b></p>
                     <input type="text" id="raceWordInput" placeholder="Type a valid word..." style="font-size: 18px; font-weight: bold; text-transform: uppercase;">
-                    <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, var(--accent-color), #34d399); color: #120A1E;">Submit Fast! 🚀</button>
+                    <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E;">Submit Fast! 🚀</button>
                     <button class="give-up-btn" onclick="skipWord()">Theriyala (Skip) 🔄</button>
                     <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:bold;"></p>
                 </div>`;
@@ -596,7 +657,7 @@
         }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem||isCheat ? 'color:inherit' : ''}">${isMine ? 'You' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
+        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem||isCheat ? 'color:inherit; font-size:11px;' : ''}">${isMine ? 'You' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
