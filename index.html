@@ -18,7 +18,7 @@
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* Home Page specific styles */
-        .app-title { text-align: center; color: #FF4B72; font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px rgba(255, 75, 114, 0.4); margin-bottom: 10px; }
+        .app-title { text-align: center; color: #FF4B72; font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px rgba(255, 75, 114, 0.4); margin-bottom: 10px; font-weight: bold;}
         .app-subtitle { text-align: center; color: #aaa; font-size: 13px; margin-bottom: 30px; }
         .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: #1D102E; border: 2px solid #FF4B72; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
         .game-menu-btn:hover { background: rgba(255, 75, 114, 0.1); transform: scale(1.02); }
@@ -138,8 +138,6 @@
         </div>
     </div>
 
-    <datalist id="movieList"></datalist>
-
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
@@ -193,10 +191,9 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; // Movie Game State
-    let wordGameState = {}; // Word Game State
+    let gameState = {}; 
+    let wordGameState = {}; 
 
-    // --- NAVIGATION LOGIC ---
     function openGame(gameType) {
         activeGame = gameType;
         document.getElementById('homeScreen').classList.add('hidden');
@@ -221,7 +218,6 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // --- STATE LISTENERS ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movie: data.movie || "", hint: data.hint || "" };
@@ -230,24 +226,15 @@
 
     db.ref('wordGameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        wordGameState = { 
-            status: data.status || "letter_phase", 
-            p1Letter: data.p1Letter || "", 
-            p2Letter: data.p2Letter || "", 
-            startLetter: data.startLetter || "", 
-            endLetter: data.endLetter || "", 
-            score1: data.score1 || 0, 
-            score2: data.score2 || 0 
-        };
+        wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0 };
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- MASSIVE MOVIE DICTIONARY WITH HEROES ---
+    // --- TAMIL DICTIONARY (Robust Tanglish Mapping) ---
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
         'g': 'க்', 'ga': 'க', 'gaa': 'கா', 'gi': 'கி', 'gee': 'கீ', 'gu': 'கு', 'goo': 'கூ', 'ge': 'கெ', 'gae': 'கே', 'gai': 'கை', 'go': 'கொ', 'goa': 'கோ',
-        'gh': 'க்', 'gha': 'க', 'ghaa': 'கா', 'ghi': 'கி', 'ghee': 'கீ', 'ghu': 'கு', 'ghoo': 'கூ', 'ghe': 'கெ', 'ghae': 'கே', 'ghai': 'கை', 'gho': 'கொ', 'ghoa': 'கோ',
         'ng': 'ங்', 'nga': 'ங', 'ngaa': 'ஙா', 'ngi': 'ஙி', 'ngee': 'ஙீ', 'ngu': 'ஙு', 'ngoo': 'ஙூ', 'nge': 'ஙெ', 'ngae': 'ஙே', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoa': 'ஙோ',
         'ch': 'ச்', 'cha': 'ச', 'chaa': 'சா', 'chi': 'சி', 'chee': 'சீ', 'chu': 'சு', 'choo': 'சூ', 'che': 'செ', 'chae': 'சே', 'chai': 'சை', 'cho': 'சொ', 'choa': 'சோ',
         's': 'ஸ்', 'sa': 'ச', 'saa': 'சா', 'si': 'சி', 'see': 'சீ', 'su': 'சு', 'soo': 'சூ', 'se': 'செ', 'sae': 'சே', 'sai': 'சை', 'so': 'சொ', 'soa': 'சோ',
@@ -262,7 +249,6 @@
         'nh': 'ந்', 'nha': 'ந', 'nhaa': 'நா', 'nhi': 'நி', 'nhee': 'நீ', 'nhu': 'நு', 'nhoo': 'நூ', 'nhe': 'நெ', 'nhae': 'நே', 'nhai': 'நை', 'nho': 'நொ', 'nhoa': 'நோ',
         'p': 'ப்', 'pa': 'ப', 'paa': 'பா', 'pi': 'பி', 'pee': 'பீ', 'pu': 'பு', 'poo': 'பூ', 'pe': 'பெ', 'pae': 'பே', 'pai': 'பை', 'po': 'பொ', 'poa': 'போ',
         'b': 'ப்', 'ba': 'ப', 'baa': 'பா', 'bi': 'பி', 'bee': 'பீ', 'bu': 'பு', 'boo': 'பூ', 'be': 'பெ', 'bae': 'பே', 'bai': 'பை', 'bo': 'பொ', 'boa': 'போ',
-        'bh': 'ப்', 'bha': 'ப', 'bhaa': 'பா', 'bhi': 'பி', 'bhee': 'பீ', 'bhu': 'பு', 'bhoo': 'பூ', 'bhe': 'பெ', 'bhae': 'பே', 'bhai': 'பை', 'bho': 'பொ', 'bhoa': 'போ',
         'm': 'ம்', 'ma': 'ம', 'maa': 'மா', 'mi': 'மி', 'mee': 'மீ', 'mu': 'மு', 'moo': 'மூ', 'me': 'மெ', 'mae': 'மே', 'mai': 'மை', 'mo': 'மொ', 'moa': 'மோ',
         'y': 'ய்', 'ya': 'ய', 'yaa': 'யா', 'yi': 'யி', 'yee': 'யீ', 'yu': 'யு', 'yoo': 'யூ', 'ye': 'யெ', 'yae': 'யே', 'yai': 'யை', 'yo': 'யொ', 'yoa': 'யோ',
         'r': 'ர்', 'ra': 'ர', 'raa': 'ரா', 'ri': 'ரி', 'ree': 'ரீ', 'ru': 'ரு', 'roo': 'ரூ', 're': 'ரெ', 'rae': 'ரே', 'rai': 'ரை', 'ro': 'ரொ', 'roa': 'ரோ',
@@ -270,33 +256,26 @@
         'v': 'வ்', 'va': 'வ', 'vaa': 'வா', 'vi': 'வி', 'vee': 'வீ', 'vu': 'வு', 'voo': 'வூ', 've': 'வெ', 'vae': 'வே', 'vai': 'வை', 'vo': 'வொ', 'voa': 'வோ',
         'w': 'வ்', 'wa': 'வ', 'waa': 'வா', 'wi': 'வி', 'wee': 'வீ', 'wu': 'வு', 'woo': 'வூ', 'we': 'வெ', 'wae': 'வே', 'wai': 'வை', 'wo': 'வொ', 'woa': 'வோ',
         'zh': 'ழ்', 'zha': 'ழ', 'zhaa': 'ழா', 'zhi': 'ழி', 'zhee': 'ழீ', 'zhu': 'ழு', 'zhoo': 'ழூ', 'zhe': 'ழெ', 'zhae': 'ழே', 'zhai': 'ழை', 'zho': 'ழொ', 'zhoa': 'ழோ',
-        'h': 'ஹ்', 'ha': 'ஹ', 'haa': 'ஹா', 'hi': 'ஹி', 'hee': 'ஹீ', 'hu': 'ஹு', 'hoo': 'ஹூ', 'he': 'ஹெ', 'hae': 'ஹே', 'hai': 'ஹை', 'ho': 'ஹொ', 'hoa': 'ஹோ',
-        'f': 'ஃப்', 'fa': 'ஃப', 'faa': 'ஃபா', 'fi': 'ஃபி', 'fee': 'ஃபீ', 'fu': 'ஃபு', 'foo': 'ஃபூ', 'fe': 'ஃபெ', 'fae': 'ஃபே', 'fai': 'ஃபை', 'fo': 'ஃபொ', 'foa': 'ஃபோ',
+        'L': 'ள்', 'La': 'ள', 'Laa': 'ளா', 'Li': 'ளி', 'Lee': 'ளீ', 'Lu': 'ளு', 'Loo': 'ளூ', 'Le': 'ளெ', 'Lae': 'ளே', 'Lai': 'ளை', 'Lo': 'ளொ', 'Loa': 'ளோ',
+        'R': 'ற்', 'Ra': 'ற', 'Raa': 'றா', 'Ri': 'றி', 'Ree': 'றீ', 'Ru': 'று', 'Roo': 'றூ', 'Re': 'றெ', 'Rae': 'றே', 'Rai': 'றை', 'Ro': 'றொ', 'Roa': 'றோ',
         'nn': 'ன்', 'nna': 'ன', 'nnaa': 'னா', 'nni': 'னி', 'nnee': 'னீ', 'nnu': 'னு', 'nnoo': 'னூ', 'nne': 'னெ', 'nnae': 'னே', 'nnai': 'னை', 'nno': 'னொ', 'nnoa': 'னோ'
     };
 
-    // Huge Movie Collection with Hero details!
+    // Tanglish spellings customized to convert PERFECTLY to Tamil
     const MOVIE_COLLECTION = [
-        { title: "Ghilli", hero: "Vijay" }, { title: "Thuppakki", hero: "Vijay" }, { title: "Master", hero: "Vijay" }, { title: "Leo", hero: "Vijay" }, { title: "Kaththi", hero: "Vijay" }, { title: "Theri", hero: "Vijay" }, { title: "Mersal", hero: "Vijay" }, { title: "Bigil", hero: "Vijay" }, { title: "Beast", hero: "Vijay" }, { title: "Varisu", hero: "Vijay" }, { title: "GOAT", hero: "Vijay" }, { title: "Pokkiri", hero: "Vijay" }, { title: "Sura", hero: "Vijay" }, { title: "Bairavaa", hero: "Vijay" }, { title: "Puli", hero: "Vijay" }, { title: "Kushi", hero: "Vijay" }, { title: "Sachien", hero: "Vijay" }, { title: "Thulladha Manamum Thullum", hero: "Vijay" }, { title: "Nanban", hero: "Vijay" },
-        { title: "Mankatha", hero: "Ajith" }, { title: "Billa", hero: "Ajith" }, { title: "Dheena", hero: "Ajith" }, { title: "Viswasam", hero: "Ajith" }, { title: "Thunivu", hero: "Ajith" }, { title: "Valimai", hero: "Ajith" }, { title: "Vivegam", hero: "Ajith" }, { title: "Vedalam", hero: "Ajith" }, { title: "Veeram", hero: "Ajith" }, { title: "Amarkalam", hero: "Ajith" }, { title: "Vaali", hero: "Ajith" }, { title: "Villain", hero: "Ajith" }, { title: "Varalaru", hero: "Ajith" }, { title: "Aasal", hero: "Ajith" }, { title: "Aarambam", hero: "Ajith" }, { title: "Yennai Arindhaal", hero: "Ajith" },
-        { title: "Baasha", hero: "Rajinikanth" }, { title: "Muthu", hero: "Rajinikanth" }, { title: "Padayappa", hero: "Rajinikanth" }, { title: "Sivaji", hero: "Rajinikanth" }, { title: "Enthiran", hero: "Rajinikanth" }, { title: "Jailer", hero: "Rajinikanth" }, { title: "Arunachalam", hero: "Rajinikanth" }, { title: "Annamalai", hero: "Rajinikanth" }, { title: "Kaala", hero: "Rajinikanth" }, { title: "Kabali", hero: "Rajinikanth" }, { title: "Petta", hero: "Rajinikanth" }, { title: "Darbar", hero: "Rajinikanth" }, { title: "Annaatthe", hero: "Rajinikanth" }, { title: "Thalapathi", hero: "Rajinikanth" }, { title: "Chandramukhi", hero: "Rajinikanth" }, { title: "Vettaiyan", hero: "Rajinikanth" }, { title: "2.0", hero: "Rajinikanth" },
-        { title: "Vikram", hero: "Kamal Haasan" }, { title: "Indian", hero: "Kamal Haasan" }, { title: "Nayakan", hero: "Kamal Haasan" }, { title: "Anbe Sivam", hero: "Kamal Haasan" }, { title: "Panchatanthiram", hero: "Kamal Haasan" }, { title: "Dasavathaaram", hero: "Kamal Haasan" }, { title: "Vishwaroopam", hero: "Kamal Haasan" }, { title: "Thevar Magan", hero: "Kamal Haasan" }, { title: "Kuruthipunal", hero: "Kamal Haasan" }, { title: "Virumaandi", hero: "Kamal Haasan" }, { title: "Indian 2", hero: "Kamal Haasan" }, { title: "Vettaiyaadu Vilaiyaadu", hero: "Kamal Haasan" },
-        { title: "Ayan", hero: "Suriya" }, { title: "Singam", hero: "Suriya" }, { title: "Jai Bhim", hero: "Suriya" }, { title: "Ghajini", hero: "Suriya" }, { title: "Pithamagan", hero: "Suriya / Vikram" }, { title: "Kanguva", hero: "Suriya" }, { title: "Masss", hero: "Suriya" }, { title: "Anjaan", hero: "Suriya" }, { title: "24", hero: "Suriya" }, { title: "Soorarai Pottru", hero: "Suriya" }, { title: "Vaaranam Aayiram", hero: "Suriya" }, { title: "Kaakha Kaakha", hero: "Suriya" },
-        { title: "Kaithi", hero: "Karthi" }, { title: "Paruthiveeran", hero: "Karthi" }, { title: "Paiyaa", hero: "Karthi" }, { title: "Siruthai", hero: "Karthi" }, { title: "Madras", hero: "Karthi" }, { title: "Sulthan", hero: "Karthi" }, { title: "Japan", hero: "Karthi" }, { title: "Meiyazhagan", hero: "Karthi" }, { title: "Sardar", hero: "Karthi" }, { title: "Theeran Adhigaaram Ondru", hero: "Karthi" }, { title: "Kadaikutty Singam", hero: "Karthi" },
-        { title: "Asuran", hero: "Dhanush" }, { title: "Karnan", hero: "Dhanush" }, { title: "Aadukalam", hero: "Dhanush" }, { title: "Polladhavan", hero: "Dhanush" }, { title: "Maari", hero: "Dhanush" }, { title: "Pudhupettai", hero: "Dhanush" }, { title: "Thiruchitrambalam", hero: "Dhanush" }, { title: "Raayan", hero: "Dhanush" }, { title: "Kodi", hero: "Dhanush" }, { title: "Anegan", hero: "Dhanush" }, { title: "Velaiilla Pattadhari", hero: "Dhanush" }, { title: "Captain Miller", hero: "Dhanush" },
-        { title: "Doctor", hero: "Sivakarthikeyan" }, { title: "Don", hero: "Sivakarthikeyan" }, { title: "Maaveeran", hero: "Sivakarthikeyan" }, { title: "Ayalaan", hero: "Sivakarthikeyan" }, { title: "Amaran", hero: "Sivakarthikeyan" }, { title: "Remo", hero: "Sivakarthikeyan" }, { title: "Rajini Murugan", hero: "Sivakarthikeyan" }, { title: "Varuthapadatha Valibar Sangam", hero: "Sivakarthikeyan" }, { title: "Ethir Neechal", hero: "Sivakarthikeyan" },
-        { title: "Maharaja", hero: "Vijay Sethupathi" }, { title: "Vikram Vedha", hero: "Madhavan & VJS" }, { title: "Pizza", hero: "Vijay Sethupathi" }, { title: "Soodhu Kavvum", hero: "Vijay Sethupathi" }, { title: "Kavan", hero: "Vijay Sethupathi" }, { title: "Sethupathi", hero: "Vijay Sethupathi" }, { title: "96", hero: "Vijay Sethupathi" }, { title: "Naanum Rowdy Dhaan", hero: "Vijay Sethupathi" },
-        { title: "Love Today", hero: "Pradeep Ranganathan" }, { title: "Alaipayuthey", hero: "Madhavan" }, { title: "Raja Rani", hero: "Arya" }, { title: "Ko", hero: "Jiiva" }, { title: "Gargi", hero: "Sai Pallavi" }, { title: "Dada", hero: "Kavin" }, { title: "Good Night", hero: "Manikandan" }, { title: "Por Thozhil", hero: "Ashok Selvan" }, { title: "Aruvi", hero: "Aditi Balan" }, { title: "Kumki", hero: "Vikram Prabhu" }, { title: "Roja", hero: "Arvind Swamy" }, { title: "Bombay", hero: "Arvind Swamy" }, { title: "Mudhalvan", hero: "Arjun" }, { title: "Boys", hero: "Siddharth" }, { title: "Jeans", hero: "Prashanth" }, { title: "Kadhalan", hero: "Prabhu Deva" }, { title: "Gentleman", hero: "Arjun" }, { title: "Viduthalai", hero: "Soori" }, { title: "Jigarthanda", hero: "Siddharth / Bobby Simha" }, { title: "Minnale", hero: "Madhavan" }, { title: "Aramm", hero: "Nayanthara" }, { title: "Airaa", hero: "Nayanthara" }, { title: "Manjummel Boys", hero: "Soubin Shahir" }, { title: "Premalu", hero: "Naslen" }, { title: "Vinnaithaandi Varuvaayaa", hero: "Simbu" }, { title: "Sarpatta Parambarai", hero: "Arya" }, { title: "Pariyerum Perumal", hero: "Kathir" }, { title: "Lubber Pandhu", hero: "Harish Kalyan" }
+        { tanglish: "gilli", hero: "Vijay" }, { tanglish: "thuppaakki", hero: "Vijay" }, { tanglish: "maastar", hero: "Vijay" }, { tanglish: "liyoa", hero: "Vijay" }, { tanglish: "kaththi", hero: "Vijay" }, { tanglish: "theri", hero: "Vijay" }, { tanglish: "mersal", hero: "Vijay" }, { tanglish: "paokkiri", hero: "Vijay" }, { tanglish: "kaathalukku mariyaathai", hero: "Vijay" }, 
+        { tanglish: "mangaathaa", hero: "Ajith" }, { tanglish: "billaa", hero: "Ajith" }, { tanglish: "dheenaa", hero: "Ajith" }, { tanglish: "viswaasam", hero: "Ajith" }, { tanglish: "thunivu", hero: "Ajith" }, { tanglish: "valimai", hero: "Ajith" }, { tanglish: "aarambam", hero: "Ajith" },
+        { tanglish: "baashaa", hero: "Rajinikanth" }, { title: "muthu", hero: "Rajinikanth" }, { tanglish: "padaiyappaa", hero: "Rajinikanth" }, { tanglish: "sivaaji", hero: "Rajinikanth" }, { tanglish: "enthiran", hero: "Rajinikanth" }, { tanglish: "jailar", hero: "Rajinikanth" }, { tanglish: "thaalapathi", hero: "Rajinikanth" },
+        { tanglish: "vikram", hero: "Kamal Haasan" }, { tanglish: "indhiyan", hero: "Kamal Haasan" }, { tanglish: "naayakan", hero: "Kamal Haasan" }, { tanglish: "anbae sivam", hero: "Kamal Haasan" }, { tanglish: "panchathanthiram", hero: "Kamal Haasan" }, 
+        { tanglish: "ayan", hero: "Suriya" }, { tanglish: "singam", hero: "Suriya" }, { tanglish: "gajini", hero: "Suriya" }, { tanglish: "kanguvaa", hero: "Suriya" }, { tanglish: "soorarai poatru", hero: "Suriya" }, 
+        { tanglish: "kaithi", hero: "Karthi" }, { tanglish: "siruthai", hero: "Karthi" }, { tanglish: "madras", hero: "Karthi" }, { tanglish: "paruthiveeran", hero: "Karthi" },
+        { tanglish: "asuran", hero: "Dhanush" }, { tanglish: "karnan", hero: "Dhanush" }, { tanglish: "aadukalam", hero: "Dhanush" }, { tanglish: "maari", hero: "Dhanush" }, { tanglish: "raayan", hero: "Dhanush" },
+        { tanglish: "daaktar", hero: "Sivakarthikeyan" }, { tanglish: "remoa", hero: "Sivakarthikeyan" }, { tanglish: "amaraan", hero: "Sivakarthikeyan" },
+        { tanglish: "maahaaraajaa", hero: "Vijay Sethupathi" }, { tanglish: "vikram vaethaa", hero: "Madhavan & VJS" }, { tanglish: "pizzaa", hero: "Vijay Sethupathi" }, { tanglish: "96", hero: "Vijay Sethupathi" },
+        { tanglish: "alaipaayuthae", hero: "Madhavan" }, { tanglish: "raajaa raani", hero: "Arya" }, { tanglish: "roaajaa", hero: "Arvind Swamy" }, { tanglish: "poar thozhil", hero: "Ashok Selvan" }, { tanglish: "manjummal paays", hero: "Soubin Shahir" }
     ];
 
     window.onload = () => {
-        const list = document.getElementById('movieList');
-        MOVIE_COLLECTION.forEach(movieObj => {
-            const option = document.createElement('option');
-            option.value = movieObj.title;
-            list.appendChild(option);
-        });
-        
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
         emojis.forEach(emoji => {
@@ -338,8 +317,8 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
-                        <p style="font-size:11px;color:#aaa;">Type or select a movie</p>
-                        <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="handleMovieInput()">
+                        <p style="font-size:11px;color:#aaa;">Type in Tanglish (Preview in Tamil)</p>
+                        <input type="text" id="movieInput" placeholder="e.g. maastar" oninput="livePreview()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
                         <input type="text" id="hintInput" placeholder="Add a hint (e.g. Hero name)">
@@ -369,31 +348,36 @@
         }
     }
 
-    // -- MOVIE LOGIC FUNCS --
-    function handleMovieInput() {
-        const val = document.getElementById('movieInput').value;
-        document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
-        
-        // Auto fill hero name if movie matches the list
-        const foundMovie = MOVIE_COLLECTION.find(m => m.title.toLowerCase() === val.toLowerCase().trim());
-        if(foundMovie) {
-            document.getElementById('hintInput').value = "Hero: " + foundMovie.hero;
-        }
-    }
+    // -- MOVIE LOGIC FUNCS (Tamil UI Restored) --
+    function livePreview() { const val = document.getElementById('movieInput').value; document.getElementById('tamilPreview').innerText = val ? transliterate(val) : ""; }
+    function liveGuessPreview() { const val = document.getElementById('guessInput').value; document.getElementById('guessPreview').innerText = val ? transliterate(val) : ""; }
     
     function suggestRandomMovie() { 
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
-        document.getElementById('movieInput').value = randomObj.title; 
+        document.getElementById('movieInput').value = randomObj.tanglish; 
         document.getElementById('hintInput').value = "Hero: " + randomObj.hero;
-        document.getElementById('tamilPreview').innerText = transliterate(randomObj.title); 
+        livePreview(); // auto update preview
     }
     
     function setMovie() { const raw = document.getElementById('movieInput').value.trim(); const tamilMovie = transliterate(raw); const h = document.getElementById('hintInput').value; if(!raw) return alert("Enter movie!"); db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" }); }
     function checkGuess() { const guessRaw = document.getElementById('guessInput').value.trim(); const tamilGuess = transliterate(guessRaw); if (tamilGuess === gameState.movie) { const scoreKey = (myName === "immu") ? 'score1' : 'score2'; db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); db.ref('gameState').update({ turn: myName, status: "set", movie: "" }); } else { document.getElementById('feedback').innerText = "Wrong! ("+tamilGuess+") Try again 🥺"; } }
     function giveUp() { document.getElementById('feedback').innerText = "Answer: " + gameState.movie; const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500); }
+    
+    // Exact Tamil Letter Count
     function getLetterCount(str) { if(!str) return 0; const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; return clusters.filter(c => c !== ' ').length; }
-    function maskTamil(str) { if(!str) return ""; const words = str.split(" "); return words.map(word => { const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; return clusters.map((c, i) => { if(i === 0 || i === clusters.length - 1) return c; return "_"; }).join(" "); }).join("&nbsp;&nbsp;&nbsp;&nbsp;"); }
-
+    
+    // Perfect Masking Logic for Tamil Characters
+    function maskTamil(str) {
+        if(!str) return "";
+        const words = str.split(" ");
+        return words.map(word => {
+            const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
+            return clusters.map((c, i) => {
+                if(i === 0 || i === clusters.length - 1) return c; // Reveals first and last valid character
+                return "_";
+            }).join(" ");
+        }).join("&nbsp;&nbsp;&nbsp;&nbsp;");
+    }
 
     // ================= WORD GAME LOGIC =================
     function renderWordGameUI() {
@@ -432,11 +416,9 @@
                     <div class="card">
                         <h3 style="color:#4ade80;">Both Letters Ready!</h3>
                         <p style="font-size:13px; color:#aaa;">First letter ethu, Last letter ethu?</p>
-                        
                         <button class="order-btn" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
                             Start with <b style="color:white; font-size:18px;">${wordGameState.p1Letter.toUpperCase()}</b> and end with <b style="color:white; font-size:18px;">${wordGameState.p2Letter.toUpperCase()}</b>
                         </button>
-                        
                         <button class="order-btn" onclick="setWordOrder('${wordGameState.p2Letter}', '${wordGameState.p1Letter}')">
                             Start with <b style="color:white; font-size:18px;">${wordGameState.p2Letter.toUpperCase()}</b> and end with <b style="color:white; font-size:18px;">${wordGameState.p1Letter.toUpperCase()}</b>
                         </button>
@@ -447,7 +429,6 @@
                 <div class="card" style="border-color:#4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);">
                     <h3 style="margin-top:0;">🏁 Form a Word!</h3>
                     <p style="font-size: 16px;">Starts with <b class="letter-box" style="font-size: 30px;">${wordGameState.startLetter.toUpperCase()}</b> & Ends with <b class="letter-box" style="font-size: 30px;">${wordGameState.endLetter.toUpperCase()}</b></p>
-                    
                     <input type="text" id="raceWordInput" placeholder="Type a valid word..." style="font-size: 18px; font-weight: bold; text-transform: uppercase;">
                     <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, #4ade80, #34d399); color: #120A1E;">Submit Fast! 🚀</button>
                     <button class="give-up-btn" onclick="skipWord()">Theriyala (Skip) 🔄</button>
@@ -459,20 +440,15 @@
     function submitLetter() {
         const letter = document.getElementById('letterInput').value.trim().toLowerCase();
         if(!letter || letter.length > 1 || !/[a-z]/.test(letter)) return alert("Please enter exactly 1 English letter (A-Z)!");
-        
         const letterKey = (myName === "immu") ? 'p1Letter' : 'p2Letter';
         db.ref(`wordGameState`).update({ [letterKey]: letter });
     }
 
-    function setWordOrder(start, end) {
-        db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end });
-    }
+    function setWordOrder(start, end) { db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end }); }
 
     function submitRaceWord() {
         const word = document.getElementById('raceWordInput').value.trim().toLowerCase();
-        const start = wordGameState.startLetter.toLowerCase();
-        const end = wordGameState.endLetter.toLowerCase();
-        
+        const start = wordGameState.startLetter.toLowerCase(); const end = wordGameState.endLetter.toLowerCase();
         if (word.length >= 2 && word.startsWith(start) && word.endsWith(end)) {
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
@@ -516,8 +492,8 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    let initialLoad = true;
-    db.ref('chatMessages').once('value', () => { setTimeout(() => { initialLoad = false; }, 1000); });
+    let isChatLoaded = false;
+    db.ref('chatMessages').once('value', () => { isChatLoaded = true; });
 
     db.ref('chatMessages').on('child_added', (snapshot) => {
         const data = snapshot.val();
@@ -534,7 +510,7 @@
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
-        if (!initialLoad && !isMine && !isSystem) { showToast(`💬 ${data.sender} sent a message!`); }
+        if (isChatLoaded && !isMine && !isSystem) { showToast(`💬 ${data.sender} sent a message!`); }
     });
 
     function sendChatMessage() {
