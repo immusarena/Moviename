@@ -18,7 +18,7 @@
             --primary-color: #FF4B72;
             --secondary-color: #FF7694;
             --accent-color: #4ade80;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
             --glow-shadow: rgba(255, 75, 114, 0.4);
@@ -41,39 +41,43 @@
         @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
 
         /* Toast Notification */
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* Home Page */
-        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 30px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
-        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 11px; margin-bottom: 35px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 32px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
         
         /* SLEEK TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: 0.2s; padding: 5px 0;}
-        .back-btn:hover { color: var(--text-main); transform: translateX(-3px); }
-        .game-title-badge { background: transparent; border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+        .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
+        .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
+        .back-btn svg { width: 10px; height: 10px; }
+        
+        /* PREMIUM TITLE BADGE */
+        .game-title-badge { display: flex; align-items: center; gap: 6px; background: transparent; border: none; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--text-main); opacity: 0.8; text-transform: uppercase; }
+        .game-title-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 8px var(--accent-color); }
         
         /* SLEEK THEME BUTTON */
         .theme-wrapper { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
         .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
-        .theme-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease, box-shadow 0.5s ease; }
-        .theme-label { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease, box-shadow 0.5s ease; }
+        .theme-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
         /* VS Scoreboard */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; }
-        .player-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 95px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
+        .player-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
         .active-turn { animation: pulseGlow 2s infinite; border: 1px solid var(--primary-color); transform: scale(1.05); }
         .racing-turn { animation: pulseGlowAccent 2s infinite; border: 1px solid var(--accent-color); transform: scale(1.05); }
         
         /* Avatars */
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E; transition: 0.3s; }
+        .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E; transition: 0.3s; }
         .immu-pic { background-image: url('1000242624.jpg'); } 
         .sappii-pic { background-image: url('1000242625.jpg'); } 
         .active-turn .sappii-pic { border-color: var(--primary-color); }
@@ -81,72 +85,71 @@
         .racing-turn .avatar { border-color: var(--accent-color); }
         
         .name-container { display: flex; align-items: center; gap: 6px; margin-top: 5px;}
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--card-bg); transition: background-color 0.3s; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; border: 2px solid var(--card-bg); transition: background-color 0.3s; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
         .online { background-color: #4ade80; box-shadow: 0 0 10px #4ade80;} 
         .offline { background-color: #555; } 
-        .player-name { font-size: 12px; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px;}
-        .score-val { font-size: 26px; font-weight: 800; color: var(--primary-color); text-shadow: 0 2px 10px var(--glow-shadow); }
-        .vs-badge { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
+        .player-name { font-size: 11px; font-weight: 800; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase;}
+        .score-val { font-size: 24px; font-weight: 800; color: var(--primary-color); text-shadow: 0 2px 10px var(--glow-shadow); }
+        .vs-badge { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
 
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 16px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 13px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
-        input::placeholder { color: #666; font-weight: 400;}
+        input::placeholder { color: #666; font-weight: 600;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
         .order-btn:hover { background: rgba(74, 222, 128, 0.1); transform: scale(1.02); }
 
-        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
+        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
         button:active { transform: scale(0.96); }
         
-        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 11px; width: 100%; box-shadow: none; }
+        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; }
         .random-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
         .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
-        .reset-btn { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); box-shadow: none; margin-top: 20px; font-size: 11px; padding: 10px; width: auto; border-radius: 20px;}
-        .reset-btn:hover { background: rgba(255, 75, 114, 0.1); box-shadow: 0 0 15px var(--glow-shadow); }
+        .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
+        .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        .masked-word { font-size: 30px; letter-spacing: 8px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
-        .letter-count { font-size: 10px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;}
-        .preview-text { color: var(--accent-color); font-size: 18px; font-weight: 800; margin: 5px 0 15px 0; min-height: 27px; font-family: 'Latha', sans-serif; opacity: 0.8;}
+        .masked-word { font-size: 32px; letter-spacing: 8px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+        .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
+        .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
+        .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
 
         .hidden { display: none !important; }
-        .turn-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px;}
-        .hint-text { color: var(--primary-color); font-weight: 600; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 10px;}
+        .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; }
-        .chat-container h3 { margin-top: 0; margin-bottom: 15px; color: var(--text-main); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;}
+        .chat-container h3 { margin-top: 0; margin-bottom: 15px; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
         .message { padding: 10px 14px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .message-sender { font-size: 9px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.5px;}
-        .message-text { font-size: 13px; line-height: 1.4; word-wrap: break-word; font-weight: 400;}
+        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px;}
+        .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
         
         .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
-        .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 0.5px;}
-        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 0.5px;}
+        .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
-        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 15px;}
-        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 13px; text-transform: none; font-weight: 400;}
+        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
+        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
         
-        /* SVG Icons */
-        .svg-icon { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+        .svg-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .chat-send-btn { width: auto; padding: 10px 18px; margin-top: 0; border-radius: 20px; font-size: 11px; box-shadow: 0 4px 15px var(--glow-shadow);}
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
         /* Emoji Picker */
-        .emoji-picker { position: absolute; bottom: 120%; right: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
+        .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
         .emoji-item:hover { transform: scale(1.3); }
 
@@ -154,10 +157,9 @@
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
         .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
-        .btn-cancel { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 12px; box-shadow: none;}
+        .btn-cancel { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 12px; box-shadow: none; font-size:11px;}
         .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white;}
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
@@ -195,7 +197,7 @@
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
         <button class="back-btn" onclick="goHome()">
-            <svg class="svg-icon" style="width:14px;height:14px;" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <svg class="svg-icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
             BACK
         </button>
         <div id="activeGameBadge" class="game-title-badge">GAME</div>
@@ -232,10 +234,10 @@
         <h3>REAL-TIME CHAT</h3>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
-            <div id="emojiPicker" class="emoji-picker hidden"></div>
             <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">
                 <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
             </button>
+            <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
                 <button class="chat-send-btn" onclick="sendChatMessage()">SEND</button>
@@ -250,8 +252,8 @@
 
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
-        <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:1px;">RESET GAME?</h3>
-        <p style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Scores will reset for the current game.</p>
+        <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:2px; font-size:16px;">RESET GAME?</h3>
+        <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing:1px;">Scores will reset for the current game.</p>
         <div class="modal-btn-group" id="movieResetBtns">
             <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">IMMU START</button>
             <button onclick="confirmReset('sappii')">SAPPII START</button>
@@ -321,7 +323,7 @@
             if (isMovieGuessing || isWordRacing) {
                 db.ref('chatMessages').push({ 
                     sender: "ANTI-CHEAT", 
-                    text: `${myName.toUpperCase()} left the game tab! Are they Googling?`, 
+                    text: `${myName.toUpperCase()} LEFT THE GAME TAB! ARE THEY GOOGLING?`, 
                     timestamp: firebase.database.ServerValue.TIMESTAMP 
                 });
                 cheatCooldown = true;
@@ -388,7 +390,20 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: data.movieEng || "", movieTamil: data.movieTamil || "", hint: data.hint || "" };
+        
+        // Critical Fix: Automatically correct old English strings saved as movieTamil
+        let mt = data.movieTamil || data.movie || "";
+        if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
+        
+        gameState = { 
+            turn: data.turn || "immu", 
+            status: data.status || "set", 
+            score1: data.score1 || 0, 
+            score2: data.score2 || 0, 
+            movieEng: data.movieEng || data.movie || "", 
+            movieTamil: mt, 
+            hint: data.hint || "" 
+        };
         if(activeGame === 'movie') renderMovieGameUI();
     });
 
@@ -431,32 +446,32 @@
             if (gameState.turn === myName) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="margin-top:0; font-size:14px; text-transform:uppercase; letter-spacing:1.5px;">YOUR TURN</h3>
-                        <p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Type English spelling (e.g. Master)</p>
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR TURN</h3>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Type movie in English...</p>
+                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
-                        <input type="text" id="hintInput" placeholder="ADD A HINT (E.G. HERO NAME)">
+                        <input type="text" id="hintInput" placeholder="HINT (AUTO-FILLS IF KNOWN)">
                         <button onclick="setMovie()">START GAME</button>
                     </div>`;
             } else {
-                container.innerHTML = `<div class="card"><h3 style="font-size:14px; text-transform:uppercase; letter-spacing:1px;">WAITING...</h3><p style="font-size:12px; color:var(--text-muted); text-transform:uppercase;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
+                container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
             }
         } else if (gameState.status === "guessing") {
             const letterCount = getLetterCount(gameState.movieTamil);
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3 style="margin-top:0; font-size:14px; text-transform:uppercase; letter-spacing:1px;">PARTNER GUESSING</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} LETTERS</div></div>`;
+                container.innerHTML = `<div class="card"><h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} LETTERS</div></div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="margin-top:0; font-size:14px; text-transform:uppercase; letter-spacing:1.5px;">GUESS THE MOVIE</h3>
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} LETTERS</div>
                         <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
-                        <input type="text" id="guessInput" placeholder="TYPE NORMAL ENGLISH SPELLING">
+                        <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
-                        <p id="feedback" style="margin-top:15px; font-weight:bold; font-size:12px; text-transform:uppercase;"></p>
+                        <p id="feedback" style="margin-top:15px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                     </div>`;
             }
         }
@@ -466,7 +481,7 @@
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         if(foundMovie) { 
-            document.getElementById('hintInput').value = "Hero: " + foundMovie.hero; 
+            document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); 
             selectedPerfectTamil = foundMovie.tamil;
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
@@ -478,7 +493,7 @@
     function suggestRandomMovie() { 
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        document.getElementById('hintInput').value = "Hero: " + randomObj.hero; 
+        document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); 
         selectedPerfectTamil = randomObj.tamil;
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
@@ -494,10 +509,10 @@
     
     function checkGuess() { 
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
-        const normalizedGuess = guessRaw.replace(/\s/g, '');
-        const normalizedAnswer = (gameState.movieEng || "").replace(/\s/g, '');
+        const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
+        const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
 
-        if (normalizedGuess === normalizedAnswer) { 
+        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
             db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
@@ -521,11 +536,15 @@
         return clusters.filter(c => c !== ' ').length; 
     }
     
+    // Exact Tamil masking: Protects 2 letter words by hiding the second letter!
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
         return words.map(word => {
             const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
+            if (clusters.length <= 2) {
+                return clusters.map((c, i) => i === 0 ? c : "_").join(" ");
+            }
             return clusters.map((c, i) => {
                 if(i === 0 || i === clusters.length - 1) return c;
                 return "_";
@@ -553,23 +572,23 @@
             if (!myLetter) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="margin-top:0; font-size:14px; text-transform:uppercase; letter-spacing:1px;">YOUR LETTER?</h3>
-                        <p style="color:var(--text-muted); font-size: 10px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR LETTER?</h3>
+                        <p style="color:var(--text-muted); font-size: 9px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
                         <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S OR K" class="letter-box">
                         <button onclick="submitLetter()">SEND LETTER</button>
                     </div>`;
             } else if (!partnerLetter) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="font-size:14px; text-transform:uppercase; letter-spacing:1px;">WAITING...</h3>
-                        <p style="font-size: 11px; text-transform:uppercase; color:var(--text-muted);">${partnerName} IS CHOOSING A LETTER</p>
-                        <p style="font-size: 16px; color: var(--accent-color); font-weight:bold; margin-top:10px;">YOU PICKED: ${myLetter.toUpperCase()}</p>
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">WAITING...</h3>
+                        <p style="font-size: 10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">${partnerName} IS CHOOSING A LETTER</p>
+                        <p style="font-size: 20px; color: var(--accent-color); font-weight:800; margin-top:15px; letter-spacing:2px;">YOU PICKED: ${myLetter.toUpperCase()}</p>
                     </div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="color:var(--accent-color); margin-top:0; font-size:14px; letter-spacing:1px;">LETTERS READY!</h3>
-                        <p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">FIRST LETTER ETHU, LAST LETTER ETHU?</p>
+                        <h3 style="color:var(--accent-color); margin-top:0; font-size:13px; letter-spacing:2px;">LETTERS READY!</h3>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">FIRST LETTER ETHU, LAST LETTER ETHU?</p>
                         <button class="order-btn" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
                             START: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b>
                         </button>
@@ -581,12 +600,12 @@
         } else if (wordGameState.status === "race_phase") {
             container.innerHTML = `
                 <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 30px rgba(74, 222, 128, 0.15);">
-                    <h3 style="margin-top:0; font-size:14px; letter-spacing:1.5px; text-transform:uppercase;">FORM A WORD!</h3>
-                    <p style="font-size: 12px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px;">${wordGameState.endLetter.toUpperCase()}</b></p>
-                    <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 16px; font-weight: bold; text-transform: uppercase;">
+                    <h3 style="margin-top:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-main);">FORM A WORD!</h3>
+                    <p style="font-size: 10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.endLetter.toUpperCase()}</b></p>
+                    <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 14px; font-weight: bold; text-transform: uppercase;">
                     <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E;">SUBMIT FAST</button>
                     <button class="give-up-btn" onclick="skipWord()">SKIP ROUND</button>
-                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:bold; font-size:12px; text-transform:uppercase;"></p>
+                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                 </div>`;
         }
     }
