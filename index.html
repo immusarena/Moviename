@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-time Couple Movie Game 💖</title>
+    <title>Couple Games Hub 💖</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -16,6 +16,16 @@
         /* Toast Notification Styling */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #4ade80; color: #120A1E; padding: 12px 24px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Home Page specific styles */
+        .app-title { text-align: center; color: #FF4B72; font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px rgba(255, 75, 114, 0.4); margin-bottom: 10px; }
+        .app-subtitle { text-align: center; color: #aaa; font-size: 13px; margin-bottom: 30px; }
+        .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: #1D102E; border: 2px solid #FF4B72; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .game-menu-btn:hover { background: rgba(255, 75, 114, 0.1); transform: scale(1.02); }
+        .game-menu-btn.disabled { border-color: #555; color: #888; cursor: not-allowed; }
+        .game-menu-btn.disabled:hover { background: #1D102E; transform: scale(1); }
+        .back-btn { background: transparent; border: 1px solid #aaa; color: #aaa; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; margin-bottom: 20px; width: auto; transition: 0.2s; }
+        .back-btn:active { transform: scale(0.95); }
 
         /* VS Scoreboard Styling */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
@@ -70,7 +80,6 @@
         .chat-icon-btn#emojiBtn { color: #fff;}
         .chat-send-btn { width: auto; padding: 10px 15px; margin-top: 0;}
 
-        /* Emoji Picker Styling */
         .emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: #1D102E; border: 1px solid #FF4B72; border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
 
@@ -84,7 +93,19 @@
 
 <div id="toast" class="toast">💬 New Message!</div>
 
-<div class="container">
+<div class="container" id="homeScreen">
+    <h1 class="app-title">Namma Games 💖</h1>
+    <p class="app-subtitle">Choose a game to play together!</p>
+    
+    <div class="card" style="padding: 30px 20px;">
+        <button class="game-menu-btn" onclick="openGame('movie')">🎬 Movie Guessing</button>
+        <button class="game-menu-btn disabled" onclick="openGame('new')">🎲 New Game (Soon)</button>
+    </div>
+</div>
+
+<div class="container hidden" id="movieGameScreen">
+    <button class="back-btn" onclick="goHome()">⬅ Back to Home</button>
+
     <div class="vs-container">
         <div id="box-immu" class="player-box">
             <div class="avatar immu-pic"></div>
@@ -126,7 +147,15 @@
         </div>
     </div>
 
-    <button class="reset-btn" onclick="openResetModal()">Reset Game 🔄</button>
+    <button class="reset-btn" onclick="openResetModal()">Reset Score 🔄</button>
+</div>
+
+<div class="container hidden" id="newGameScreen">
+    <button class="back-btn" onclick="goHome()">⬅ Back to Home</button>
+    <div class="card">
+        <h3>🎲 Puthu Game</h3>
+        <p style="color: #aaa; font-size: 14px;">Intha game innum ready aagala! Seekiram varum... 😉</p>
+    </div>
 </div>
 
 <div id="resetModal" class="modal hidden">
@@ -142,7 +171,24 @@
 </div>
 
 <script>
-    // FULL COMPREHENSIVE TAMIL DICTIONARY (Fixed Darbar, h, f, dh, bh etc)
+    // --- NAVIGATION LOGIC ---
+    function openGame(gameType) {
+        document.getElementById('homeScreen').classList.add('hidden');
+        if (gameType === 'movie') {
+            document.getElementById('movieGameScreen').classList.remove('hidden');
+        } else if (gameType === 'new') {
+            // Uncomment next line when new game is ready to be shown
+            // document.getElementById('newGameScreen').classList.remove('hidden');
+        }
+    }
+
+    function goHome() {
+        document.getElementById('movieGameScreen').classList.add('hidden');
+        document.getElementById('newGameScreen').classList.add('hidden');
+        document.getElementById('homeScreen').classList.remove('hidden');
+    }
+
+    // --- DICTIONARY & GAME LOGIC ---
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
@@ -231,7 +277,6 @@
         renderUI();
     });
 
-    // Populate the datalist on load
     window.onload = () => {
         const list = document.getElementById('movieList');
         MOVIE_COLLECTION.forEach(movie => {
@@ -252,7 +297,6 @@
 
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
-                // Notice the oninput="livePreview()" and list="movieList" attributes
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
@@ -288,7 +332,6 @@
         }
     }
 
-    // Live translation preview functions
     function livePreview() {
         const val = document.getElementById('movieInput').value;
         document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
@@ -301,7 +344,7 @@
 
     function suggestRandomMovie() {
         document.getElementById('movieInput').value = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
-        livePreview(); // Update preview automatically for random suggestion
+        livePreview();
         document.getElementById('hintInput').value = "Guess pannu papom! 😉";
     }
 
