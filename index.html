@@ -54,14 +54,11 @@
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
         
         /* SLEEK TOP NAV */
-        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 8px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.5;}
         .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
-        .back-btn svg { width: 10px; height: 10px; }
-        
-        /* PREMIUM TITLE BADGE */
-        .game-title-badge { display: flex; align-items: center; gap: 6px; background: transparent; border: none; font-size: 10px; font-weight: 800; letter-spacing: 2px; color: var(--text-main); opacity: 0.8; text-transform: uppercase; }
-        .game-title-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 8px var(--accent-color); }
+        .back-btn svg { width: 8px; height: 8px; }
+        .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* SLEEK THEME BUTTON */
         .theme-wrapper { display: flex; justify-content: flex-end; margin-bottom: 20px; }
@@ -95,7 +92,7 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
         input::placeholder { color: #666; font-weight: 600;}
         
@@ -171,7 +168,6 @@
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
-    
     <div class="theme-wrapper">
         <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
             <div id="themeIndicator" class="theme-dot"></div>
@@ -200,7 +196,7 @@
             <svg class="svg-icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
             BACK
         </button>
-        <div id="activeGameBadge" class="game-title-badge">GAME</div>
+        <h2 id="activeGameBadge" class="game-title-text">GAME</h2>
     </div>
 
     <div class="vs-container">
@@ -288,6 +284,7 @@
     let gameState = {}; 
     let wordGameState = {}; 
     
+    // Dynamic List from GitHub TXT & Master DB
     let MOVIE_COLLECTION = []; 
     let selectedPerfectTamil = "";
 
@@ -303,11 +300,8 @@
 
     function applyTheme(index) {
         const theme = themes[index];
-        for (const [key, value] of Object.entries(theme.vars)) {
-            document.documentElement.style.setProperty(key, value);
-        }
+        for (const [key, value] of Object.entries(theme.vars)) { document.documentElement.style.setProperty(key, value); }
     }
-    
     function cycleTheme() {
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
         localStorage.setItem('appTheme', currentThemeIndex);
@@ -321,18 +315,55 @@
         if (document.hidden && !cheatCooldown) {
             const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
             const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
-            
             if (isMovieGuessing || isWordRacing) {
-                db.ref('chatMessages').push({ 
-                    sender: "ANTI-CHEAT", 
-                    text: `${myName.toUpperCase()} LEFT THE GAME TAB! ARE THEY GOOGLING?`, 
-                    timestamp: firebase.database.ServerValue.TIMESTAMP 
-                });
-                cheatCooldown = true;
-                setTimeout(() => { cheatCooldown = false; }, 10000);
+                db.ref('chatMessages').push({ sender: "ANTI-CHEAT", text: `${myName.toUpperCase()} LEFT THE GAME TAB! ARE THEY GOOGLING?`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+                cheatCooldown = true; setTimeout(() => { cheatCooldown = false; }, 10000);
             }
         }
     });
+
+    // --- FULL FLAVOR TRANSLITERATION DICTIONARY ---
+    const tamilMapping = {
+        'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ',
+        'k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ',
+        'g':'க்','ga':'க','gaa':'கா','gi':'கி','gee':'கீ','gu':'கு','goo':'கூ','ge':'கெ','gae':'கே','gai':'கை','go':'கொ','goa':'கோ',
+        'ng':'ங்','nga':'ங','ngaa':'ஙா','ngi':'ஙி','ngee':'ஙீ','ngu':'ஙு','ngoo':'ஙூ','nge':'ஙெ','ngae':'ஙே','ngai':'ஙை','ngo':'ஙொ','ngoa':'ஙோ',
+        'ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ',
+        'j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','joa':'ஜோ',
+        't':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ',
+        'd':'ட்','da':'ட','daa':'டா','di':'டி','dee':'டீ','du':'டு','doo':'டூ','de':'டெ','dae':'டே','dai':'டை','do':'டொ','doa':'டோ',
+        'n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'ணோ',
+        'th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ',
+        'dh':'த்','dha':'த','dhaa':'தா','dhi':'தி','dhee':'தீ','dhu':'து','dhoo':'தூ','dhe':'தெ','dhae':'தே','dhai':'தை','dho':'தொ','dhoa':'தோ',
+        'nh':'ந்','nha':'ந','nhaa':'நா','nhi':'நி','nhee':'நீ','nhu':'நு','nhoo':'நூ','nhe':'நெ','nhae':'நே','nhai':'நை','nho':'நொ','nhoa':'நோ',
+        'p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ',
+        'b':'ப்','ba':'ப','baa':'பா','bi':'பி','bee':'பீ','bu':'பு','boo':'பூ','be':'பெ','bae':'பே','bai':'பை','bo':'பொ','boa':'போ',
+        'm':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ',
+        'y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ',
+        'r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ',
+        'l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ',
+        'v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ',
+        'w':'வ்','wa':'வ','waa':'வா','wi':'வி','wee':'வீ','wu':'வு','woo':'வூ','we':'வெ','wae':'வே','wai':'வை','wo':'வொ','woa':'வோ',
+        'zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ',
+        'L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ',
+        'R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ',
+        'nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ',
+        's':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ',
+        'sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ'
+    };
+
+    function transliterate(text) {
+        let result = ""; let i = 0; const lower = text.toLowerCase();
+        while (i < lower.length) {
+            let found = false;
+            for (let len = 4; len >= 1; len--) {
+                let chunk = lower.substring(i, i + len);
+                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
+            }
+            if (!found) { result += text[i]; i++; }
+        }
+        return result;
+    }
 
     // --- MASTER DATABASE ---
     const MASTER_DATABASE = [
@@ -348,58 +379,46 @@
         { eng: "Love Today", tamil: "லவ் டுடே", hero: "Pradeep" }, { eng: "Alaipayuthey", tamil: "அலைபாயுதே", hero: "Madhavan" }, { eng: "Raja Rani", tamil: "ராஜா ராணி", hero: "Arya" }, { eng: "Roja", tamil: "ரோஜா", hero: "Arvind Swamy" }, { eng: "Bombay", tamil: "பம்பாய்", hero: "Arvind Swamy" }, { eng: "Jeans", tamil: "ஜீன்ஸ்", hero: "Prashanth" }, { eng: "Minnale", tamil: "மின்னலே", hero: "Madhavan" }, { eng: "Manjummel Boys", tamil: "மஞ்சும்மல் பாய்ஸ்", hero: "Soubin" }, { eng: "Premalu", tamil: "பிரேமலு", hero: "Naslen" }, { eng: "Good Night", tamil: "குட் நைட்", hero: "Manikandan" }, { eng: "Dada", tamil: "டாடா", hero: "Kavin" }, { eng: "Aruvi", tamil: "அருவி", hero: "Aditi" }, { eng: "Lubber Pandhu", tamil: "லப்பர் பந்து", hero: "Harish Kalyan" }
     ];
 
-    // --- TXT LOADER ---
+    // --- TXT LOADER WITH SMART MERGE ---
     async function loadMoviesFromTXT() {
+        MOVIE_COLLECTION = [...MASTER_DATABASE];
         try {
-            const engResponse = await fetch('movies_eng.txt');
-            const tamilResponse = await fetch('movies_tamil.txt');
-            const heroResponse = await fetch('heroes.txt'); // FETCHING HEROES.TXT
+            const engRes = await fetch('movies_eng.txt');
+            const tamilRes = await fetch('movies_tamil.txt');
+            const heroRes = await fetch('heroes.txt');
             
-            if (engResponse.ok && tamilResponse.ok && heroResponse.ok) {
-                const engText = await engResponse.text();
-                const tamilText = await tamilResponse.text();
-                const heroText = await heroResponse.text();
+            if (engRes.ok && tamilRes.ok && heroRes.ok) {
+                const engText = await engRes.text();
+                const tamilText = await tamilRes.text();
+                const heroText = await heroRes.text();
                 
-                const engLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tamilLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const heroLines = heroText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const eLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const hLines = heroText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
-                MOVIE_COLLECTION = [];
-                const minLength = Math.min(engLines.length, tamilLines.length, heroLines.length); // Use min to prevent errors
-                
-                for(let i=0; i<minLength; i++){
-                    MOVIE_COLLECTION.push({
-                        eng: engLines[i],
-                        tamil: tamilLines[i],
-                        hero: heroLines[i] // Direct from heroes.txt!
-                    });
+                const minLen = Math.min(eLines.length, tLines.length, hLines.length);
+                for(let i=0; i<minLen; i++){
+                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
+                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
+                    }
                 }
-                console.log("Loaded movies perfectly from 3 TXT files!");
+                console.log("Loaded TXT perfectly with Heroes!");
+            } else if (engRes.ok && tamilRes.ok) {
+                // Fallback if heroes.txt fails
+                const engText = await engRes.text();
+                const tamilText = await tamilRes.text();
+                const eLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
-            } else if (engResponse.ok && tamilResponse.ok) {
-                // Backward compatibility just in case heroes.txt fails
-                const engText = await engResponse.text();
-                const tamilText = await tamilResponse.text();
-                const engLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tamilLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                
-                MOVIE_COLLECTION = [];
-                const maxLength = Math.min(engLines.length, tamilLines.length);
-                for(let i=0; i<maxLength; i++){
-                    let engName = engLines[i];
-                    let foundMaster = MASTER_DATABASE.find(m => m.eng.toLowerCase() === engName.toLowerCase());
-                    MOVIE_COLLECTION.push({ eng: engName, tamil: tamilLines[i], hero: foundMaster ? foundMaster.hero : "" });
+                const minLen = Math.min(eLines.length, tLines.length);
+                for(let i=0; i<minLen; i++){
+                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
+                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
+                    }
                 }
-            } else {
-                console.warn("TXT files not found. Using Master Database.");
-                MOVIE_COLLECTION = [...MASTER_DATABASE];
             }
-        } catch (error) { 
-            console.error(error); 
-            MOVIE_COLLECTION = [...MASTER_DATABASE];
-        }
+        } catch (error) { console.error("Using Master DB due to TXT error."); }
 
-        // Update list
         const list = document.getElementById('movieList');
         list.innerHTML = "";
         MOVIE_COLLECTION.forEach(movieObj => {
@@ -411,7 +430,6 @@
 
     window.onload = () => {
         loadMoviesFromTXT();
-        
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
         emojis.forEach(emoji => {
@@ -450,6 +468,7 @@
         const data = snapshot.val() || {};
         
         let mt = data.movieTamil || data.movie || "";
+        // Extreme strictness: If it somehow contains English letters, FORCE transliteration!
         if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
         
         gameState = { 
@@ -469,22 +488,6 @@
         wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0 };
         if(activeGame === 'word') renderWordGameUI();
     });
-
-    // Translation fallback
-    const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
-
-    function transliterate(text) {
-        let result = ""; let i = 0; const lower = text.toLowerCase();
-        while (i < lower.length) {
-            let found = false;
-            for (let len = 4; len >= 1; len--) {
-                let chunk = lower.substring(i, i + len);
-                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
-            }
-            if (!found) { result += text[i]; i++; }
-        }
-        return result;
-    }
 
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
@@ -526,7 +529,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
+                        ${gameState.hint ? `<div class="hint-text">${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -536,12 +539,9 @@
         }
     }
 
-    // -- FIXED MOVIE LOGIC (AUTO-FILL HERO) --
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
-        
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
-        
         if(foundMovie) { 
             if(foundMovie.hero) {
                 document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); 
@@ -557,17 +557,10 @@
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
-        
+        if (MOVIE_COLLECTION.length === 0) return alert("Loading... Wait 2 seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        
-        if(randomObj.hero) {
-            document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); 
-        } else {
-            document.getElementById('hintInput').value = "GUESS THE HERO!";
-        }
-        
+        document.getElementById('hintInput').value = randomObj.hero ? ("HERO: " + randomObj.hero.toUpperCase()) : "GUESS THE HERO!"; 
         selectedPerfectTamil = randomObj.tamil;
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
@@ -577,13 +570,15 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
-        const finalTamil = selectedPerfectTamil || transliterate(rawEng);
+        let finalTamil = selectedPerfectTamil || transliterate(rawEng);
+        // EXTRA SECURITY: Force translation if English letters sneak in
+        if(/[a-zA-Z]/.test(finalTamil)) { finalTamil = transliterate(finalTamil); }
+        
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
-        
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
         const guessTamil = transliterate(guessRaw);
@@ -609,15 +604,17 @@
     
     function getLetterCount(str) { 
         if(!str) return 0; 
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; 
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || []; 
         return clusters.filter(c => c !== ' ').length; 
     }
     
+    // Strict Masking: Only shows valid clusters, completely ignores stray English
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
         return words.map(word => {
-            const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
+            const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || [];
+            if (clusters.length === 0) return "_"; // Failsafe
             if (clusters.length <= 2) {
                 return clusters.map((c, i) => i === 0 ? c : "_").join(" ");
             }
