@@ -242,7 +242,7 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- MOVIE GAME DICTIONARY & LOGIC (Preserved) ---
+    // --- MASSIVE MOVIE DICTIONARY WITH HEROES ---
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
@@ -275,22 +275,35 @@
         'nn': 'ன்', 'nna': 'ன', 'nnaa': 'னா', 'nni': 'னி', 'nnee': 'னீ', 'nnu': 'னு', 'nnoo': 'னூ', 'nne': 'னெ', 'nnae': 'னே', 'nnai': 'னை', 'nno': 'னொ', 'nnoa': 'னோ'
     };
 
+    // Huge Movie Collection with Hero details!
     const MOVIE_COLLECTION = [
-        "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Sachien",
-        "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
-        "Baasha", "Muthu", "Padayappa", "Sivaji", "Enthiran", "Jailer", "Arunachalam", "Annamalai", "Kaala", "Kabali", "Petta", "Darbar", "Annaatthe", "Thalapathi", "Chandramukhi", "Vettaiyan",
-        "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi",
-        "Ayan", "Singam", "Jai Bhim", "Ghajini", "Pithamagan", "Kanguva", "Masss", "Anjaan", "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Madras", "Sulthan", "Japan", "Meiyazhagan", "Sardar",
-        "Asuran", "Karnan", "Aadukalam", "Polladhavan", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Kodi", "Anegan", "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo",
-        "Maharaja", "Vikram Vedha", "Pizza", "Soodhu Kavvum", "Kavan", "Sethupathi", "Love Today", "Alaipayuthey", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Minnale", "Aramm", "Airaa", "Manjummel Boys", "Premalu"
+        { title: "Ghilli", hero: "Vijay" }, { title: "Thuppakki", hero: "Vijay" }, { title: "Master", hero: "Vijay" }, { title: "Leo", hero: "Vijay" }, { title: "Kaththi", hero: "Vijay" }, { title: "Theri", hero: "Vijay" }, { title: "Mersal", hero: "Vijay" }, { title: "Bigil", hero: "Vijay" }, { title: "Beast", hero: "Vijay" }, { title: "Varisu", hero: "Vijay" }, { title: "GOAT", hero: "Vijay" }, { title: "Pokkiri", hero: "Vijay" }, { title: "Sura", hero: "Vijay" }, { title: "Bairavaa", hero: "Vijay" }, { title: "Puli", hero: "Vijay" }, { title: "Kushi", hero: "Vijay" }, { title: "Sachien", hero: "Vijay" }, { title: "Thulladha Manamum Thullum", hero: "Vijay" }, { title: "Nanban", hero: "Vijay" },
+        { title: "Mankatha", hero: "Ajith" }, { title: "Billa", hero: "Ajith" }, { title: "Dheena", hero: "Ajith" }, { title: "Viswasam", hero: "Ajith" }, { title: "Thunivu", hero: "Ajith" }, { title: "Valimai", hero: "Ajith" }, { title: "Vivegam", hero: "Ajith" }, { title: "Vedalam", hero: "Ajith" }, { title: "Veeram", hero: "Ajith" }, { title: "Amarkalam", hero: "Ajith" }, { title: "Vaali", hero: "Ajith" }, { title: "Villain", hero: "Ajith" }, { title: "Varalaru", hero: "Ajith" }, { title: "Aasal", hero: "Ajith" }, { title: "Aarambam", hero: "Ajith" }, { title: "Yennai Arindhaal", hero: "Ajith" },
+        { title: "Baasha", hero: "Rajinikanth" }, { title: "Muthu", hero: "Rajinikanth" }, { title: "Padayappa", hero: "Rajinikanth" }, { title: "Sivaji", hero: "Rajinikanth" }, { title: "Enthiran", hero: "Rajinikanth" }, { title: "Jailer", hero: "Rajinikanth" }, { title: "Arunachalam", hero: "Rajinikanth" }, { title: "Annamalai", hero: "Rajinikanth" }, { title: "Kaala", hero: "Rajinikanth" }, { title: "Kabali", hero: "Rajinikanth" }, { title: "Petta", hero: "Rajinikanth" }, { title: "Darbar", hero: "Rajinikanth" }, { title: "Annaatthe", hero: "Rajinikanth" }, { title: "Thalapathi", hero: "Rajinikanth" }, { title: "Chandramukhi", hero: "Rajinikanth" }, { title: "Vettaiyan", hero: "Rajinikanth" }, { title: "2.0", hero: "Rajinikanth" },
+        { title: "Vikram", hero: "Kamal Haasan" }, { title: "Indian", hero: "Kamal Haasan" }, { title: "Nayakan", hero: "Kamal Haasan" }, { title: "Anbe Sivam", hero: "Kamal Haasan" }, { title: "Panchatanthiram", hero: "Kamal Haasan" }, { title: "Dasavathaaram", hero: "Kamal Haasan" }, { title: "Vishwaroopam", hero: "Kamal Haasan" }, { title: "Thevar Magan", hero: "Kamal Haasan" }, { title: "Kuruthipunal", hero: "Kamal Haasan" }, { title: "Virumaandi", hero: "Kamal Haasan" }, { title: "Indian 2", hero: "Kamal Haasan" }, { title: "Vettaiyaadu Vilaiyaadu", hero: "Kamal Haasan" },
+        { title: "Ayan", hero: "Suriya" }, { title: "Singam", hero: "Suriya" }, { title: "Jai Bhim", hero: "Suriya" }, { title: "Ghajini", hero: "Suriya" }, { title: "Pithamagan", hero: "Suriya / Vikram" }, { title: "Kanguva", hero: "Suriya" }, { title: "Masss", hero: "Suriya" }, { title: "Anjaan", hero: "Suriya" }, { title: "24", hero: "Suriya" }, { title: "Soorarai Pottru", hero: "Suriya" }, { title: "Vaaranam Aayiram", hero: "Suriya" }, { title: "Kaakha Kaakha", hero: "Suriya" },
+        { title: "Kaithi", hero: "Karthi" }, { title: "Paruthiveeran", hero: "Karthi" }, { title: "Paiyaa", hero: "Karthi" }, { title: "Siruthai", hero: "Karthi" }, { title: "Madras", hero: "Karthi" }, { title: "Sulthan", hero: "Karthi" }, { title: "Japan", hero: "Karthi" }, { title: "Meiyazhagan", hero: "Karthi" }, { title: "Sardar", hero: "Karthi" }, { title: "Theeran Adhigaaram Ondru", hero: "Karthi" }, { title: "Kadaikutty Singam", hero: "Karthi" },
+        { title: "Asuran", hero: "Dhanush" }, { title: "Karnan", hero: "Dhanush" }, { title: "Aadukalam", hero: "Dhanush" }, { title: "Polladhavan", hero: "Dhanush" }, { title: "Maari", hero: "Dhanush" }, { title: "Pudhupettai", hero: "Dhanush" }, { title: "Thiruchitrambalam", hero: "Dhanush" }, { title: "Raayan", hero: "Dhanush" }, { title: "Kodi", hero: "Dhanush" }, { title: "Anegan", hero: "Dhanush" }, { title: "Velaiilla Pattadhari", hero: "Dhanush" }, { title: "Captain Miller", hero: "Dhanush" },
+        { title: "Doctor", hero: "Sivakarthikeyan" }, { title: "Don", hero: "Sivakarthikeyan" }, { title: "Maaveeran", hero: "Sivakarthikeyan" }, { title: "Ayalaan", hero: "Sivakarthikeyan" }, { title: "Amaran", hero: "Sivakarthikeyan" }, { title: "Remo", hero: "Sivakarthikeyan" }, { title: "Rajini Murugan", hero: "Sivakarthikeyan" }, { title: "Varuthapadatha Valibar Sangam", hero: "Sivakarthikeyan" }, { title: "Ethir Neechal", hero: "Sivakarthikeyan" },
+        { title: "Maharaja", hero: "Vijay Sethupathi" }, { title: "Vikram Vedha", hero: "Madhavan & VJS" }, { title: "Pizza", hero: "Vijay Sethupathi" }, { title: "Soodhu Kavvum", hero: "Vijay Sethupathi" }, { title: "Kavan", hero: "Vijay Sethupathi" }, { title: "Sethupathi", hero: "Vijay Sethupathi" }, { title: "96", hero: "Vijay Sethupathi" }, { title: "Naanum Rowdy Dhaan", hero: "Vijay Sethupathi" },
+        { title: "Love Today", hero: "Pradeep Ranganathan" }, { title: "Alaipayuthey", hero: "Madhavan" }, { title: "Raja Rani", hero: "Arya" }, { title: "Ko", hero: "Jiiva" }, { title: "Gargi", hero: "Sai Pallavi" }, { title: "Dada", hero: "Kavin" }, { title: "Good Night", hero: "Manikandan" }, { title: "Por Thozhil", hero: "Ashok Selvan" }, { title: "Aruvi", hero: "Aditi Balan" }, { title: "Kumki", hero: "Vikram Prabhu" }, { title: "Roja", hero: "Arvind Swamy" }, { title: "Bombay", hero: "Arvind Swamy" }, { title: "Mudhalvan", hero: "Arjun" }, { title: "Boys", hero: "Siddharth" }, { title: "Jeans", hero: "Prashanth" }, { title: "Kadhalan", hero: "Prabhu Deva" }, { title: "Gentleman", hero: "Arjun" }, { title: "Viduthalai", hero: "Soori" }, { title: "Jigarthanda", hero: "Siddharth / Bobby Simha" }, { title: "Minnale", hero: "Madhavan" }, { title: "Aramm", hero: "Nayanthara" }, { title: "Airaa", hero: "Nayanthara" }, { title: "Manjummel Boys", hero: "Soubin Shahir" }, { title: "Premalu", hero: "Naslen" }, { title: "Vinnaithaandi Varuvaayaa", hero: "Simbu" }, { title: "Sarpatta Parambarai", hero: "Arya" }, { title: "Pariyerum Perumal", hero: "Kathir" }, { title: "Lubber Pandhu", hero: "Harish Kalyan" }
     ];
 
     window.onload = () => {
         const list = document.getElementById('movieList');
-        MOVIE_COLLECTION.forEach(movie => {
+        MOVIE_COLLECTION.forEach(movieObj => {
             const option = document.createElement('option');
-            option.value = movie;
+            option.value = movieObj.title;
             list.appendChild(option);
+        });
+        
+        const picker = document.getElementById('emojiPicker');
+        const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
+        emojis.forEach(emoji => {
+            const btn = document.createElement('button');
+            btn.className = 'emoji-item'; btn.innerText = emoji;
+            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); };
+            picker.appendChild(btn);
         });
     };
 
@@ -312,7 +325,6 @@
         document.getElementById('immuScore').innerText = gameState.score1;
         document.getElementById('sappiiScore').innerText = gameState.score2;
         
-        // Setup visual turns
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
         
@@ -326,11 +338,11 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
-                        <p style="font-size:11px;color:#aaa;">Type in Tanglish (Example: Vikram)</p>
-                        <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="livePreview()">
+                        <p style="font-size:11px;color:#aaa;">Type or select a movie</p>
+                        <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
-                        <input type="text" id="hintInput" placeholder="Add a hint">
+                        <input type="text" id="hintInput" placeholder="Add a hint (e.g. Hero name)">
                         <button onclick="setMovie()">Start Game 🚀</button>
                     </div>`;
             } else {
@@ -358,9 +370,24 @@
     }
 
     // -- MOVIE LOGIC FUNCS --
-    function livePreview() { const val = document.getElementById('movieInput').value; document.getElementById('tamilPreview').innerText = val ? transliterate(val) : ""; }
-    function liveGuessPreview() { const val = document.getElementById('guessInput').value; document.getElementById('guessPreview').innerText = val ? transliterate(val) : ""; }
-    function suggestRandomMovie() { document.getElementById('movieInput').value = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)]; livePreview(); document.getElementById('hintInput').value = "Guess pannu papom! 😉"; }
+    function handleMovieInput() {
+        const val = document.getElementById('movieInput').value;
+        document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
+        
+        // Auto fill hero name if movie matches the list
+        const foundMovie = MOVIE_COLLECTION.find(m => m.title.toLowerCase() === val.toLowerCase().trim());
+        if(foundMovie) {
+            document.getElementById('hintInput').value = "Hero: " + foundMovie.hero;
+        }
+    }
+    
+    function suggestRandomMovie() { 
+        const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
+        document.getElementById('movieInput').value = randomObj.title; 
+        document.getElementById('hintInput').value = "Hero: " + randomObj.hero;
+        document.getElementById('tamilPreview').innerText = transliterate(randomObj.title); 
+    }
+    
     function setMovie() { const raw = document.getElementById('movieInput').value.trim(); const tamilMovie = transliterate(raw); const h = document.getElementById('hintInput').value; if(!raw) return alert("Enter movie!"); db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" }); }
     function checkGuess() { const guessRaw = document.getElementById('guessInput').value.trim(); const tamilGuess = transliterate(guessRaw); if (tamilGuess === gameState.movie) { const scoreKey = (myName === "immu") ? 'score1' : 'score2'; db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); db.ref('gameState').update({ turn: myName, status: "set", movie: "" }); } else { document.getElementById('feedback').innerText = "Wrong! ("+tamilGuess+") Try again 🥺"; } }
     function giveUp() { document.getElementById('feedback').innerText = "Answer: " + gameState.movie; const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500); }
@@ -374,7 +401,6 @@
         document.getElementById('immuScore').innerText = wordGameState.score1;
         document.getElementById('sappiiScore').innerText = wordGameState.score2;
         
-        // Both are actively playing
         document.getElementById('box-immu').className = `player-box racing-turn`;
         document.getElementById('box-sappii').className = `player-box racing-turn`;
         document.getElementById('turn-immu').innerText = wordGameState.status === 'race_phase' ? 'RACING 🔥' : 'THINKING';
@@ -402,7 +428,6 @@
                         <p style="font-size: 20px; color: #4ade80; font-weight:bold;">You picked: ${myLetter.toUpperCase()}</p>
                     </div>`;
             } else {
-                // Both letters are in. Choose order!
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="color:#4ade80;">Both Letters Ready!</h3>
@@ -449,12 +474,9 @@
         const end = wordGameState.endLetter.toLowerCase();
         
         if (word.length >= 2 && word.startsWith(start) && word.endsWith(end)) {
-            // Valid Word! Give Point
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
             db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-            
-            // Send celebration msg in chat automatically
             db.ref('chatMessages').push({ sender: "System 🤖", text: `🎉 ${myName} scored 1 point with the word "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
         } else {
             document.getElementById('raceFeedback').innerText = `Word must start with ${start.toUpperCase()} and end with ${end.toUpperCase()}!`;
@@ -524,18 +546,6 @@
     }
 
     document.getElementById('chatInput').addEventListener('keypress', e => { if (e.key === 'Enter') sendChatMessage(); });
-
-    const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
-    window.addEventListener('load', () => {
-        const picker = document.getElementById('emojiPicker');
-        emojis.forEach(emoji => {
-            const btn = document.createElement('button');
-            btn.className = 'emoji-item'; btn.innerText = emoji;
-            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); };
-            picker.appendChild(btn);
-        });
-    });
-
     function toggleEmojiPicker() { document.getElementById('emojiPicker').classList.toggle('hidden'); }
     function closeEmojiPicker() { document.getElementById('emojiPicker').classList.add('hidden'); }
 </script>
