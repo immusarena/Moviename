@@ -66,7 +66,7 @@
 
         .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
         .letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;}
-        .preview-text { color: #4ade80; font-size: 18px; font-weight: bold; margin: 5px 0 10px 0; min-height: 27px; font-family: 'Latha', sans-serif;}
+        .preview-text { color: #4ade80; font-size: 20px; font-weight: bold; margin: 5px 0 10px 0; min-height: 30px; font-family: 'Latha', sans-serif;}
 
         .hidden { display: none !important; }
         .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
@@ -138,6 +138,7 @@
         </div>
     </div>
 
+    <datalist id="movieList"></datalist>
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
@@ -193,6 +194,7 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
+    let selectedPerfectTamil = ""; // Variable to hold exact Tamil word if selected from list
 
     function openGame(gameType) {
         activeGame = gameType;
@@ -220,7 +222,7 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movie: data.movie || "", hint: data.hint || "" };
+        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: data.movieEng || "", movieTamil: data.movieTamil || "", hint: data.hint || "" };
         if(activeGame === 'movie') renderMovieGameUI();
     });
 
@@ -230,23 +232,20 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- TAMIL DICTIONARY (Robust Tanglish Mapping) ---
+    // --- TRANSLITERATION ENGINE (Fallback for manual typing) ---
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
         'g': 'க்', 'ga': 'க', 'gaa': 'கா', 'gi': 'கி', 'gee': 'கீ', 'gu': 'கு', 'goo': 'கூ', 'ge': 'கெ', 'gae': 'கே', 'gai': 'கை', 'go': 'கொ', 'goa': 'கோ',
-        'ng': 'ங்', 'nga': 'ங', 'ngaa': 'ஙா', 'ngi': 'ஙி', 'ngee': 'ஙீ', 'ngu': 'ஙு', 'ngoo': 'ஙூ', 'nge': 'ஙெ', 'ngae': 'ஙே', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoa': 'ஙோ',
         'ch': 'ச்', 'cha': 'ச', 'chaa': 'சா', 'chi': 'சி', 'chee': 'சீ', 'chu': 'சு', 'choo': 'சூ', 'che': 'செ', 'chae': 'சே', 'chai': 'சை', 'cho': 'சொ', 'choa': 'சோ',
         's': 'ஸ்', 'sa': 'ச', 'saa': 'சா', 'si': 'சி', 'see': 'சீ', 'su': 'சு', 'soo': 'சூ', 'se': 'செ', 'sae': 'சே', 'sai': 'சை', 'so': 'சொ', 'soa': 'சோ',
         'sh': 'ஷ்', 'sha': 'ஷ', 'shaa': 'ஷா', 'shi': 'ஷி', 'shee': 'ஷீ', 'shu': 'ஷு', 'shoo': 'ஷூ', 'she': 'ஷெ', 'shae': 'ஷே', 'shai': 'ஷை', 'sho': 'ஷொ', 'shoa': 'ஷோ',
         'j': 'ஜ்', 'ja': 'ஜ', 'jaa': 'ஜா', 'ji': 'ஜி', 'jee': 'ஜீ', 'ju': 'ஜு', 'joo': 'ஜூ', 'je': 'ஜெ', 'jae': 'ஜே', 'jai': 'ஜை', 'jo': 'ஜொ', 'joa': 'ஜோ',
-        'nj': 'ஞ்', 'nja': 'ஞ', 'njaa': 'ஞா', 'nji': 'ஞி', 'njee': 'ஞீ', 'nju': 'ஞு', 'njoo': 'ஞூ', 'nje': 'ஞெ', 'njae': 'ஞே', 'njai': 'ஞை', 'njo': 'ஞொ', 'njoa': 'ஞோ',
         't': 'ட்', 'ta': 'ட', 'taa': 'டா', 'ti': 'டி', 'tee': 'டீ', 'tu': 'டு', 'too': 'டூ', 'te': 'டெ', 'tae': 'டே', 'tai': 'டை', 'to': 'டொ', 'toa': 'டோ',
         'd': 'ட்', 'da': 'ட', 'daa': 'டா', 'di': 'டி', 'dee': 'டீ', 'du': 'டு', 'doo': 'டூ', 'de': 'டெ', 'dae': 'டே', 'dai': 'டை', 'do': 'டொ', 'doa': 'டோ',
         'n': 'ண்', 'na': 'ண', 'naa': 'ணா', 'ni': 'ணி', 'nee': 'ணீ', 'nu': 'ணு', 'noo': 'ணூ', 'ne': 'ணெ', 'nae': 'ணே', 'nai': 'ணை', 'no': 'ணொ', 'noa': 'டோ',
         'th': 'த்', 'tha': 'த', 'thaa': 'தா', 'thi': 'தி', 'thee': 'தீ', 'thu': 'து', 'thoo': 'தூ', 'the': 'தெ', 'thae': 'தே', 'thai': 'தை', 'tho': 'தொ', 'thoa': 'தோ',
         'dh': 'த்', 'dha': 'த', 'dhaa': 'தா', 'dhi': 'தி', 'dhee': 'தீ', 'dhu': 'து', 'dhoo': 'தூ', 'dhe': 'தெ', 'dhae': 'தே', 'dhai': 'தை', 'dho': 'தொ', 'dhoa': 'தோ',
-        'nh': 'ந்', 'nha': 'ந', 'nhaa': 'நா', 'nhi': 'நி', 'nhee': 'நீ', 'nhu': 'நு', 'nhoo': 'நூ', 'nhe': 'நெ', 'nhae': 'நே', 'nhai': 'நை', 'nho': 'நொ', 'nhoa': 'நோ',
         'p': 'ப்', 'pa': 'ப', 'paa': 'பா', 'pi': 'பி', 'pee': 'பீ', 'pu': 'பு', 'poo': 'பூ', 'pe': 'பெ', 'pae': 'பே', 'pai': 'பை', 'po': 'பொ', 'poa': 'போ',
         'b': 'ப்', 'ba': 'ப', 'baa': 'பா', 'bi': 'பி', 'bee': 'பீ', 'bu': 'பு', 'boo': 'பூ', 'be': 'பெ', 'bae': 'பே', 'bai': 'பை', 'bo': 'பொ', 'boa': 'போ',
         'm': 'ம்', 'ma': 'ம', 'maa': 'மா', 'mi': 'மி', 'mee': 'மீ', 'mu': 'மு', 'moo': 'மூ', 'me': 'மெ', 'mae': 'மே', 'mai': 'மை', 'mo': 'மொ', 'moa': 'மோ',
@@ -261,31 +260,6 @@
         'nn': 'ன்', 'nna': 'ன', 'nnaa': 'னா', 'nni': 'னி', 'nnee': 'னீ', 'nnu': 'னு', 'nnoo': 'னூ', 'nne': 'னெ', 'nnae': 'னே', 'nnai': 'னை', 'nno': 'னொ', 'nnoa': 'னோ'
     };
 
-    // Tanglish spellings customized to convert PERFECTLY to Tamil
-    const MOVIE_COLLECTION = [
-        { tanglish: "gilli", hero: "Vijay" }, { tanglish: "thuppaakki", hero: "Vijay" }, { tanglish: "maastar", hero: "Vijay" }, { tanglish: "liyoa", hero: "Vijay" }, { tanglish: "kaththi", hero: "Vijay" }, { tanglish: "theri", hero: "Vijay" }, { tanglish: "mersal", hero: "Vijay" }, { tanglish: "paokkiri", hero: "Vijay" }, { tanglish: "kaathalukku mariyaathai", hero: "Vijay" }, 
-        { tanglish: "mangaathaa", hero: "Ajith" }, { tanglish: "billaa", hero: "Ajith" }, { tanglish: "dheenaa", hero: "Ajith" }, { tanglish: "viswaasam", hero: "Ajith" }, { tanglish: "thunivu", hero: "Ajith" }, { tanglish: "valimai", hero: "Ajith" }, { tanglish: "aarambam", hero: "Ajith" },
-        { tanglish: "baashaa", hero: "Rajinikanth" }, { title: "muthu", hero: "Rajinikanth" }, { tanglish: "padaiyappaa", hero: "Rajinikanth" }, { tanglish: "sivaaji", hero: "Rajinikanth" }, { tanglish: "enthiran", hero: "Rajinikanth" }, { tanglish: "jailar", hero: "Rajinikanth" }, { tanglish: "thaalapathi", hero: "Rajinikanth" },
-        { tanglish: "vikram", hero: "Kamal Haasan" }, { tanglish: "indhiyan", hero: "Kamal Haasan" }, { tanglish: "naayakan", hero: "Kamal Haasan" }, { tanglish: "anbae sivam", hero: "Kamal Haasan" }, { tanglish: "panchathanthiram", hero: "Kamal Haasan" }, 
-        { tanglish: "ayan", hero: "Suriya" }, { tanglish: "singam", hero: "Suriya" }, { tanglish: "gajini", hero: "Suriya" }, { tanglish: "kanguvaa", hero: "Suriya" }, { tanglish: "soorarai poatru", hero: "Suriya" }, 
-        { tanglish: "kaithi", hero: "Karthi" }, { tanglish: "siruthai", hero: "Karthi" }, { tanglish: "madras", hero: "Karthi" }, { tanglish: "paruthiveeran", hero: "Karthi" },
-        { tanglish: "asuran", hero: "Dhanush" }, { tanglish: "karnan", hero: "Dhanush" }, { tanglish: "aadukalam", hero: "Dhanush" }, { tanglish: "maari", hero: "Dhanush" }, { tanglish: "raayan", hero: "Dhanush" },
-        { tanglish: "daaktar", hero: "Sivakarthikeyan" }, { tanglish: "remoa", hero: "Sivakarthikeyan" }, { tanglish: "amaraan", hero: "Sivakarthikeyan" },
-        { tanglish: "maahaaraajaa", hero: "Vijay Sethupathi" }, { tanglish: "vikram vaethaa", hero: "Madhavan & VJS" }, { tanglish: "pizzaa", hero: "Vijay Sethupathi" }, { tanglish: "96", hero: "Vijay Sethupathi" },
-        { tanglish: "alaipaayuthae", hero: "Madhavan" }, { tanglish: "raajaa raani", hero: "Arya" }, { tanglish: "roaajaa", hero: "Arvind Swamy" }, { tanglish: "poar thozhil", hero: "Ashok Selvan" }, { tanglish: "manjummal paays", hero: "Soubin Shahir" }
-    ];
-
-    window.onload = () => {
-        const picker = document.getElementById('emojiPicker');
-        const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
-        emojis.forEach(emoji => {
-            const btn = document.createElement('button');
-            btn.className = 'emoji-item'; btn.innerText = emoji;
-            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); };
-            picker.appendChild(btn);
-        });
-    };
-
     function transliterate(text) {
         let result = ""; let i = 0; const lower = text.toLowerCase();
         while (i < lower.length) {
@@ -298,6 +272,38 @@
         }
         return result;
     }
+
+    // --- MASSIVE PERFECT TAMIL MOVIE DICTIONARY ---
+    const MOVIE_COLLECTION = [
+        { eng: "Ghilli", tamil: "கில்லி", hero: "Vijay" }, { eng: "Thuppakki", tamil: "துப்பாக்கி", hero: "Vijay" }, { eng: "Master", tamil: "மாஸ்டர்", hero: "Vijay" }, { eng: "Leo", tamil: "லியோ", hero: "Vijay" }, { eng: "Kaththi", tamil: "கத்தி", hero: "Vijay" }, { eng: "Theri", tamil: "தெறி", hero: "Vijay" }, { eng: "Mersal", tamil: "மெர்சல்", hero: "Vijay" }, { eng: "Bigil", tamil: "பிகில்", hero: "Vijay" }, { eng: "Beast", tamil: "பீஸ்ட்", hero: "Vijay" }, { eng: "Varisu", tamil: "வாரிசு", hero: "Vijay" }, { eng: "GOAT", tamil: "கோட்", hero: "Vijay" }, { eng: "Pokkiri", tamil: "போக்கிரி", hero: "Vijay" }, { eng: "Sura", tamil: "சுறா", hero: "Vijay" }, { eng: "Bairavaa", tamil: "பைரவா", hero: "Vijay" }, { eng: "Puli", tamil: "புலி", hero: "Vijay" }, { eng: "Kushi", tamil: "குஷி", hero: "Vijay" }, { eng: "Sachien", tamil: "சச்சின்", hero: "Vijay" }, { eng: "Nanban", tamil: "நண்பன்", hero: "Vijay" },
+        { eng: "Mankatha", tamil: "மங்காத்தா", hero: "Ajith" }, { eng: "Billa", tamil: "பில்லா", hero: "Ajith" }, { eng: "Dheena", tamil: "தீனா", hero: "Ajith" }, { eng: "Viswasam", tamil: "விஸ்வாசம்", hero: "Ajith" }, { eng: "Thunivu", tamil: "துணிவு", hero: "Ajith" }, { eng: "Valimai", tamil: "வலிமை", hero: "Ajith" }, { eng: "Vivegam", tamil: "விவேகம்", hero: "Ajith" }, { eng: "Vedalam", tamil: "வேதாளம்", hero: "Ajith" }, { eng: "Veeram", tamil: "வீரம்", hero: "Ajith" }, { eng: "Amarkalam", tamil: "அமர்க்களம்", hero: "Ajith" }, { eng: "Vaali", tamil: "வாலி", hero: "Ajith" }, { eng: "Villain", tamil: "வில்லன்", hero: "Ajith" }, { eng: "Varalaru", tamil: "வரலாறு", hero: "Ajith" }, { eng: "Aarambam", tamil: "ஆரம்பம்", hero: "Ajith" }, { eng: "Yennai Arindhaal", tamil: "என்னை அறிந்தால்", hero: "Ajith" },
+        { eng: "Baasha", tamil: "பாட்ஷா", hero: "Rajinikanth" }, { eng: "Muthu", tamil: "முத்து", hero: "Rajinikanth" }, { eng: "Padayappa", tamil: "படையப்பா", hero: "Rajinikanth" }, { eng: "Sivaji", tamil: "சிவாஜி", hero: "Rajinikanth" }, { eng: "Enthiran", tamil: "எந்திரன்", hero: "Rajinikanth" }, { eng: "Jailer", tamil: "ஜெயிலர்", hero: "Rajinikanth" }, { eng: "Arunachalam", tamil: "அருணாச்சலம்", hero: "Rajinikanth" }, { eng: "Annamalai", tamil: "அண்ணாமலை", hero: "Rajinikanth" }, { eng: "Kaala", tamil: "காலா", hero: "Rajinikanth" }, { eng: "Kabali", tamil: "கபாலி", hero: "Rajinikanth" }, { eng: "Petta", tamil: "பேட்ட", hero: "Rajinikanth" }, { eng: "Darbar", tamil: "தர்பார்", hero: "Rajinikanth" }, { eng: "Thalapathi", tamil: "தளபதி", hero: "Rajinikanth" }, { eng: "Chandramukhi", tamil: "சந்திரமுகி", hero: "Rajinikanth" },
+        { eng: "Vikram", tamil: "விக்ரம்", hero: "Kamal Haasan" }, { eng: "Indian", tamil: "இந்தியன்", hero: "Kamal Haasan" }, { eng: "Nayakan", tamil: "நாயகன்", hero: "Kamal Haasan" }, { eng: "Anbe Sivam", tamil: "அன்பே சிவம்", hero: "Kamal Haasan" }, { eng: "Panchatanthiram", tamil: "பஞ்சதந்திரம்", hero: "Kamal Haasan" }, { eng: "Dasavathaaram", tamil: "தசாவதாரம்", hero: "Kamal Haasan" }, { eng: "Vishwaroopam", tamil: "விஸ்வரூபம்", hero: "Kamal Haasan" }, { eng: "Virumaandi", tamil: "விருமாண்டி", hero: "Kamal Haasan" }, { eng: "Vettaiyaadu Vilaiyaadu", tamil: "வேட்டையாடு விளையாடு", hero: "Kamal Haasan" },
+        { eng: "Ayan", tamil: "அயன்", hero: "Suriya" }, { eng: "Singam", tamil: "சிங்கம்", hero: "Suriya" }, { eng: "Jai Bhim", tamil: "ஜெய் பீம்", hero: "Suriya" }, { eng: "Ghajini", tamil: "கஜினி", hero: "Suriya" }, { eng: "Pithamagan", tamil: "பிதாமகன்", hero: "Suriya/Vikram" }, { eng: "Kanguva", tamil: "கங்குவா", hero: "Suriya" }, { eng: "Masss", tamil: "மாஸ்", hero: "Suriya" }, { eng: "Anjaan", tamil: "அஞ்சான்", hero: "Suriya" }, { eng: "Soorarai Pottru", tamil: "சூரரைப் போற்று", hero: "Suriya" }, { eng: "Vaaranam Aayiram", tamil: "வாரணம் ஆயிரம்", hero: "Suriya" },
+        { eng: "Kaithi", tamil: "கைதி", hero: "Karthi" }, { eng: "Paruthiveeran", tamil: "பருத்திவீரன்", hero: "Karthi" }, { eng: "Paiyaa", tamil: "பையா", hero: "Karthi" }, { eng: "Siruthai", tamil: "சிறுத்தை", hero: "Karthi" }, { eng: "Madras", tamil: "மெட்ராஸ்", hero: "Karthi" }, { eng: "Sulthan", tamil: "சுல்தான்", hero: "Karthi" }, { eng: "Sardar", tamil: "சர்தார்", hero: "Karthi" }, { eng: "Japan", tamil: "ஜப்பான்", hero: "Karthi" },
+        { eng: "Asuran", tamil: "அசுரன்", hero: "Dhanush" }, { eng: "Karnan", tamil: "கர்ணன்", hero: "Dhanush" }, { eng: "Aadukalam", tamil: "ஆடுகளம்", hero: "Dhanush" }, { eng: "Polladhavan", tamil: "பொல்லாதவன்", hero: "Dhanush" }, { eng: "Maari", tamil: "மாரி", hero: "Dhanush" }, { eng: "Pudhupettai", tamil: "புதுப்பேட்டை", hero: "Dhanush" }, { eng: "Thiruchitrambalam", tamil: "திருச்சிற்றம்பலம்", hero: "Dhanush" }, { eng: "Raayan", tamil: "ராயன்", hero: "Dhanush" }, { eng: "Anegan", tamil: "அனேகன்", hero: "Dhanush" },
+        { eng: "Doctor", tamil: "டாக்டர்", hero: "Sivakarthikeyan" }, { eng: "Don", tamil: "டான்", hero: "Sivakarthikeyan" }, { eng: "Maaveeran", tamil: "மாவீரன்", hero: "Sivakarthikeyan" }, { eng: "Ayalaan", tamil: "அயலான்", hero: "Sivakarthikeyan" }, { eng: "Amaran", tamil: "அமரன்", hero: "Sivakarthikeyan" }, { eng: "Remo", tamil: "ரெமோ", hero: "Sivakarthikeyan" }, { eng: "Rajini Murugan", tamil: "ரஜினி முருகன்", hero: "Sivakarthikeyan" },
+        { eng: "Maharaja", tamil: "மகாராஜா", hero: "Vijay Sethupathi" }, { eng: "Vikram Vedha", tamil: "விக்ரம் வேதா", hero: "Madhavan/VJS" }, { eng: "Pizza", tamil: "பீட்சா", hero: "Vijay Sethupathi" }, { eng: "Soodhu Kavvum", tamil: "சூது கவ்வும்", hero: "Vijay Sethupathi" },
+        { eng: "Love Today", tamil: "லவ் டுடே", hero: "Pradeep" }, { eng: "Alaipayuthey", tamil: "அலைபாயுதே", hero: "Madhavan" }, { eng: "Raja Rani", tamil: "ராஜா ராணி", hero: "Arya" }, { eng: "Roja", tamil: "ரோஜா", hero: "Arvind Swamy" }, { eng: "Bombay", tamil: "பம்பாய்", hero: "Arvind Swamy" }, { eng: "Jeans", tamil: "ஜீன்ஸ்", hero: "Prashanth" }, { eng: "Minnale", tamil: "மின்னலே", hero: "Madhavan" }, { eng: "Manjummel Boys", tamil: "மஞ்சும்மல் பாய்ஸ்", hero: "Soubin" }
+    ];
+
+    window.onload = () => {
+        const list = document.getElementById('movieList');
+        MOVIE_COLLECTION.forEach(movieObj => {
+            const option = document.createElement('option');
+            option.value = movieObj.eng;
+            list.appendChild(option);
+        });
+        
+        const picker = document.getElementById('emojiPicker');
+        const emojis = ['❤️', '💖', '😊', '😍', '😂', '🔥', '🤔', '🥺', '🎥', '🍿', '👍', '🙏', '💯', '✨'];
+        emojis.forEach(emoji => {
+            const btn = document.createElement('button');
+            btn.className = 'emoji-item'; btn.innerText = emoji;
+            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); };
+            picker.appendChild(btn);
+        });
+    };
 
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
@@ -317,8 +323,8 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
-                        <p style="font-size:11px;color:#aaa;">Type in Tanglish (Preview in Tamil)</p>
-                        <input type="text" id="movieInput" placeholder="e.g. maastar" oninput="livePreview()">
+                        <p style="font-size:11px;color:#aaa;">Type English spelling (e.g. Master)</p>
+                        <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
                         <input type="text" id="hintInput" placeholder="Add a hint (e.g. Hero name)">
@@ -328,19 +334,18 @@
                 container.innerHTML = `<div class="card"><h3>⏳ Waiting...</h3><p>${gameState.turn} is choosing a movie!</p></div>`;
             }
         } else if (gameState.status === "guessing") {
-            const letterCount = getLetterCount(gameState.movie);
+            const letterCount = getLetterCount(gameState.movieTamil);
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
+                container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3>🤔 Guess!</h3>
-                        <div class="masked-word">${maskTamil(gameState.movie)}</div>
+                        <h3>🤔 Guess the Movie!</h3>
+                        <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} Letters</div>
                         <p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p>
-                        <input type="text" id="guessInput" placeholder="Type in Tanglish" oninput="liveGuessPreview()">
-                        <div id="guessPreview" class="preview-text" style="font-size: 15px;"></div>
-                        <button onclick="checkGuess()">Submit</button>
+                        <input type="text" id="guessInput" placeholder="Type normal English spelling (e.g. Master)">
+                        <button onclick="checkGuess()">Submit Answer</button>
                         <button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button>
                         <p id="feedback" style="margin-top:15px;"></p>
                     </div>`;
@@ -348,33 +353,77 @@
         }
     }
 
-    // -- MOVIE LOGIC FUNCS (Tamil UI Restored) --
-    function livePreview() { const val = document.getElementById('movieInput').value; document.getElementById('tamilPreview').innerText = val ? transliterate(val) : ""; }
-    function liveGuessPreview() { const val = document.getElementById('guessInput').value; document.getElementById('guessPreview').innerText = val ? transliterate(val) : ""; }
+    // -- NEW BULLETPROOF MOVIE LOGIC --
+    function handleMovieInput() {
+        const val = document.getElementById('movieInput').value.trim().toLowerCase();
+        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        if(foundMovie) { 
+            document.getElementById('hintInput').value = "Hero: " + foundMovie.hero; 
+            selectedPerfectTamil = foundMovie.tamil;
+            document.getElementById('tamilPreview').innerText = foundMovie.tamil;
+        } else {
+            selectedPerfectTamil = "";
+            document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
+        }
+    }
     
     function suggestRandomMovie() { 
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
-        document.getElementById('movieInput').value = randomObj.tanglish; 
+        document.getElementById('movieInput').value = randomObj.eng; 
         document.getElementById('hintInput').value = "Hero: " + randomObj.hero;
-        livePreview(); // auto update preview
+        selectedPerfectTamil = randomObj.tamil;
+        document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
-    function setMovie() { const raw = document.getElementById('movieInput').value.trim(); const tamilMovie = transliterate(raw); const h = document.getElementById('hintInput').value; if(!raw) return alert("Enter movie!"); db.ref('gameState').update({ movie: tamilMovie, hint: h, status: "guessing" }); }
-    function checkGuess() { const guessRaw = document.getElementById('guessInput').value.trim(); const tamilGuess = transliterate(guessRaw); if (tamilGuess === gameState.movie) { const scoreKey = (myName === "immu") ? 'score1' : 'score2'; db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); db.ref('gameState').update({ turn: myName, status: "set", movie: "" }); } else { document.getElementById('feedback').innerText = "Wrong! ("+tamilGuess+") Try again 🥺"; } }
-    function giveUp() { document.getElementById('feedback').innerText = "Answer: " + gameState.movie; const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movie: "" }), 2500); }
+    function setMovie() { 
+        const rawEng = document.getElementById('movieInput').value.trim(); 
+        const h = document.getElementById('hintInput').value; 
+        if(!rawEng) return alert("Enter movie!"); 
+        
+        // Use predefined perfect Tamil, OR fallback to transliteration if typed manually
+        const finalTamil = selectedPerfectTamil || transliterate(rawEng);
+        
+        db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
+    }
     
-    // Exact Tamil Letter Count
-    function getLetterCount(str) { if(!str) return 0; const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; return clusters.filter(c => c !== ' ').length; }
+    function checkGuess() { 
+        const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
+        // Remove all spaces for super flexible checking (e.g "Love Today" matches "lovetoday")
+        const normalizedGuess = guessRaw.replace(/\s/g, '');
+        const normalizedAnswer = (gameState.movieEng || "").replace(/\s/g, '');
+
+        if (normalizedGuess === normalizedAnswer) { 
+            const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
+            db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
+            db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
+        } else { 
+            document.getElementById('feedback').innerText = "Wrong spelling! Try again 🥺"; 
+        } 
+    }
     
-    // Perfect Masking Logic for Tamil Characters
+    function giveUp() { 
+        document.getElementById('feedback').innerText = "Answer: " + (gameState.movieEng || "").toUpperCase(); 
+        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
+        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
+        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
+    }
+    
+    // Perfect Tamil Letter Count (Handles Tamil clusters)
+    function getLetterCount(str) { 
+        if(!str) return 0; 
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; 
+        return clusters.filter(c => c !== ' ').length; 
+    }
+    
+    // Perfect Tamil Masking: Shows exactly First and Last letter of the Tamil word!
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
         return words.map(word => {
             const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
             return clusters.map((c, i) => {
-                if(i === 0 || i === clusters.length - 1) return c; // Reveals first and last valid character
-                return "_";
+                if(i === 0 || i === clusters.length - 1) return c; // Show first and last
+                return "_"; // Mask middle
             }).join(" ");
         }).join("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
@@ -467,7 +516,7 @@
     // --- RESET MODALS ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
-    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movie: "", hint: "" }); closeResetModal(); }
+    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); closeResetModal(); }
     function confirmResetWord() { db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0 }); closeResetModal(); }
 
     // --- ONLINE STATUS & CHAT ---
