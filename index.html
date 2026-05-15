@@ -288,7 +288,7 @@
     let gameState = {}; 
     let wordGameState = {}; 
     
-    // Dynamic List from GitHub TXT
+    // Dynamic List from GitHub TXT + Master Hero DB
     let MOVIE_COLLECTION = []; 
     let selectedPerfectTamil = "";
 
@@ -369,15 +369,11 @@
                     let engName = engLines[i];
                     let tamilName = tamilLines[i];
                     
-                    // Search in master database to auto-fill hero name!
+                    // Cross-check with Master DB to get Hero Name!
                     let foundMaster = MASTER_DATABASE.find(m => m.eng.toLowerCase() === engName.toLowerCase());
                     let heroName = foundMaster ? foundMaster.hero : "";
                     
-                    MOVIE_COLLECTION.push({
-                        eng: engName,
-                        tamil: tamilName,
-                        hero: heroName
-                    });
+                    MOVIE_COLLECTION.push({ eng: engName, tamil: tamilName, hero: heroName });
                 }
                 
                 const list = document.getElementById('movieList');
@@ -387,7 +383,7 @@
                     option.value = movieObj.eng;
                     list.appendChild(option);
                 });
-                console.log("Loaded movies from TXT and merged with Master Hero DB!");
+                console.log("Loaded movies from TXT & merged with Hero Database!");
             } else {
                 console.warn("TXT files not found. Using Master Database as fallback.");
                 MOVIE_COLLECTION = [...MASTER_DATABASE];
@@ -452,7 +448,6 @@
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         
-        // Critical Fix: Automatically correct old English strings saved as movieTamil
         let mt = data.movieTamil || data.movie || "";
         if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
         
@@ -509,10 +504,12 @@
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR TURN</h3>
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Type English spelling (e.g. Master)</p>
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
+                        
+                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
                         <input type="text" id="hintInput" placeholder="HINT (AUTO-FILLS IF KNOWN)">
+                        
                         <button onclick="setMovie()">START GAME</button>
                     </div>`;
             } else {
@@ -538,11 +535,15 @@
         }
     }
 
+    // -- FIXED MOVIE LOGIC (AUTO-FILL HERO) --
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
+        
+        // Find matching movie
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        
         if(foundMovie) { 
-            // Only update hint if we actually have a hero in DB!
+            // If movie found AND it has a hero in our DB/TXT, auto-fill it!
             if(foundMovie.hero) {
                 document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); 
             }
@@ -556,9 +557,17 @@
     
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
+        
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        document.getElementById('hintInput').value = randomObj.hero ? ("HERO: " + randomObj.hero.toUpperCase()) : "GUESS THE HERO!"; 
+        
+        // Auto-fill hero from Random selection
+        if(randomObj.hero) {
+            document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); 
+        } else {
+            document.getElementById('hintInput').value = "GUESS THE HERO!";
+        }
+        
         selectedPerfectTamil = randomObj.tamil;
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
@@ -568,16 +577,21 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
+        // Exact Tamil match, else transliterate fallback
         const finalTamil = selectedPerfectTamil || transliterate(rawEng);
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
+        
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
+        const guessTamil = transliterate(guessRaw);
+        const answerTamil = gameState.movieTamil;
 
-        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
+        // Smart check: Valid if either exact English or translated Tamil matches
+        if ((normalizedGuess === normalizedAnswer && normalizedGuess !== "") || (guessTamil === answerTamil && guessTamil !== "")) { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
             db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
@@ -601,7 +615,6 @@
         return clusters.filter(c => c !== ' ').length; 
     }
     
-    // Exact Tamil masking protecting 2 letter words
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
