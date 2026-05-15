@@ -348,43 +348,58 @@
         { eng: "Love Today", tamil: "லவ் டுடே", hero: "Pradeep" }, { eng: "Alaipayuthey", tamil: "அலைபாயுதே", hero: "Madhavan" }, { eng: "Raja Rani", tamil: "ராஜா ராணி", hero: "Arya" }, { eng: "Roja", tamil: "ரோஜா", hero: "Arvind Swamy" }, { eng: "Bombay", tamil: "பம்பாய்", hero: "Arvind Swamy" }, { eng: "Jeans", tamil: "ஜீன்ஸ்", hero: "Prashanth" }, { eng: "Minnale", tamil: "மின்னலே", hero: "Madhavan" }, { eng: "Manjummel Boys", tamil: "மஞ்சும்மல் பாய்ஸ்", hero: "Soubin" }, { eng: "Premalu", tamil: "பிரேமலு", hero: "Naslen" }, { eng: "Good Night", tamil: "குட் நைட்", hero: "Manikandan" }, { eng: "Dada", tamil: "டாடா", hero: "Kavin" }, { eng: "Aruvi", tamil: "அருவி", hero: "Aditi" }, { eng: "Lubber Pandhu", tamil: "லப்பர் பந்து", hero: "Harish Kalyan" }
     ];
 
-    // --- TXT LOADER WITH MASTER MERGE ---
+    // --- TXT LOADER ---
     async function loadMoviesFromTXT() {
-        // Start with Master DB
-        MOVIE_COLLECTION = [...MASTER_DATABASE];
-
         try {
             const engResponse = await fetch('movies_eng.txt');
             const tamilResponse = await fetch('movies_tamil.txt');
+            const heroResponse = await fetch('heroes.txt'); // FETCHING HEROES.TXT
             
-            if (engResponse.ok && tamilResponse.ok) {
+            if (engResponse.ok && tamilResponse.ok && heroResponse.ok) {
                 const engText = await engResponse.text();
                 const tamilText = await tamilResponse.text();
+                const heroText = await heroResponse.text();
                 
                 const engLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const tamilLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const heroLines = heroText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
+                MOVIE_COLLECTION = [];
+                const minLength = Math.min(engLines.length, tamilLines.length, heroLines.length); // Use min to prevent errors
+                
+                for(let i=0; i<minLength; i++){
+                    MOVIE_COLLECTION.push({
+                        eng: engLines[i],
+                        tamil: tamilLines[i],
+                        hero: heroLines[i] // Direct from heroes.txt!
+                    });
+                }
+                console.log("Loaded movies perfectly from 3 TXT files!");
+                
+            } else if (engResponse.ok && tamilResponse.ok) {
+                // Backward compatibility just in case heroes.txt fails
+                const engText = await engResponse.text();
+                const tamilText = await tamilResponse.text();
+                const engLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const tamilLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                
+                MOVIE_COLLECTION = [];
                 const maxLength = Math.min(engLines.length, tamilLines.length);
-                
                 for(let i=0; i<maxLength; i++){
                     let engName = engLines[i];
-                    let tamilName = tamilLines[i];
-                    
-                    // Add only if not already in Master DB
-                    let exists = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === engName.toLowerCase());
-                    if (!exists) {
-                        MOVIE_COLLECTION.push({ eng: engName, tamil: tamilName, hero: "" });
-                    }
+                    let foundMaster = MASTER_DATABASE.find(m => m.eng.toLowerCase() === engName.toLowerCase());
+                    MOVIE_COLLECTION.push({ eng: engName, tamil: tamilLines[i], hero: foundMaster ? foundMaster.hero : "" });
                 }
-                console.log("Loaded TXT and merged with Master DB!");
             } else {
-                console.warn("TXT files not found. Using only Master Database.");
+                console.warn("TXT files not found. Using Master Database.");
+                MOVIE_COLLECTION = [...MASTER_DATABASE];
             }
         } catch (error) { 
-            console.error("Error loading TXT:", error); 
+            console.error(error); 
+            MOVIE_COLLECTION = [...MASTER_DATABASE];
         }
 
-        // Update dropdown
+        // Update list
         const list = document.getElementById('movieList');
         list.innerHTML = "";
         MOVIE_COLLECTION.forEach(movieObj => {
@@ -434,7 +449,6 @@
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         
-        // Critical Fix: Correct old data bugs
         let mt = data.movieTamil || data.movie || "";
         if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
         
@@ -526,19 +540,17 @@
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         
-        // Find matching movie
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         
         if(foundMovie) { 
             if(foundMovie.hero) {
                 document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); 
             } else {
-                document.getElementById('hintInput').value = ""; // Clear if no hero in TXT
+                document.getElementById('hintInput').value = ""; 
             }
             selectedPerfectTamil = foundMovie.tamil;
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
-            document.getElementById('hintInput').value = ""; 
             selectedPerfectTamil = "";
             document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
         }
@@ -550,7 +562,6 @@
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         
-        // Auto-fill hero from Random selection
         if(randomObj.hero) {
             document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); 
         } else {
