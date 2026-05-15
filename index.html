@@ -41,7 +41,10 @@
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
         .back-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; width: auto; transition: 0.2s; }
         .game-title-badge { background: var(--border-color); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--primary-color); }
-        .theme-btn { background: var(--card-bg); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-bottom: 10px;}
+        
+        /* Updated Theme Button */
+        .theme-btn { background: var(--card-bg); border: 2px solid var(--accent-color); width: 45px; height: 45px; border-radius: 50%; font-size: 22px; cursor: pointer; transition: 0.3s; margin-left: auto; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);}
+        .theme-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-color); }
 
         /* VS Scoreboard */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 15px; }
@@ -113,8 +116,8 @@
 <div id="toast" class="toast">💬 New Message!</div>
 
 <div class="container" id="homeScreen">
-    <div style="text-align: right;">
-        <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()">🎨 Theme: Love Vibe</button>
+    <div style="display: flex; width: 100%;">
+        <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">💖</button>
     </div>
 
     <h1 class="app-title">Namma Games 💖</h1>
@@ -216,11 +219,11 @@
 
     // --- 🎨 THEME SYSTEM ---
     const themes = [
-        { name: "Love Vibe 💖", vars: { '--bg-color': '#120A1E', '--card-bg': '#1D102E', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': '#3A2359', '--text-main': '#ffffff', '--text-muted': '#aaaaaa' } },
-        { name: "Ocean Blue 🌊", vars: { '--bg-color': '#0B132B', '--card-bg': '#1C2541', '--primary-color': '#3A506B', '--secondary-color': '#5BC0BE', '--accent-color': '#6FFFE9', '--border-color': '#3A506B', '--text-main': '#ffffff', '--text-muted': '#8a9ab3' } },
-        { name: "Cyberpunk 🌃", vars: { '--bg-color': '#000000', '--card-bg': '#121212', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': '#2B2B2B', '--text-main': '#ffffff', '--text-muted': '#888888' } },
-        { name: "Nature Dark 🍃", vars: { '--bg-color': '#0F1712', '--card-bg': '#172219', '--primary-color': '#4ade80', '--secondary-color': '#22c55e', '--accent-color': '#fbbf24', '--border-color': '#233226', '--text-main': '#e0eade', '--text-muted': '#819385' } },
-        { name: "Gold Spark ✨", vars: { '--bg-color': '#1a1814', '--card-bg': '#2a2620', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': '#4a4435', '--text-main': '#fffefc', '--text-muted': '#a39c8f' } }
+        { icon: "💖", vars: { '--bg-color': '#120A1E', '--card-bg': '#1D102E', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': '#3A2359', '--text-main': '#ffffff', '--text-muted': '#aaaaaa' } },
+        { icon: "🌊", vars: { '--bg-color': '#0B132B', '--card-bg': '#1C2541', '--primary-color': '#3A506B', '--secondary-color': '#5BC0BE', '--accent-color': '#6FFFE9', '--border-color': '#3A506B', '--text-main': '#ffffff', '--text-muted': '#8a9ab3' } },
+        { icon: "🌃", vars: { '--bg-color': '#000000', '--card-bg': '#121212', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': '#2B2B2B', '--text-main': '#ffffff', '--text-muted': '#888888' } },
+        { icon: "🍃", vars: { '--bg-color': '#0F1712', '--card-bg': '#172219', '--primary-color': '#4ade80', '--secondary-color': '#22c55e', '--accent-color': '#fbbf24', '--border-color': '#233226', '--text-main': '#e0eade', '--text-muted': '#819385' } },
+        { icon: "✨", vars: { '--bg-color': '#1a1814', '--card-bg': '#2a2620', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': '#4a4435', '--text-main': '#fffefc', '--text-muted': '#a39c8f' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
@@ -229,7 +232,7 @@
         for (const [key, value] of Object.entries(theme.vars)) {
             document.documentElement.style.setProperty(key, value);
         }
-        document.getElementById('themeSwitcher').innerText = "🎨 Theme: " + theme.name;
+        document.getElementById('themeSwitcher').innerText = theme.icon;
     }
     
     function cycleTheme() {
@@ -239,11 +242,10 @@
     }
     applyTheme(currentThemeIndex); // Apply on load
 
-    // --- 🚨 ANTI-CHEAT SYSTEM (Tab Switch Detection) ---
+    // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
     document.addEventListener("visibilitychange", () => {
         if (document.hidden && !cheatCooldown) {
-            // Check if player is currently in a guessing/racing phase
             const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
             const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
             
@@ -253,7 +255,6 @@
                     text: `⚠️ ${myName.toUpperCase()} left the game tab! Are they Googling the answer? 👀`, 
                     timestamp: firebase.database.ServerValue.TIMESTAMP 
                 });
-                // 10-second cooldown so it doesn't spam
                 cheatCooldown = true;
                 setTimeout(() => { cheatCooldown = false; }, 10000);
             }
@@ -328,7 +329,7 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // Fallback Translation
+    // Translation fallback
     const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
 
     function transliterate(text) {
