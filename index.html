@@ -10,85 +10,102 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Latha&display=swap');
-        body { background-color: #120A1E; color: white; font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; }
+        
+        /* CSS Variables for Dynamic Themes */
+        :root {
+            --bg-color: #120A1E;
+            --card-bg: #1D102E;
+            --primary-color: #FF4B72;
+            --secondary-color: #FF7694;
+            --accent-color: #4ade80;
+            --border-color: #3A2359;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', 'Latha', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; transition: background-color 0.5s ease; }
         .container { width: 90%; max-width: 400px; padding: 20px; }
         
         /* Toast Notification Styling */
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #4ade80; color: #120A1E; padding: 12px 24px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 2000; pointer-events: none; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--accent-color); color: #120A1E; padding: 12px 24px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
         /* Home Page */
-        .app-title { text-align: center; color: #FF4B72; font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px rgba(255, 75, 114, 0.4); margin-bottom: 10px; font-weight: bold;}
-        .app-subtitle { text-align: center; color: #aaa; font-size: 13px; margin-bottom: 30px; }
-        .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: #1D102E; border: 2px solid #FF4B72; border-radius: 15px; color: white; font-weight: 600; cursor: pointer; font-size: 18px; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
-        .game-menu-btn:hover { background: rgba(255, 75, 114, 0.1); transform: scale(1.02); }
-        .game-menu-btn.blue { border-color: #4ade80; }
-        .game-menu-btn.blue:hover { background: rgba(74, 222, 128, 0.1); }
+        .app-title { text-align: center; color: var(--primary-color); font-family: 'Poppins', sans-serif; font-size: 28px; text-shadow: 0 0 15px var(--primary-color); margin-bottom: 10px; font-weight: bold; transition: color 0.5s ease;}
+        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+        .game-menu-btn { width: 100%; padding: 20px; margin-bottom: 15px; background: var(--card-bg); border: 2px solid var(--primary-color); border-radius: 15px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 18px; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); }
+        .game-menu-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--primary-color); }
+        .game-menu-btn.blue { border-color: var(--accent-color); }
+        .game-menu-btn.blue:hover { box-shadow: 0 0 15px var(--accent-color); }
         
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
-        .back-btn { background: transparent; border: 1px solid #aaa; color: #aaa; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; width: auto; transition: 0.2s; }
-        .game-title-badge { background: #3A2359; padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: #FF4B72; }
+        .back-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; width: auto; transition: 0.2s; }
+        .game-title-badge { background: var(--border-color); padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--primary-color); }
+        .theme-btn { background: var(--card-bg); border: 1px solid var(--accent-color); color: var(--accent-color); padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-bottom: 10px;}
 
         /* VS Scoreboard */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 15px; }
-        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px; transition: 0.3s;}
-        .active-turn { background: rgba(255, 75, 114, 0.15); border: 1px solid #FF4B72; }
-        .racing-turn { background: rgba(74, 222, 128, 0.15); border: 1px solid #4ade80; }
+        .player-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 10px; border-radius: 15px; transition: 0.3s; border: 2px solid transparent;}
+        .active-turn { border: 2px solid var(--primary-color); box-shadow: 0 0 15px var(--primary-color); background: var(--card-bg); }
+        .racing-turn { border: 2px solid var(--accent-color); box-shadow: 0 0 15px var(--accent-color); background: var(--card-bg); }
         
         /* Avatars */
-        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid #3A2359; background-size: cover; background-position: center; background-color: #1D102E; }
-        .immu-pic { background-image: url('1000242624.jpg'); border-color: #4ade80; } 
-        .sappii-pic { background-image: url('1000242625.jpg'); border-color: #FF4B72; } 
+        .avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--border-color); background-size: cover; background-position: center; background-color: var(--card-bg); }
+        .immu-pic { background-image: url('1000242624.jpg'); border-color: var(--accent-color); } 
+        .sappii-pic { background-image: url('1000242625.jpg'); border-color: var(--primary-color); } 
         
         .name-container { display: flex; align-items: center; gap: 6px; }
         .status-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid #fff; transition: background-color 0.3s; }
         .online { background-color: #4ade80; } 
         .offline { background-color: #aaa; } 
-        .player-name { font-size: 13px; font-weight: 600; color: #fff; }
-        .score-val { font-size: 24px; font-weight: bold; color: #FF4B72; }
-        .vs-badge { background: #3A2359; padding: 6px 12px; border-radius: 50%; font-size: 12px; color: #aaa; }
+        .player-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .score-val { font-size: 24px; font-weight: bold; color: var(--primary-color); }
+        .vs-badge { background: var(--border-color); padding: 6px 12px; border-radius: 50%; font-size: 12px; color: var(--text-muted); }
 
         /* Cards & Inputs */
-        .card { background-color: #1D102E; border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); text-align: center; border: 1px solid #2D1A45; margin-bottom: 15px; }
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #3A2359; background-color: #120A1E; color: white; box-sizing: border-box; font-family: inherit; font-size: 14px; text-align: center;}
+        .card { background-color: var(--card-bg); border-radius: 25px; padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center; border: 1px solid var(--border-color); margin-bottom: 15px; transition: 0.5s ease; }
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 14px; text-align: center;}
+        input:focus { outline: none; border-color: var(--primary-color); }
         
-        .letter-box { font-size: 24px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #4ade80; }
-        .order-btn { background: #2D1A45; border: 1px solid #4ade80; color: #4ade80; margin: 5px 0; padding: 12px; }
+        .letter-box { font-size: 24px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); }
+        .order-btn { background: var(--bg-color); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 5px 0; padding: 12px; }
 
-        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, #FF4B72, #FF7694); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
+        button { width: 100%; padding: 15px; margin-top: 10px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.2s;}
         button:active { transform: scale(0.98); }
-        .random-btn { background: transparent; border: 1px dashed #4ade80; color: #4ade80; margin: 0 0 10px 0; padding: 10px; font-size: 13px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .give-up-btn { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px; }
-        .reset-btn { background: transparent; border: 1px solid #FF4B72; color: #FF4B72; margin-top: 20px; font-size: 14px; padding: 10px; width: auto;}
+        .random-btn { background: transparent; border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 10px; font-size: 13px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .give-up-btn { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 10px; }
+        .reset-btn { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); margin-top: 20px; font-size: 14px; padding: 10px; width: auto;}
 
-        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: #4ade80; font-weight: bold; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
-        .letter-count { font-size: 12px; color: #aaa; margin-bottom: 20px; font-weight: 600; background: #2D1A45; display: inline-block; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;}
-        .preview-text { color: #4ade80; font-size: 20px; font-weight: bold; margin: 5px 0 10px 0; min-height: 30px; font-family: 'Latha', sans-serif;}
+        .masked-word { font-size: 28px; letter-spacing: 5px; margin: 15px 0 5px 0; color: var(--accent-color); font-weight: bold; font-family: 'Latha', sans-serif; text-shadow: 0 0 10px rgba(0,0,0,0.3); }
+        .letter-count { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; font-weight: 600; background: var(--border-color); display: inline-block; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;}
+        .preview-text { color: var(--accent-color); font-size: 20px; font-weight: bold; margin: 5px 0 10px 0; min-height: 30px; font-family: 'Latha', sans-serif;}
 
         .hidden { display: none !important; }
-        .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
+        .turn-indicator { font-size: 11px; color: var(--accent-color); font-weight: bold; margin-top: 5px; text-transform: uppercase;}
 
         /* Chat Box */
         .chat-container { text-align: left; }
-        .chat-messages { height: 180px; overflow-y: auto; padding: 10px; border: 1px solid #3A2359; border-radius: 10px; background: #120A1E; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;}
+        .chat-messages { height: 180px; overflow-y: auto; padding: 10px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-color); margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px;}
         .message { padding: 8px 12px; border-radius: 12px; max-width: 80%; display: inline-block;}
-        .message-sender { font-size: 10px; color: #FF4B72; font-weight: 600; margin-bottom: 3px;}
-        .my-message { background: linear-gradient(135deg, #FF4B72, #FF7694); align-self: flex-end; color: #fff; }
-        .partner-message { background: #3A2359; align-self: flex-start; color: #fff; }
+        .message-sender { font-size: 10px; color: var(--primary-color); font-weight: 600; margin-bottom: 3px;}
+        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; }
+        .partner-message { background: var(--border-color); align-self: flex-start; color: var(--text-main); }
+        .system-message { background: var(--border-color); color: var(--accent-color); align-self: center; font-size: 12px; text-align: center; border: 1px solid var(--accent-color); box-shadow: 0 0 10px rgba(0,0,0,0.2);}
+        .cheat-message { background: #3f0000; color: #ff4444; align-self: center; font-size: 12px; font-weight: bold; text-align: center; border: 1px solid #ff4444; box-shadow: 0 0 10px rgba(255,0,0,0.3);}
         
         .chat-input-group { display: flex; gap: 8px; align-items: center; position: relative;}
         .chat-input { margin: 0; text-align: left; }
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
-        .chat-icon-btn { background: none; border: none; font-size: 20px; color: #FF4B72; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
-        .chat-icon-btn#emojiBtn { color: #fff;}
+        .chat-icon-btn { background: none; border: none; font-size: 20px; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
         .chat-send-btn { width: auto; padding: 10px 15px; margin-top: 0;}
-        .emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: #1D102E; border: 1px solid #FF4B72; border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: var(--card-bg); border: 1px solid var(--primary-color); border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
 
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
-        .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(255, 75, 114, 0.2);}
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--primary-color); width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);}
         .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-cancel { background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 15px; padding: 10px;}
+        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); margin-top: 15px; padding: 10px;}
     </style>
 </head>
 <body>
@@ -96,7 +113,11 @@
 <div id="toast" class="toast">💬 New Message!</div>
 
 <div class="container" id="homeScreen">
-    <h1 class="app-title">Immu's Games 💖</h1>
+    <div style="text-align: right;">
+        <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()">🎨 Theme: Love Vibe</button>
+    </div>
+
+    <h1 class="app-title">Namma Games 💖</h1>
     <p class="app-subtitle">Choose a game to play together!</p>
     
     <div class="card" style="padding: 30px 20px;">
@@ -139,13 +160,13 @@
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
-        <h3 style="margin-top:0; font-size:16px;">💬 Chat with Mutta Kannu</h3>
+        <h3 style="margin-top:0; font-size:16px;">💬 Real-time Chat</h3>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
             <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type message...">
             <div class="chat-btn-group">
-                <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">💗</button>
+                <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker()">😊</button>
                 <button class="chat-send-btn" onclick="sendChatMessage()">Send</button>
             </div>
         </div>
@@ -156,14 +177,14 @@
 
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
-        <h3 style="margin-top: 0; color: #fff;">Reset Game</h3>
-        <p style="font-size: 13px; color: #aaa;">Scores will reset for the current game.</p>
+        <h3 style="margin-top: 0; color: var(--text-main);">Reset Game</h3>
+        <p style="font-size: 13px; color: var(--text-muted);">Scores will reset for the current game.</p>
         <div class="modal-btn-group" id="movieResetBtns">
-            <button onclick="confirmReset('immu')" style="background: #4ade80; color: #120A1E;">Immu Start</button>
+            <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E;">Immu Start</button>
             <button onclick="confirmReset('sappii')">Sappii Start</button>
         </div>
         <div class="modal-btn-group hidden" id="wordResetBtns">
-            <button onclick="confirmResetWord()" style="background: #4ade80; color: #120A1E;">Yes, Reset</button>
+            <button onclick="confirmResetWord()" style="background: var(--accent-color); color: #120A1E;">Yes, Reset</button>
         </div>
         <button class="btn-cancel" onclick="closeResetModal()">Cancel</button>
     </div>
@@ -193,7 +214,53 @@
     let wordGameState = {}; 
     let selectedPerfectTamil = ""; 
 
-    // MASSIVE TAMIL MOVIE DATABASE INSIDE THE CODE (No GitHub TXT needed!)
+    // --- 🎨 THEME SYSTEM ---
+    const themes = [
+        { name: "Love Vibe 💖", vars: { '--bg-color': '#120A1E', '--card-bg': '#1D102E', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': '#3A2359', '--text-main': '#ffffff', '--text-muted': '#aaaaaa' } },
+        { name: "Ocean Blue 🌊", vars: { '--bg-color': '#0B132B', '--card-bg': '#1C2541', '--primary-color': '#3A506B', '--secondary-color': '#5BC0BE', '--accent-color': '#6FFFE9', '--border-color': '#3A506B', '--text-main': '#ffffff', '--text-muted': '#8a9ab3' } },
+        { name: "Cyberpunk 🌃", vars: { '--bg-color': '#000000', '--card-bg': '#121212', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': '#2B2B2B', '--text-main': '#ffffff', '--text-muted': '#888888' } },
+        { name: "Nature Dark 🍃", vars: { '--bg-color': '#0F1712', '--card-bg': '#172219', '--primary-color': '#4ade80', '--secondary-color': '#22c55e', '--accent-color': '#fbbf24', '--border-color': '#233226', '--text-main': '#e0eade', '--text-muted': '#819385' } },
+        { name: "Gold Spark ✨", vars: { '--bg-color': '#1a1814', '--card-bg': '#2a2620', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': '#4a4435', '--text-main': '#fffefc', '--text-muted': '#a39c8f' } }
+    ];
+    let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
+
+    function applyTheme(index) {
+        const theme = themes[index];
+        for (const [key, value] of Object.entries(theme.vars)) {
+            document.documentElement.style.setProperty(key, value);
+        }
+        document.getElementById('themeSwitcher').innerText = "🎨 Theme: " + theme.name;
+    }
+    
+    function cycleTheme() {
+        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+        localStorage.setItem('appTheme', currentThemeIndex);
+        applyTheme(currentThemeIndex);
+    }
+    applyTheme(currentThemeIndex); // Apply on load
+
+    // --- 🚨 ANTI-CHEAT SYSTEM (Tab Switch Detection) ---
+    let cheatCooldown = false;
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && !cheatCooldown) {
+            // Check if player is currently in a guessing/racing phase
+            const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
+            const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
+            
+            if (isMovieGuessing || isWordRacing) {
+                db.ref('chatMessages').push({ 
+                    sender: "Anti-Cheat 🚨", 
+                    text: `⚠️ ${myName.toUpperCase()} left the game tab! Are they Googling the answer? 👀`, 
+                    timestamp: firebase.database.ServerValue.TIMESTAMP 
+                });
+                // 10-second cooldown so it doesn't spam
+                cheatCooldown = true;
+                setTimeout(() => { cheatCooldown = false; }, 10000);
+            }
+        }
+    });
+
+    // --- MASSIVE TAMIL MOVIE DATABASE ---
     const MOVIE_COLLECTION = [
         { eng: "Ghilli", tamil: "கில்லி", hero: "Vijay" }, { eng: "Thuppakki", tamil: "துப்பாக்கி", hero: "Vijay" }, { eng: "Master", tamil: "மாஸ்டர்", hero: "Vijay" }, { eng: "Leo", tamil: "லியோ", hero: "Vijay" }, { eng: "Kaththi", tamil: "கத்தி", hero: "Vijay" }, { eng: "Theri", tamil: "தெறி", hero: "Vijay" }, { eng: "Mersal", tamil: "மெர்சல்", hero: "Vijay" }, { eng: "Bigil", tamil: "பிகில்", hero: "Vijay" }, { eng: "Beast", tamil: "பீஸ்ட்", hero: "Vijay" }, { eng: "Varisu", tamil: "வாரிசு", hero: "Vijay" }, { eng: "GOAT", tamil: "கோட்", hero: "Vijay" }, { eng: "Pokkiri", tamil: "போக்கிரி", hero: "Vijay" }, { eng: "Sura", tamil: "சுறா", hero: "Vijay" }, { eng: "Bairavaa", tamil: "பைரவா", hero: "Vijay" }, { eng: "Puli", tamil: "புலி", hero: "Vijay" }, { eng: "Kushi", tamil: "குஷி", hero: "Vijay" }, { eng: "Sachien", tamil: "சச்சின்", hero: "Vijay" }, { eng: "Nanban", tamil: "நண்பன்", hero: "Vijay" },
         { eng: "Mankatha", tamil: "மங்காத்தா", hero: "Ajith" }, { eng: "Billa", tamil: "பில்லா", hero: "Ajith" }, { eng: "Dheena", tamil: "தீனா", hero: "Ajith" }, { eng: "Viswasam", tamil: "விஸ்வாசம்", hero: "Ajith" }, { eng: "Thunivu", tamil: "துணிவு", hero: "Ajith" }, { eng: "Valimai", tamil: "வலிமை", hero: "Ajith" }, { eng: "Vivegam", tamil: "விவேகம்", hero: "Ajith" }, { eng: "Vedalam", tamil: "வேதாளம்", hero: "Ajith" }, { eng: "Veeram", tamil: "வீரம்", hero: "Ajith" }, { eng: "Amarkalam", tamil: "அமர்க்களம்", hero: "Ajith" }, { eng: "Vaali", tamil: "வாலி", hero: "Ajith" }, { eng: "Villain", tamil: "வில்லன்", hero: "Ajith" }, { eng: "Varalaru", tamil: "வரலாறு", hero: "Ajith" }, { eng: "Aarambam", tamil: "ஆரம்பம்", hero: "Ajith" }, { eng: "Yennai Arindhaal", tamil: "என்னை அறிந்தால்", hero: "Ajith" },
@@ -261,7 +328,7 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // Translation fallback (just in case they type a manual movie not in our 120+ list)
+    // Fallback Translation
     const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
 
     function transliterate(text) {
@@ -295,7 +362,7 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
-                        <p style="font-size:11px;color:#aaa;">Type English spelling (e.g. Master)</p>
+                        <p style="font-size:11px;color:var(--text-muted);">Type English spelling (e.g. Master)</p>
                         <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
@@ -315,17 +382,16 @@
                         <h3>🤔 Guess the Movie!</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} Letters</div>
-                        <p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p>
+                        <p style="color:var(--primary-color);">💡 Hint: ${gameState.hint || "No hint"}</p>
                         <input type="text" id="guessInput" placeholder="Type normal English spelling (e.g. Master)">
                         <button onclick="checkGuess()">Submit Answer</button>
                         <button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button>
-                        <p id="feedback" style="margin-top:15px;"></p>
+                        <p id="feedback" style="margin-top:15px; font-weight:bold;"></p>
                     </div>`;
             }
         }
     }
 
-    // -- MOVIE LOGIC --
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
@@ -352,7 +418,6 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("Enter movie!"); 
         
-        // Exact Tamil match, else transliterate fallback
         const finalTamil = selectedPerfectTamil || transliterate(rawEng);
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
@@ -368,6 +433,7 @@
             db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
         } else { 
             document.getElementById('feedback').innerText = "Wrong spelling! Try again 🥺"; 
+            document.getElementById('feedback').style.color = "var(--primary-color)";
         } 
     }
     
@@ -378,22 +444,20 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
     
-    // Exact Tamil Cluster Length Counter
     function getLetterCount(str) { 
         if(!str) return 0; 
         const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; 
         return clusters.filter(c => c !== ' ').length; 
     }
     
-    // Perfect Tamil Letter Masking (Shows First & Last Tamil letters cleanly)
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
         return words.map(word => {
             const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
             return clusters.map((c, i) => {
-                if(i === 0 || i === clusters.length - 1) return c; // Show first and last
-                return "_"; // Mask middle
+                if(i === 0 || i === clusters.length - 1) return c;
+                return "_";
             }).join(" ");
         }).join("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
@@ -419,7 +483,7 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3>🔠 Your Letter?</h3>
-                        <p style="color:#aaa; font-size: 13px;">Type ONE English letter (A-Z)</p>
+                        <p style="color:var(--text-muted); font-size: 13px;">Type ONE English letter (A-Z)</p>
                         <input type="text" id="letterInput" maxlength="1" placeholder="e.g. S or K" class="letter-box">
                         <button onclick="submitLetter()">Send Letter</button>
                     </div>`;
@@ -428,13 +492,13 @@
                     <div class="card">
                         <h3>⏳ Waiting...</h3>
                         <p>${partnerName} is choosing a letter!</p>
-                        <p style="font-size: 20px; color: #4ade80; font-weight:bold;">You picked: ${myLetter.toUpperCase()}</p>
+                        <p style="font-size: 20px; color: var(--accent-color); font-weight:bold;">You picked: ${myLetter.toUpperCase()}</p>
                     </div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="color:#4ade80;">Both Letters Ready!</h3>
-                        <p style="font-size:13px; color:#aaa;">First letter ethu, Last letter ethu?</p>
+                        <h3 style="color:var(--accent-color);">Both Letters Ready!</h3>
+                        <p style="font-size:13px; color:var(--text-muted);">First letter ethu, Last letter ethu?</p>
                         <button class="order-btn" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
                             Start with <b style="color:white; font-size:18px;">${wordGameState.p1Letter.toUpperCase()}</b> and end with <b style="color:white; font-size:18px;">${wordGameState.p2Letter.toUpperCase()}</b>
                         </button>
@@ -445,13 +509,13 @@
             }
         } else if (wordGameState.status === "race_phase") {
             container.innerHTML = `
-                <div class="card" style="border-color:#4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);">
+                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);">
                     <h3 style="margin-top:0;">🏁 Form a Word!</h3>
                     <p style="font-size: 16px;">Starts with <b class="letter-box" style="font-size: 30px;">${wordGameState.startLetter.toUpperCase()}</b> & Ends with <b class="letter-box" style="font-size: 30px;">${wordGameState.endLetter.toUpperCase()}</b></p>
                     <input type="text" id="raceWordInput" placeholder="Type a valid word..." style="font-size: 18px; font-weight: bold; text-transform: uppercase;">
-                    <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, #4ade80, #34d399); color: #120A1E;">Submit Fast! 🚀</button>
+                    <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, var(--accent-color), #34d399); color: #120A1E;">Submit Fast! 🚀</button>
                     <button class="give-up-btn" onclick="skipWord()">Theriyala (Skip) 🔄</button>
-                    <p id="raceFeedback" style="margin-top:15px; color:#FF4B72; font-weight:bold;"></p>
+                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:bold;"></p>
                 </div>`;
         }
     }
@@ -472,7 +536,7 @@
             const scoreKey = (myName === "immu") ? 'score1' : 'score2';
             db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
             db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-            db.ref('chatMessages').push({ sender: "System 🤖", text: `🎉 ${myName} scored 1 point with the word "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+            db.ref('chatMessages').push({ sender: "System 🤖", text: `🎉 ${myName.toUpperCase()} scored 1 point with the word "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
         } else {
             document.getElementById('raceFeedback').innerText = `Word must start with ${start.toUpperCase()} and end with ${end.toUpperCase()}!`;
         }
@@ -519,13 +583,19 @@
         const chatMessagesDiv = document.getElementById('chatMessages');
         const isMine = data.sender === myName;
         const isSystem = data.sender === "System 🤖";
+        const isCheat = data.sender === "Anti-Cheat 🚨";
         
         const messageDiv = document.createElement('div');
-        if (isSystem) { messageDiv.className = 'message'; messageDiv.style.background = '#2D1A45'; messageDiv.style.color = '#4ade80'; messageDiv.style.alignSelf = 'center'; messageDiv.style.fontSize = '12px'; }
-        else { messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; }
+        if (isSystem) { 
+            messageDiv.className = 'message system-message'; 
+        } else if (isCheat) {
+            messageDiv.className = 'message cheat-message';
+        } else { 
+            messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; 
+        }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        messageDiv.innerHTML = `<div class="message-sender">${isMine ? 'You' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
+        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem||isCheat ? 'color:inherit' : ''}">${isMine ? 'You' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
