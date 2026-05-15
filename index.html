@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real-time Couple Movie Game 💖</title>
     
-    <!-- Firebase CDN Links -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
@@ -53,6 +52,7 @@
         
         .hidden { display: none !important; }
         .turn-indicator { font-size: 11px; color: #4ade80; font-weight: bold; margin-top: 5px; text-transform: uppercase;}
+        .preview-text { color: #4ade80; font-size: 18px; font-weight: bold; margin: 5px 0 10px 0; min-height: 27px; font-family: 'Latha', sans-serif;}
 
         /* Chat Box Styling */
         .chat-container { text-align: left; }
@@ -73,7 +73,6 @@
         /* Emoji Picker Styling */
         .emoji-picker { position: absolute; bottom: 110%; right: 0; width: 100%; max-width: 250px; height: 120px; background: #1D102E; border: 1px solid #FF4B72; border-radius: 12px; padding: 10px; display: flex; flex-wrap: wrap; gap: 8px; overflow-y: auto; z-index: 10; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 0; cursor: pointer; transition: transform 0.2s; }
-        .emoji-item:hover { transform: scale(1.2); }
 
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 10, 30, 0.9); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: #1D102E; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #FF4B72; width: 100%; max-width: 320px; box-shadow: 0 10px 40px rgba(255, 75, 114, 0.2);}
@@ -83,7 +82,6 @@
 </head>
 <body>
 
-<!-- Notification Toast -->
 <div id="toast" class="toast">💬 New Message!</div>
 
 <div class="container">
@@ -110,6 +108,8 @@
             <div id="turn-sappii" class="turn-indicator hidden">SETTING...</div>
         </div>
     </div>
+
+    <datalist id="movieList"></datalist>
 
     <div id="gameContent"></div>
 
@@ -142,11 +142,12 @@
 </div>
 
 <script>
-    // Updated engine with missing english letters (b, d, g, s, j, w, sh)
+    // FULL COMPREHENSIVE TAMIL DICTIONARY (Fixed Darbar, h, f, dh, bh etc)
     const tamilMapping = {
         'a': 'அ', 'aa': 'ஆ', 'i': 'இ', 'ee': 'ஈ', 'u': 'உ', 'oo': 'ஊ', 'e': 'எ', 'ae': 'ஏ', 'ai': 'ஐ', 'o': 'ஒ', 'oa': 'ஓ', 'au': 'ஔ',
         'k': 'க்', 'ka': 'க', 'kaa': 'கா', 'ki': 'கி', 'kee': 'கீ', 'ku': 'கு', 'koo': 'கூ', 'ke': 'கெ', 'kae': 'கே', 'kai': 'கை', 'ko': 'கொ', 'koa': 'கோ',
         'g': 'க்', 'ga': 'க', 'gaa': 'கா', 'gi': 'கி', 'gee': 'கீ', 'gu': 'கு', 'goo': 'கூ', 'ge': 'கெ', 'gae': 'கே', 'gai': 'கை', 'go': 'கொ', 'goa': 'கோ',
+        'gh': 'க்', 'gha': 'க', 'ghaa': 'கா', 'ghi': 'கி', 'ghee': 'கீ', 'ghu': 'கு', 'ghoo': 'கூ', 'ghe': 'கெ', 'ghae': 'கே', 'ghai': 'கை', 'gho': 'கொ', 'ghoa': 'கோ',
         'ng': 'ங்', 'nga': 'ங', 'ngaa': 'ஙா', 'ngi': 'ஙி', 'ngee': 'ஙீ', 'ngu': 'ஙு', 'ngoo': 'ஙூ', 'nge': 'ஙெ', 'ngae': 'ஙே', 'ngai': 'ஙை', 'ngo': 'ஙொ', 'ngoa': 'ஙோ',
         'ch': 'ச்', 'cha': 'ச', 'chaa': 'சா', 'chi': 'சி', 'chee': 'சீ', 'chu': 'சு', 'choo': 'சூ', 'che': 'செ', 'chae': 'சே', 'chai': 'சை', 'cho': 'சொ', 'choa': 'சோ',
         's': 'ஸ்', 'sa': 'ச', 'saa': 'சா', 'si': 'சி', 'see': 'சீ', 'su': 'சு', 'soo': 'சூ', 'se': 'செ', 'sae': 'சே', 'sai': 'சை', 'so': 'சொ', 'soa': 'சோ',
@@ -157,9 +158,11 @@
         'd': 'ட்', 'da': 'ட', 'daa': 'டா', 'di': 'டி', 'dee': 'டீ', 'du': 'டு', 'doo': 'டூ', 'de': 'டெ', 'dae': 'டே', 'dai': 'டை', 'do': 'டொ', 'doa': 'டோ',
         'n': 'ண்', 'na': 'ண', 'naa': 'ணா', 'ni': 'ணி', 'nee': 'ணீ', 'nu': 'ணு', 'noo': 'ணூ', 'ne': 'ணெ', 'nae': 'ணே', 'nai': 'ணை', 'no': 'ணொ', 'noa': 'டோ',
         'th': 'த்', 'tha': 'த', 'thaa': 'தா', 'thi': 'தி', 'thee': 'தீ', 'thu': 'து', 'thoo': 'தூ', 'the': 'தெ', 'thae': 'தே', 'thai': 'தை', 'tho': 'தொ', 'thoa': 'தோ',
+        'dh': 'த்', 'dha': 'த', 'dhaa': 'தா', 'dhi': 'தி', 'dhee': 'தீ', 'dhu': 'து', 'dhoo': 'தூ', 'dhe': 'தெ', 'dhae': 'தே', 'dhai': 'தை', 'dho': 'தொ', 'dhoa': 'தோ',
         'nh': 'ந்', 'nha': 'ந', 'nhaa': 'நா', 'nhi': 'நி', 'nhee': 'நீ', 'nhu': 'நு', 'nhoo': 'நூ', 'nhe': 'நெ', 'nhae': 'நே', 'nhai': 'நை', 'nho': 'நொ', 'nhoa': 'நோ',
         'p': 'ப்', 'pa': 'ப', 'paa': 'பா', 'pi': 'பி', 'pee': 'பீ', 'pu': 'பு', 'poo': 'பூ', 'pe': 'பெ', 'pae': 'பே', 'pai': 'பை', 'po': 'பொ', 'poa': 'போ',
         'b': 'ப்', 'ba': 'ப', 'baa': 'பா', 'bi': 'பி', 'bee': 'பீ', 'bu': 'பு', 'boo': 'பூ', 'be': 'பெ', 'bae': 'பே', 'bai': 'பை', 'bo': 'பொ', 'boa': 'போ',
+        'bh': 'ப்', 'bha': 'ப', 'bhaa': 'பா', 'bhi': 'பி', 'bhee': 'பீ', 'bhu': 'பு', 'bhoo': 'பூ', 'bhe': 'பெ', 'bhae': 'பே', 'bhai': 'பை', 'bho': 'பொ', 'bhoa': 'போ',
         'm': 'ம்', 'ma': 'ம', 'maa': 'மா', 'mi': 'மி', 'mee': 'மீ', 'mu': 'மு', 'moo': 'மூ', 'me': 'மெ', 'mae': 'மே', 'mai': 'மை', 'mo': 'மொ', 'moa': 'மோ',
         'y': 'ய்', 'ya': 'ய', 'yaa': 'யா', 'yi': 'யி', 'yee': 'யீ', 'yu': 'யு', 'yoo': 'யூ', 'ye': 'யெ', 'yae': 'யே', 'yai': 'யை', 'yo': 'யொ', 'yoa': 'யோ',
         'r': 'ர்', 'ra': 'ர', 'raa': 'ரா', 'ri': 'ரி', 'ree': 'ரீ', 'ru': 'ரு', 'roo': 'ரூ', 're': 'ரெ', 'rae': 'ரே', 'rai': 'ரை', 'ro': 'ரொ', 'roa': 'ரோ',
@@ -167,10 +170,20 @@
         'v': 'வ்', 'va': 'வ', 'vaa': 'வா', 'vi': 'வி', 'vee': 'வீ', 'vu': 'வு', 'voo': 'வூ', 've': 'வெ', 'vae': 'வே', 'vai': 'வை', 'vo': 'வொ', 'voa': 'வோ',
         'w': 'வ்', 'wa': 'வ', 'waa': 'வா', 'wi': 'வி', 'wee': 'வீ', 'wu': 'வு', 'woo': 'வூ', 'we': 'வெ', 'wae': 'வே', 'wai': 'வை', 'wo': 'வொ', 'woa': 'வோ',
         'zh': 'ழ்', 'zha': 'ழ', 'zhaa': 'ழா', 'zhi': 'ழி', 'zhee': 'ழீ', 'zhu': 'ழு', 'zhoo': 'ழூ', 'zhe': 'ழெ', 'zhae': 'ழே', 'zhai': 'ழை', 'zho': 'ழொ', 'zhoa': 'ழோ',
-        'L': 'ள்', 'La': 'ள', 'Laa': 'ளா', 'Li': 'ளி', 'Lee': 'ளீ', 'Lu': 'ளு', 'Loo': 'ளூ', 'Le': 'ளெ', 'Lae': 'ளே', 'Lai': 'ளை', 'Lo': 'ளொ', 'Loa': 'ளோ',
-        'R': 'ற்', 'Ra': 'ற', 'Raa': 'றா', 'Ri': 'றி', 'Ree': 'றீ', 'Ru': 'று', 'Roo': 'றூ', 'Re': 'றெ', 'Rae': 'றே', 'Rai': 'றை', 'Ro': 'றொ', 'Roa': 'றோ',
+        'h': 'ஹ்', 'ha': 'ஹ', 'haa': 'ஹா', 'hi': 'ஹி', 'hee': 'ஹீ', 'hu': 'ஹு', 'hoo': 'ஹூ', 'he': 'ஹெ', 'hae': 'ஹே', 'hai': 'ஹை', 'ho': 'ஹொ', 'hoa': 'ஹோ',
+        'f': 'ஃப்', 'fa': 'ஃப', 'faa': 'ஃபா', 'fi': 'ஃபி', 'fee': 'ஃபீ', 'fu': 'ஃபு', 'foo': 'ஃபூ', 'fe': 'ஃபெ', 'fae': 'ஃபே', 'fai': 'ஃபை', 'fo': 'ஃபொ', 'foa': 'ஃபோ',
         'nn': 'ன்', 'nna': 'ன', 'nnaa': 'னா', 'nni': 'னி', 'nnee': 'னீ', 'nnu': 'னு', 'nnoo': 'னூ', 'nne': 'னெ', 'nnae': 'னே', 'nnai': 'னை', 'nno': 'னொ', 'nnoa': 'னோ'
     };
+
+    const MOVIE_COLLECTION = [
+        "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Sachien",
+        "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
+        "Baasha", "Muthu", "Padayappa", "Sivaji", "Enthiran", "Jailer", "Arunachalam", "Annamalai", "Kaala", "Kabali", "Petta", "Darbar", "Annaatthe", "Thalapathi", "Chandramukhi", "Vettaiyan",
+        "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi",
+        "Ayan", "Singam", "Jai Bhim", "Ghajini", "Pithamagan", "Kanguva", "Masss", "Anjaan", "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Madras", "Sulthan", "Japan", "Meiyazhagan", "Sardar",
+        "Asuran", "Karnan", "Aadukalam", "Polladhavan", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Kodi", "Anegan", "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo",
+        "Maharaja", "Vikram Vedha", "Pizza", "Soodhu Kavvum", "Kavan", "Sethupathi", "Love Today", "Alaipayuthey", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Minnale", "Aramm", "Airaa", "Manjummel Boys", "Premalu"
+    ];
 
     function transliterate(text) {
         let result = "";
@@ -178,7 +191,7 @@
         const lower = text.toLowerCase();
         while (i < lower.length) {
             let found = false;
-            for (let len = 3; len >= 1; len--) {
+            for (let len = 4; len >= 1; len--) {
                 let chunk = lower.substring(i, i + len);
                 if (tamilMapping[chunk]) {
                     result += tamilMapping[chunk];
@@ -218,6 +231,16 @@
         renderUI();
     });
 
+    // Populate the datalist on load
+    window.onload = () => {
+        const list = document.getElementById('movieList');
+        MOVIE_COLLECTION.forEach(movie => {
+            const option = document.createElement('option');
+            option.value = movie;
+            list.appendChild(option);
+        });
+    };
+
     function renderUI() {
         const container = document.getElementById('gameContent');
         document.getElementById('immuScore').innerText = gameState.score1;
@@ -229,11 +252,13 @@
 
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
+                // Notice the oninput="livePreview()" and list="movieList" attributes
                 container.innerHTML = `
                     <div class="card">
                         <h3>🎬 Your Turn</h3>
                         <p style="font-size:11px;color:#aaa;">Type in Tanglish (Example: Vikram)</p>
-                        <input type="text" id="movieInput" placeholder="Movie Name">
+                        <input type="text" id="movieInput" placeholder="Movie Name" list="movieList" oninput="livePreview()">
+                        <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">Suggest Random Movie 🎲</button>
                         <input type="text" id="hintInput" placeholder="Add a hint">
                         <button onclick="setMovie()">Start Game 🚀</button>
@@ -247,27 +272,41 @@
             if (gameState.turn === myName) {
                 container.innerHTML = `<div class="card"><h3>🍿 Guessing...</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div></div>`;
             } else {
-                container.innerHTML = `<div class="card"><h3>🤔 Guess!</h3><div class="masked-word">${maskTamil(gameState.movie)}</div><div class="letter-count">${letterCount} Letters</div><p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p><input type="text" id="guessInput" placeholder="Type in Tanglish"><button onclick="checkGuess()">Submit</button><button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button><p id="feedback" style="margin-top:15px;"></p></div>`;
+                container.innerHTML = `
+                    <div class="card">
+                        <h3>🤔 Guess!</h3>
+                        <div class="masked-word">${maskTamil(gameState.movie)}</div>
+                        <div class="letter-count">${letterCount} Letters</div>
+                        <p style="color:#FF4B72;">💡 Hint: ${gameState.hint || "No hint"}</p>
+                        <input type="text" id="guessInput" placeholder="Type in Tanglish" oninput="liveGuessPreview()">
+                        <div id="guessPreview" class="preview-text" style="font-size: 15px;"></div>
+                        <button onclick="checkGuess()">Submit</button>
+                        <button class="give-up-btn" onclick="giveUp()">Theriyala 🥺</button>
+                        <p id="feedback" style="margin-top:15px;"></p>
+                    </div>`;
             }
         }
     }
 
+    // Live translation preview functions
+    function livePreview() {
+        const val = document.getElementById('movieInput').value;
+        document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
+    }
+
+    function liveGuessPreview() {
+        const val = document.getElementById('guessInput').value;
+        document.getElementById('guessPreview').innerText = val ? transliterate(val) : "";
+    }
+
     function suggestRandomMovie() {
-        const movieArray = [
-            "Ghilli", "Thuppakki", "Master", "Leo", "Kaththi", "Theri", "Mersal", "Bigil", "Beast", "Varisu", "GOAT", "Pokkiri", "Sura", "Bairavaa", "Puli", "Kushi", "Sachien",
-            "Mankatha", "Billa", "Dheena", "Viswasam", "Thunivu", "Valimai", "Vivegam", "Vedalam", "Veeram", "Amarkalam", "Vaali", "Villain", "Varalaru", "Aasal", "Aarambam",
-            "Baasha", "Muthu", "Padayappa", "Sivaji", "Enthiran", "Jailer", "Arunachalam", "Annamalai", "Kaala", "Kabali", "Petta", "Darbar", "Annaatthe", "Thalapathi", "Chandramukhi", "Vettaiyan",
-            "Vikram", "Indian", "Nayakan", "Anbe Sivam", "Panchatanthiram", "Dasavathaaram", "Vishwaroopam", "Thevar Magan", "Kuruthipunal", "Virumaandi",
-            "Ayan", "Singam", "Jai Bhim", "Ghajini", "Pithamagan", "Kanguva", "Masss", "Anjaan", "Kaithi", "Paruthiveeran", "Paiyaa", "Siruthai", "Madras", "Sulthan", "Japan", "Meiyazhagan", "Sardar",
-            "Asuran", "Karnan", "Aadukalam", "Polladhavan", "Maari", "Pudhupettai", "Thiruchitrambalam", "Raayan", "Kodi", "Anegan", "Doctor", "Don", "Maaveeran", "Ayalaan", "Amaran", "Remo",
-            "Maharaja", "Vikram Vedha", "Pizza", "Soodhu Kavvum", "Kavan", "Sethupathi", "Love Today", "Alaipayuthey", "Raja Rani", "Ko", "Gargi", "Dada", "Good Night", "Por Thozhil", "Aruvi", "Kumki", "Roja", "Bombay", "Mudhalvan", "Boys", "Jeans", "Kadhalan", "Gentleman", "Viduthalai", "Jigarthanda", "Minnale", "Aramm", "Airaa", "Manjummel Boys", "Premalu"
-        ];
-        document.getElementById('movieInput').value = movieArray[Math.floor(Math.random() * movieArray.length)];
+        document.getElementById('movieInput').value = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
+        livePreview(); // Update preview automatically for random suggestion
         document.getElementById('hintInput').value = "Guess pannu papom! 😉";
     }
 
     function setMovie() {
-        const raw = document.getElementById('movieInput').value.trim(); // Trim extra spaces
+        const raw = document.getElementById('movieInput').value.trim();
         const tamilMovie = transliterate(raw);
         const h = document.getElementById('hintInput').value;
         if(!raw) return alert("Enter movie!");
@@ -299,7 +338,6 @@
         return clusters.filter(c => c !== ' ').length;
     }
 
-    // FIXED MASKING LOGIC (No Extra Dashes & Handles Spaces Perfectly)
     function maskTamil(str) {
         if(!str) return "";
         const words = str.split(" ");
@@ -336,7 +374,6 @@
         toast.innerText = msg;
         toast.classList.add('show');
         
-        // Play small popup sound
         try {
             const audio = new Audio("https://actions.google.com/sounds/v1/communication/bubble_pop.ogg");
             audio.play();
@@ -361,7 +398,6 @@
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
-        // Trigger Notification if Partner sent the message and it's not the initial load
         if (!initialLoad && !isMine) {
             showToast(`💬 ${data.sender} sent a message!`);
         }
