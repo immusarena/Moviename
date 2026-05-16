@@ -39,16 +39,21 @@
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
         @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
 
         /* Toast Notification */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* Home Page */
+        /* Home Page Elements */
+        .home-top-bar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .couple-pic-wrapper { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--primary-color); padding: 3px; box-shadow: 0 0 15px var(--glow-shadow); animation: pulseGlow 3s infinite alternate;}
+        .couple-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background-color: var(--card-bg); }
+        
         .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 32px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
@@ -61,10 +66,9 @@
         .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* SLEEK THEME BUTTON */
-        .theme-wrapper { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
         .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
-        .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease, box-shadow 0.5s ease; }
+        .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease; }
         .theme-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
         /* VS Scoreboard */
@@ -90,7 +94,7 @@
         .vs-badge { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
 
         /* Cards & Inputs */
-        .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
@@ -109,13 +113,13 @@
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
         .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
         
-        /* Fixed Manual Point Button Styling */
         .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 5px; padding: 10px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; }
         .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
 
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
+        /* Advanced Masking View */
         .masked-word { font-size: 32px; letter-spacing: 8px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
@@ -124,9 +128,13 @@
         .hidden { display: none !important; }
         .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
 
-        /* Modern Chat Box */
-        .chat-container { text-align: left; padding: 20px; }
-        .chat-container h3 { margin-top: 0; margin-bottom: 15px; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
+        /* Modern Chat Box with Typing Indicator */
+        .chat-container { text-align: left; padding: 20px; position: relative;}
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
+        
+        .typing-indicator { font-size: 9px; color: var(--accent-color); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; animation: blink 1.5s infinite; }
+
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
         .message { padding: 10px 14px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
@@ -137,9 +145,7 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
-        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
-        /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
         .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
         .chat-input:focus { box-shadow: none; background: transparent;}
@@ -174,7 +180,11 @@
 
 <div class="container" id="homeScreen">
     
-    <div class="theme-wrapper">
+    <div class="home-top-bar">
+        <div class="couple-pic-wrapper">
+            <img src="YOUR_IMAGE_LINK_HERE.jpg" alt="Us" class="couple-pic" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\'/></svg>'">
+        </div>
+        
         <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
             <div id="themeIndicator" class="theme-dot"></div>
             <span class="theme-label">THEME</span>
@@ -233,7 +243,10 @@
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
-        <h3>REAL-TIME CHAT</h3>
+        <div class="chat-header">
+            <h3>REAL-TIME CHAT</h3>
+            <span id="typingIndicator" class="typing-indicator hidden">Typing...</span>
+        </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
             <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
@@ -290,7 +303,6 @@
     let gameState = {}; 
     let wordGameState = {}; 
     
-    // Dynamic List from TXT files
     let MOVIE_COLLECTION = []; 
     let selectedPerfectTamil = "";
 
@@ -308,12 +320,8 @@
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
     function applyTheme(index) {
-        const theme = themes[index];
-        for (const [key, value] of Object.entries(theme.vars)) {
-            document.documentElement.style.setProperty(key, value);
-        }
+        for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
     }
-    
     function cycleTheme() {
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
         localStorage.setItem('appTheme', currentThemeIndex);
@@ -327,103 +335,95 @@
         if (document.hidden && !cheatCooldown) {
             const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
             const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
-            
             if (isMovieGuessing || isWordRacing) {
-                db.ref('chatMessages').push({ 
-                    sender: "ANTI-CHEAT", 
-                    text: `${myName.toUpperCase()} LEFT THE GAME TAB! ARE THEY GOOGLING?`, 
-                    timestamp: firebase.database.ServerValue.TIMESTAMP 
-                });
-                cheatCooldown = true;
-                setTimeout(() => { cheatCooldown = false; }, 10000);
+                db.ref('chatMessages').push({ sender: "SYSTEM", text: `🚨 ${myName.toUpperCase()} LEFT THE APP (SEARCHING GOOGLE?) 👀`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+                cheatCooldown = true; setTimeout(() => { cheatCooldown = false; }, 10000);
             }
         }
     });
 
-    // --- TXT LOADER (Only loads from your GitHub TXT files!) ---
+    // --- TYPING INDICATOR ---
+    let typingTimer;
+    document.getElementById('chatInput').addEventListener('input', () => {
+        db.ref(`typingStatus/${myName}`).set(true);
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => { db.ref(`typingStatus/${myName}`).set(false); }, 1500);
+    });
+
+    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
+        const isTyping = snapshot.val();
+        const indicator = document.getElementById('typingIndicator');
+        if (isTyping) {
+            indicator.innerText = `${partnerName} is typing...`;
+            indicator.classList.remove('hidden');
+        } else {
+            indicator.classList.add('hidden');
+        }
+    });
+
+    // --- MASTER DATABASE ---
+    const MASTER_DATABASE = [
+        { eng: "Ghilli", tamil: "கில்லி", hero: "Vijay" }, { eng: "Master", tamil: "மாஸ்டர்", hero: "Vijay" }, { eng: "Mankatha", tamil: "மங்காத்தா", hero: "Ajith" }, { eng: "Vikram", tamil: "விக்ரம்", hero: "Kamal Haasan" }, { eng: "Asuran", tamil: "அசுரன்", hero: "Dhanush" }
+    ];
+
+    // --- TXT LOADER ---
     async function loadMoviesFromTXT() {
+        MOVIE_COLLECTION = [...MASTER_DATABASE];
         try {
             const engRes = await fetch('movies_eng.txt');
             const tamilRes = await fetch('movies_tamil.txt');
             const heroRes = await fetch('heroes.txt');
             
             if (engRes.ok && tamilRes.ok && heroRes.ok) {
-                const engText = await engRes.text();
-                const tamilText = await tamilRes.text();
-                const heroText = await heroRes.text();
+                const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
-                const eLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const hLines = heroText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                
-                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length, hLines.length);
                 for(let i=0; i<minLen; i++){
-                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
+                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
+                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
+                    }
                 }
-                console.log("Loaded TXT files perfectly!");
             } else if (engRes.ok && tamilRes.ok) {
-                // Failsafe: if heroes.txt is missing but movies exist
-                const engText = await engRes.text();
-                const tamilText = await tamilRes.text();
-                const eLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                
-                MOVIE_COLLECTION = [];
+                const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
+                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
+                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
+                    }
                 }
-                console.log("Loaded TXT movies (no heroes.txt found).");
-            } else {
-                console.warn("TXT files completely missing from GitHub. App needs movies_eng.txt and movies_tamil.txt");
-                MOVIE_COLLECTION = [];
             }
-        } catch (error) { 
-            console.error("Error loading TXT:", error); 
-            MOVIE_COLLECTION = [];
-        }
+        } catch (error) { console.error("Using Master DB fallback"); }
 
-        // Update list for input suggestions
         const list = document.getElementById('movieList');
         list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(movieObj => {
-            const option = document.createElement('option');
-            option.value = movieObj.eng;
-            list.appendChild(option);
+        MOVIE_COLLECTION.forEach(m => {
+            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
         });
     }
 
-    // Initialize Picker and Outside click
+    // Initialize Emoji Picker
     window.onload = () => {
         loadMoviesFromTXT();
-        
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '🔥', '😂', '🥺', '👍', '👎', '✨', '💀', '💯', '👏'];
         emojis.forEach(emoji => {
             const btn = document.createElement('button');
             btn.className = 'emoji-item'; btn.innerText = emoji;
-            btn.onclick = () => { 
-                document.getElementById('chatInput').value += emoji; 
-                document.getElementById('chatInput').focus(); 
-                document.getElementById('emojiPicker').classList.add('hidden');
-            };
+            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); document.getElementById('emojiPicker').classList.add('hidden'); };
             picker.appendChild(btn);
         });
 
         document.addEventListener('click', function(event) {
             var picker = document.getElementById('emojiPicker');
             var btn = document.getElementById('emojiBtn');
-            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) {
-                picker.classList.add('hidden');
-            }
+            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) { picker.classList.add('hidden'); }
         });
     };
 
-    function toggleEmojiPicker(e) {
-        if(e) e.stopPropagation();
-        document.getElementById('emojiPicker').classList.toggle('hidden');
-    }
+    function toggleEmojiPicker(e) { if(e) e.stopPropagation(); document.getElementById('emojiPicker').classList.toggle('hidden'); }
 
     function openGame(gameType) {
         activeGame = gameType;
@@ -451,15 +451,9 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        gameState = { 
-            turn: data.turn || "immu", 
-            status: data.status || "set", 
-            score1: data.score1 || 0, 
-            score2: data.score2 || 0, 
-            movieEng: data.movieEng || data.movie || "", 
-            movieTamil: data.movieTamil || "", 
-            hint: data.hint || "" 
-        };
+        let mt = data.movieTamil || data.movie || "";
+        if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
+        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: data.movieEng || data.movie || "", movieTamil: mt, hint: data.hint || "" };
         if(activeGame === 'movie') renderMovieGameUI();
     });
 
@@ -469,7 +463,7 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // Translation fallback (only if manual type doesn't exist in txt)
+    // Fallback dictionary
     const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
 
     function transliterate(text) {
@@ -534,7 +528,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
+                        <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -547,9 +541,7 @@
     // --- MANUAL POINT FIX ---
     function awardManualPoint() {
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
-        // Add point to partner
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
-        // Switch turn back to partner
         db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "" });
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
@@ -559,11 +551,8 @@
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         
         if(foundMovie) { 
-            if(foundMovie.hero) {
-                document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); 
-            } else {
-                document.getElementById('hintInput').value = ""; 
-            }
+            if(foundMovie.hero) { document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); } 
+            else { document.getElementById('hintInput').value = ""; }
             selectedPerfectTamil = foundMovie.tamil;
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
@@ -574,15 +563,11 @@
     
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
-        
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         
-        if(randomObj.hero) {
-            document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); 
-        } else {
-            document.getElementById('hintInput').value = "GUESS THE HERO!";
-        }
+        if(randomObj.hero) { document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); } 
+        else { document.getElementById('hintInput').value = "GUESS THE HERO!"; }
         
         selectedPerfectTamil = randomObj.tamil;
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
@@ -593,14 +578,14 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
-        // Exact Tamil match from text file, else transliterate fallback
-        const finalTamil = selectedPerfectTamil || transliterate(rawEng);
+        let finalTamil = selectedPerfectTamil || transliterate(rawEng);
+        if(/[a-zA-Z]/.test(finalTamil)) { finalTamil = transliterate(finalTamil); } // Force Translation
+
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
-        
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
         const guessTamil = transliterate(guessRaw);
@@ -619,38 +604,35 @@
     function giveUp() { 
         document.getElementById('feedback').innerText = "ANSWER: " + (gameState.movieEng || "").toUpperCase(); 
         document.getElementById('feedback').style.color = "var(--accent-color)";
-        // Partner gets the point
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
-        // Guesser sets the next movie
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
     
     function getLetterCount(str) { 
         if(!str) return 0; 
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || []; 
-        return clusters.filter(c => c !== ' ').length; 
+        const clusters = str.replace(/\s+/g, '').match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || []; 
+        return clusters.length; 
     }
     
-    // GUARANTEED TAMIL MASKING: Completely ignores any stray English letters from DB
+    // PERFECT MASKING: First and Last of the ENTIRE STRING
     function maskTamil(str) {
         if(!str) return "";
-        // Force transliterate again just to be 100% safe
         let safeStr = str;
         if (/[a-zA-Z]/.test(safeStr)) { safeStr = transliterate(safeStr); }
         
-        const words = safeStr.split(" ");
-        return words.map(word => {
-            const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || [];
-            if (clusters.length === 0) return "_";
-            if (clusters.length <= 2) {
-                return clusters.map((c, i) => i === 0 ? c : "_").join(" ");
-            }
-            return clusters.map((c, i) => {
-                if(i === 0 || i === clusters.length - 1) return c;
-                return "_";
-            }).join(" ");
-        }).join("&nbsp;&nbsp;&nbsp;&nbsp;");
+        // Remove spaces to calculate pure clusters
+        const pureClusters = safeStr.replace(/\s+/g, '').match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
+        
+        if (pureClusters.length === 0) return "_";
+        if (pureClusters.length <= 2) {
+            return pureClusters.map((c, i) => i === 0 ? c : "_").join(" ");
+        }
+        
+        return pureClusters.map((c, i) => {
+            if(i === 0 || i === pureClusters.length - 1) return c;
+            return "_";
+        }).join(" ");
     }
 
     // ================= WORD GAME LOGIC =================
@@ -772,21 +754,18 @@
     db.ref('chatMessages').on('child_added', (snapshot) => {
         const data = snapshot.val();
         const chatMessagesDiv = document.getElementById('chatMessages');
-        const isMine = data.sender === myName.toUpperCase(); // Adjusted for upper case senders
-        const isSystem = data.sender === "SYSTEM";
-        const isCheat = data.sender === "ANTI-CHEAT";
+        const isMine = data.sender === myName.toUpperCase();
+        const isSystem = data.sender === "SYSTEM" || data.sender === "ANTI-CHEAT";
         
         const messageDiv = document.createElement('div');
         if (isSystem) { 
-            messageDiv.className = 'message system-message'; 
-        } else if (isCheat) {
-            messageDiv.className = 'message cheat-message';
+            messageDiv.className = data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message'; 
         } else { 
             messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; 
         }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem||isCheat ? 'color:inherit; font-size:10px;' : ''}">${isMine ? 'YOU' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
+        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">${isMine ? 'YOU' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
