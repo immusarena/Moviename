@@ -122,8 +122,8 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        /* PERFECT MASKING VIEW - Tamil Native Format */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        /* MASKING VIEW - Tamil Native Format */
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; }
         .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
         .mask-space { width: 15px; }
         .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
@@ -251,9 +251,7 @@
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
-            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
-                <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-            </button>
+            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)" style="font-size: 18px;">😊</button>
             <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
@@ -304,6 +302,7 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
+    
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
@@ -361,15 +360,15 @@
         }
     });
 
-    // --- 5000+ TXT LOADER (SWAPPED FILES CORRECTLY) ---
+    // --- CACHE-BUSTED TXT LOADER ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; 
         try {
-            // நீங்க சொன்ன மாதிரி File names மாத்தி உக்காந்திருக்கு!
-            // movies_tamil.txt-குள்ள இங்கிலீஷ் இருக்கு, movies_eng.txt-குள்ள தமிழ் இருக்கு.
-            const engRes = await fetch('movies_eng.txt'); // English names fetch
-            const tamilRes = await fetch('movies_tamil.txt'); // Tamil names fetch
-            const heroRes = await fetch('heroes.txt');
+            // ?v= trick bypasses the browser cache so you always get the latest txt files!
+            const cacheBuster = "?v=" + new Date().getTime();
+            const engRes = await fetch('movies_eng.txt' + cacheBuster);
+            const tamilRes = await fetch('movies_tamil.txt' + cacheBuster);
+            const heroRes = await fetch('heroes.txt' + cacheBuster);
             
             if (engRes.ok && tamilRes.ok) {
                 const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
@@ -385,7 +384,7 @@
                         MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
                     }
                 }
-                console.log("Successfully loaded " + MOVIE_COLLECTION.length + " movies!");
+                console.log("Successfully loaded " + MOVIE_COLLECTION.length + " movies from GitHub!");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
 
@@ -441,7 +440,7 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // --- DB LISTENER ---
+    // --- DB LISTENER (Forces exact Tamil from the loaded array) ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         
@@ -449,7 +448,7 @@
         let finalTamil = data.movieTamil || "";
         let finalHint = data.hint || "";
 
-        // Puthusa anupura padam DB-la irunthu clean-a vanthurum!
+        // Double check to absolutely ensure NO english passes through the mask
         if (dbEng !== "" && MOVIE_COLLECTION.length > 0) {
             const match = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === dbEng.toLowerCase());
             if (match) {
@@ -550,16 +549,21 @@
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         
         if(foundMovie) { 
+            // Alert user if Tamil text contains English letters! (Helps catch bad txt formatting)
+            if (/[a-zA-Z]/.test(foundMovie.tamil)) {
+                document.getElementById('tamilPreview').innerHTML = `<span style="color:red; font-size:12px;">⚠️ Error: Your tamil txt file contains English here!</span>`;
+            } else {
+                document.getElementById('tamilPreview').innerText = foundMovie.tamil;
+            }
             if(foundMovie.hero) { document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); } 
             else { document.getElementById('hintInput').value = ""; }
-            document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
             document.getElementById('tamilPreview').innerText = "Select from list!";
         }
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! 5000 Movies are loading...");
+        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! Movies are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         
@@ -578,6 +582,10 @@
         
         if (!foundMovie) {
             return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST! (We only use names from your TXT file)");
+        }
+        
+        if (/[a-zA-Z]/.test(foundMovie.tamil)) {
+            return alert("Wait! Your movies_tamil.txt file has English letters for this movie. Fix your txt file on GitHub first!");
         }
 
         db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
@@ -621,7 +629,7 @@
 
     function maskExactString(str) {
         if (!str) return "";
-        let html = `<div style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
+        let html = `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
 
         let segments = [];
         if (window.Intl && Intl.Segmenter) {
@@ -648,10 +656,13 @@
 
         segments.forEach((char, idx) => {
             if (char.trim() === '') {
-                wordHtml += `<div style="width:15px; height:5px;"></div>`;
+                // Space
+                wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
             } else if (idx === firstIdx || idx === lastIdx) {
+                // First or Last
                 wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
             } else {
+                // Mask
                 wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
             }
         });
@@ -751,7 +762,6 @@
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     function confirmReset(starter) { 
-        // Force fully empty strings to reset any DB corruption
         db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
         closeResetModal(); 
     }
