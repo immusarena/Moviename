@@ -56,7 +56,7 @@
         .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 32px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
@@ -97,7 +97,7 @@
         .vs-badge { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
 
         /* Cards & Inputs */
-        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
@@ -116,10 +116,10 @@
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
         .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
         
-        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;}
         .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
         
-        .reveal-btn { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; color: #3b82f6; margin-top: 5px; padding: 12px; font-size: 10px; width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+        .reveal-btn { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; color: #3b82f6; margin-top: 5px; padding: 12px; font-size: 10px; width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;}
         .reveal-btn:hover { background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
 
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
@@ -462,7 +462,7 @@
             status: data.status || "set", 
             score1: data.score1 || 0, 
             score2: data.score2 || 0, 
-            movieEng: data.movieEng || data.movie || "", 
+            movieEng: data.movieEng || "", 
             movieTamil: data.movieTamil || "", 
             hint: data.hint || "",
             revealCount: data.revealCount || 0
@@ -536,7 +536,7 @@
         }
     }
 
-    // --- REVEAL 1 LETTER FIX ---
+    // --- REVEAL 1 LETTER ---
     function revealLetters() {
         let current = gameState.revealCount || 0;
         db.ref('gameState').update({ revealCount: current + 1 });
@@ -580,7 +580,7 @@
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        const finalTamil = foundMovie ? foundMovie.tamil : rawEng; // Use text file content directly
+        const finalTamil = foundMovie ? foundMovie.tamil : rawEng; // Use exact txt value
 
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing", revealCount: 0 }); 
     }
@@ -589,7 +589,8 @@
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
-        // Simple English match check
+        
+        // Exact spelling match ONLY
         if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
@@ -608,47 +609,29 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "", revealCount: 0 }), 2500); 
     }
     
+    // Exact Tamil letter counting (ignores spaces & English)
     function getLetterCount(str) { 
         if(!str) return 0; 
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]|\s/g) || []; 
-        let count = 0;
-        for (let i = 0; i < clusters.length; i++) {
-            if (clusters[i].trim() !== "") count++;
-        }
-        return count; 
+        const pureClusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*/g) || []; 
+        return pureClusters.filter(c => c.trim() !== '').length; 
     }
     
-    // PERFECT MASKING: Exactly from Text file, properly handling spaces
+    // PERFECT MASKING: First and Last of the ENTIRE STRING
     function maskTamilFull(str, revealCount = 0) {
         if(!str) return "";
-        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]|\s/g) || [];
-        const letterIndices = [];
         
-        for (let i = 0; i < clusters.length; i++) {
-            if (clusters[i].trim() !== "") {
-                letterIndices.push(i);
-            }
+        // Match ONLY Tamil letters. Spaces and English characters are ignored.
+        const pureClusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*/g) || [];
+        const validClusters = pureClusters.filter(c => c.trim() !== '');
+
+        if (validClusters.length === 0) return "_";
+        if (validClusters.length <= 2) {
+            return validClusters.map((c, i) => i === 0 ? c : "_").join(" ");
         }
 
-        if (letterIndices.length === 0) return "_";
-
-        if (letterIndices.length <= 2) {
-            return clusters.map((c, i) => {
-                if (c.trim() === "") return "&nbsp;&nbsp;";
-                if (i === letterIndices[0]) return c;
-                return "_";
-            }).join(" ");
-        }
-
-        const firstIdx = letterIndices[0];
-        const lastIdx = letterIndices[letterIndices.length - 1];
-        const hiddenIndices = letterIndices.slice(1, -1);
-        const revealedIndices = hiddenIndices.slice(0, revealCount);
-
-        return clusters.map((c, i) => {
-            if (c.trim() === "") return "&nbsp;&nbsp;";
-            if (i === firstIdx || i === lastIdx) return c;
-            if (revealedIndices.includes(i)) return `<span style="color:var(--text-main);">${c}</span>`;
+        return validClusters.map((c, i) => {
+            if(i === 0 || i === validClusters.length - 1) return c; // First & Last
+            if(i <= revealCount && revealCount > 0) return `<span style="color:var(--text-main); text-shadow: 0 0 10px white;">${c}</span>`;
             return "_";
         }).join(" ");
     }
