@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple Games Hub</title>
+    <title>Immu's Games Hub</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -53,7 +53,7 @@
         .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
         .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
 
-        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 34px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
         .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
@@ -66,7 +66,7 @@
         .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
         .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
         .back-btn svg { width: 10px; height: 10px; }
-        .game-title-text { font-size: 13px; font-weight: 800; letter-spacing: 3px; color: var(--text-main); text-transform: uppercase; margin:0; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 2px 4px rgba(255,75,114,0.3));}
+        .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* SLEEK THEME BUTTON */
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
@@ -107,7 +107,7 @@
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
         .order-btn:hover { background: rgba(74, 222, 128, 0.1); transform: scale(1.02); }
 
-        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
+        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
         button:active { transform: scale(0.96); }
         
@@ -118,15 +118,11 @@
         
         .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;}
         .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
-        
-        .reveal-btn { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; color: #3b82f6; margin-top: 5px; padding: 12px; font-size: 10px; width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;}
-        .reveal-btn:hover { background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
 
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
         /* MASKING VIEW - Updated layout */
-        .masked-word-container { margin: 15px 0; font-family: 'Latha', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%;}
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
@@ -151,6 +147,7 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
@@ -310,7 +307,6 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
-    
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
@@ -368,7 +364,23 @@
         }
     });
 
-    // --- TXT LOADER (STRICTLY FROM TXT ONLY) ---
+    // --- TRANSLITERATOR ---
+    const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
+
+    function transliterate(text) {
+        let result = ""; let i = 0; const lower = text.toLowerCase();
+        while (i < lower.length) {
+            let found = false;
+            for (let len = 4; len >= 1; len--) {
+                let chunk = lower.substring(i, i + len);
+                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
+            }
+            if (!found) { result += text[i]; i++; }
+        }
+        return result;
+    }
+
+    // --- TXT LOADER (STRICTLY FROM TXT) ---
     async function loadMoviesFromTXT() {
         try {
             const engRes = await fetch('movies_eng.txt');
@@ -389,18 +401,15 @@
                     }
                 }
             }
-        } catch (error) { console.error("Error loading TXT:", error); }
+        } catch (error) { console.error("TXT Load Error:", error); }
 
         const list = document.getElementById('movieList');
         list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(movieObj => {
-            const option = document.createElement('option');
-            option.value = movieObj.eng;
-            list.appendChild(option);
+        MOVIE_COLLECTION.forEach(m => {
+            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
         });
     }
 
-    // Initialize Emoji Picker
     window.onload = () => {
         loadMoviesFromTXT();
         const picker = document.getElementById('emojiPicker');
@@ -454,8 +463,7 @@
             score2: data.score2 || 0, 
             movieEng: data.movieEng || "", 
             movieTamil: data.movieTamil || "", 
-            hint: data.hint || "",
-            revealCount: data.revealCount || 0
+            hint: data.hint || "" 
         };
         if(activeGame === 'movie') renderMovieGameUI();
     });
@@ -503,15 +511,12 @@
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
                         
-                        <div class="masked-word-container">
-                            ${maskTamilFull(gameState.movieTamil, gameState.revealCount)}
-                        </div>
+                        ${maskTamilStrict(gameState.movieTamil)}
                         
                         <div class="letter-count">${letterCount} LETTERS</div>
                         
                         <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">HELP YOUR PARTNER:</p>
-                        <button class="reveal-btn" onclick="revealLetters()">REVEAL 1 LETTER</button>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">IF PARTNER MADE A SPELLING MISTAKE:</p>
                         <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
                     </div>`;
             } else {
@@ -519,9 +524,7 @@
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         
-                        <div class="masked-word-container">
-                            ${maskTamilFull(gameState.movieTamil, gameState.revealCount)}
-                        </div>
+                        ${maskTamilStrict(gameState.movieTamil)}
                         
                         <div class="letter-count">${letterCount} LETTERS</div>
                         <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
@@ -534,20 +537,13 @@
         }
     }
 
-    // --- REVEAL 1 LETTER ONLY ---
-    function revealLetters() {
-        let current = gameState.revealCount || 0;
-        db.ref('gameState').update({ revealCount: current + 1 });
-    }
-
     function awardManualPoint() {
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
-        db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "", revealCount: 0 });
+        db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "" });
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
-    // STRICT TXT SELECTION ONLY
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
@@ -578,12 +574,9 @@
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        
-        if (!foundMovie) {
-            return alert("Please select a movie strictly from the dropdown list!");
-        }
+        if (!foundMovie) { return alert("Please select a movie strictly from the dropdown list!"); }
 
-        db.ref('gameState').update({ movieEng: foundMovie.eng.toLowerCase(), movieTamil: foundMovie.tamil, hint: h, status: "guessing", revealCount: 0 }); 
+        db.ref('gameState').update({ movieEng: foundMovie.eng.toLowerCase(), movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
@@ -594,7 +587,7 @@
         if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
-            db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "", revealCount: 0 }); 
+            db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
         } else { 
             document.getElementById('feedback').innerText = "WRONG SPELLING! TRY AGAIN"; 
             document.getElementById('feedback').style.color = "var(--primary-color)";
@@ -606,77 +599,58 @@
         document.getElementById('feedback').style.color = "var(--accent-color)";
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
-        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "", revealCount: 0 }), 2500); 
+        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
-
-    // --- FLAWLESS TAMIL LETTER LOGIC (using Intl.Segmenter) ---
-    function getTamilLetters(str) {
-        if(!str) return [];
-        let cleanStr = str.replace(/\s+/g, '');
+    
+    // --- FLAWLESS TAMIL LETTER LOGIC (Strict First & Last) ---
+    function tokenizeTamil(str) {
+        if (!str) return [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            return Array.from(segmenter.segment(cleanStr)).map(s => s.segment);
+            return Array.from(segmenter.segment(str)).map(s => s.segment);
         }
-        return cleanStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|[a-zA-Z0-9]/g) || [];
+        return str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+|[a-zA-Z0-9]/g) || [];
     }
 
     function getLetterCount(str) { 
-        return getTamilLetters(str).length; 
+        let safeStr = str;
+        if (/[a-zA-Z]/.test(safeStr)) safeStr = transliterate(safeStr);
+        const tokens = tokenizeTamil(safeStr);
+        return tokens.filter(c => c.trim() !== '').length; 
     }
     
-    // FLAWLESS MASKING: First & Last of entire string, with elegant word-wrap layout
-    function maskTamilFull(str, revealCount = 0) {
+    function maskTamilStrict(str) {
         if(!str) return "";
-        
-        const words = str.split(/\s+/);
-        const totalLetters = getLetterCount(str);
-        const isShort = totalLetters <= 2;
-        
-        let html = "";
-        let globalIndex = 0;
-        
-        words.forEach((word, wIdx) => {
-            let letters = [];
-            if (window.Intl && Intl.Segmenter) {
-                const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-                letters = Array.from(segmenter.segment(word)).map(s => s.segment);
-            } else {
-                letters = word.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|[a-zA-Z0-9]/g) || [];
-            }
-            
-            let wordHtml = `<div style="display:inline-flex; gap:6px;">`;
-            
-            letters.forEach((char) => {
-                let isVisible = false;
-                
-                if (isShort) {
-                    if (globalIndex === 0) isVisible = true;
-                } else {
-                    if (globalIndex === 0 || globalIndex === totalLetters - 1) isVisible = true;
-                }
-                
-                let hiddenIndex = globalIndex - 1; 
-                if (!isVisible && hiddenIndex < revealCount) {
-                    isVisible = true;
-                }
+        let safeStr = str;
+        if (/[a-zA-Z]/.test(safeStr)) safeStr = transliterate(safeStr);
 
-                if (isVisible) {
-                    wordHtml += `<span style="color:var(--text-main); font-size:32px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4);">${char}</span>`;
-                } else {
-                    wordHtml += `<span style="color:var(--accent-color); font-size:32px; font-weight:800;">_</span>`;
-                }
-                globalIndex++;
-            });
-            
-            wordHtml += `</div>`;
-            html += wordHtml;
-            
-            if (wIdx < words.length - 1) {
-                html += `<span style="width: 15px; display:inline-block;"></span>`;
+        const tokens = tokenizeTamil(safeStr);
+        let letterIndices = [];
+
+        // Identify pure letters vs spaces
+        tokens.forEach((t, i) => {
+            if(t.trim() !== '') letterIndices.push(i);
+        });
+
+        if (letterIndices.length === 0) return `<span style="color:var(--accent-color); font-size:28px; font-weight:800;">_</span>`;
+
+        const firstIdx = letterIndices[0];
+        const lastIdx = letterIndices[letterIndices.length - 1];
+
+        let html = `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin: 15px 0 10px 0; min-height: 40px;">`;
+
+        tokens.forEach((char, idx) => {
+            if (char.trim() === '') {
+                html += `<span style="width:16px;"></span>`;
+            } else if (idx === firstIdx || idx === lastIdx) {
+                html += `<span style="color:var(--text-main); font-size:28px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4);">${char}</span>`;
+            } else {
+                html += `<span style="color:var(--accent-color); font-size:28px; font-weight:800;">_</span>`;
             }
         });
-        
-        return `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px;">${html}</div>`;
+
+        html += `</div>`;
+        return html;
     }
 
     // ================= WORD GAME LOGIC =================
@@ -767,7 +741,7 @@
     // --- RESET MODALS ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
-    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "", revealCount: 0 }); closeResetModal(); }
+    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); closeResetModal(); }
     function confirmResetWord() { db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0 }); closeResetModal(); }
 
     // --- ONLINE STATUS & CHAT ---
