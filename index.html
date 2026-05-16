@@ -50,7 +50,8 @@
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
         @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
-        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Toast Notification */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
@@ -71,6 +72,8 @@
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
+        .game-menu-btn.purple { border-left: 4px solid #d946ef; }
+        .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(217, 70, 239, 0.3); border-left: 8px solid #d946ef; }
         
         /* SLEEK TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -110,9 +113,9 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
-        input::placeholder { color: #666; font-weight: 600;}
+        input::placeholder { color: #666; font-weight: 600; text-transform: uppercase;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
@@ -144,17 +147,30 @@
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
 
+        /* MUSIC LOUNGE ELEMENTS */
+        .vinyl-container { width: 120px; height: 120px; margin: 0 auto 20px auto; border-radius: 50%; border: 4px solid var(--primary-color); padding: 5px; box-shadow: 0 0 25px var(--glow-shadow); position: relative; display: flex; justify-content: center; align-items: center; background: #111; }
+        .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
+        .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
+        .spin-anim { animation: spin 4s linear infinite; }
+
+        .music-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; }
+        .music-btn.play { background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
+        .music-btn.sync { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; }
+        .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
+
         .hidden { display: none !important; }
         .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
-        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
         
-        .typing-indicator { font-size: 9px; color: var(--accent-color); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; animation: blink 1.5s infinite; }
+        /* UPDATED TYPING INDICATOR (Just above input box) */
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
 
-        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
+        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
         .message { padding: 10px 14px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px;}
@@ -164,7 +180,6 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
-        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
@@ -198,6 +213,8 @@
 
 <canvas id="neonCanvas"></canvas>
 
+<audio id="sharedAudio" src="song.mp3" preload="auto"></audio>
+
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
@@ -220,6 +237,7 @@
     <div class="card" style="padding: 35px 20px;">
         <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
         <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
+        <button class="game-menu-btn purple" onclick="openGame('music')">MUSIC LOUNGE 🎧</button>
     </div>
 </div>
 
@@ -229,7 +247,7 @@
         <h2 id="activeGameBadge" class="game-title-text">GAME</h2>
     </div>
 
-    <div class="vs-container">
+    <div class="vs-container" id="vsScoreBoard">
         <div id="box-immu" class="player-box">
             <div class="avatar immu-pic"></div>
             <div class="name-container">
@@ -259,9 +277,11 @@
     <div class="chat-container card">
         <div class="chat-header">
             <h3>REAL-TIME CHAT</h3>
-            <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
         </div>
         <div id="chatMessages" class="chat-messages"></div>
+        
+        <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
+        
         <div class="chat-input-group">
             <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)" style="font-size: 18px;">😊</button>
             <div id="emojiPicker" class="emoji-picker hidden"></div>
@@ -273,7 +293,7 @@
     </div>
 
     <div style="text-align: center;">
-        <button class="reset-btn" onclick="openResetModal()">RESET SCORES</button>
+        <button class="reset-btn" id="resetScoresBtn" onclick="openResetModal()">RESET SCORES</button>
     </div>
 </div>
 
@@ -313,7 +333,8 @@
 
     let activeGame = 'home';
     let gameState = {}; 
-    let wordGameState = { usedWords: {} }; 
+    let wordGameState = {}; 
+    let musicStateObj = {}; 
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
@@ -328,14 +349,18 @@
         { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
+    
     let particleColor1 = '#FF4B72';
     let particleColor2 = '#4ade80';
 
     function applyTheme(index) {
-        for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
+        for (const [key, value] of Object.entries(themes[index].vars)) { 
+            document.documentElement.style.setProperty(key, value); 
+        }
         particleColor1 = themes[index].vars['--primary-color'];
         particleColor2 = themes[index].vars['--accent-color'];
     }
+
     function cycleTheme() {
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
         localStorage.setItem('appTheme', currentThemeIndex);
@@ -348,26 +373,42 @@
     const ctx = canvas.getContext('2d');
     let particlesArray = [];
 
-    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+    }
     window.addEventListener('resize', resizeCanvas);
     
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
             this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
+            this.speedX = Math.random() * 0.4 - 0.2;
+            this.speedY = Math.random() * 0.4 - 0.2;
             this.colorType = Math.random() > 0.5 ? 1 : 2;
             this.opacity = Math.random() * 0.5 + 0.1;
         }
         update() {
-            this.x += this.speedX; this.y += this.speedY;
-            if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
-            if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
+            this.x += this.speedX;
+            this.y += this.speedY;
+
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
         }
         draw() {
-            ctx.globalAlpha = this.opacity; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.globalAlpha = this.opacity;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             let color = this.colorType === 1 ? particleColor1 : particleColor2;
-            ctx.fillStyle = color; ctx.shadowBlur = 15; ctx.shadowColor = color; ctx.fill(); ctx.globalAlpha = 1; 
+            ctx.fillStyle = color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = color;
+            ctx.fill();
+            ctx.globalAlpha = 1; 
         }
     }
 
@@ -375,15 +416,22 @@
         particlesArray = [];
         let numberOfParticles = (canvas.width * canvas.height) / 12000;
         if (numberOfParticles > 60) numberOfParticles = 60;
-        for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
+        for (let i = 0; i < numberOfParticles; i++) {
+            particlesArray.push(new Particle());
+        }
     }
 
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+            particlesArray[i].draw();
+        }
         requestAnimationFrame(animateParticles);
     }
-    resizeCanvas(); animateParticles();
+    
+    resizeCanvas(); // Set initial size
+    animateParticles(); // Start animation loop
 
     // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
@@ -409,8 +457,12 @@
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
         const isTyping = snapshot.val();
         const indicator = document.getElementById('typingIndicator');
-        if (isTyping) { indicator.innerText = `${partnerName} IS TYPING...`; indicator.classList.remove('hidden'); } 
-        else { indicator.classList.add('hidden'); }
+        if (isTyping) {
+            indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`;
+            indicator.classList.remove('hidden');
+        } else {
+            indicator.classList.add('hidden');
+        }
     });
 
     // --- AUTO-SWAP TXT LOADER ---
@@ -426,22 +478,32 @@
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
-                if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
+                if (heroRes.ok) {
+                    hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
+                }
                 
                 // AUTO FIX: If the English file contains Tamil characters, swap the arrays automatically!
                 if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) {
-                    let temp = eLines; eLines = tLines; tLines = temp;
+                    let temp = eLines;
+                    eLines = tLines;
+                    tLines = temp;
                 }
                 
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(eLines[i] && tLines[i]) { MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" }); }
+                    if(eLines[i] && tLines[i]) {
+                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
+                    }
                 }
+                console.log("Successfully loaded " + MOVIE_COLLECTION.length + " movies!");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
 
-        const list = document.getElementById('movieList'); list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(m => { const option = document.createElement('option'); option.value = m.eng; list.appendChild(option); });
+        const list = document.getElementById('movieList');
+        list.innerHTML = "";
+        MOVIE_COLLECTION.forEach(m => {
+            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
+        });
     }
 
     window.onload = () => {
@@ -471,14 +533,23 @@
         
         if (gameType === 'movie') {
             document.getElementById('activeGameBadge').innerText = "MOVIE GUESSING";
+            document.getElementById('vsScoreBoard').classList.remove('hidden');
+            document.getElementById('resetScoresBtn').classList.remove('hidden');
             document.getElementById('movieResetBtns').classList.remove('hidden');
             document.getElementById('wordResetBtns').classList.add('hidden');
             renderMovieGameUI();
         } else if (gameType === 'word') {
             document.getElementById('activeGameBadge').innerText = "WORD RACE";
+            document.getElementById('vsScoreBoard').classList.remove('hidden');
+            document.getElementById('resetScoresBtn').classList.remove('hidden');
             document.getElementById('movieResetBtns').classList.add('hidden');
             document.getElementById('wordResetBtns').classList.remove('hidden');
             renderWordGameUI();
+        } else if (gameType === 'music') {
+            document.getElementById('activeGameBadge').innerText = "MUSIC LOUNGE 🎧";
+            document.getElementById('vsScoreBoard').classList.add('hidden');
+            document.getElementById('resetScoresBtn').classList.add('hidden');
+            renderMusicUI();
         }
     }
 
@@ -488,11 +559,13 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // --- DB LISTENER ---
+    // --- DB LISTENERS ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        let dbEng = data.movieEng || ""; let finalTamil = data.movieTamil || ""; let finalHint = data.hint || "";
-        
+        let dbEng = data.movieEng || "";
+        let finalTamil = data.movieTamil || "";
+        let finalHint = data.hint || "";
+
         if (dbEng !== "" && MOVIE_COLLECTION.length > 0) {
             const match = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === dbEng.toLowerCase());
             if (match) { finalTamil = match.tamil; }
@@ -508,10 +581,45 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // ================= MOVIE GUESSING LOGIC =================
+    // --- MUSIC SYNC LISTENER ---
+    const audioEl = document.getElementById('sharedAudio');
+    let ignoreNextSync = false;
+
+    db.ref('musicState').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        musicStateObj = { isPlaying: data.isPlaying || false, currentTime: data.currentTime || 0, url: data.url || 'song.mp3', updatedBy: data.updatedBy || '' };
+        
+        if (musicStateObj.url !== audioEl.src && !audioEl.src.includes(musicStateObj.url)) {
+            audioEl.src = musicStateObj.url;
+            audioEl.load();
+        }
+
+        if (musicStateObj.updatedBy !== myName) {
+            ignoreNextSync = true;
+            if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) {
+                audioEl.currentTime = musicStateObj.currentTime;
+            }
+            if (musicStateObj.isPlaying && audioEl.paused) {
+                audioEl.play().catch(e => console.log("Autoplay prevented. Please interact first."));
+            } else if (!musicStateObj.isPlaying && !audioEl.paused) {
+                audioEl.pause();
+            }
+        }
+        
+        if (activeGame === 'music') renderMusicUI();
+    });
+
+    audioEl.addEventListener('seeked', () => {
+        if (!ignoreNextSync) {
+            db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
+        }
+        ignoreNextSync = false;
+    });
+
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
+        document.getElementById('immuScore').innerText = gameState.score1;
+        document.getElementById('sappiiScore').innerText = gameState.score2;
         
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
@@ -745,13 +853,11 @@
             return;
         }
 
-        // DUPLICATE WORD CHECK
         if (wordGameState.usedWords && wordGameState.usedWords[word]) {
             document.getElementById('raceFeedback').innerText = `ALREADY USED! FIND A NEW WORD.`;
             return;
         }
 
-        // DICTIONARY CHECK (To prevent gibberish)
         document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
         document.getElementById('raceFeedback').style.color = "var(--text-main)";
 
@@ -762,13 +868,11 @@
                 document.getElementById('raceFeedback').style.color = "var(--primary-color)";
                 return;
             }
-        } catch (e) {
-            // API down, allow it
-        }
+        } catch (e) {}
 
         const scoreKey = (myName === "immu") ? 'score1' : 'score2';
         db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
-        db.ref(`wordGameState/usedWords/${word}`).set(true); // Save word to stop duplicates
+        db.ref(`wordGameState/usedWords/${word}`).set(true); 
         db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
@@ -776,6 +880,55 @@
     function skipWord() {
         db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+    }
+
+    // ================= MUSIC LOUNGE LOGIC =================
+    function renderMusicUI() {
+        const container = document.getElementById('gameContentArea');
+        const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
+        const playBtnText = musicStateObj.isPlaying ? 'PAUSE' : 'PLAY';
+        
+        container.innerHTML = `
+            <div class="card" style="text-align:center;">
+                <div class="vinyl-container">
+                    <img src="1000243508.jpg" class="vinyl-record ${isSpinning}">
+                </div>
+                <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
+                <p style="font-size:10px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;">
+                    ${musicStateObj.isPlaying ? '🎵 Playing in sync' : 'Paused'}
+                </p>
+                
+                <input type="text" id="musicUrl" placeholder="Direct MP3 Link or filename (e.g. song.mp3)" value="${musicStateObj.url}" style="font-size:10px; text-transform:none;">
+                <button onclick="changeSong()" style="margin-top:5px; margin-bottom:20px; padding:12px; font-size:10px;">LOAD SONG</button>
+
+                <div class="music-controls">
+                    <button class="music-btn play" onclick="togglePlayPause()">${playBtnText}</button>
+                    <button class="music-btn sync" onclick="forceSync()">SYNC AUDIO</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function togglePlayPause() {
+        const newState = !musicStateObj.isPlaying;
+        if (newState) {
+            audioEl.play().catch(e => alert("Please tap anywhere on screen first to allow audio!"));
+        } else {
+            audioEl.pause();
+        }
+        db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function changeSong() {
+        const newUrl = document.getElementById('musicUrl').value.trim();
+        if(!newUrl) return alert("Please enter a valid link or filename!");
+        db.ref('musicState').update({ url: newUrl, isPlaying: false, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function forceSync() {
+        audioEl.currentTime = musicStateObj.currentTime;
+        if(musicStateObj.isPlaying) audioEl.play().catch(e=>{});
+        showToast("AUDIO SYNCED!");
     }
 
     // --- RESET MODALS ---
@@ -846,22 +999,20 @@
             if (text.startsWith('/add ')) {
                 const pts = parseInt(text.replace('/add ', ''));
                 if (!isNaN(pts)) {
-                    // Update scores silently
                     if (activeGame === 'movie') db.ref(`gameState/score1`).transaction(s => (s || 0) + pts);
                     if (activeGame === 'word') db.ref(`wordGameState/score1`).transaction(s => (s || 0) + pts);
                     showToast(`SECRET: +${pts} POINTS ADDED!`);
                 }
-                chatInput.value = ""; return; // Stop it from appearing in chat
+                chatInput.value = ""; return; 
             }
             if (text.startsWith('/minus ')) {
                 const pts = parseInt(text.replace('/minus ', ''));
                 if (!isNaN(pts)) {
-                    // Update scores silently
                     if (activeGame === 'movie') db.ref(`gameState/score2`).transaction(s => (s || 0) - pts);
                     if (activeGame === 'word') db.ref(`wordGameState/score2`).transaction(s => (s || 0) - pts);
                     showToast(`SECRET: -${pts} POINTS TAKEN FROM SAPPII!`);
                 }
-                chatInput.value = ""; return; // Stop it from appearing in chat
+                chatInput.value = ""; return; 
             }
         }
 
