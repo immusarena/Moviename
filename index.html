@@ -56,7 +56,7 @@
         .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 32px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
@@ -97,7 +97,7 @@
         .vs-badge { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
 
         /* Cards & Inputs */
-        .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
@@ -125,8 +125,8 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        /* Advanced Masking View */
-        .masked-word { font-size: 32px; letter-spacing: 8px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+        /* FIXED MASKING VIEW */
+        .masked-word { font-size: 26px; letter-spacing: 5px; margin: 15px 0 10px 0; color: var(--accent-color); font-weight: 800; font-family: 'Latha', sans-serif; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); word-wrap: break-word; line-height: 1.5;}
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
@@ -311,6 +311,7 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
+    
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
@@ -368,45 +369,59 @@
         }
     });
 
+    // --- FULL FLAVOR TRANSLITERATION DICTIONARY (FALLBACK ONLY) ---
+    const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
+
+    function transliterate(text) {
+        let result = ""; let i = 0; const lower = text.toLowerCase();
+        while (i < lower.length) {
+            let found = false;
+            for (let len = 4; len >= 1; len--) {
+                let chunk = lower.substring(i, i + len);
+                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
+            }
+            if (!found) { result += text[i]; i++; }
+        }
+        return result;
+    }
+
     // --- TXT LOADER (STRICTLY FROM TXT) ---
     async function loadMoviesFromTXT() {
+        MOVIE_COLLECTION = []; 
+        let hasFiles = false;
         try {
             const engRes = await fetch('movies_eng.txt');
             const tamilRes = await fetch('movies_tamil.txt');
             const heroRes = await fetch('heroes.txt');
             
-            if (engRes.ok && tamilRes.ok && heroRes.ok) {
-                const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+            if (engRes.ok && tamilRes.ok) {
+                hasFiles = true;
+                const eLines = (await engRes.text()).split('\n');
+                const tLines = (await tamilRes.text()).split('\n');
+                let hLines = [];
+                if (heroRes.ok) hLines = (await heroRes.text()).split('\n');
                 
-                MOVIE_COLLECTION = [];
-                const minLen = Math.min(eLines.length, tLines.length, hLines.length);
-                for(let i=0; i<minLen; i++){
-                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
-                }
-                console.log("Loaded TXT files perfectly!");
-            } else if (engRes.ok && tamilRes.ok) {
-                // Failsafe if heroes.txt is missing
-                const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
-                
-                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
+                    let eng = eLines[i].replace(/\r/g, '').trim();
+                    let tam = tLines[i].replace(/\r/g, '').trim();
+                    let her = hLines[i] ? hLines[i].replace(/\r/g, '').trim() : "";
+                    
+                    if (eng !== "" && tam !== "") {
+                        MOVIE_COLLECTION.push({ eng: eng, tamil: tam, hero: her });
+                    }
                 }
-            } else {
-                console.warn("TXT files missing.");
             }
-        } catch (error) { console.error("Error loading TXT:", error); }
+        } catch (error) { console.error("TXT Load Error:", error); }
+
+        if (!hasFiles || MOVIE_COLLECTION.length === 0) {
+            console.warn("No TXT files found! Add movies_eng.txt and movies_tamil.txt to GitHub.");
+        }
 
         const list = document.getElementById('movieList');
         list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(movieObj => {
-            const option = document.createElement('option');
-            option.value = movieObj.eng;
-            list.appendChild(option);
+        MOVIE_COLLECTION.forEach(m => {
+            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
         });
     }
 
@@ -536,7 +551,7 @@
         }
     }
 
-    // --- REVEAL 1 LETTER ---
+    // --- REVEAL 1 LETTER FIX ---
     function revealLetters() {
         let current = gameState.revealCount || 0;
         db.ref('gameState').update({ revealCount: current + 1 });
@@ -547,24 +562,27 @@
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
         db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "", revealCount: 0 });
-        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
-        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        let foundMovie = null;
+        if(MOVIE_COLLECTION.length > 0) {
+            foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        }
         
         if(foundMovie) { 
             if(foundMovie.hero) { document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); } 
             else { document.getElementById('hintInput').value = ""; }
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
-            document.getElementById('tamilPreview').innerText = "";
+            document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
         }
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
+        if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... Wait 2 seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         
@@ -579,8 +597,22 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
-        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        const finalTamil = foundMovie ? foundMovie.tamil : rawEng; // Use exact txt value
+        let finalTamil = "";
+        let foundMovie = null;
+        if(MOVIE_COLLECTION.length > 0) {
+            foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
+        }
+
+        if(foundMovie) {
+            finalTamil = foundMovie.tamil;
+        } else {
+            finalTamil = transliterate(rawEng);
+        }
+
+        // FAILSAFE: If it's literally just english letters, forcefully transliterate.
+        if (!/[\u0B80-\u0BFF]/.test(finalTamil)) {
+            finalTamil = transliterate(finalTamil);
+        }
 
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing", revealCount: 0 }); 
     }
@@ -590,7 +622,7 @@
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
         
-        // Exact spelling match ONLY
+        // Exact English match ONLY
         if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
@@ -609,29 +641,55 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "", revealCount: 0 }), 2500); 
     }
     
-    // Exact Tamil letter counting (ignores spaces & English)
+    // --- EXACT TAMIL PARSING & MASKING ---
+    function tokenizeTamil(str) {
+        if (!str) return [];
+        // Matches Tamil characters, English alphanumeric (if they somehow leaked), OR spaces.
+        return str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|[a-zA-Z0-9]|\s/g) || [];
+    }
+
     function getLetterCount(str) { 
-        if(!str) return 0; 
-        const pureClusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*/g) || []; 
-        return pureClusters.filter(c => c.trim() !== '').length; 
+        const tokens = tokenizeTamil(str);
+        return tokens.filter(c => c.trim() !== '').length; 
     }
     
-    // PERFECT MASKING: First and Last of the ENTIRE STRING
     function maskTamilFull(str, revealCount = 0) {
-        if(!str) return "";
+        if(!str) return "_";
         
-        // Match ONLY Tamil letters. Spaces and English characters are ignored.
-        const pureClusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*/g) || [];
-        const validClusters = pureClusters.filter(c => c.trim() !== '');
-
-        if (validClusters.length === 0) return "_";
-        if (validClusters.length <= 2) {
-            return validClusters.map((c, i) => i === 0 ? c : "_").join(" ");
+        let safeStr = str;
+        // Ultimate Fail-safe: if string has NO Tamil, translate it.
+        if (!/[\u0B80-\u0BFF]/.test(safeStr)) { safeStr = transliterate(safeStr); }
+        
+        const tokens = tokenizeTamil(safeStr);
+        let letterIndices = [];
+        
+        // Find positions of actual letters (ignoring spaces)
+        tokens.forEach((t, i) => { 
+            if(t.trim() !== '') letterIndices.push(i); 
+        });
+        
+        if (letterIndices.length === 0) return "_";
+        
+        // If word has 1 or 2 letters, show only 1st letter
+        if (letterIndices.length <= 2) {
+            return tokens.map((t, i) => {
+                if (t.trim() === '') return "&nbsp;&nbsp;";
+                if (i === letterIndices[0]) return t;
+                return "_";
+            }).join(" ");
         }
 
-        return validClusters.map((c, i) => {
-            if(i === 0 || i === validClusters.length - 1) return c; // First & Last
-            if(i <= revealCount && revealCount > 0) return `<span style="color:var(--text-main); text-shadow: 0 0 10px white;">${c}</span>`;
+        const firstIdx = letterIndices[0];
+        const lastIdx = letterIndices[letterIndices.length - 1];
+        
+        // Identify hidden letters
+        const hiddenIndices = letterIndices.slice(1, -1);
+        const revealedIndices = hiddenIndices.slice(0, revealCount);
+
+        return tokens.map((t, i) => {
+            if (t.trim() === '') return "&nbsp;&nbsp;"; // Preserve Spaces visually
+            if (i === firstIdx || i === lastIdx) return t; // Show First & Last
+            if (revealedIndices.includes(i)) return `<span style="color:var(--text-main); text-shadow: 0 0 10px white;">${t}</span>`;
             return "_";
         }).join(" ");
     }
