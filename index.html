@@ -11,7 +11,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Latha&display=swap');
         
-        /* CSS Variables for Dynamic Themes */
         :root {
             --bg-color: #0d0614;
             --card-bg: rgba(29, 16, 46, 0.7);
@@ -123,9 +122,11 @@
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
         /* PERFECT MASKING VIEW - Tamil Native Format */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
-        .mask-char { color: var(--text-main); font-size: 30px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
-        .mask-dash { color: var(--accent-color); font-size: 30px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); }
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; }
+        .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
+        .mask-space { width: 15px; }
+        .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
+        .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;}
 
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
@@ -159,6 +160,11 @@
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
         
+        .svg-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
+        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
+
         /* Emoji Picker */
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
@@ -184,7 +190,7 @@
 <div class="container" id="homeScreen">
     <div class="home-top-bar">
         <div class="theme-wrapper">
-            <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()">
+            <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
                 <div id="themeIndicator" class="theme-dot"></div>
                 <span class="theme-label">THEME</span>
             </button>
@@ -206,7 +212,10 @@
 
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
-        <button class="back-btn" onclick="goHome()">BACK</button>
+        <button class="back-btn" onclick="goHome()">
+            <svg class="svg-icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            BACK
+        </button>
         <h2 id="activeGameBadge" class="game-title-text">MOVIE GUESSING</h2>
     </div>
 
@@ -244,7 +253,9 @@
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
-            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)" style="font-size: 18px;">😊</button>
+            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
+                <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </button>
             <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
@@ -295,18 +306,118 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
-    let MOVIE_COLLECTION = []; 
+
+    // --- 📚 HARDCODED MASTER DATABASE (No Text Files Needed!) ---
+    // This perfectly matches your provided English and Tamil pairs.
+    const MOVIE_COLLECTION = [
+        { eng: "Alaipayuthey", tamil: "அலைபாயுதே", hero: "" },
+        { eng: "Thenali", tamil: "தெனாலி", hero: "" },
+        { eng: "Rhythm", tamil: "ரிதம்", hero: "" },
+        { eng: "Minnale", tamil: "மின்னலே", hero: "" },
+        { eng: "Friends", tamil: "பிரண்ட்ஸ்", hero: "" },
+        { eng: "Citizen", tamil: "சிட்டிசன்", hero: "" },
+        { eng: "Nandha", tamil: "நந்தா", hero: "" },
+        { eng: "Gemini", tamil: "ஜெமினி", hero: "" },
+        { eng: "Run", tamil: "ரன்", hero: "" },
+        { eng: "Ramanaa", tamil: "ரமணா", hero: "" },
+        { eng: "Kaakha Kaakha", tamil: "காக்க காக்க", hero: "" },
+        { eng: "Saamy", tamil: "சாமி", hero: "" },
+        { eng: "Anbe Sivam", tamil: "அன்பே சிவம்", hero: "" },
+        { eng: "Pithamagan", tamil: "பிதாமகன்", hero: "" },
+        { eng: "Boys", tamil: "பாய்ஸ்", hero: "" },
+        { eng: "Ghilli", tamil: "கில்லி", hero: "" },
+        { eng: "Virumaandi", tamil: "விருமாண்டி", hero: "" },
+        { eng: "Autograph", tamil: "ஆட்டோகிராப்", hero: "" },
+        { eng: "7G Rainbow Colony", tamil: "7ஜி ரெயின்போ காலனி", hero: "" },
+        { eng: "Chandramukhi", tamil: "சந்திரமுகி", hero: "" },
+        { eng: "Anniyan", tamil: "அந்நியன்", hero: "" },
+        { eng: "Ghajini", tamil: "கஜினி", hero: "" },
+        { eng: "Sandakozhi", tamil: "சண்டக்கோழி", hero: "" },
+        { eng: "Vettaiyaadu Vilaiyaadu", tamil: "வேட்டையாடு விளையாடு", hero: "" },
+        { eng: "Pudhupettai", tamil: "புதுப்பேட்டை", hero: "" },
+        { eng: "Varalaru", tamil: "வரலாறு", hero: "" },
+        { eng: "Sivaji", tamil: "சிவாஜி", hero: "" },
+        { eng: "Billa", tamil: "பில்லா", hero: "" },
+        { eng: "Paruthiveeran", tamil: "பருத்திவீரன்", hero: "" },
+        { eng: "Mozhi", tamil: "மொழி", hero: "" },
+        { eng: "Polladhavan", tamil: "பொல்லாதவன்", hero: "" },
+        { eng: "Dasavathaaram", tamil: "தசாவதாரம்", hero: "" },
+        { eng: "Subramaniapuram", tamil: "சுப்பிரமணியபுரம்", hero: "" },
+        { eng: "Saroja", tamil: "சரோஜா", hero: "" },
+        { eng: "Ayan", tamil: "அயன்", hero: "" },
+        { eng: "Pasanga", tamil: "பசங்க", hero: "" },
+        { eng: "Naadodigal", tamil: "நாடோடிகள்", hero: "" },
+        { eng: "Enthiran", tamil: "எந்திரன்", hero: "" },
+        { eng: "Boss Engira Bhaskaran", tamil: "பாஸ் என்கிற பாஸ்கரன்", hero: "" },
+        { eng: "Mynaa", tamil: "மைனா", hero: "" },
+        { eng: "Singam", tamil: "சிங்கம்", hero: "" },
+        { eng: "Aadukalam", tamil: "ஆடுகளம்", hero: "" },
+        { eng: "Ko", tamil: "கோ", hero: "" },
+        { eng: "Mankatha", tamil: "மங்காத்தா", hero: "" },
+        { eng: "7aum Arivu", tamil: "ஏழாம் அறிவு", hero: "" },
+        { eng: "Thuppakki", tamil: "துப்பாக்கி", hero: "" },
+        { eng: "Pizza", tamil: "பீட்சா", hero: "" },
+        { eng: "Nanban", tamil: "நண்பன்", hero: "" },
+        { eng: "Kumki", tamil: "கும்கி", hero: "" },
+        { eng: "Viswaroopam", tamil: "விஸ்வரூபம்", hero: "" },
+        { eng: "Soodhu Kavvum", tamil: "சூது கவ்வும்", hero: "" },
+        { eng: "Raja Rani", tamil: "ராஜா ராணி", hero: "" },
+        { eng: "Kaththi", tamil: "கத்தி", hero: "" },
+        { eng: "Jigarthanda", tamil: "ஜிகர்தண்டா", hero: "" },
+        { eng: "Madras", tamil: "மதராஸ்", hero: "" },
+        { eng: "Pisasu", tamil: "பிசாசு", hero: "" },
+        { eng: "Thani Oruvan", tamil: "தனி ஒருவன்", hero: "" },
+        { eng: "Vedalam", tamil: "வேதாளம்", hero: "" },
+        { eng: "Papanasam", tamil: "பாபநாசம்", hero: "" },
+        { eng: "Kabali", tamil: "கபாலி", hero: "" },
+        { eng: "Irudhi Suttru", tamil: "இறுதிச்சுற்று", hero: "" },
+        { eng: "Joker", tamil: "ஜோக்கர்", hero: "" },
+        { eng: "Theri", tamil: "தெறி", hero: "" },
+        { eng: "Vikram Vedha", tamil: "விக்ரம் வேதா", hero: "" },
+        { eng: "Mersal", tamil: "மெர்சல்", hero: "" },
+        { eng: "Aruvi", tamil: "அருவி", hero: "" },
+        { eng: "Theeran Adhigaaram Ondru", tamil: "தீரன் அதிகாரம் ஒன்று", hero: "" },
+        { eng: "96", tamil: "96", hero: "" },
+        { eng: "Pariyerum Perumal", tamil: "பரியேறும் பெருமாள்", hero: "" },
+        { eng: "Ratsasan", tamil: "ராட்சசன்", hero: "" },
+        { eng: "Sarkar", tamil: "சர்கார்", hero: "" },
+        { eng: "Asuran", tamil: "அசுரன்", hero: "" },
+        { eng: "Kaithi", tamil: "கைதி", hero: "" },
+        { eng: "Bigil", tamil: "பிகில்", hero: "" },
+        { eng: "Super Deluxe", tamil: "சூப்பர் டீலக்ஸ்", hero: "" },
+        { eng: "Soorarai Pottru", tamil: "சூரரைப் போற்று", hero: "" },
+        { eng: "Oh My Kadavule", tamil: "ஓ மை கடவுளே", hero: "" },
+        { eng: "Master", tamil: "மாஸ்டர்", hero: "" },
+        { eng: "Doctor", tamil: "டாக்டர்", hero: "" },
+        { eng: "Jai Bhim", tamil: "ஜெய் பீம்", hero: "" },
+        { eng: "Karnan", tamil: "கர்ணன்", hero: "" },
+        { eng: "Maanaadu", tamil: "மாநாடு", hero: "" },
+        { eng: "Vikram", tamil: "விக்ரம்", hero: "" },
+        { eng: "Ponniyin Selvan", tamil: "பொன்னியின் செல்வன்", hero: "" },
+        { eng: "Love Today", tamil: "லவ் டுடே", hero: "" },
+        { eng: "Thiruchitrambalam", tamil: "திருச்சிற்றம்பலம்", hero: "" },
+        { eng: "Jailer", tamil: "ஜெயிலர்", hero: "" },
+        { eng: "Leo", tamil: "லியோ", hero: "" },
+        { eng: "Mark Antony", tamil: "மார்க் ஆண்டனி", hero: "" },
+        { eng: "Good Night", tamil: "குட் நைட்", hero: "" },
+        { eng: "Parking", tamil: "பார்க்கிங்", hero: "" },
+        { eng: "Captain Miller", tamil: "கேப்டன் மில்லர்", hero: "" },
+        { eng: "Ayalaan", tamil: "அயலான்", hero: "" },
+        { eng: "Raayan", tamil: "ராயன்", hero: "" },
+        { eng: "Garudan", tamil: "கருடன்", hero: "" },
+        { eng: "Coolie", tamil: "கூலி", hero: "" }
+    ];
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
-        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
-        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
-        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)' } },
-        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
-        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
-        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)' } },
-        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)' } },
-        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
+        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#aaaaaa', '--glow-shadow': 'rgba(255, 75, 114, 0.4)' } },
+        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#8a9ab3', '--glow-shadow': 'rgba(0, 210, 255, 0.4)' } },
+        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)', '--text-main': '#ffffff', '--text-muted': '#888888', '--glow-shadow': 'rgba(255, 0, 60, 0.4)' } },
+        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#e0eade', '--text-muted': '#819385', '--glow-shadow': 'rgba(34, 197, 94, 0.4)' } },
+        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#fffefc', '--text-muted': '#a39c8f', '--glow-shadow': 'rgba(245, 158, 11, 0.4)' } },
+        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)', '--text-main': '#ffffff', '--text-muted': '#666666', '--glow-shadow': 'rgba(255, 0, 60, 0.5)' } },
+        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)', '--text-main': '#ffffff', '--text-muted': '#c084fc', '--glow-shadow': 'rgba(217, 70, 239, 0.4)' } },
+        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)', '--text-main': '#ffffff', '--text-muted': '#7dd3fc', '--glow-shadow': 'rgba(56, 189, 248, 0.4)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
@@ -352,47 +463,13 @@
         }
     });
 
-    // --- STRICT TXT LOADER ---
-    async function loadMoviesFromTXT() {
-        MOVIE_COLLECTION = []; 
-        try {
-            const engRes = await fetch('movies_eng.txt');
-            const tamilRes = await fetch('movies_tamil.txt');
-            const heroRes = await fetch('heroes.txt');
-            
-            if (engRes.ok && tamilRes.ok) {
-                const eLines = (await engRes.text()).split('\n');
-                const tLines = (await tamilRes.text()).split('\n');
-                let hLines = [];
-                if (heroRes.ok) hLines = (await heroRes.text()).split('\n');
-                
-                const minLen = Math.min(eLines.length, tLines.length);
-                for(let i=0; i<minLen; i++){
-                    let eng = eLines[i].replace(/\r/g, '').trim();
-                    let tam = tLines[i].replace(/\r/g, '').trim();
-                    let her = hLines[i] ? hLines[i].replace(/\r/g, '').trim() : "";
-                    
-                    if (eng !== "" && tam !== "") {
-                        MOVIE_COLLECTION.push({ eng: eng, tamil: tam, hero: her });
-                    }
-                }
-            }
-        } catch (error) { console.error("TXT Load Error:", error); }
-
-        if (MOVIE_COLLECTION.length === 0) {
-            console.warn("No TXT files found! Please upload movies_eng.txt and movies_tamil.txt to your GitHub repo.");
-        }
-
+    // Initialize Dropdown and Emojis
+    window.onload = () => {
         const list = document.getElementById('movieList');
-        list.innerHTML = "";
         MOVIE_COLLECTION.forEach(m => {
             const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
         });
-    }
 
-    // Initialize Emoji Picker
-    window.onload = () => {
-        loadMoviesFromTXT();
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '🔥', '😂', '🥺', '👍', '👎', '✨', '💀', '💯', '👏'];
         emojis.forEach(emoji => {
@@ -435,16 +512,26 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
-    // --- DB LISTENER: NO MORE AUTO-TRANSLATION ---
+    // --- DB LISTENER WITH AUTO-OVERRIDE FIX ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
+        
+        // Failsafe: If DB contains bad english string for movieTamil due to old bug, override it with correct Master DB Tamil
+        let safeTamil = data.movieTamil || "";
+        let engVal = data.movieEng || "";
+        const correctMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === engVal.toLowerCase());
+        
+        if (correctMovie) {
+            safeTamil = correctMovie.tamil; 
+        }
+
         gameState = { 
             turn: data.turn || "immu", 
             status: data.status || "set", 
             score1: data.score1 || 0, 
             score2: data.score2 || 0, 
-            movieEng: data.movieEng || "", 
-            movieTamil: data.movieTamil || "", // EXACTLY from DB
+            movieEng: engVal, 
+            movieTamil: safeTamil, 
             hint: data.hint || "" 
         };
         if(activeGame === 'movie') renderMovieGameUI();
@@ -479,7 +566,7 @@
                         <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
-                        <input type="text" id="hintInput" placeholder="HINT (AUTO-FILLS IF KNOWN)">
+                        <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
                         
                         <button onclick="setMovie()">START GAME</button>
                     </div>`;
@@ -509,7 +596,7 @@
                         ${maskExactString(gameState.movieTamil)}
                         
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
+                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -531,8 +618,6 @@
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         
         if(foundMovie) { 
-            if(foundMovie.hero) { document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); } 
-            else { document.getElementById('hintInput').value = ""; }
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
             document.getElementById('tamilPreview').innerText = "Select from list!";
@@ -540,13 +625,8 @@
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Wait 2 seconds! Text files are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        
-        if(randomObj.hero) { document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); } 
-        else { document.getElementById('hintInput').value = "GUESS THE HERO!"; }
-        
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
@@ -558,11 +638,10 @@
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
         
         if (!foundMovie) {
-            return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST! (We only use names from your TXT file)");
+            return alert("PLEASE SELECT A MOVIE STRICTLY FROM THE DROPDOWN LIST!");
         }
 
-        // We push EXACTLY the string from the TXT file. No changes, no translations.
-        db.ref('gameState').update({ movieEng: foundMovie.eng.toLowerCase(), movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
+        db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
@@ -588,7 +667,7 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
     
-    // --- 100% PERFECT MASKING LOGIC FOR ANY STRING ---
+    // --- 100% PERFECT MASKING LOGIC FOR TAMIL ---
     function getLetterCountExact(str) {
         if (!str) return 0;
         let segments = [];
@@ -596,16 +675,15 @@
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
             segments = Array.from(segmenter.segment(str)).map(s => s.segment);
         } else {
-            segments = str.split(''); // Fallback
+            segments = str.split(''); 
         }
         return segments.filter(c => c.trim() !== '').length;
     }
 
     function maskExactString(str) {
         if (!str) return "";
-        let html = `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
+        let html = `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
 
-        // Split entire string into exact visual graphemes (Spaces included!)
         let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
@@ -614,10 +692,9 @@
             segments = str.split('');
         }
 
-        // Find the absolute first and last characters that are NOT spaces
+        // Find absolute first and last index of letters (ignoring spaces)
         let firstIdx = -1;
         let lastIdx = -1;
-
         for (let i = 0; i < segments.length; i++) {
             if (segments[i].trim() !== '') {
                 if (firstIdx === -1) firstIdx = i;
@@ -631,14 +708,11 @@
 
         segments.forEach((char, idx) => {
             if (char.trim() === '') {
-                // If it's a space, close current div and start a new one to allow word-wrap!
-                wordHtml += `</div><div style="width:15px;"></div><div style="display:flex; gap:6px;">`;
+                wordHtml += `</div><div style="height:4px;"></div><div style="display:flex; gap:6px;">`;
             } else if (idx === firstIdx || idx === lastIdx) {
-                // VERY FIRST and VERY LAST letter of the entire string
-                wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
+                wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:28px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
             } else {
-                // Everything else is masked!
-                wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
+                wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:28px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
             }
         });
 
@@ -737,7 +811,6 @@
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     function confirmReset(starter) { 
-        // Pass empty strings so old corrupted data is wiped out completely
         db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
         closeResetModal(); 
     }
