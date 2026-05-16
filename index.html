@@ -9,26 +9,28 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Latha&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&family=Latha&display=swap');
         
-        /* CSS Variables */
+        /* CSS Variables for Dynamic Themes */
         :root {
-            --bg-color: #050816;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --primary-color: #1db954;
-            --secondary-color: #10b981;
+            --bg-color: #0d0614;
+            --card-bg: rgba(29, 16, 46, 0.7);
+            --primary-color: #FF4B72;
+            --secondary-color: #FF7694;
             --accent-color: #4ade80;
             --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --glow-shadow: rgba(29, 185, 84, 0.35);
+            --text-muted: #aaaaaa;
+            --glow-shadow: rgba(255, 75, 114, 0.4);
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; font-family:'Inter', 'Latha', sans-serif;}
+        *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
         body { 
-            background: var(--bg-color); 
+            background: radial-gradient(circle at top left, #2b1340, var(--bg-color)); 
+            background-attachment: fixed;
             color: var(--text-main); 
+            font-family: 'Poppins', 'Latha', sans-serif; 
             display: flex; justify-content: center; align-items: flex-start; 
             min-height: 100vh; overflow-x: hidden; 
             transition: background 0.5s ease; 
@@ -37,155 +39,252 @@
         /* NEON BACKGROUND CANVAS */
         #neonCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
 
-        .container { width: 100%; max-width: 430px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1; padding-bottom: 120px;}
+        .container { width: 100%; max-width: 430px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1; padding-bottom: 50px;}
         
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
+        @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* Toast */
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: #fff; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
+        /* Toast Notification */
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* Headers & Top Nav */
-        .home-top-bar, .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        /* Home Page Elements */
+        .home-top-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px; }
         
-        .brand { display: flex; align-items: center; gap: 14px; }
-        .brand-box { width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 15px var(--glow-shadow); }
-        .brand-box::before { content: ''; width: 14px; height: 14px; border-radius: 50%; background: white; }
-        .brand h2 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.5px; }
+        .home-banner-wrapper { position: relative; width: 100%; height: 180px; margin-bottom: 20px; border-radius: 20px; padding: 2px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); overflow: hidden; transition: all 0.4s ease; cursor: pointer; }
+        .home-banner-img { width: 100%; height: 100%; border-radius: 18px; object-fit: cover; opacity: 0.85; transition: 0.4s ease; filter: contrast(1.1); }
+        .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
+        .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
 
-        .theme-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.3s; color: white; font-weight: bold; font-size: 9px; letter-spacing: 1px;}
-        .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); }
-
-        .card { background: var(--card-bg); backdrop-filter: blur(25px); border-radius: 36px; padding: 25px; box-shadow: 0 15px 50px rgba(0,0,0,.45), inset 0 0 40px rgba(255,255,255,.02); border: 1px solid var(--border-color); margin-bottom: 20px; text-align: center;}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: 0.3s; letter-spacing: 1px;}
-        input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); }
+        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
+        .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
+        .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
+        .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
+        .game-menu-btn.purple { border-left: 4px solid #a855f7; }
+        .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3); border-left: 8px solid #a855f7; }
         
-        button.btn-main { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 18px; color: white; font-weight: 800; cursor: pointer; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; box-shadow: 0 10px 30px var(--glow-shadow);}
-        button.btn-main:active { transform: scale(0.96); }
-
-        /* MASKING VIEW - Tamil Native Format */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
-        .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
-        .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); }
-        .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
-        .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
+        /* SLEEK TOP NAV */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
+        .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
+        .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
-        .hint-text { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 15px; border-radius: 999px; font-size: 10px; font-weight: bold; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 8px; }
-        .hint-text::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 10px var(--accent-color);}
+        /* SLEEK THEME BUTTON */
+        .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+        .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
+        .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease; }
+        .theme-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
-        .hidden { display: none !important; }
-
-        /* VELORA PLAYER UI */
-        .velora-cover-wrap { position: relative; padding: 18px; margin-top:-10px;}
-        .velora-cover-img { width: 100%; height: 260px; object-fit: cover; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
-        
-        .velora-seek { margin-top: 15px; padding: 0 15px;}
-        .velora-line { height: 5px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; position: relative;}
-        .velora-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); border-radius: 999px; transition: width 0.1s linear;}
-        .velora-time { margin-top: 12px; display: flex; justify-content: space-between; color: var(--text-muted); font-size: .82rem;}
-        
-        .velora-controls { margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 20px; }
-        .velora-ctrl-btn { width: 62px; height: 62px; border: none; border-radius: 22px; background: rgba(255,255,255,.05); display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; color: #cbd5e1;}
-        .velora-ctrl-btn:active { transform: scale(0.9); }
-        .velora-play-btn { width: 82px; height: 82px; border-radius: 28px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; border: none;}
-        .velora-play-btn:active { transform: scale(0.92); }
-        
-        .svg-icon { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-        .fill-icon { fill: currentColor; stroke: none; }
-
-        /* Navigation Bar */
-        .navbar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 390px; padding: 10px 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); border-radius: 30px; backdrop-filter: blur(25px); display: flex; justify-content: space-around; box-shadow: 0 10px 35px rgba(0,0,0,.45); z-index: 100; }
-        .nav-item { width: 50px; height: 50px; border-radius: 22px; background: transparent; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #64748b; transition: 0.3s; }
-        .nav-item.active { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 25px var(--glow-shadow); color: white; }
-        .nav-item svg { width: 22px; height: 22px; }
-
-        /* SCORE BOARD */
+        /* VS Scoreboard */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; }
-        .player-box { background: var(--card-bg); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
-        .active-turn { border: 1px solid var(--primary-color); box-shadow: 0 0 20px var(--glow-shadow);}
-        .score-val { font-size: 24px; font-weight: 800; color: var(--primary-color); text-shadow: 0 2px 10px var(--glow-shadow); }
-        .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E;}
+        .player-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
+        .active-turn { border: 1px solid var(--primary-color); transform: scale(1.05); box-shadow: 0 0 20px var(--glow-shadow);}
+        .racing-turn { border: 1px solid var(--accent-color); transform: scale(1.05); box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);}
+        
+        .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E; transition: 0.3s; }
         .immu-pic { background-image: url('1000242624.jpg'); } 
         .sappii-pic { background-image: url('1000242625.jpg'); } 
-
-        /* CHAT */
-        .chat-messages { height: 180px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
-        .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
-        .partner-message { background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
+        .active-turn .sappii-pic, .active-turn .immu-pic { border-color: var(--primary-color); }
+        .racing-turn .avatar { border-color: var(--accent-color); }
         
-        .chat-input-group { display: flex; gap: 8px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
-        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; font-weight: 600; text-transform:none;}
+        .name-container { display: flex; align-items: center; gap: 6px; margin-top: 5px;}
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; border: 2px solid var(--card-bg); transition: background-color 0.3s; box-shadow: 0 0 5px rgba(0,0,0,0.5);}
+        .online { background-color: #4ade80; box-shadow: 0 0 10px #4ade80;} 
+        .offline { background-color: #555; } 
+        .player-name { font-size: 11px; font-weight: 800; color: var(--text-main); letter-spacing: 1px; text-transform: uppercase;}
+        .score-val { font-size: 24px; font-weight: 800; color: var(--primary-color); text-shadow: 0 2px 10px var(--glow-shadow); }
+        .vs-badge { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px;}
+
+        /* Cards & Inputs */
+        .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
+        
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; letter-spacing: 1px;}
+        input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
+        input::placeholder { color: #666; font-weight: 600;}
+        
+        .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
+        .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
+        
+        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
+        button:active { transform: scale(0.96); }
+        
+        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 10px; box-shadow: none; }
+        .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
+        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; border-radius: 12px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s; box-shadow: none;}
+        .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
+
+        /* PERFECT MASKING VIEW */
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
+        .mask-space { width: 15px; }
+        .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
+        .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;}
+
+        .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
+        .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
+        .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
+
+        /* VELORA MUSIC PLAYER */
+        .velora-player { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 36px; overflow: hidden; backdrop-filter: blur(25px); box-shadow: 0 15px 50px rgba(0,0,0,.45), inset 0 0 40px rgba(255,255,255,.02); padding-bottom: 20px;}
+        .velora-cover-wrap { position: relative; padding: 18px; }
+        .velora-cover-img { width: 100%; height: 280px; object-fit: cover; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+        .velora-cover-overlay { position: absolute; inset: 18px; border-radius: 28px; background: linear-gradient(to top, rgba(0,0,0,.8), transparent 60%); }
+        
+        .velora-info { padding: 0 24px; text-align: left; }
+        .velora-song-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.5px; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .velora-artist { color: var(--accent-color); font-size: .9rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
+        
+        .velora-seek { margin-top: 25px; }
+        .velora-line { height: 6px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; position: relative;}
+        .velora-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); border-radius: 999px; transition: width 0.1s linear;}
+        .velora-time { margin-top: 10px; display: flex; justify-content: space-between; color: #94a3b8; font-size: .75rem; font-weight: 600; letter-spacing: 1px;}
+        
+        .velora-controls { margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .velora-ctrl-btn { width: 55px; height: 55px; border: none; border-radius: 18px; background: rgba(255,255,255,.05); display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; color: #fff;}
+        .velora-ctrl-btn:hover { background: rgba(255,255,255,.1); transform: scale(1.05); color: var(--accent-color);}
+        .velora-play-btn { width: 75px; height: 75px; border-radius: 24px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; border: none;}
+        .velora-play-btn:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 15px 40px var(--glow-shadow); }
+        .velora-play-btn svg, .velora-ctrl-btn svg { fill: currentColor; }
+
+        .velora-playlist-sec { margin-top: 30px; text-align: left; }
+        .velora-ph { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;}
+        .velora-ph h3 { font-size: 1.1rem; font-weight: 600; color: #fff; }
+        .velora-ph span { color: #64748b; font-size: .8rem; font-weight: 600;}
+        
+        .velora-track { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.05); border-radius: 20px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.3s;}
+        .velora-track:hover { background: rgba(255,255,255,.08); transform: translateX(5px); border-color: rgba(255,255,255,.1);}
+        .velora-track.active-track { border-color: var(--primary-color); background: rgba(255,255,255,.08); }
+        
+        .velora-track-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.05); display: flex; justify-content: center; align-items: center; color: var(--accent-color); }
+        .velora-track-icon svg { width: 16px; height: 16px; fill: currentColor; }
+        .velora-track-info { flex: 1; overflow: hidden; }
+        .velora-track-name { font-size: .95rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .velora-track-artist { font-size: .75rem; color: #94a3b8; margin-top: 3px; }
+
+        .hidden { display: none !important; }
+        .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
+
+        /* Modern Chat Box */
+        .chat-container { text-align: left; padding: 20px; position: relative;}
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
+        
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
+
+        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
+        
+        .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
+        .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
+        
+        /* PREMIUM SVG ACTION BUTTONS */
+        .msg-actions { display: inline-flex; gap: 8px; }
+        .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
+        .msg-action-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+        .msg-action-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 10px var(--glow-shadow); }
+        .msg-action-btn.copy-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #120A1E; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
+
+        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
+        .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
+        .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
+        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
+        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
+        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
+
+        /* Emoji Picker */
+        .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
+        .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
+        .emoji-item:hover { transform: scale(1.3); }
+
+        /* Modal */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
+        .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
+        .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 12px; box-shadow: none; font-size:11px;}
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white;}
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+        .svg-icon { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
 
-<canvas id="neonCanvas"></canvas>
+<audio id="sharedAudio" src="" preload="auto"></audio>
 
-<audio id="sharedAudio" preload="auto"></audio>
+<canvas id="neonCanvas"></canvas>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
-<div class="navbar" id="bottomNav">
-    <div class="nav-item active" onclick="switchTab('home', this)">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-    </div>
-    <div class="nav-item" onclick="switchTab('movie', this)">
-        <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-    </div>
-    <div class="nav-item" onclick="switchTab('word', this)">
-        <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
-    </div>
-    <div class="nav-item" onclick="switchTab('music', this)">
-        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
-    </div>
-</div>
-
-<div class="container" id="homeTab">
+<div class="container" id="homeScreen">
     <div class="home-top-bar">
-        <div class="brand">
-            <div class="brand-box"></div>
-            <h2>Immu's Hub</h2>
+        <div class="theme-wrapper">
+            <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
+                <div id="themeIndicator" class="theme-dot"></div>
+                <span class="theme-label">THEME</span>
+            </button>
         </div>
-        <button class="theme-btn" onclick="cycleTheme()"><div class="theme-dot"></div> THEME</button>
     </div>
 
-    <div class="card" style="margin-top:20px;">
-        <h1 style="font-size:2rem; font-weight:800; text-transform:uppercase;">Welcome<br>Partner</h1>
-        <p style="color:var(--text-muted); font-size:11px; margin-top:10px;">Select a game from the bottom menu to start playing!</p>
-        
-        <div class="vs-container" style="margin-top:30px;">
-            <div class="player-box" style="width:100px;">
-                <div class="avatar immu-pic"></div>
-                <div class="player-name" style="margin-top:10px;">IMMU</div>
-            </div>
-            <div class="vs-badge" style="font-size:16px;">&</div>
-            <div class="player-box" style="width:100px;">
-                <div class="avatar sappii-pic"></div>
-                <div class="player-name" style="margin-top:10px;">SAPPII</div>
-            </div>
-        </div>
+    <div class="home-banner-wrapper">
+        <img src="1000243508.jpg" alt="Banner" class="home-banner-img" onerror="this.style.display='none'">
+    </div>
+
+    <h1 class="app-title">IMMU'S HUB</h1>
+    <p class="app-subtitle">CHOOSE YOUR ARENA</p>
+    
+    <div class="card" style="padding: 35px 20px;">
+        <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
+        <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
+        <button class="game-menu-btn purple" onclick="openGame('music')">
+            MUSIC LOUNGE 
+            <svg class="svg-icon" viewBox="0 0 24 24" width="18" height="18" style="margin-left: 5px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+        </button>
     </div>
 </div>
 
-<div class="container hidden" id="gameUIContainer">
+<div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
-        <h2 id="activeGameBadge" class="game-title-text" style="font-size: 16px;">GAME</h2>
-        <button class="theme-btn" onclick="openResetModal()">RESET</button>
+        <button class="back-btn" onclick="goHome()">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="12" height="12"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            BACK
+        </button>
+        <h2 id="activeGameBadge" class="game-title-text">GAME</h2>
     </div>
 
     <div class="vs-container" id="vsScoreBoard">
         <div id="box-immu" class="player-box">
             <div class="avatar immu-pic"></div>
+            <div class="name-container">
+                <span id="status-immu" class="status-dot offline"></span>
+                <div class="player-name">IMMU</div>
+            </div>
             <div id="immuScore" class="score-val">0</div>
+            <div id="turn-immu" class="turn-indicator hidden"></div>
         </div>
+        
         <div class="vs-badge">VS</div>
+        
         <div id="box-sappii" class="player-box">
             <div class="avatar sappii-pic"></div>
+            <div class="name-container">
+                <span id="status-sappii" class="status-dot offline"></span>
+                <div class="player-name">SAPPII</div>
+            </div>
             <div id="sappiiScore" class="score-val">0</div>
+            <div id="turn-sappii" class="turn-indicator hidden"></div>
         </div>
     </div>
 
@@ -193,28 +292,43 @@
     <datalist id="songList"></datalist>
     <div id="gameContentArea"></div>
 
-    <div class="card" style="padding:15px;" id="chatArea">
-        <h3 style="font-size: 11px; margin-bottom: 10px; text-align:left;">CHAT & COMMANDS</h3>
+    <div class="chat-container card">
+        <div class="chat-header">
+            <h3>REAL-TIME CHAT</h3>
+        </div>
         <div id="chatMessages" class="chat-messages"></div>
-        <span id="typingIndicator" style="font-size:9px; color:var(--accent-color); float:left; margin-bottom:5px;" class="hidden">TYPING...</span>
-        <div style="clear:both;"></div>
+        
+        <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
         
         <div class="chat-input-group">
-            <input type="text" id="chatInput" class="chat-input" placeholder="Type message or /add 1">
-            <button class="btn-main" style="width:auto; margin:0; padding:10px 20px; font-size:10px;" onclick="sendChatMessage()">SEND</button>
+            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
+                <svg class="svg-icon" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </button>
+            <div id="emojiPicker" class="emoji-picker hidden"></div>
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
+            <div class="chat-btn-group">
+                <button class="chat-send-btn" onclick="sendChatMessage()">SEND</button>
+            </div>
         </div>
+    </div>
+
+    <div style="text-align: center;">
+        <button class="reset-btn" id="resetScoresBtn" onclick="openResetModal()">RESET SCORES</button>
     </div>
 </div>
 
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
-        <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; font-size:16px;">RESET GAME?</h3>
-        <div style="display: flex; gap: 10px; margin-top: 25px; flex-direction: column;">
-            <button class="btn-main" onclick="confirmReset('immu')">IMMU START (MOVIE)</button>
-            <button class="btn-main" onclick="confirmReset('sappii')" style="background:transparent; border:1px solid var(--border-color); box-shadow:none;">SAPPII START (MOVIE)</button>
-            <button class="btn-main" onclick="confirmResetWord()" style="background: var(--accent-color); color:#000;">RESET WORD RACE</button>
-            <button class="btn-main" onclick="closeResetModal()" style="background:transparent; border:1px dashed red; color:red; box-shadow:none;">CANCEL</button>
+        <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:1px; font-size:16px;">RESET GAME?</h3>
+        <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing:1px;">Scores and Chat History will be cleared.</p>
+        <div class="modal-btn-group" id="movieResetBtns">
+            <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">IMMU START</button>
+            <button onclick="confirmReset('sappii')">SAPPII START</button>
         </div>
+        <div class="modal-btn-group hidden" id="wordResetBtns">
+            <button onclick="confirmResetWord()" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">YES, RESET</button>
+        </div>
+        <button class="btn-cancel" onclick="closeResetModal()">CANCEL</button>
     </div>
 </div>
 
@@ -238,19 +352,25 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; let wordGameState = {}; let musicStateObj = {}; 
-    let MOVIE_COLLECTION = []; let SONG_COLLECTION = [];
-    const audioEl = document.getElementById('sharedAudio');
+    let gameState = {}; 
+    let wordGameState = {}; 
+    let musicStateObj = {}; 
+    let MOVIE_COLLECTION = []; 
+    let SONG_COLLECTION = [];
 
-    // --- 🎨 THEMES ---
+    // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
-        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#1db954', '--secondary-color': '#10b981', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.08)' } },
+        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
         { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
         { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)' } },
-        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)' } }
+        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)' } },
+        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)' } },
+        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
-    let particleColor1 = '#1db954'; let particleColor2 = '#4ade80';
+    let particleColor1 = '#FF4B72'; let particleColor2 = '#4ade80';
 
     function applyTheme(index) {
         for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
@@ -261,7 +381,7 @@
     }
     applyTheme(currentThemeIndex);
 
-    // --- 🌌 PARTICLES ---
+    // --- 🌌 NEON BACKGROUND PARTICLES ENGINE ---
     const canvas = document.getElementById('neonCanvas'); const ctx = canvas.getContext('2d'); let particlesArray = [];
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
     window.addEventListener('resize', resizeCanvas);
@@ -295,7 +415,33 @@
     }
     resizeCanvas(); animateParticles(); 
 
-    // --- AUTO-SWAP TXT LOADER ---
+    // --- 🚨 ANTI-CHEAT SYSTEM ---
+    let cheatCooldown = false;
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && !cheatCooldown) {
+            const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
+            const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
+            if (isMovieGuessing || isWordRacing) {
+                db.ref('chatMessages').push({ sender: "SYSTEM", text: `🚨 ${myName.toUpperCase()} LEFT THE APP (SEARCHING GOOGLE?) 👀`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+                cheatCooldown = true; setTimeout(() => { cheatCooldown = false; }, 10000);
+            }
+        }
+    });
+
+    // --- TYPING INDICATOR ---
+    let typingTimer;
+    document.getElementById('chatInput').addEventListener('input', () => {
+        db.ref(`typingStatus/${myName}`).set(true); clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => { db.ref(`typingStatus/${myName}`).set(false); }, 1500);
+    });
+
+    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
+        const isTyping = snapshot.val(); const indicator = document.getElementById('typingIndicator');
+        if (isTyping) { indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`; indicator.classList.remove('hidden'); } 
+        else { indicator.classList.add('hidden'); }
+    });
+
+    // --- AUTO-SWAP TXT LOADER WITH SONGS ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; SONG_COLLECTION = [];
         try {
@@ -310,6 +456,7 @@
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
                 if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
+                
                 if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) { let temp = eLines; eLines = tLines; tLines = temp; }
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
@@ -323,42 +470,60 @@
 
         const list = document.getElementById('movieList'); list.innerHTML = "";
         MOVIE_COLLECTION.forEach(m => { const option = document.createElement('option'); option.value = m.eng; list.appendChild(option); });
+
         const songList = document.getElementById('songList'); songList.innerHTML = "";
         SONG_COLLECTION.forEach(s => { const option = document.createElement('option'); option.value = s; songList.appendChild(option); });
     }
-    window.onload = loadMoviesFromTXT;
 
-    // --- NAVIGATION LOGIC ---
-    function switchTab(tab, element) {
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        if(element) element.classList.add('active');
-        
-        document.getElementById('homeTab').classList.add('hidden');
-        document.getElementById('gameUIContainer').classList.add('hidden');
+    window.onload = () => {
+        loadMoviesFromTXT();
+        const picker = document.getElementById('emojiPicker');
+        const emojis = ['❤️', '🔥', '😂', '🥺', '👍', '👎', '✨', '💀', '💯', '👏'];
+        emojis.forEach(emoji => {
+            const btn = document.createElement('button'); btn.className = 'emoji-item'; btn.innerText = emoji;
+            btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); document.getElementById('emojiPicker').classList.add('hidden'); };
+            picker.appendChild(btn);
+        });
+        document.addEventListener('click', function(event) {
+            var picker = document.getElementById('emojiPicker'); var btn = document.getElementById('emojiBtn');
+            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) picker.classList.add('hidden'); 
+        });
+    };
 
-        activeGame = tab;
+    function toggleEmojiPicker(e) { if(e) e.stopPropagation(); document.getElementById('emojiPicker').classList.toggle('hidden'); }
+
+    function openGame(gameType) {
+        activeGame = gameType;
+        document.getElementById('homeScreen').classList.add('hidden');
+        document.getElementById('sharedUIContainer').classList.remove('hidden');
         
-        if (tab === 'home') {
-            document.getElementById('homeTab').classList.remove('hidden');
-        } else {
-            document.getElementById('gameUIContainer').classList.remove('hidden');
-            if (tab === 'movie') {
-                document.getElementById('activeGameBadge').innerText = "MOVIE GUESSING";
-                document.getElementById('vsScoreBoard').classList.remove('hidden');
-                document.getElementById('chatArea').classList.remove('hidden');
-                renderMovieGameUI();
-            } else if (tab === 'word') {
-                document.getElementById('activeGameBadge').innerText = "WORD RACE";
-                document.getElementById('vsScoreBoard').classList.remove('hidden');
-                document.getElementById('chatArea').classList.remove('hidden');
-                renderWordGameUI();
-            } else if (tab === 'music') {
-                document.getElementById('activeGameBadge').innerText = "MUSIC LOUNGE";
-                document.getElementById('vsScoreBoard').classList.add('hidden');
-                document.getElementById('chatArea').classList.add('hidden');
-                renderMusicUI();
-            }
+        if (gameType === 'movie') {
+            document.getElementById('activeGameBadge').innerHTML = "MOVIE GUESSING";
+            document.getElementById('vsScoreBoard').classList.remove('hidden');
+            document.getElementById('resetScoresBtn').classList.remove('hidden');
+            document.getElementById('movieResetBtns').classList.remove('hidden');
+            document.getElementById('wordResetBtns').classList.add('hidden');
+            renderMovieGameUI();
+        } else if (gameType === 'word') {
+            document.getElementById('activeGameBadge').innerHTML = "WORD RACE";
+            document.getElementById('vsScoreBoard').classList.remove('hidden');
+            document.getElementById('resetScoresBtn').classList.remove('hidden');
+            document.getElementById('movieResetBtns').classList.add('hidden');
+            document.getElementById('wordResetBtns').classList.remove('hidden');
+            renderWordGameUI();
+        } else if (gameType === 'music') {
+            document.getElementById('activeGameBadge').innerHTML = `MUSIC LOUNGE <svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16" style="margin-left:5px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`;
+            document.getElementById('vsScoreBoard').classList.add('hidden');
+            document.getElementById('resetScoresBtn').classList.add('hidden');
+            renderMusicUI();
         }
+        setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
+    }
+
+    function goHome() {
+        activeGame = 'home';
+        document.getElementById('sharedUIContainer').classList.add('hidden');
+        document.getElementById('homeScreen').classList.remove('hidden');
     }
 
     // --- DB LISTENERS ---
@@ -379,14 +544,17 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- 🎵 MUSIC DIRECT PLAY & SYNC LOGIC ---
+    // --- MUSIC SYNC LISTENER (WITH FIX FOR SPACES & UNLOCK BUTTON) ---
+    const audioEl = document.getElementById('sharedAudio');
+    let ignoreNextSync = false;
+
     function formatAudioUrl(rawUrl) {
         if (!rawUrl) return "";
-        if (rawUrl.startsWith('http')) return rawUrl;
+        if (rawUrl.startsWith('http')) return encodeURI(rawUrl);
         let finalUrl = rawUrl;
         if (!finalUrl.startsWith('songs/')) finalUrl = 'songs/' + finalUrl;
         if (!finalUrl.endsWith('.mp3')) finalUrl += '.mp3';
-        return encodeURI(finalUrl); 
+        return encodeURI(finalUrl); // Converts spaces to %20 to avoid 404 errors!
     }
 
     db.ref('musicState').on('value', (snapshot) => {
@@ -395,22 +563,29 @@
         
         let playUrl = formatAudioUrl(musicStateObj.url);
 
+        if (playUrl && playUrl !== audioEl.getAttribute('data-playing-url')) {
+            audioEl.src = playUrl;
+            audioEl.setAttribute('data-playing-url', playUrl);
+            audioEl.load();
+        }
+
         if (musicStateObj.updatedBy !== myName) {
-            // Apply remote updates only
-            if (playUrl && playUrl !== audioEl.src) {
-                audioEl.src = playUrl;
-                audioEl.load();
-            }
-            if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) {
-                audioEl.currentTime = musicStateObj.currentTime;
-            }
+            ignoreNextSync = true;
+            if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) audioEl.currentTime = musicStateObj.currentTime;
+            
             if (musicStateObj.isPlaying && audioEl.paused) {
-                audioEl.play().catch(e => console.log("Waiting for user tap."));
+                audioEl.play().catch(e => console.log("Waiting for user interaction."));
             } else if (!musicStateObj.isPlaying && !audioEl.paused) {
                 audioEl.pause();
             }
         }
+        
         if (activeGame === 'music') renderMusicUI();
+    });
+
+    audioEl.addEventListener('seeked', () => {
+        if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
+        ignoreNextSync = false;
     });
 
     audioEl.addEventListener('timeupdate', () => {
@@ -433,151 +608,28 @@
         return `${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
     }
 
-    // NATIVE DIRECT PLAY TOGGLE
-    function togglePlayPause() {
-        const playBtn = document.querySelector(".velora-play-btn");
-        if(playBtn) playBtn.style.transform = "scale(0.92)";
-
-        let isPlayingNow = !audioEl.paused;
-        
-        if (isPlayingNow) {
-            audioEl.pause();
-            musicStateObj.isPlaying = false;
-        } else {
-            audioEl.play().catch(e => alert("Please tap anywhere first! " + e.message));
-            musicStateObj.isPlaying = true;
-        }
-
-        setTimeout(() => { if(playBtn) playBtn.style.transform = "scale(1)"; }, 150);
-
-        // Update DB after local action
-        db.ref('musicState').update({ isPlaying: musicStateObj.isPlaying, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
-        renderMusicUI();
-    }
-
-    function playSpecificSong(songName) {
-        let newUrl = formatAudioUrl(songName);
-        audioEl.src = newUrl;
-        audioEl.load();
-        audioEl.play().catch(e => console.log(e));
-
-        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
-        renderMusicUI();
-    }
-
-    function changeSong() {
-        let newUrl = document.getElementById('musicUrl').value.trim();
-        if(!newUrl) return alert("Enter song name!");
-        playSpecificSong(newUrl);
-    }
-
-    function nextSong() {
-        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
-        let idx = SONG_COLLECTION.indexOf(currentFile);
-        if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
-        playSpecificSong(SONG_COLLECTION[idx]);
-    }
-
-    function prevSong() {
-        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
-        let idx = SONG_COLLECTION.indexOf(currentFile);
-        if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
-        playSpecificSong(SONG_COLLECTION[idx]);
-    }
-
-    function renderMusicUI() {
-        const container = document.getElementById('gameContentArea');
-        const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
-        let displayUrl = musicStateObj.url ? decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '') : "Select a track";
-        let isPlaying = musicStateObj.isPlaying;
-        
-        const playIcon = `<svg class="fill-icon" viewBox="0 0 24 24" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
-        const pauseIcon = `<svg class="fill-icon" viewBox="0 0 24 24" width="24" height="24"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
-        const prevIcon = `<svg class="fill-icon" viewBox="0 0 24 24" width="24" height="24"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
-        const nextIcon = `<svg class="fill-icon" viewBox="0 0 24 24" width="24" height="24"><polygon points="13 19 22 12 13 5"></polygon><polygon points="2 19 11 12 2 5"></polygon></svg>`;
-
-        container.innerHTML = `
-        <div class="card" style="padding:0; overflow:hidden;">
-            <div style="text-align:left; padding: 25px 22px 10px 22px;">
-                <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); border-radius:999px; color:#cbd5e1; font-size:.75rem; font-weight:800; text-transform:uppercase;">
-                    <div style="width:8px; height:8px; border-radius:50%; background:var(--accent-color); box-shadow:0 0 10px var(--accent-color); ${isPlaying ? 'animation: blink 1.5s infinite;' : ''}"></div>
-                    Live Sync
-                </div>
-                <h2 style="font-size:2.2rem; margin-top:15px; font-weight:800; text-transform:uppercase; line-height:1.1;">Listen<br>Together</h2>
-            </div>
-
-            <div>
-                <div class="velora-cover-wrap">
-                    <img src="1000243510.png" onerror="this.src='image_605d04.png'" class="velora-cover-img ${isSpinning}" style="border: 2px solid var(--border-color);">
-                </div>
-                <div class="velora-info" style="padding: 10px 24px;">
-                    <div style="font-size: 1.4rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${displayUrl}</div>
-                    <div style="color: var(--text-muted); font-size: .8rem; font-weight: 600; text-transform: uppercase;">Immu & Sappii Mix</div>
-
-                    <div class="velora-seek">
-                        <div class="velora-line"><div class="velora-progress" id="musicProgress" style="width: 0%;"></div></div>
-                        <div class="velora-time">
-                            <span id="currentTimeDisplay">00:00</span>
-                            <span id="durationDisplay">00:00</span>
-                        </div>
-                    </div>
-
-                    <div class="velora-controls">
-                        <button class="velora-ctrl-btn" onclick="prevSong()">${prevIcon}</button>
-                        <button class="velora-play-btn" onclick="togglePlayPause()">${isPlaying ? pauseIcon : playIcon}</button>
-                        <button class="velora-ctrl-btn" onclick="nextSong()">${nextIcon}</button>
-                    </div>
-
-                    <div style="display:flex; gap:10px; margin-top:25px;">
-                        <input type="text" id="musicUrl" placeholder="Direct Link or Name..." value="${displayUrl}" list="songList" style="flex:1; margin:0; font-size:10px; text-transform:none;">
-                        <button class="btn-main" onclick="changeSong()" style="width:auto; margin:0; padding:12px; font-size:10px;">LOAD</button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: left; padding: 25px 22px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #fff;">Shared Collection</h3>
-                    <span style="color: #64748b; font-size: .8rem; font-weight: 600;">${SONG_COLLECTION.length} Tracks</span>
-                </div>
-                <div style="max-height: 200px; overflow-y: auto;">
-                    ${SONG_COLLECTION.map(song => {
-                        let isMatch = musicStateObj.url && decodeURI(musicStateObj.url).includes(song);
-                        return `
-                        <div style="background:rgba(255,255,255,.04); border:1px solid ${isMatch ? 'var(--primary-color)' : 'rgba(255,255,255,.05)'}; border-radius:16px; padding:10px 15px; display:flex; align-items:center; gap:15px; margin-bottom:8px; cursor:pointer;" onclick="playSpecificSong('${song}')">
-                            <div style="width:36px; height:36px; border-radius:10px; background:rgba(255,255,255,.05); display:flex; justify-content:center; align-items:center; color:var(--accent-color);">${isMatch && isPlaying ? pauseIcon : playIcon}</div>
-                            <div style="flex:1; overflow:hidden;">
-                                <div style="font-size:.9rem; font-weight:600; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${song}</div>
-                                <div style="font-size:.7rem; color:#94a3b8; margin-top:2px;">Immu & Sappii</div>
-                            </div>
-                        </div>
-                    `}).join('')}
-                </div>
-            </div>
-        </div>
-        `;
-    }
-
     // ================= MOVIE GUESSING LOGIC =================
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
         document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
-        
+        document.getElementById('turn-immu').innerText = gameState.status === 'set' ? 'SETTING...' : 'GUESSING';
+        document.getElementById('turn-sappii').innerText = gameState.status === 'set' ? 'SETTING...' : 'GUESSING';
+        document.getElementById('turn-immu').classList.toggle('hidden', gameState.turn !== 'immu');
+        document.getElementById('turn-sappii').classList.toggle('hidden', gameState.turn !== 'sappii');
+
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR TURN</h3>
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select movie from the list</p>
                         <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
                         <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
-                        <button class="btn-main" onclick="setMovie()">START GAME</button>
+                        <button onclick="setMovie()">START GAME</button>
                     </div>`;
             } else {
                 container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
@@ -591,18 +643,19 @@
                         ${maskExactString(gameState.movieTamil)}
                         <div class="letter-count">${letterCount} LETTERS</div>
                         <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
-                        <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none; font-size:10px; padding:12px;" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">IF PARTNER MADE A SPELLING MISTAKE:</p>
+                        <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
                     </div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">GUESS THE MOVIE</h3>
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         ${maskExactString(gameState.movieTamil)}
                         <div class="letter-count">${letterCount} LETTERS</div>
                         ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
-                        <button class="btn-main" onclick="checkGuess()">SUBMIT ANSWER</button>
-                        <button class="btn-main" style="background:transparent; box-shadow:none; color:var(--text-muted);" onclick="giveUp()">GIVE UP</button>
+                        <button onclick="checkGuess()">SUBMIT ANSWER</button>
+                        <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
                         <p id="feedback" style="margin-top:15px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                     </div>`;
             }
@@ -620,7 +673,7 @@
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         if(foundMovie) { 
-            if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); 
+            if(foundMovie.hero) document.getElementById('hintInput').value = foundMovie.hero.toUpperCase(); 
             else document.getElementById('hintInput').value = ""; 
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else { document.getElementById('tamilPreview').innerText = "Select from list!"; }
@@ -630,8 +683,8 @@
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! Movies are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase(); 
-        else document.getElementById('hintInput').value = "HINT: GUESS THE HERO!"; 
+        if(randomObj.hero) document.getElementById('hintInput').value = randomObj.hero.toUpperCase(); 
+        else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
@@ -668,18 +721,19 @@
     
     function getLetterCountExact(str) {
         if (!str) return 0;
-        let segments = [];
+        let safeStr = str; let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
-        } else { segments = str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
+            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
+        } else { segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
         return segments.filter(c => c.trim() !== '').length;
     }
 
     function maskExactString(str) {
         if (!str) return "";
-        let html = `<div class="masked-container">`;
-        const tokens = str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
+        let safeStr = str;
+        let html = `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
+        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
 
         let firstIdx = -1; let lastIdx = -1;
         for (let i = 0; i < tokens.length; i++) {
@@ -695,9 +749,9 @@
             if (char.trim() === '') {
                 wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
             } else if (idx === firstIdx || idx === lastIdx) {
-                wordHtml += `<span class="mask-char">${char}</span>`;
+                wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
             } else {
-                wordHtml += `<span class="mask-dash">_</span>`;
+                wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
             }
         });
 
@@ -713,7 +767,11 @@
         
         document.getElementById('box-immu').className = `player-box racing-turn`;
         document.getElementById('box-sappii').className = `player-box racing-turn`;
-        
+        document.getElementById('turn-immu').innerText = wordGameState.status === 'race_phase' ? 'RACING' : 'THINKING';
+        document.getElementById('turn-sappii').innerText = wordGameState.status === 'race_phase' ? 'RACING' : 'THINKING';
+        document.getElementById('turn-immu').classList.remove('hidden');
+        document.getElementById('turn-sappii').classList.remove('hidden');
+
         if (wordGameState.status === "letter_phase") {
             const myLetter = (myName === 'immu') ? wordGameState.p1Letter : wordGameState.p2Letter;
             const partnerLetter = (myName === 'immu') ? wordGameState.p2Letter : wordGameState.p1Letter;
@@ -724,7 +782,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR LETTER?</h3>
                         <p style="color:var(--text-muted); font-size: 9px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
                         <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S OR K" class="letter-box">
-                        <button class="btn-main" onclick="submitLetter()">SEND LETTER</button>
+                        <button onclick="submitLetter()">SEND LETTER</button>
                     </div>`;
             } else if (!partnerLetter) {
                 container.innerHTML = `
@@ -752,8 +810,8 @@
                     <h3 style="margin-top:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-main);">FORM A WORD!</h3>
                     <p style="font-size: 10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.endLetter.toUpperCase()}</b></p>
                     <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 14px; font-weight: bold; text-transform: uppercase;">
-                    <button class="btn-main" onclick="submitRaceWord()">SUBMIT FAST</button>
-                    <button class="btn-main" style="background:transparent; box-shadow:none; color:var(--text-muted);" onclick="skipWord()">SKIP ROUND</button>
+                    <button onclick="submitRaceWord()" style="background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E;">SUBMIT FAST</button>
+                    <button class="give-up-btn" onclick="skipWord()">SKIP ROUND</button>
                     <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                 </div>`;
         }
@@ -773,10 +831,13 @@
         const start = wordGameState.startLetter.toLowerCase(); const end = wordGameState.endLetter.toLowerCase();
         
         if (word.length < 2 || !word.startsWith(start) || !word.endsWith(end)) {
-            document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`; return;
+            document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`;
+            return;
         }
+
         if (wordGameState.usedWords && wordGameState.usedWords[word]) {
-            document.getElementById('raceFeedback').innerText = `ALREADY USED! FIND A NEW WORD.`; return;
+            document.getElementById('raceFeedback').innerText = `ALREADY USED! FIND A NEW WORD.`;
+            return;
         }
 
         document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
@@ -803,7 +864,133 @@
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
-    // --- RESET MODALS ---
+    // ================= PREMIUM VELORA MUSIC LOUNGE =================
+    function playSpecificSong(songName) {
+        let newUrl = formatAudioUrl(songName);
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function nextSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
+        playSpecificSong(SONG_COLLECTION[idx]);
+    }
+
+    function prevSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
+        playSpecificSong(SONG_COLLECTION[idx]);
+    }
+
+    function renderMusicUI() {
+        const container = document.getElementById('gameContentArea');
+        const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
+        
+        let displayUrl = musicStateObj.url ? decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '') : "Select a track";
+        let isPlaying = musicStateObj.isPlaying;
+        
+        const playIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+        const pauseIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+        const prevIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
+        const nextIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="13 19 22 12 13 5"></polygon><polygon points="2 19 11 12 2 5"></polygon></svg>`;
+        const syncIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" style="margin-right:5px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> SYNC AUDIO`;
+        const noteIcon = `<svg viewBox="0 0 24 24" width="12" height="12" class="svg-icon" style="margin-right:4px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`;
+
+        container.innerHTML = `
+        <div class="velora-player">
+            <div style="text-align:left; padding: 15px 22px 5px 22px;">
+                <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); border-radius:999px; color:#cbd5e1; font-size:.75rem; font-weight:800; text-transform:uppercase; cursor:pointer;" onclick="unlockAudio()">
+                    <div style="width:8px; height:8px; border-radius:50%; background:var(--accent-color); box-shadow:0 0 10px var(--accent-color); ${isPlaying ? 'animation: blink 1.5s infinite;' : ''}"></div>
+                    🔓 TAP TO UNLOCK AUDIO
+                </div>
+                <h2 style="font-size:2rem; margin-top:15px; font-weight:800; text-transform:uppercase; line-height:1.1;">Listen<br>Together</h2>
+            </div>
+
+            <div>
+                <div class="velora-cover-wrap">
+                    <img src="image_605d04.png" onerror="this.src='1000243510.png'" class="velora-cover-img ${isSpinning}">
+                    <div class="velora-cover-overlay"></div>
+                </div>
+                <div class="velora-info">
+                    <div class="velora-song-title">${displayUrl}</div>
+                    <div class="velora-artist">Immu & Sappii Radio</div>
+
+                    <div class="velora-seek">
+                        <div class="velora-line"><div class="velora-progress" id="musicProgress" style="width: 0%;"></div></div>
+                        <div class="velora-time">
+                            <span id="currentTimeDisplay">00:00</span>
+                            <span id="durationDisplay">00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="velora-controls">
+                        <button class="velora-ctrl-btn" onclick="prevSong()">${prevIcon}</button>
+                        <button class="velora-play-btn" onclick="togglePlayPause()">${isPlaying ? pauseIcon : playIcon}</button>
+                        <button class="velora-ctrl-btn" onclick="nextSong()">${nextIcon}</button>
+                    </div>
+
+                    <div style="display:flex; gap:10px; margin-top:25px;">
+                        <input type="text" id="musicUrl" placeholder="Direct Link or Name..." value="${displayUrl}" list="songList" style="flex:1; margin:0; padding:12px; font-size:10px; text-transform:none;">
+                        <button onclick="changeSong()" style="width:auto; margin:0; padding:12px; font-size:10px;">LOAD</button>
+                    </div>
+
+                    <button class="theme-btn" style="width:100%; justify-content:center; margin-top:15px; padding: 12px; border-radius:15px;" onclick="forceSync()">${syncIcon}</button>
+                </div>
+            </div>
+
+            <div class="velora-playlist-sec" style="padding: 0 22px;">
+                <div class="velora-ph" style="margin-top: 25px;">
+                    <h3>Shared Collection</h3>
+                    <span>${SONG_COLLECTION.length} Tracks</span>
+                </div>
+                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                    ${SONG_COLLECTION.map(song => {
+                        let isMatch = musicStateObj.url && decodeURI(musicStateObj.url).includes(song);
+                        return `
+                        <div class="velora-track ${isMatch ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
+                            <div class="velora-track-icon">${isMatch && isPlaying ? pauseIcon : playIcon}</div>
+                            <div class="velora-track-info">
+                                <div class="velora-track-name">${song}</div>
+                                <div class="velora-track-artist">Immu & Sappii</div>
+                            </div>
+                        </div>
+                    `}).join('')}
+                    ${SONG_COLLECTION.length === 0 ? `<div style="text-align:center; color:#64748b; font-size:10px; margin-top:20px;">No songs found in songs.txt</div>` : ''}
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    function togglePlayPause() {
+        const newState = !musicStateObj.isPlaying;
+        if (newState) { 
+            audioEl.play().catch(e => alert("Please tap the 'TAP TO UNLOCK AUDIO' button first!")); 
+        } else { 
+            audioEl.pause(); 
+        }
+        db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function changeSong() {
+        let newUrl = document.getElementById('musicUrl').value.trim();
+        if(!newUrl) return alert("Please enter a valid link or filename!");
+        
+        newUrl = formatAudioUrl(newUrl);
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function forceSync() {
+        audioEl.currentTime = musicStateObj.currentTime;
+        if(musicStateObj.isPlaying) audioEl.play().catch(e=>{});
+        showToast("AUDIO SYNCED!");
+    }
+
+    // --- RESET MODALS (CHAT CLEARS ON RESET) ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     
@@ -812,13 +999,14 @@
         db.ref('chatMessages').remove(); 
         closeResetModal(); 
     }
+    
     function confirmResetWord() { 
         db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0, usedWords: null }); 
         db.ref('chatMessages').remove(); 
         closeResetModal(); 
     }
 
-    // --- ONLINE STATUS & CHAT ---
+    // --- ONLINE STATUS & CHAT & SECRET POWER ---
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
             const myPresenceRef = db.ref(`presence/${myName}`);
@@ -840,8 +1028,21 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
+    function copyMsg(id) {
+        const txt = document.getElementById('text-' + id).innerText;
+        navigator.clipboard.writeText(txt);
+        showToast("COPIED!");
+    }
+
+    function deleteMsg(id) {
+        db.ref('chatMessages/' + id).remove();
+        showToast("DELETED!");
+    }
+
     db.ref('chatMessages').on('value', (snapshot) => {
-        if(!snapshot.exists()) document.getElementById('chatMessages').innerHTML = ''; 
+        if(!snapshot.exists()) {
+            document.getElementById('chatMessages').innerHTML = ''; 
+        }
     });
 
     let isChatLoaded = false;
@@ -856,19 +1057,38 @@
         
         const messageDiv = document.createElement('div');
         messageDiv.id = `msg-${msgKey}`;
-        messageDiv.className = isSystem ? (data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message') : (isMine ? 'message my-message' : 'message partner-message'); 
+
+        if (isSystem) { 
+            messageDiv.className = data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message'; 
+        } else { 
+            messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; 
+        }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
+        const copySvg = `<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        const delSvg = `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+
+        const copyBtn = `<button class="msg-action-btn copy-btn" onclick="copyMsg('${msgKey}')" title="Copy">${copySvg}</button>`;
+        const delBtn = isMine ? `<button class="msg-action-btn" onclick="deleteMsg('${msgKey}')" title="Delete">${delSvg}</button>` : '';
+
         messageDiv.innerHTML = `
-            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">${isMine ? 'YOU' : data.sender} (${time})</div>
-            <div class="message-text">${data.text}</div>
+            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">
+                ${isMine ? 'YOU' : data.sender} (${time})
+                ${!isSystem ? `<span class="msg-actions">${copyBtn}${delBtn}</span>` : ''}
+            </div>
+            <div class="message-text" id="text-${msgKey}">${data.text}</div>
         `;
         
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
-        if (isChatLoaded && !isMine && !isSystem) showToast(`NEW MESSAGE FROM ${data.sender}`);
+        if (isChatLoaded && !isMine && !isSystem) { showToast(`NEW MESSAGE FROM ${data.sender}`); }
+    });
+
+    db.ref('chatMessages').on('child_removed', (snapshot) => {
+        const msgDiv = document.getElementById(`msg-${snapshot.key}`);
+        if(msgDiv) msgDiv.remove();
     });
 
     function sendChatMessage() {
@@ -896,6 +1116,7 @@
                 chatInput.value = ""; return; 
             }
         }
+
         db.ref('chatMessages').push({ sender: myName.toUpperCase(), text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
         chatInput.value = ""; document.getElementById('emojiPicker').classList.add('hidden');
     }
