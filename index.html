@@ -137,7 +137,7 @@
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
         /* PERFECT MASKING VIEW */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; }
         .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
         .mask-space { width: 15px; }
         .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
@@ -152,10 +152,11 @@
         .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
         .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
         .spin-anim { animation: spin 4s linear infinite; }
-        .music-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        
+        .music-controls { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
         .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; }
-        .music-btn.play { background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
-        .music-btn.sync { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; }
+        .music-btn.play { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
+        .music-btn.sync { padding: 10px; font-size: 14px; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; border-radius: 15px; display: flex; align-items: center; justify-content: center;}
         .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
 
         .hidden { display: none !important; }
@@ -176,28 +177,14 @@
         
         /* PREMIUM SVG ACTION BUTTONS */
         .msg-actions { display: inline-flex; gap: 8px; }
-        .msg-action-btn { 
-            background: rgba(0,0,0,0.3); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            cursor: pointer; 
-            border-radius: 5px; 
-            padding: 4px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: all 0.3s ease; 
-            color: var(--text-muted); 
-            margin-left: 5px;
-        }
+        .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
         .msg-action-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
         .msg-action-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 10px var(--glow-shadow); }
         .msg-action-btn.copy-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #120A1E; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
 
         .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
-        
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
-        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
@@ -231,7 +218,7 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<audio id="sharedAudio" src="song.mp3" preload="auto"></audio>
+<audio id="sharedAudio" src="" preload="auto"></audio>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
@@ -302,9 +289,7 @@
         <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
         
         <div class="chat-input-group">
-            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
-                <svg viewBox="0 0 24 24" class="svg-icon"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-            </button>
+            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)" style="font-size: 18px;">😊</button>
             <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
@@ -371,89 +356,54 @@
         { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
-    
-    let particleColor1 = '#FF4B72';
-    let particleColor2 = '#4ade80';
+    let particleColor1 = '#FF4B72'; let particleColor2 = '#4ade80';
 
     function applyTheme(index) {
-        for (const [key, value] of Object.entries(themes[index].vars)) { 
-            document.documentElement.style.setProperty(key, value); 
-        }
-        particleColor1 = themes[index].vars['--primary-color'];
-        particleColor2 = themes[index].vars['--accent-color'];
+        for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
+        particleColor1 = themes[index].vars['--primary-color']; particleColor2 = themes[index].vars['--accent-color'];
     }
-
     function cycleTheme() {
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-        localStorage.setItem('appTheme', currentThemeIndex);
-        applyTheme(currentThemeIndex);
+        localStorage.setItem('appTheme', currentThemeIndex); applyTheme(currentThemeIndex);
     }
     applyTheme(currentThemeIndex);
 
     // --- 🌌 NEON BACKGROUND PARTICLES ENGINE ---
-    const canvas = document.getElementById('neonCanvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
-    }
+    const canvas = document.getElementById('neonCanvas'); const ctx = canvas.getContext('2d'); let particlesArray = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
     window.addEventListener('resize', resizeCanvas);
     
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
             this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.4 - 0.2;
-            this.speedY = Math.random() * 0.4 - 0.2;
-            this.colorType = Math.random() > 0.5 ? 1 : 2;
-            this.opacity = Math.random() * 0.5 + 0.1;
+            this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
+            this.colorType = Math.random() > 0.5 ? 1 : 2; this.opacity = Math.random() * 0.5 + 0.1;
         }
         update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-
-            if (this.x < 0) this.x = canvas.width;
-            if (this.x > canvas.width) this.x = 0;
-            if (this.y < 0) this.y = canvas.height;
-            if (this.y > canvas.height) this.y = 0;
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
         }
         draw() {
-            ctx.globalAlpha = this.opacity;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.globalAlpha = this.opacity; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             let color = this.colorType === 1 ? particleColor1 : particleColor2;
-            ctx.fillStyle = color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = color;
-            ctx.fill();
-            ctx.globalAlpha = 1; 
+            ctx.fillStyle = color; ctx.shadowBlur = 15; ctx.shadowColor = color; ctx.fill(); ctx.globalAlpha = 1; 
         }
     }
 
     function initParticles() {
-        particlesArray = [];
-        let numberOfParticles = (canvas.width * canvas.height) / 12000;
+        particlesArray = []; let numberOfParticles = (canvas.width * canvas.height) / 12000;
         if (numberOfParticles > 60) numberOfParticles = 60;
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+        for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
     }
 
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-        }
+        for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
         requestAnimationFrame(animateParticles);
     }
-    
-    resizeCanvas(); 
-    animateParticles(); 
+    resizeCanvas(); animateParticles(); 
 
     // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
@@ -471,75 +421,52 @@
     // --- TYPING INDICATOR ---
     let typingTimer;
     document.getElementById('chatInput').addEventListener('input', () => {
-        db.ref(`typingStatus/${myName}`).set(true);
-        clearTimeout(typingTimer);
+        db.ref(`typingStatus/${myName}`).set(true); clearTimeout(typingTimer);
         typingTimer = setTimeout(() => { db.ref(`typingStatus/${myName}`).set(false); }, 1500);
     });
 
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        const isTyping = snapshot.val();
-        const indicator = document.getElementById('typingIndicator');
-        if (isTyping) {
-            indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`;
-            indicator.classList.remove('hidden');
-        } else {
-            indicator.classList.add('hidden');
-        }
+        const isTyping = snapshot.val(); const indicator = document.getElementById('typingIndicator');
+        if (isTyping) { indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`; indicator.classList.remove('hidden'); } 
+        else { indicator.classList.add('hidden'); }
     });
 
-    // --- AUTO-SWAP TXT LOADER & SONGS LOADER ---
+    // --- AUTO-SWAP TXT LOADER WITH SONGS ---
     async function loadMoviesFromTXT() {
-        MOVIE_COLLECTION = []; 
-        SONG_COLLECTION = [];
+        MOVIE_COLLECTION = []; SONG_COLLECTION = [];
         try {
             const cacheBuster = "?v=" + new Date().getTime();
             const engRes = await fetch('movies_eng.txt' + cacheBuster);
             const tamilRes = await fetch('movies_tamil.txt' + cacheBuster);
             const heroRes = await fetch('heroes.txt' + cacheBuster);
-            const songsRes = await fetch('songs.txt' + cacheBuster);
             
-            // Load Movies
+            // New Feature: Load Songs from songs/songs.txt
+            const songsRes = await fetch('songs/songs.txt' + cacheBuster);
+            
             if (engRes.ok && tamilRes.ok) {
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
-                if (heroRes.ok) {
-                    hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
-                }
+                if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 
-                // AUTO FIX
-                if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) {
-                    let temp = eLines;
-                    eLines = tLines;
-                    tLines = temp;
-                }
+                if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) { let temp = eLines; eLines = tLines; tLines = temp; }
                 
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(eLines[i] && tLines[i]) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
-                    }
+                    if(eLines[i] && tLines[i]) MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
                 }
             }
-            
-            // Load Songs
+
             if (songsRes.ok) {
                 SONG_COLLECTION = (await songsRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== "");
             }
-
         } catch (error) { console.error("TXT Load Error:", error); }
 
-        const list = document.getElementById('movieList');
-        list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(m => {
-            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
-        });
+        const list = document.getElementById('movieList'); list.innerHTML = "";
+        MOVIE_COLLECTION.forEach(m => { const option = document.createElement('option'); option.value = m.eng; list.appendChild(option); });
 
-        const songList = document.getElementById('songList');
-        songList.innerHTML = "";
-        SONG_COLLECTION.forEach(s => {
-            const option = document.createElement('option'); option.value = s; songList.appendChild(option);
-        });
+        const songList = document.getElementById('songList'); songList.innerHTML = "";
+        SONG_COLLECTION.forEach(s => { const option = document.createElement('option'); option.value = s; songList.appendChild(option); });
     }
 
     window.onload = () => {
@@ -547,16 +474,13 @@
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '🔥', '😂', '🥺', '👍', '👎', '✨', '💀', '💯', '👏'];
         emojis.forEach(emoji => {
-            const btn = document.createElement('button');
-            btn.className = 'emoji-item'; btn.innerText = emoji;
+            const btn = document.createElement('button'); btn.className = 'emoji-item'; btn.innerText = emoji;
             btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); document.getElementById('emojiPicker').classList.add('hidden'); };
             picker.appendChild(btn);
         });
-
         document.addEventListener('click', function(event) {
-            var picker = document.getElementById('emojiPicker');
-            var btn = document.getElementById('emojiBtn');
-            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) { picker.classList.add('hidden'); }
+            var picker = document.getElementById('emojiPicker'); var btn = document.getElementById('emojiBtn');
+            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) picker.classList.add('hidden'); 
         });
     };
 
@@ -588,11 +512,7 @@
             renderMusicUI();
         }
         
-        // Auto scroll chat to bottom when opening game
-        setTimeout(() => {
-            const chatDiv = document.getElementById('chatMessages');
-            if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight;
-        }, 100);
+        setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
     }
 
     function goHome() {
@@ -604,14 +524,11 @@
     // --- DB LISTENERS ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        
-        let dbEng = data.movieEng || "";
-        let finalTamil = data.movieTamil || "";
-        let finalHint = data.hint || "";
+        let dbEng = data.movieEng || ""; let finalTamil = data.movieTamil || ""; let finalHint = data.hint || "";
 
         if (dbEng !== "" && MOVIE_COLLECTION.length > 0) {
             const match = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === dbEng.toLowerCase());
-            if (match) { finalTamil = match.tamil; }
+            if (match) finalTamil = match.tamil; 
         }
 
         gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: dbEng, movieTamil: finalTamil, hint: finalHint };
@@ -630,10 +547,16 @@
 
     db.ref('musicState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        musicStateObj = { isPlaying: data.isPlaying || false, currentTime: data.currentTime || 0, url: data.url || 'song.mp3', updatedBy: data.updatedBy || '' };
+        musicStateObj = { isPlaying: data.isPlaying || false, currentTime: data.currentTime || 0, url: data.url || '', updatedBy: data.updatedBy || '' };
         
-        if (musicStateObj.url !== audioEl.src && !audioEl.src.includes(musicStateObj.url)) {
-            audioEl.src = musicStateObj.url;
+        // Ensure URL is correctly formatted based on 'songs/' folder
+        let playUrl = musicStateObj.url;
+        if (playUrl && !playUrl.startsWith('http') && !playUrl.startsWith('songs/')) {
+            playUrl = 'songs/' + playUrl;
+        }
+
+        if (playUrl && playUrl !== audioEl.src && !audioEl.src.includes(playUrl)) {
+            audioEl.src = playUrl;
             audioEl.load();
         }
 
@@ -643,7 +566,7 @@
                 audioEl.currentTime = musicStateObj.currentTime;
             }
             if (musicStateObj.isPlaying && audioEl.paused) {
-                audioEl.play().catch(e => console.log("Autoplay prevented."));
+                audioEl.play().catch(e => console.log("Autoplay prevented. Tap screen to allow."));
             } else if (!musicStateObj.isPlaying && !audioEl.paused) {
                 audioEl.pause();
             }
@@ -653,16 +576,13 @@
     });
 
     audioEl.addEventListener('seeked', () => {
-        if (!ignoreNextSync) {
-            db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
-        }
+        if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
         ignoreNextSync = false;
     });
 
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1;
-        document.getElementById('sappiiScore').innerText = gameState.score2;
+        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
         
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
@@ -705,7 +625,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         ${maskExactString(gameState.movieTamil)}
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
+                        ${gameState.hint ? `<div class="hint-text">${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -777,28 +697,24 @@
     
     function getLetterCountExact(str) {
         if (!str) return 0;
+        let safeStr = str;
         let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
-        } else {
-            segments = str.split(''); 
-        }
+            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
+        } else { segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
         return segments.filter(c => c.trim() !== '').length;
     }
 
     function maskExactString(str) {
         if (!str) return "";
+        let safeStr = str;
         let html = `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
-        let segments = [];
-        if (window.Intl && Intl.Segmenter) {
-            const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
-        } else { segments = str.split(''); }
+        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
 
         let firstIdx = -1; let lastIdx = -1;
-        for (let i = 0; i < segments.length; i++) {
-            if (segments[i].trim() !== '') {
+        for (let i = 0; i < tokens.length; i++) {
+            if (tokens[i].trim() !== '') {
                 if (firstIdx === -1) firstIdx = i;
                 lastIdx = i;
             }
@@ -806,7 +722,7 @@
         if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
 
         let wordHtml = `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">`;
-        segments.forEach((char, idx) => {
+        tokens.forEach((char, idx) => {
             if (char.trim() === '') {
                 wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
             } else if (idx === firstIdx || idx === lastIdx) {
@@ -926,10 +842,30 @@
     }
 
     // ================= MUSIC LOUNGE LOGIC =================
+    function nextSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = musicStateObj.url.replace('songs/', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
+        let newUrl = 'songs/' + SONG_COLLECTION[idx];
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function prevSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = musicStateObj.url.replace('songs/', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
+        let newUrl = 'songs/' + SONG_COLLECTION[idx];
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
     function renderMusicUI() {
         const container = document.getElementById('gameContentArea');
         const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
         const playBtnText = musicStateObj.isPlaying ? 'PAUSE' : 'PLAY';
+        
+        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '') : "";
         
         container.innerHTML = `
             <div class="card" style="text-align:center;">
@@ -938,16 +874,18 @@
                 </div>
                 <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
                 <p style="font-size:10px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;">
-                    ${musicStateObj.isPlaying ? '🎵 Playing in sync' : 'Paused'}
+                    ${musicStateObj.isPlaying ? '🎵 Playing in sync' : 'Paused (Tap screen once to allow Audio)'}
                 </p>
                 
-                <input type="text" id="musicUrl" placeholder="Select from list or type link..." value="${musicStateObj.url}" list="songList" style="font-size:10px; text-transform:none;">
+                <input type="text" id="musicUrl" placeholder="Select from list or type link..." value="${displayUrl}" list="songList" style="font-size:10px; text-transform:none;">
                 <button onclick="changeSong()" style="margin-top:5px; margin-bottom:20px; padding:12px; font-size:10px;">LOAD SONG</button>
 
-                <div class="music-controls">
-                    <button class="music-btn play" onclick="togglePlayPause()">${playBtnText}</button>
-                    <button class="music-btn sync" onclick="forceSync()">SYNC AUDIO</button>
+                <div class="music-controls" style="display:flex; align-items:center; gap: 10px;">
+                    <button class="music-btn sync" style="padding: 10px;" onclick="prevSong()" title="Previous">⏮️</button>
+                    <button class="music-btn play" style="flex:1;" onclick="togglePlayPause()">${playBtnText}</button>
+                    <button class="music-btn sync" style="padding: 10px;" onclick="nextSong()" title="Next">⏭️</button>
                 </div>
+                <button class="music-btn sync" style="margin-top:15px; width:100%;" onclick="forceSync()">🔄 SYNC AUDIO</button>
             </div>
         `;
     }
@@ -963,9 +901,15 @@
     }
 
     function changeSong() {
-        const newUrl = document.getElementById('musicUrl').value.trim();
+        let newUrl = document.getElementById('musicUrl').value.trim();
         if(!newUrl) return alert("Please enter a valid link or filename!");
-        db.ref('musicState').update({ url: newUrl, isPlaying: false, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+        
+        // Auto prepends 'songs/' if it's not a full web link
+        if (!newUrl.startsWith('http') && !newUrl.startsWith('songs/')) {
+            newUrl = 'songs/' + newUrl;
+        }
+        
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
     }
 
     function forceSync() {
@@ -980,13 +924,13 @@
     
     function confirmReset(starter) { 
         db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
-        db.ref('chatMessages').remove(); // WIPES CHAT HISTORY
+        db.ref('chatMessages').remove(); 
         closeResetModal(); 
     }
     
     function confirmResetWord() { 
         db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0, usedWords: null }); 
-        db.ref('chatMessages').remove(); // WIPES CHAT HISTORY
+        db.ref('chatMessages').remove(); 
         closeResetModal(); 
     }
 
@@ -1012,23 +956,20 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Copy Message
     function copyMsg(id) {
         const txt = document.getElementById('text-' + id).innerText;
         navigator.clipboard.writeText(txt);
         showToast("COPIED!");
     }
 
-    // Delete Message
     function deleteMsg(id) {
         db.ref('chatMessages/' + id).remove();
         showToast("DELETED!");
     }
 
-    // Handle Chat Wipe in UI real-time
     db.ref('chatMessages').on('value', (snapshot) => {
         if(!snapshot.exists()) {
-            document.getElementById('chatMessages').innerHTML = ''; // Clear div if wiped
+            document.getElementById('chatMessages').innerHTML = ''; 
         }
     });
 
@@ -1053,8 +994,7 @@
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        // PREMIUM SVG ICONS FOR COPY & DELETE
-        const copySvg = `<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        const copySvg = `<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"></path></svg>`;
         const delSvg = `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 
         const copyBtn = `<button class="msg-action-btn copy-btn" onclick="copyMsg('${msgKey}')" title="Copy">${copySvg}</button>`;
@@ -1074,7 +1014,6 @@
         if (isChatLoaded && !isMine && !isSystem) { showToast(`NEW MESSAGE FROM ${data.sender}`); }
     });
 
-    // Handle single message deletion in UI
     db.ref('chatMessages').on('child_removed', (snapshot) => {
         const msgDiv = document.getElementById(`msg-${snapshot.key}`);
         if(msgDiv) msgDiv.remove();
