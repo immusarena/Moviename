@@ -45,7 +45,9 @@
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* Home Page Cinematic Banner */
+        /* Home Page Elements */
+        .home-top-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 10px; }
+        
         .home-banner-wrapper { position: relative; width: 100%; height: 180px; margin-bottom: 20px; border-radius: 20px; padding: 2px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); overflow: hidden; transition: all 0.4s ease; cursor: pointer; }
         .home-banner-img { width: 100%; height: 100%; border-radius: 18px; object-fit: cover; opacity: 0.85; transition: 0.4s ease; filter: contrast(1.1); }
         .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
@@ -67,7 +69,6 @@
         .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* SLEEK THEME BUTTON */
-        .theme-wrapper { display: flex; justify-content: flex-end; margin-bottom: 15px; }
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
         .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
         .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease; }
@@ -106,7 +107,7 @@
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
         .order-btn:hover { background: rgba(74, 222, 128, 0.1); transform: scale(1.02); }
 
-        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
+        button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
         button:active { transform: scale(0.96); }
         
@@ -121,11 +122,10 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        /* PERFECT MASKING VIEW - 247 Letters Supported */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 15px 0 20px 0; line-height: 1.5; font-family: 'Latha', sans-serif;}
-        .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
-        .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); }
-        .mask-space { width: 15px; } /* Ensures word gaps are visible but responsive */
+        /* PERFECT MASKING VIEW - Tamil Native Format */
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        .mask-char { color: var(--text-main); font-size: 30px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .mask-dash { color: var(--accent-color); font-size: 30px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); }
 
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
@@ -159,11 +159,6 @@
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
         
-        .svg-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
-        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
-
         /* Emoji Picker */
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
@@ -187,10 +182,9 @@
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
-    
     <div class="home-top-bar">
         <div class="theme-wrapper">
-            <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
+            <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()">
                 <div id="themeIndicator" class="theme-dot"></div>
                 <span class="theme-label">THEME</span>
             </button>
@@ -198,30 +192,21 @@
     </div>
 
     <div class="home-banner-wrapper">
-        <img src="1000243508.jpg" alt="Banner" class="home-banner-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\'/></svg>'">
+        <img src="1000243508.jpg" alt="Banner" class="home-banner-img" onerror="this.style.display='none'">
     </div>
 
     <h1 class="app-title">IMMU'S HUB</h1>
     <p class="app-subtitle">CHOOSE YOUR ARENA</p>
     
     <div class="card" style="padding: 35px 20px;">
-        <button class="game-menu-btn" onclick="openGame('movie')">
-            <svg class="svg-icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
-            MOVIE GUESSING
-        </button>
-        <button class="game-menu-btn blue" onclick="openGame('word')">
-            <svg class="svg-icon" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
-            WORD RACE
-        </button>
+        <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
+        <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
     </div>
 </div>
 
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
-        <button class="back-btn" onclick="goHome()">
-            <svg class="svg-icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            BACK
-        </button>
+        <button class="back-btn" onclick="goHome()">BACK</button>
         <h2 id="activeGameBadge" class="game-title-text">MOVIE GUESSING</h2>
     </div>
 
@@ -259,9 +244,7 @@
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         <div class="chat-input-group">
-            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">
-                <svg class="svg-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-            </button>
+            <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)" style="font-size: 18px;">😊</button>
             <div id="emojiPicker" class="emoji-picker hidden"></div>
             <input type="text" id="chatInput" class="chat-input" placeholder="Type a message...">
             <div class="chat-btn-group">
@@ -312,20 +295,18 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
-    
-    // Arrays to hold data from TXT
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
-        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#aaaaaa', '--glow-shadow': 'rgba(255, 75, 114, 0.4)' } },
-        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#8a9ab3', '--glow-shadow': 'rgba(0, 210, 255, 0.4)' } },
-        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)', '--text-main': '#ffffff', '--text-muted': '#888888', '--glow-shadow': 'rgba(255, 0, 60, 0.4)' } },
-        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#e0eade', '--text-muted': '#819385', '--glow-shadow': 'rgba(34, 197, 94, 0.4)' } },
-        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#fffefc', '--text-muted': '#a39c8f', '--glow-shadow': 'rgba(245, 158, 11, 0.4)' } },
-        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)', '--text-main': '#ffffff', '--text-muted': '#666666', '--glow-shadow': 'rgba(255, 0, 60, 0.5)' } },
-        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)', '--text-main': '#ffffff', '--text-muted': '#c084fc', '--glow-shadow': 'rgba(217, 70, 239, 0.4)' } },
-        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)', '--text-main': '#ffffff', '--text-muted': '#7dd3fc', '--glow-shadow': 'rgba(56, 189, 248, 0.4)' } }
+        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)' } },
+        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)' } },
+        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)' } },
+        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)' } },
+        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
@@ -374,14 +355,12 @@
     // --- STRICT TXT LOADER ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; 
-        let hasFiles = false;
         try {
             const engRes = await fetch('movies_eng.txt');
             const tamilRes = await fetch('movies_tamil.txt');
             const heroRes = await fetch('heroes.txt');
             
             if (engRes.ok && tamilRes.ok) {
-                hasFiles = true;
                 const eLines = (await engRes.text()).split('\n');
                 const tLines = (await tamilRes.text()).split('\n');
                 let hLines = [];
@@ -400,8 +379,8 @@
             }
         } catch (error) { console.error("TXT Load Error:", error); }
 
-        if (!hasFiles || MOVIE_COLLECTION.length === 0) {
-            console.warn("No TXT files found! Add movies_eng.txt and movies_tamil.txt to GitHub.");
+        if (MOVIE_COLLECTION.length === 0) {
+            console.warn("No TXT files found! Please upload movies_eng.txt and movies_tamil.txt to your GitHub repo.");
         }
 
         const list = document.getElementById('movieList');
@@ -456,6 +435,7 @@
         document.getElementById('homeScreen').classList.remove('hidden');
     }
 
+    // --- DB LISTENER: NO MORE AUTO-TRANSLATION ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         gameState = { 
@@ -464,7 +444,7 @@
             score1: data.score1 || 0, 
             score2: data.score2 || 0, 
             movieEng: data.movieEng || "", 
-            movieTamil: data.movieTamil || "", 
+            movieTamil: data.movieTamil || "", // EXACTLY from DB
             hint: data.hint || "" 
         };
         if(activeGame === 'movie') renderMovieGameUI();
@@ -507,13 +487,13 @@
                 container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
             }
         } else if (gameState.status === "guessing") {
-            const letterCount = getLetterCount(gameState.movieTamil);
+            const letterCount = getLetterCountExact(gameState.movieTamil);
             if (gameState.turn === myName) {
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
                         
-                        ${maskTamilFull(gameState.movieTamil)}
+                        ${maskExactString(gameState.movieTamil)}
                         
                         <div class="letter-count">${letterCount} LETTERS</div>
                         
@@ -526,7 +506,7 @@
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         
-                        ${maskTamilFull(gameState.movieTamil)}
+                        ${maskExactString(gameState.movieTamil)}
                         
                         <div class="letter-count">${letterCount} LETTERS</div>
                         <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
@@ -555,12 +535,12 @@
             else { document.getElementById('hintInput').value = ""; }
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
-            document.getElementById('tamilPreview').innerText = "Select movie from list!";
+            document.getElementById('tamilPreview').innerText = "Select from list!";
         }
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
+        if (MOVIE_COLLECTION.length === 0) return alert("Wait 2 seconds! Text files are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         
@@ -578,9 +558,10 @@
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
         
         if (!foundMovie) {
-            return alert("Please select a movie strictly from the dropdown list!");
+            return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST! (We only use names from your TXT file)");
         }
 
+        // We push EXACTLY the string from the TXT file. No changes, no translations.
         db.ref('gameState').update({ movieEng: foundMovie.eng.toLowerCase(), movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
     }
     
@@ -606,68 +587,64 @@
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
-
-    // --- FLAWLESS 247 TAMIL LETTER LOGIC (using Intl.Segmenter) ---
-    function getTamilLettersArray(str) {
-        if (!str) return [];
-        // Uses native browser segmenter to split exact characters (all 247 tamil letters)
+    
+    // --- 100% PERFECT MASKING LOGIC FOR ANY STRING ---
+    function getLetterCountExact(str) {
+        if (!str) return 0;
+        let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            return Array.from(segmenter.segment(str)).map(s => s.segment);
+            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
+        } else {
+            segments = str.split(''); // Fallback
         }
-        // Fallback array logic
-        return str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|[a-zA-Z0-9]|\s/g) || [];
+        return segments.filter(c => c.trim() !== '').length;
     }
 
-    function getLetterCount(str) { 
-        if (!str) return 0;
-        const words = str.split(" ");
-        let count = 0;
-        words.forEach(word => {
-            const chars = getTamilLettersArray(word);
-            count += chars.length;
-        });
-        return count; 
-    }
-    
-    // FLAWLESS MASKING: Only hides middle letters. Maintains exact spacing structure.
-    function maskTamilFull(str) {
-        if(!str) return "";
-        
-        const words = str.split(" ");
+    function maskExactString(str) {
+        if (!str) return "";
         let html = `<div style="display:flex; flex-wrap:wrap; justify-content:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
-        
-        // Find total character count to accurately find first and last
-        let totalChars = getLetterCount(str);
-        if (totalChars === 0) return `<span class="mask-dash">_</span>`;
 
-        let globalIndex = 0;
+        // Split entire string into exact visual graphemes (Spaces included!)
+        let segments = [];
+        if (window.Intl && Intl.Segmenter) {
+            const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
+            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
+        } else {
+            segments = str.split('');
+        }
 
-        words.forEach((word, wordIdx) => {
-            const chars = getTamilLettersArray(word);
-            let wordHtml = `<div style="display:flex; gap:6px;">`;
-            
-            chars.forEach((char) => {
-                let isFirst = (globalIndex === 0);
-                let isLast = (globalIndex === totalChars - 1);
-                
-                if (isFirst || isLast) {
-                    wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
-                } else {
-                    wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
-                }
-                globalIndex++;
-            });
-            wordHtml += `</div>`;
-            html += wordHtml;
-            
-            // Add a visual space between words if not the last word
-            if (wordIdx < words.length - 1) {
-                html += `<div style="width: 15px;"></div>`;
+        // Find the absolute first and last characters that are NOT spaces
+        let firstIdx = -1;
+        let lastIdx = -1;
+
+        for (let i = 0; i < segments.length; i++) {
+            if (segments[i].trim() !== '') {
+                if (firstIdx === -1) firstIdx = i;
+                lastIdx = i;
+            }
+        }
+
+        if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
+
+        let wordHtml = `<div style="display:flex; gap:6px;">`;
+
+        segments.forEach((char, idx) => {
+            if (char.trim() === '') {
+                // If it's a space, close current div and start a new one to allow word-wrap!
+                wordHtml += `</div><div style="width:15px;"></div><div style="display:flex; gap:6px;">`;
+            } else if (idx === firstIdx || idx === lastIdx) {
+                // VERY FIRST and VERY LAST letter of the entire string
+                wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
+            } else {
+                // Everything else is masked!
+                wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
             }
         });
 
-        html += `</div>`;
+        wordHtml += `</div>`;
+        html += wordHtml + `</div>`;
+
         return html;
     }
 
@@ -759,7 +736,11 @@
     // --- RESET MODALS ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
-    function confirmReset(starter) { db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); closeResetModal(); }
+    function confirmReset(starter) { 
+        // Pass empty strings so old corrupted data is wiped out completely
+        db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
+        closeResetModal(); 
+    }
     function confirmResetWord() { db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0 }); closeResetModal(); }
 
     // --- ONLINE STATUS & CHAT ---
