@@ -133,6 +133,13 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
+        /* PERFECT MASKING VIEW - Tamil Native Format */
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
+        .mask-space { width: 15px; }
+        .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
+        .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;}
+
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
@@ -157,6 +164,7 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
@@ -218,7 +226,7 @@
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
         <button class="back-btn" onclick="goHome()">BACK</button>
-        <h2 id="activeGameBadge" class="game-title-text">MOVIE GUESSING</h2>
+        <h2 id="activeGameBadge" class="game-title-text">GAME</h2>
     </div>
 
     <div class="vs-container">
@@ -305,7 +313,7 @@
 
     let activeGame = 'home';
     let gameState = {}; 
-    let wordGameState = {}; 
+    let wordGameState = { usedWords: {} }; 
     let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
@@ -320,18 +328,14 @@
         { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
-    
     let particleColor1 = '#FF4B72';
     let particleColor2 = '#4ade80';
 
     function applyTheme(index) {
-        for (const [key, value] of Object.entries(themes[index].vars)) { 
-            document.documentElement.style.setProperty(key, value); 
-        }
+        for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
         particleColor1 = themes[index].vars['--primary-color'];
         particleColor2 = themes[index].vars['--accent-color'];
     }
-
     function cycleTheme() {
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
         localStorage.setItem('appTheme', currentThemeIndex);
@@ -344,42 +348,26 @@
     const ctx = canvas.getContext('2d');
     let particlesArray = [];
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
-    }
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
     window.addEventListener('resize', resizeCanvas);
     
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
             this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.4 - 0.2;
-            this.speedY = Math.random() * 0.4 - 0.2;
+            this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
             this.colorType = Math.random() > 0.5 ? 1 : 2;
             this.opacity = Math.random() * 0.5 + 0.1;
         }
         update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-
-            if (this.x < 0) this.x = canvas.width;
-            if (this.x > canvas.width) this.x = 0;
-            if (this.y < 0) this.y = canvas.height;
-            if (this.y > canvas.height) this.y = 0;
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
         }
         draw() {
-            ctx.globalAlpha = this.opacity;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.globalAlpha = this.opacity; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             let color = this.colorType === 1 ? particleColor1 : particleColor2;
-            ctx.fillStyle = color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = color;
-            ctx.fill();
-            ctx.globalAlpha = 1; 
+            ctx.fillStyle = color; ctx.shadowBlur = 15; ctx.shadowColor = color; ctx.fill(); ctx.globalAlpha = 1; 
         }
     }
 
@@ -387,38 +375,43 @@
         particlesArray = [];
         let numberOfParticles = (canvas.width * canvas.height) / 12000;
         if (numberOfParticles > 60) numberOfParticles = 60;
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+        for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
     }
 
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-        }
+        for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
         requestAnimationFrame(animateParticles);
     }
-    
-    resizeCanvas();
-    animateParticles();
+    resizeCanvas(); animateParticles();
 
-    // --- TRANSLITERATOR (Fallback Only) ---
-    const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
-
-    function transliterate(text) {
-        let result = ""; let i = 0; const lower = text.toLowerCase();
-        while (i < lower.length) {
-            let found = false;
-            for (let len = 4; len >= 1; len--) {
-                let chunk = lower.substring(i, i + len);
-                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
+    // --- 🚨 ANTI-CHEAT SYSTEM ---
+    let cheatCooldown = false;
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && !cheatCooldown) {
+            const isMovieGuessing = (activeGame === 'movie' && gameState.status === 'guessing' && gameState.turn !== myName);
+            const isWordRacing = (activeGame === 'word' && wordGameState.status === 'race_phase');
+            if (isMovieGuessing || isWordRacing) {
+                db.ref('chatMessages').push({ sender: "SYSTEM", text: `🚨 ${myName.toUpperCase()} LEFT THE APP (SEARCHING GOOGLE?) 👀`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+                cheatCooldown = true; setTimeout(() => { cheatCooldown = false; }, 10000);
             }
-            if (!found) { result += text[i]; i++; }
         }
-        return result;
-    }
+    });
+
+    // --- TYPING INDICATOR ---
+    let typingTimer;
+    document.getElementById('chatInput').addEventListener('input', () => {
+        db.ref(`typingStatus/${myName}`).set(true);
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => { db.ref(`typingStatus/${myName}`).set(false); }, 1500);
+    });
+
+    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
+        const isTyping = snapshot.val();
+        const indicator = document.getElementById('typingIndicator');
+        if (isTyping) { indicator.innerText = `${partnerName} IS TYPING...`; indicator.classList.remove('hidden'); } 
+        else { indicator.classList.add('hidden'); }
+    });
 
     // --- AUTO-SWAP TXT LOADER ---
     async function loadMoviesFromTXT() {
@@ -433,32 +426,22 @@
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
-                if (heroRes.ok) {
-                    hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
-                }
+                if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 
                 // AUTO FIX: If the English file contains Tamil characters, swap the arrays automatically!
                 if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) {
-                    let temp = eLines;
-                    eLines = tLines;
-                    tLines = temp;
+                    let temp = eLines; eLines = tLines; tLines = temp;
                 }
                 
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(eLines[i] && tLines[i]) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
-                    }
+                    if(eLines[i] && tLines[i]) { MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" }); }
                 }
-                console.log("Successfully loaded " + MOVIE_COLLECTION.length + " movies!");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
 
-        const list = document.getElementById('movieList');
-        list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(m => {
-            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
-        });
+        const list = document.getElementById('movieList'); list.innerHTML = "";
+        MOVIE_COLLECTION.forEach(m => { const option = document.createElement('option'); option.value = m.eng; list.appendChild(option); });
     }
 
     window.onload = () => {
@@ -508,40 +491,27 @@
     // --- DB LISTENER ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
+        let dbEng = data.movieEng || ""; let finalTamil = data.movieTamil || ""; let finalHint = data.hint || "";
         
-        let dbEng = data.movieEng || "";
-        let finalTamil = data.movieTamil || "";
-        let finalHint = data.hint || "";
-
         if (dbEng !== "" && MOVIE_COLLECTION.length > 0) {
             const match = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === dbEng.toLowerCase());
-            if (match) {
-                finalTamil = match.tamil;
-            }
+            if (match) { finalTamil = match.tamil; }
         }
 
-        gameState = { 
-            turn: data.turn || "immu", 
-            status: data.status || "set", 
-            score1: data.score1 || 0, 
-            score2: data.score2 || 0, 
-            movieEng: dbEng, 
-            movieTamil: finalTamil, 
-            hint: finalHint 
-        };
+        gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: dbEng, movieTamil: finalTamil, hint: finalHint };
         if(activeGame === 'movie') renderMovieGameUI();
     });
 
     db.ref('wordGameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0 };
+        wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0, usedWords: data.usedWords || {} };
         if(activeGame === 'word') renderWordGameUI();
     });
 
+    // ================= MOVIE GUESSING LOGIC =================
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1;
-        document.getElementById('sappiiScore').innerText = gameState.score2;
+        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
         
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
@@ -557,12 +527,10 @@
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR TURN</h3>
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select movie from the list</p>
-                        
                         <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
                         <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
-                        
                         <button onclick="setMovie()">START GAME</button>
                     </div>`;
             } else {
@@ -574,11 +542,8 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
-                        
                         ${maskExactString(gameState.movieTamil)}
-                        
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        
                         <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">IF PARTNER MADE A SPELLING MISTAKE:</p>
                         <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
@@ -587,11 +552,9 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
-                        
                         ${maskExactString(gameState.movieTamil)}
-                        
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
+                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -611,7 +574,6 @@
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
-        
         if(foundMovie) { 
             if(foundMovie.hero) { document.getElementById('hintInput').value = foundMovie.hero.toUpperCase(); } 
             else { document.getElementById('hintInput').value = ""; }
@@ -625,10 +587,8 @@
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! Movies are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        
         if(randomObj.hero) { document.getElementById('hintInput').value = randomObj.hero.toUpperCase(); } 
         else { document.getElementById('hintInput').value = "GUESS THE HERO!"; }
-        
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
@@ -636,13 +596,8 @@
         const rawEng = document.getElementById('movieInput').value.trim(); 
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
-        
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        
-        if (!foundMovie) {
-            return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!");
-        }
-
+        if (!foundMovie) { return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); }
         db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
     }
     
@@ -669,68 +624,52 @@
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
     
-    // --- 100% PERFECT TAMIL MASKING LOGIC ---
     function getLetterCountExact(str) {
         if (!str) return 0;
-        let safeStr = str;
-        // Last-resort fail-safe translation
-        if (!/[\u0B80-\u0BFF]/.test(safeStr)) safeStr = transliterate(safeStr);
-
         let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
+            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
         } else {
-            segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || [];
+            segments = str.split(''); 
         }
         return segments.filter(c => c.trim() !== '').length;
     }
 
     function maskExactString(str) {
         if (!str) return "";
-        let safeStr = str;
-        // Fail-safe to prevent English letters from getting into the mask logic
-        if (!/[\u0B80-\u0BFF]/.test(safeStr)) safeStr = transliterate(safeStr);
-
         let html = `<div style="display:flex; flex-direction:column; align-items:center; gap:8px; line-height: 1.6; margin-bottom: 20px;">`;
+        let segments = [];
+        if (window.Intl && Intl.Segmenter) {
+            const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
+            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
+        } else { segments = str.split(''); }
 
-        // Strictly pull only Tamil letters and spaces
-        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
-
-        let firstIdx = -1;
-        let lastIdx = -1;
-
-        for (let i = 0; i < tokens.length; i++) {
-            if (tokens[i].trim() !== '') {
+        let firstIdx = -1; let lastIdx = -1;
+        for (let i = 0; i < segments.length; i++) {
+            if (segments[i].trim() !== '') {
                 if (firstIdx === -1) firstIdx = i;
                 lastIdx = i;
             }
         }
-
         if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
 
         let wordHtml = `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">`;
-
-        tokens.forEach((char, idx) => {
+        segments.forEach((char, idx) => {
             if (char.trim() === '') {
-                // Word Wrap Space
                 wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
             } else if (idx === firstIdx || idx === lastIdx) {
-                // VERY FIRST and VERY LAST Tamil letter
                 wordHtml += `<span class="mask-char" style="color:var(--text-main); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;">${char}</span>`;
             } else {
-                // MASK
                 wordHtml += `<span class="mask-dash" style="color:var(--accent-color); font-size:30px; font-weight:800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;">_</span>`;
             }
         });
 
-        wordHtml += `</div>`;
-        html += wordHtml + `</div>`;
-
+        wordHtml += `</div>`; html += wordHtml + `</div>`;
         return html;
     }
 
-    // ================= WORD GAME LOGIC =================
+    // ================= WORD GAME LOGIC (WITH API CHECK) =================
     function renderWordGameUI() {
         const container = document.getElementById('gameContentArea');
         document.getElementById('immuScore').innerText = wordGameState.score1;
@@ -797,17 +736,41 @@
 
     function setWordOrder(start, end) { db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end }); }
 
-    function submitRaceWord() {
+    async function submitRaceWord() {
         const word = document.getElementById('raceWordInput').value.trim().toLowerCase();
         const start = wordGameState.startLetter.toLowerCase(); const end = wordGameState.endLetter.toLowerCase();
-        if (word.length >= 2 && word.startsWith(start) && word.endsWith(end)) {
-            const scoreKey = (myName === "immu") ? 'score1' : 'score2';
-            db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
-            db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-            db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH THE WORD "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
-        } else {
+        
+        if (word.length < 2 || !word.startsWith(start) || !word.endsWith(end)) {
             document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`;
+            return;
         }
+
+        // DUPLICATE WORD CHECK
+        if (wordGameState.usedWords && wordGameState.usedWords[word]) {
+            document.getElementById('raceFeedback').innerText = `ALREADY USED! FIND A NEW WORD.`;
+            return;
+        }
+
+        // DICTIONARY CHECK (To prevent gibberish)
+        document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
+        document.getElementById('raceFeedback').style.color = "var(--text-main)";
+
+        try {
+            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            if (!res.ok) {
+                document.getElementById('raceFeedback').innerText = `NOT A VALID ENGLISH WORD!`;
+                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
+                return;
+            }
+        } catch (e) {
+            // API down, allow it
+        }
+
+        const scoreKey = (myName === "immu") ? 'score1' : 'score2';
+        db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
+        db.ref(`wordGameState/usedWords/${word}`).set(true); // Save word to stop duplicates
+        db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
     function skipWord() {
@@ -822,9 +785,12 @@
         db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
         closeResetModal(); 
     }
-    function confirmResetWord() { db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0 }); closeResetModal(); }
+    function confirmResetWord() { 
+        db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0, usedWords: null }); 
+        closeResetModal(); 
+    }
 
-    // --- ONLINE STATUS & CHAT ---
+    // --- ONLINE STATUS & CHAT & SECRET POWER ---
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
             const myPresenceRef = db.ref(`presence/${myName}`);
@@ -874,6 +840,31 @@
         const chatInput = document.getElementById('chatInput');
         const text = chatInput.value.trim();
         if(!text) return;
+
+        // 🔥 IMMU'S SECRET ADMIN POWERS 🔥
+        if (myName === 'immu') {
+            if (text.startsWith('/add ')) {
+                const pts = parseInt(text.replace('/add ', ''));
+                if (!isNaN(pts)) {
+                    // Update scores silently
+                    if (activeGame === 'movie') db.ref(`gameState/score1`).transaction(s => (s || 0) + pts);
+                    if (activeGame === 'word') db.ref(`wordGameState/score1`).transaction(s => (s || 0) + pts);
+                    showToast(`SECRET: +${pts} POINTS ADDED!`);
+                }
+                chatInput.value = ""; return; // Stop it from appearing in chat
+            }
+            if (text.startsWith('/minus ')) {
+                const pts = parseInt(text.replace('/minus ', ''));
+                if (!isNaN(pts)) {
+                    // Update scores silently
+                    if (activeGame === 'movie') db.ref(`gameState/score2`).transaction(s => (s || 0) - pts);
+                    if (activeGame === 'word') db.ref(`wordGameState/score2`).transaction(s => (s || 0) - pts);
+                    showToast(`SECRET: -${pts} POINTS TAKEN FROM SAPPII!`);
+                }
+                chatInput.value = ""; return; // Stop it from appearing in chat
+            }
+        }
+
         db.ref('chatMessages').push({ sender: myName.toUpperCase(), text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
         chatInput.value = ""; document.getElementById('emojiPicker').classList.add('hidden');
     }
