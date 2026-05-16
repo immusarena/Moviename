@@ -136,8 +136,8 @@
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        /* PERFECT MASKING VIEW - Tamil Native Format */
-        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; }
+        /* PERFECT MASKING VIEW */
+        .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
         .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
         .mask-space { width: 15px; }
         .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
@@ -197,6 +197,7 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        .cheat-message { background: rgba(255, 68, 68, 0.1); color: #ff4d4d; align-self: center; text-align: center; border: 1px solid rgba(255, 68, 68, 0.5); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
         /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
@@ -289,6 +290,7 @@
     </div>
 
     <datalist id="movieList"></datalist>
+    <datalist id="songList"></datalist>
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
@@ -355,6 +357,7 @@
     let wordGameState = {}; 
     let musicStateObj = {}; 
     let MOVIE_COLLECTION = []; 
+    let SONG_COLLECTION = [];
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -484,15 +487,18 @@
         }
     });
 
-    // --- AUTO-SWAP TXT LOADER ---
+    // --- AUTO-SWAP TXT LOADER & SONGS LOADER ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; 
+        SONG_COLLECTION = [];
         try {
             const cacheBuster = "?v=" + new Date().getTime();
             const engRes = await fetch('movies_eng.txt' + cacheBuster);
             const tamilRes = await fetch('movies_tamil.txt' + cacheBuster);
             const heroRes = await fetch('heroes.txt' + cacheBuster);
+            const songsRes = await fetch('songs.txt' + cacheBuster);
             
+            // Load Movies
             if (engRes.ok && tamilRes.ok) {
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
@@ -515,12 +521,24 @@
                     }
                 }
             }
+            
+            // Load Songs
+            if (songsRes.ok) {
+                SONG_COLLECTION = (await songsRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== "");
+            }
+
         } catch (error) { console.error("TXT Load Error:", error); }
 
         const list = document.getElementById('movieList');
         list.innerHTML = "";
         MOVIE_COLLECTION.forEach(m => {
             const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
+        });
+
+        const songList = document.getElementById('songList');
+        songList.innerHTML = "";
+        SONG_COLLECTION.forEach(s => {
+            const option = document.createElement('option'); option.value = s; songList.appendChild(option);
         });
     }
 
@@ -916,14 +934,14 @@
         container.innerHTML = `
             <div class="card" style="text-align:center;">
                 <div class="vinyl-container">
-                    <img src="1000243510.png" class="vinyl-record ${isSpinning}" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="1000243510.png" class="vinyl-record ${isSpinning}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z\'/></svg>'">
                 </div>
                 <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
                 <p style="font-size:10px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;">
                     ${musicStateObj.isPlaying ? '🎵 Playing in sync' : 'Paused'}
                 </p>
                 
-                <input type="text" id="musicUrl" placeholder="Direct MP3 Link or filename (e.g. song.mp3)" value="${musicStateObj.url}" style="font-size:10px; text-transform:none;">
+                <input type="text" id="musicUrl" placeholder="Select from list or type link..." value="${musicStateObj.url}" list="songList" style="font-size:10px; text-transform:none;">
                 <button onclick="changeSong()" style="margin-top:5px; margin-bottom:20px; padding:12px; font-size:10px;">LOAD SONG</button>
 
                 <div class="music-controls">
