@@ -92,7 +92,7 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
         input::placeholder { color: #666; font-weight: 600;}
         
@@ -108,6 +108,11 @@
         .random-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
         .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
+        
+        /* Fixed Manual Point Button Styling */
+        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 5px; padding: 10px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; }
+        .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
+
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
         .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
@@ -141,14 +146,14 @@
         .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
         
         .svg-icon { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0; position: relative;}
+        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
-        /* PREMIUM EMOJI PICKER */
-        .emoji-picker { position: absolute; bottom: calc(100% + 15px); left: 0; width: 240px; background: rgba(15, 10, 25, 0.95); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; z-index: 100; box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px var(--glow-shadow); animation: slideUp 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
-        .emoji-item { font-size: 22px; background: rgba(255,255,255,0.05); border: 1px solid transparent; width: 100%; aspect-ratio: 1; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; padding: 0;}
-        .emoji-item:hover { transform: scale(1.15) translateY(-2px); background: rgba(255,255,255,0.15); border-color: var(--primary-color); box-shadow: 0 5px 15px var(--glow-shadow); z-index: 2;}
+        /* Emoji Picker */
+        .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
+        .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
+        .emoji-item:hover { transform: scale(1.3); }
 
         /* Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
@@ -168,6 +173,7 @@
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
+    
     <div class="theme-wrapper">
         <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
             <div id="themeIndicator" class="theme-dot"></div>
@@ -284,19 +290,20 @@
     let gameState = {}; 
     let wordGameState = {}; 
     
+    // Dynamic List from TXT files
     let MOVIE_COLLECTION = []; 
     let selectedPerfectTamil = "";
 
-    // --- 🎨 8 PREMIUM THEMES (Including Stealth & Neon) ---
+    // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
-        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#aaaaaa', '--glow-shadow': 'rgba(255, 75, 114, 0.4)' } }, // Love Vibe
-        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#8a9ab3', '--glow-shadow': 'rgba(0, 210, 255, 0.4)' } }, // Ocean Blue
-        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)', '--text-main': '#ffffff', '--text-muted': '#888888', '--glow-shadow': 'rgba(255, 0, 60, 0.4)' } }, // Cyberpunk
-        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#e0eade', '--text-muted': '#819385', '--glow-shadow': 'rgba(34, 197, 94, 0.4)' } }, // Nature Dark
-        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#fffefc', '--text-muted': '#a39c8f', '--glow-shadow': 'rgba(245, 158, 11, 0.4)' } }, // Gold Spark
-        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)', '--text-main': '#ffffff', '--text-muted': '#666666', '--glow-shadow': 'rgba(255, 0, 60, 0.5)' } }, // Stealth Red
-        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)', '--text-main': '#ffffff', '--text-muted': '#c084fc', '--glow-shadow': 'rgba(217, 70, 239, 0.4)' } }, // Neon Synth
-        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)', '--text-main': '#ffffff', '--text-muted': '#7dd3fc', '--glow-shadow': 'rgba(56, 189, 248, 0.4)' } } // Arctic Frost
+        { vars: { '--bg-color': '#0d0614', '--card-bg': 'rgba(29, 16, 46, 0.7)', '--primary-color': '#FF4B72', '--secondary-color': '#FF7694', '--accent-color': '#4ade80', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#aaaaaa', '--glow-shadow': 'rgba(255, 75, 114, 0.4)' } },
+        { vars: { '--bg-color': '#050a17', '--card-bg': 'rgba(16, 26, 50, 0.7)', '--primary-color': '#00d2ff', '--secondary-color': '#3a7bd5', '--accent-color': '#6FFFE9', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#ffffff', '--text-muted': '#8a9ab3', '--glow-shadow': 'rgba(0, 210, 255, 0.4)' } },
+        { vars: { '--bg-color': '#0a0a0a', '--card-bg': 'rgba(20, 20, 20, 0.8)', '--primary-color': '#FF003C', '--secondary-color': '#D9002E', '--accent-color': '#00FF41', '--border-color': 'rgba(255, 255, 255, 0.08)', '--text-main': '#ffffff', '--text-muted': '#888888', '--glow-shadow': 'rgba(255, 0, 60, 0.4)' } },
+        { vars: { '--bg-color': '#09100b', '--card-bg': 'rgba(18, 30, 20, 0.7)', '--primary-color': '#22c55e', '--secondary-color': '#16a34a', '--accent-color': '#fbbf24', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#e0eade', '--text-muted': '#819385', '--glow-shadow': 'rgba(34, 197, 94, 0.4)' } },
+        { vars: { '--bg-color': '#14120e', '--card-bg': 'rgba(35, 30, 24, 0.7)', '--primary-color': '#f59e0b', '--secondary-color': '#fbbf24', '--accent-color': '#ffffff', '--border-color': 'rgba(255, 255, 255, 0.1)', '--text-main': '#fffefc', '--text-muted': '#a39c8f', '--glow-shadow': 'rgba(245, 158, 11, 0.4)' } },
+        { vars: { '--bg-color': '#050505', '--card-bg': 'rgba(15, 15, 15, 0.8)', '--primary-color': '#ff003c', '--secondary-color': '#8a001a', '--accent-color': '#e5e5e5', '--border-color': 'rgba(255, 0, 60, 0.3)', '--text-main': '#ffffff', '--text-muted': '#666666', '--glow-shadow': 'rgba(255, 0, 60, 0.5)' } },
+        { vars: { '--bg-color': '#1a0b2e', '--card-bg': 'rgba(35, 15, 60, 0.7)', '--primary-color': '#d946ef', '--secondary-color': '#a855f7', '--accent-color': '#f472b6', '--border-color': 'rgba(217, 70, 239, 0.2)', '--text-main': '#ffffff', '--text-muted': '#c084fc', '--glow-shadow': 'rgba(217, 70, 239, 0.4)' } },
+        { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)', '--text-main': '#ffffff', '--text-muted': '#7dd3fc', '--glow-shadow': 'rgba(56, 189, 248, 0.4)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
 
@@ -333,24 +340,8 @@
         }
     });
 
-    // --- MASTER DATABASE ---
-    const MASTER_DATABASE = [
-        { eng: "Ghilli", tamil: "கில்லி", hero: "Vijay" }, { eng: "Thuppakki", tamil: "துப்பாக்கி", hero: "Vijay" }, { eng: "Master", tamil: "மாஸ்டர்", hero: "Vijay" }, { eng: "Leo", tamil: "லியோ", hero: "Vijay" }, { eng: "Kaththi", tamil: "கத்தி", hero: "Vijay" }, { eng: "Theri", tamil: "தெறி", hero: "Vijay" }, { eng: "Mersal", tamil: "மெர்சல்", hero: "Vijay" }, { eng: "Bigil", tamil: "பிகில்", hero: "Vijay" }, { eng: "Beast", tamil: "பீஸ்ட்", hero: "Vijay" }, { eng: "Varisu", tamil: "வாரிசு", hero: "Vijay" }, { eng: "GOAT", tamil: "கோட்", hero: "Vijay" }, { eng: "Pokkiri", tamil: "போக்கிரி", hero: "Vijay" }, { eng: "Sura", tamil: "சுறா", hero: "Vijay" }, { eng: "Bairavaa", tamil: "பைரவா", hero: "Vijay" }, { eng: "Puli", tamil: "புலி", hero: "Vijay" }, { eng: "Kushi", tamil: "குஷி", hero: "Vijay" }, { eng: "Sachien", tamil: "சச்சின்", hero: "Vijay" }, { eng: "Nanban", tamil: "நண்பன்", hero: "Vijay" },
-        { eng: "Mankatha", tamil: "மங்காத்தா", hero: "Ajith" }, { eng: "Billa", tamil: "பில்லா", hero: "Ajith" }, { eng: "Dheena", tamil: "தீனா", hero: "Ajith" }, { eng: "Viswasam", tamil: "விஸ்வாசம்", hero: "Ajith" }, { eng: "Thunivu", tamil: "துணிவு", hero: "Ajith" }, { eng: "Valimai", tamil: "வலிமை", hero: "Ajith" }, { eng: "Vivegam", tamil: "விவேகம்", hero: "Ajith" }, { eng: "Vedalam", tamil: "வேதாளம்", hero: "Ajith" }, { eng: "Veeram", tamil: "வீரம்", hero: "Ajith" }, { eng: "Amarkalam", tamil: "அமர்க்களம்", hero: "Ajith" }, { eng: "Vaali", tamil: "வாலி", hero: "Ajith" }, { eng: "Villain", tamil: "வில்லன்", hero: "Ajith" }, { eng: "Varalaru", tamil: "வரலாறு", hero: "Ajith" }, { eng: "Aarambam", tamil: "ஆரம்பம்", hero: "Ajith" }, { eng: "Yennai Arindhaal", tamil: "என்னை அறிந்தால்", hero: "Ajith" },
-        { eng: "Baasha", tamil: "பாட்ஷா", hero: "Rajinikanth" }, { eng: "Muthu", tamil: "முத்து", hero: "Rajinikanth" }, { eng: "Padayappa", tamil: "படையப்பா", hero: "Rajinikanth" }, { eng: "Sivaji", tamil: "சிவாஜி", hero: "Rajinikanth" }, { eng: "Enthiran", tamil: "எந்திரன்", hero: "Rajinikanth" }, { eng: "Jailer", tamil: "ஜெயிலர்", hero: "Rajinikanth" }, { eng: "Arunachalam", tamil: "அருணாச்சலம்", hero: "Rajinikanth" }, { eng: "Annamalai", tamil: "அண்ணாமலை", hero: "Rajinikanth" }, { eng: "Kaala", tamil: "காலா", hero: "Rajinikanth" }, { eng: "Kabali", tamil: "கபாலி", hero: "Rajinikanth" }, { eng: "Petta", tamil: "பேட்ட", hero: "Rajinikanth" }, { eng: "Darbar", tamil: "தர்பார்", hero: "Rajinikanth" }, { eng: "Thalapathi", tamil: "தளபதி", hero: "Rajinikanth" }, { eng: "Chandramukhi", tamil: "சந்திரமுகி", hero: "Rajinikanth" },
-        { eng: "Vikram", tamil: "விக்ரம்", hero: "Kamal Haasan" }, { eng: "Indian", tamil: "இந்தியன்", hero: "Kamal Haasan" }, { eng: "Nayakan", tamil: "நாயகன்", hero: "Kamal Haasan" }, { eng: "Anbe Sivam", tamil: "அன்பே சிவம்", hero: "Kamal Haasan" }, { eng: "Panchatanthiram", tamil: "பஞ்சதந்திரம்", hero: "Kamal Haasan" }, { eng: "Dasavathaaram", tamil: "தசாவதாரம்", hero: "Kamal Haasan" }, { eng: "Vishwaroopam", tamil: "விஸ்வரூபம்", hero: "Kamal Haasan" }, { eng: "Virumaandi", tamil: "விருமாண்டி", hero: "Kamal Haasan" }, { eng: "Vettaiyaadu Vilaiyaadu", tamil: "வேட்டையாடு விளையாடு", hero: "Kamal Haasan" },
-        { eng: "Ayan", tamil: "அயன்", hero: "Suriya" }, { eng: "Singam", tamil: "சிங்கம்", hero: "Suriya" }, { eng: "Jai Bhim", tamil: "ஜெய் பீம்", hero: "Suriya" }, { eng: "Ghajini", tamil: "கஜினி", hero: "Suriya" }, { eng: "Pithamagan", tamil: "பிதாமகன்", hero: "Suriya/Vikram" }, { eng: "Kanguva", tamil: "கங்குவா", hero: "Suriya" }, { eng: "Masss", tamil: "மாஸ்", hero: "Suriya" }, { eng: "Anjaan", tamil: "அஞ்சான்", hero: "Suriya" }, { eng: "Soorarai Pottru", tamil: "சூரரைப் போற்று", hero: "Suriya" }, { eng: "Vaaranam Aayiram", tamil: "வாரணம் ஆயிரம்", hero: "Suriya" },
-        { eng: "Kaithi", tamil: "கைதி", hero: "Karthi" }, { eng: "Paruthiveeran", tamil: "பருத்திவீரன்", hero: "Karthi" }, { eng: "Paiyaa", tamil: "பையா", hero: "Karthi" }, { eng: "Siruthai", tamil: "சிறுத்தை", hero: "Karthi" }, { eng: "Madras", tamil: "மெட்ராஸ்", hero: "Karthi" }, { eng: "Sulthan", tamil: "சுல்தான்", hero: "Karthi" }, { eng: "Sardar", tamil: "சர்தார்", hero: "Karthi" }, { eng: "Japan", tamil: "ஜப்பான்", hero: "Karthi" }, { eng: "Meiyazhagan", tamil: "மெய்யழகன்", hero: "Karthi" },
-        { eng: "Asuran", tamil: "அசுரன்", hero: "Dhanush" }, { eng: "Karnan", tamil: "கர்ணன்", hero: "Dhanush" }, { eng: "Aadukalam", tamil: "ஆடுகளம்", hero: "Dhanush" }, { eng: "Polladhavan", tamil: "பொல்லாதவன்", hero: "Dhanush" }, { eng: "Maari", tamil: "மாரி", hero: "Dhanush" }, { eng: "Pudhupettai", tamil: "புதுப்பேட்டை", hero: "Dhanush" }, { eng: "Thiruchitrambalam", tamil: "திருச்சிற்றம்பலம்", hero: "Dhanush" }, { eng: "Raayan", tamil: "ராயன்", hero: "Dhanush" }, { eng: "Anegan", tamil: "அனேகன்", hero: "Dhanush" }, { eng: "Vada Chennai", tamil: "வட சென்னை", hero: "Dhanush" },
-        { eng: "Doctor", tamil: "டாக்டர்", hero: "Sivakarthikeyan" }, { eng: "Don", tamil: "டான்", hero: "Sivakarthikeyan" }, { eng: "Maaveeran", tamil: "மாவீரன்", hero: "Sivakarthikeyan" }, { eng: "Ayalaan", tamil: "அயலான்", hero: "Sivakarthikeyan" }, { eng: "Amaran", tamil: "அமரன்", hero: "Sivakarthikeyan" }, { eng: "Remo", tamil: "ரெமோ", hero: "Sivakarthikeyan" }, { eng: "Rajini Murugan", tamil: "ரஜினி முருகன்", hero: "Sivakarthikeyan" },
-        { eng: "Maharaja", tamil: "மகாராஜா", hero: "Vijay Sethupathi" }, { eng: "Vikram Vedha", tamil: "விக்ரம் வேதா", hero: "Madhavan" }, { eng: "Pizza", tamil: "பீட்சா", hero: "Vijay Sethupathi" }, { eng: "Soodhu Kavvum", tamil: "சூது கவ்வும்", hero: "Vijay Sethupathi" },
-        { eng: "Love Today", tamil: "லவ் டுடே", hero: "Pradeep" }, { eng: "Alaipayuthey", tamil: "அலைபாயுதே", hero: "Madhavan" }, { eng: "Raja Rani", tamil: "ராஜா ராணி", hero: "Arya" }, { eng: "Roja", tamil: "ரோஜா", hero: "Arvind Swamy" }, { eng: "Bombay", tamil: "பம்பாய்", hero: "Arvind Swamy" }, { eng: "Jeans", tamil: "ஜீன்ஸ்", hero: "Prashanth" }, { eng: "Minnale", tamil: "மின்னலே", hero: "Madhavan" }, { eng: "Manjummel Boys", tamil: "மஞ்சும்மல் பாய்ஸ்", hero: "Soubin" }, { eng: "Premalu", tamil: "பிரேமலு", hero: "Naslen" }, { eng: "Good Night", tamil: "குட் நைட்", hero: "Manikandan" }, { eng: "Dada", tamil: "டாடா", hero: "Kavin" }, { eng: "Aruvi", tamil: "அருவி", hero: "Aditi" }, { eng: "Lubber Pandhu", tamil: "லப்பர் பந்து", hero: "Harish Kalyan" }
-    ];
-
-    // --- TXT LOADER WITH SMART MERGE ---
+    // --- TXT LOADER (Only loads from your GitHub TXT files!) ---
     async function loadMoviesFromTXT() {
-        MOVIE_COLLECTION = [...MASTER_DATABASE];
-
         try {
             const engRes = await fetch('movies_eng.txt');
             const tamilRes = await fetch('movies_tamil.txt');
@@ -365,27 +356,35 @@
                 const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const hLines = heroText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
+                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length, hLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
-                    }
+                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
                 }
+                console.log("Loaded TXT files perfectly!");
             } else if (engRes.ok && tamilRes.ok) {
+                // Failsafe: if heroes.txt is missing but movies exist
                 const engText = await engRes.text();
                 const tamilText = await tamilRes.text();
                 const eLines = engText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const tLines = tamilText.split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
+                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
-                    }
+                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
                 }
+                console.log("Loaded TXT movies (no heroes.txt found).");
+            } else {
+                console.warn("TXT files completely missing from GitHub. App needs movies_eng.txt and movies_tamil.txt");
+                MOVIE_COLLECTION = [];
             }
-        } catch (error) { console.error("Using Master DB due to TXT error."); }
+        } catch (error) { 
+            console.error("Error loading TXT:", error); 
+            MOVIE_COLLECTION = [];
+        }
 
+        // Update list for input suggestions
         const list = document.getElementById('movieList');
         list.innerHTML = "";
         MOVIE_COLLECTION.forEach(movieObj => {
@@ -395,7 +394,7 @@
         });
     }
 
-    // Initialize Emojis and Click Outside listener for Emoji Picker
+    // Initialize Picker and Outside click
     window.onload = () => {
         loadMoviesFromTXT();
         
@@ -412,7 +411,6 @@
             picker.appendChild(btn);
         });
 
-        // Click outside to close emoji picker
         document.addEventListener('click', function(event) {
             var picker = document.getElementById('emojiPicker');
             var btn = document.getElementById('emojiBtn');
@@ -453,17 +451,13 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        
-        let mt = data.movieTamil || data.movie || "";
-        if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
-        
         gameState = { 
             turn: data.turn || "immu", 
             status: data.status || "set", 
             score1: data.score1 || 0, 
             score2: data.score2 || 0, 
             movieEng: data.movieEng || data.movie || "", 
-            movieTamil: mt, 
+            movieTamil: data.movieTamil || "", 
             hint: data.hint || "" 
         };
         if(activeGame === 'movie') renderMovieGameUI();
@@ -475,7 +469,7 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // Translation fallback
+    // Translation fallback (only if manual type doesn't exist in txt)
     const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
 
     function transliterate(text) {
@@ -524,14 +518,23 @@
         } else if (gameState.status === "guessing") {
             const letterCount = getLetterCount(gameState.movieTamil);
             if (gameState.turn === myName) {
-                container.innerHTML = `<div class="card"><h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3><div class="masked-word">${maskTamil(gameState.movieTamil)}</div><div class="letter-count">${letterCount} LETTERS</div></div>`;
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
+                        <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
+                        <div class="letter-count">${letterCount} LETTERS</div>
+                        
+                        <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">IF PARTNER MADE A SPELLING MISTAKE:</p>
+                        <button class="manual-point-btn" onclick="awardManualPoint()">✅ GIVE POINT & NEXT TURN</button>
+                    </div>`;
             } else {
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         <div class="masked-word">${maskTamil(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        <div class="hint-text">HINT: ${gameState.hint || "NO HINT"}</div>
+                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -541,9 +544,18 @@
         }
     }
 
+    // --- MANUAL POINT FIX ---
+    function awardManualPoint() {
+        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
+        // Add point to partner
+        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
+        // Switch turn back to partner
+        db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "" });
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+    }
+
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
-        
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         
         if(foundMovie) { 
@@ -581,10 +593,8 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
-        let finalTamil = selectedPerfectTamil || transliterate(rawEng);
-        // Force translation if English sneaks in
-        if(/[a-zA-Z]/.test(finalTamil)) { finalTamil = transliterate(finalTamil); }
-
+        // Exact Tamil match from text file, else transliterate fallback
+        const finalTamil = selectedPerfectTamil || transliterate(rawEng);
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
     
@@ -609,8 +619,10 @@
     function giveUp() { 
         document.getElementById('feedback').innerText = "ANSWER: " + (gameState.movieEng || "").toUpperCase(); 
         document.getElementById('feedback').style.color = "var(--accent-color)";
+        // Partner gets the point
         const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
         db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
+        // Guesser sets the next movie
         setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
     }
     
@@ -620,9 +632,14 @@
         return clusters.filter(c => c !== ' ').length; 
     }
     
+    // GUARANTEED TAMIL MASKING: Completely ignores any stray English letters from DB
     function maskTamil(str) {
         if(!str) return "";
-        const words = str.split(" ");
+        // Force transliterate again just to be 100% safe
+        let safeStr = str;
+        if (/[a-zA-Z]/.test(safeStr)) { safeStr = transliterate(safeStr); }
+        
+        const words = safeStr.split(" ");
         return words.map(word => {
             const clusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || [];
             if (clusters.length === 0) return "_";
