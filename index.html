@@ -42,7 +42,10 @@
         .container { width: 100%; max-width: 430px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1; padding-bottom: 50px;}
         
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
+        @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Toast Notification */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
@@ -125,27 +128,22 @@
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
         .hidden { display: none !important; }
-        .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
-        
         .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
-        
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
         .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
         
-        /* PREMIUM SVG ACTION BUTTONS */
         .msg-actions { display: inline-flex; gap: 8px; }
         .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
         .msg-action-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
         .msg-action-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 10px var(--glow-shadow); }
-        .msg-action-btn.copy-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #120A1E; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
 
         .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
@@ -153,11 +151,11 @@
         
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
         .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
-        .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
+        /* Emoji Picker */
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
         .emoji-item:hover { transform: scale(1.3); }
@@ -204,12 +202,10 @@
         .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
         .btn-cancel { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 12px; box-shadow: none; font-size:11px;}
         .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white;}
-
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
-        
         .svg-icon { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
@@ -345,7 +341,7 @@
     let gameState = {}; let wordGameState = {}; let musicStateObj = {}; 
     let MOVIE_COLLECTION = []; let SONG_COLLECTION = [];
 
-    // --- AUDIO UNLOCK SYSTEM ---
+    // --- 🔊 AUTO-PLAY UNLOCKER FIX ---
     let audioUnlocked = false;
     function unlockAudio() {
         if(audioUnlocked) return;
@@ -353,7 +349,9 @@
         audioEl.play().then(() => {
             if(!musicStateObj.isPlaying) audioEl.pause();
             audioUnlocked = true;
-        }).catch(err => { audioUnlocked = true; });
+        }).catch(err => {
+            audioUnlocked = true; // Prevents endless retries
+        });
         document.body.removeEventListener('click', unlockAudio);
         document.body.removeEventListener('touchstart', unlockAudio);
     }
@@ -443,7 +441,7 @@
         else { indicator.classList.add('hidden'); }
     });
 
-    // --- AUTO-SWAP TXT LOADER ---
+    // --- AUTO-SWAP TXT LOADER WITH FORMATTER ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; SONG_COLLECTION = [];
         try {
@@ -458,10 +456,14 @@
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
                 if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
+                
                 if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) { let temp = eLines; eLines = tLines; tLines = temp; }
                 const minLen = Math.min(eLines.length, tLines.length);
-                for(let i=0; i<minLen; i++){ if(eLines[i] && tLines[i]) MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" }); }
+                for(let i=0; i<minLen; i++){
+                    if(eLines[i] && tLines[i]) MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
+                }
             }
+
             if (songsRes.ok) {
                 SONG_COLLECTION = (await songsRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== "");
             }
@@ -537,29 +539,55 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- MUSIC SYNC LISTENER ---
+    // --- MUSIC SYNC LISTENER (WITH 404 AUTO-FIX) ---
     const audioEl = document.getElementById('sharedAudio');
     let ignoreNextSync = false;
+
+    // Helper: Safely format URL to always include .mp3
+    function formatAudioUrl(rawUrl) {
+        if (!rawUrl) return "";
+        if (rawUrl.startsWith('http')) return rawUrl;
+        let finalUrl = rawUrl;
+        if (!finalUrl.startsWith('songs/')) finalUrl = 'songs/' + finalUrl;
+        if (!finalUrl.endsWith('.mp3')) finalUrl += '.mp3';
+        return finalUrl;
+    }
 
     db.ref('musicState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         musicStateObj = { isPlaying: data.isPlaying || false, currentTime: data.currentTime || 0, url: data.url || '', updatedBy: data.updatedBy || '' };
         
-        let playUrl = musicStateObj.url;
-        if (playUrl && !playUrl.startsWith('http') && !playUrl.startsWith('songs/')) playUrl = 'songs/' + playUrl;
+        let playUrl = formatAudioUrl(musicStateObj.url);
 
-        if (playUrl && playUrl !== audioEl.src && !audioEl.src.includes(playUrl)) {
-            audioEl.src = playUrl; audioEl.load();
+        if (playUrl && playUrl !== audioEl.getAttribute('data-playing-url')) {
+            audioEl.src = playUrl;
+            audioEl.setAttribute('data-playing-url', playUrl);
+            audioEl.load();
         }
 
         if (musicStateObj.updatedBy !== myName) {
             ignoreNextSync = true;
             if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) audioEl.currentTime = musicStateObj.currentTime;
-            if (musicStateObj.isPlaying && audioEl.paused) audioEl.play().catch(e => console.log("Waiting for user tap."));
-            else if (!musicStateObj.isPlaying && !audioEl.paused) audioEl.pause();
+            
+            if (musicStateObj.isPlaying && audioEl.paused) {
+                audioEl.play().catch(e => console.log("Waiting for user tap to allow audio."));
+            } else if (!musicStateObj.isPlaying && !audioEl.paused) {
+                audioEl.pause();
+            }
         }
         
         if (activeGame === 'music') renderMusicUI();
+    });
+
+    audioEl.addEventListener('seeked', () => {
+        if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
+        ignoreNextSync = false;
+    });
+
+    audioEl.addEventListener('error', (e) => {
+        if(activeGame === 'music' && musicStateObj.url) {
+            showToast("⚠️ SONG FILE NOT FOUND! Check GitHub name.");
+        }
     });
 
     audioEl.addEventListener('timeupdate', () => {
@@ -574,11 +602,6 @@
                 durDisplay.innerText = formatTime(audioEl.duration);
             }
         }
-    });
-
-    audioEl.addEventListener('seeked', () => {
-        if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
-        ignoreNextSync = false;
     });
 
     function formatTime(secs) {
@@ -631,7 +654,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
                         ${maskExactString(gameState.movieTamil)}
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        ${gameState.hint ? `<div class="hint-text">${gameState.hint}</div>` : ''}
+                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
                         <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
                         <button onclick="checkGuess()">SUBMIT ANSWER</button>
                         <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
@@ -844,18 +867,42 @@
     }
 
     // ================= PREMIUM VELORA MUSIC LOUNGE =================
+    function playSpecificSong(songName) {
+        // Formats properly to add .mp3 automatically
+        const newUrl = formatAudioUrl(songName);
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function nextSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = musicStateObj.url.replace('songs/', '').replace('.mp3', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
+        playSpecificSong(SONG_COLLECTION[idx]);
+    }
+
+    function prevSong() {
+        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
+        let currentFile = musicStateObj.url.replace('songs/', '').replace('.mp3', '');
+        let idx = SONG_COLLECTION.indexOf(currentFile);
+        if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
+        playSpecificSong(SONG_COLLECTION[idx]);
+    }
+
     function renderMusicUI() {
         const container = document.getElementById('gameContentArea');
         const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
         
-        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '') : "Select a track";
+        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '').replace('.mp3', '') : "Select a track";
         let isPlaying = musicStateObj.isPlaying;
         
+        // PREMIUM SVG ICONS
         const playIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
         const pauseIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
         const prevIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
         const nextIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="13 19 22 12 13 5"></polygon><polygon points="2 19 11 12 2 5"></polygon></svg>`;
         const syncIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" style="margin-right:5px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> SYNC AUDIO`;
+        const noteIcon = `<svg viewBox="0 0 24 24" width="12" height="12" class="svg-icon" style="margin-right:4px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`;
 
         container.innerHTML = `
         <div class="velora-player">
@@ -869,7 +916,7 @@
 
             <div>
                 <div class="velora-cover-wrap">
-                    <img src="image_605d04.png" onerror="this.src='1000243510.png'" class="velora-cover-img ${isSpinning}">
+                    <img src="1000243510.png" onerror="this.src='image_605d04.png'" class="velora-cover-img ${isSpinning}">
                     <div class="velora-cover-overlay"></div>
                 </div>
                 <div class="velora-info">
@@ -890,7 +937,12 @@
                         <button class="velora-ctrl-btn" onclick="nextSong()">${nextIcon}</button>
                     </div>
 
-                    <button class="theme-btn" style="width:100%; justify-content:center; margin-top:25px; padding: 12px; border-radius:15px;" onclick="forceSync()">${syncIcon}</button>
+                    <div style="display:flex; gap:10px; margin-top:25px;">
+                        <input type="text" id="musicUrl" placeholder="Direct Link or Name..." value="${displayUrl}" list="songList" style="flex:1; margin:0; padding:12px; font-size:10px; text-transform:none;">
+                        <button onclick="changeSong()" style="width:auto; margin:0; padding:12px; font-size:10px;">LOAD</button>
+                    </div>
+
+                    <button class="theme-btn" style="width:100%; justify-content:center; margin-top:15px; padding: 12px; border-radius:15px;" onclick="forceSync()">${syncIcon}</button>
                 </div>
             </div>
 
@@ -901,8 +953,8 @@
                 </div>
                 <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
                     ${SONG_COLLECTION.map(song => `
-                        <div class="velora-track ${musicStateObj.url === 'songs/'+song ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
-                            <div class="velora-track-icon">${playIcon}</div>
+                        <div class="velora-track ${musicStateObj.url && musicStateObj.url.includes(song) ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
+                            <div class="velora-track-icon"><svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" stroke="none" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div>
                             <div class="velora-track-info">
                                 <div class="velora-track-name">${song}</div>
                                 <div class="velora-track-artist">Immu & Sappii</div>
@@ -923,25 +975,12 @@
         db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
     }
 
-    function playSpecificSong(songName) {
-        let newUrl = 'songs/' + songName;
+    function changeSong() {
+        let newUrl = document.getElementById('musicUrl').value.trim();
+        if(!newUrl) return alert("Please enter a valid link or filename!");
+        
+        newUrl = formatAudioUrl(newUrl);
         db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
-    }
-
-    function nextSong() {
-        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = musicStateObj.url.replace('songs/', '');
-        let idx = SONG_COLLECTION.indexOf(currentFile);
-        if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
-        playSpecificSong(SONG_COLLECTION[idx]);
-    }
-
-    function prevSong() {
-        if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = musicStateObj.url.replace('songs/', '');
-        let idx = SONG_COLLECTION.indexOf(currentFile);
-        if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
-        playSpecificSong(SONG_COLLECTION[idx]);
     }
 
     function forceSync() {
