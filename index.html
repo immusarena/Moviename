@@ -102,9 +102,9 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; letter-spacing: 1px;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
-        input::placeholder { color: #666; font-weight: 600; text-transform: uppercase;}
+        input::placeholder { color: #666; font-weight: 600;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
@@ -134,12 +134,10 @@
         .spin-anim { animation: spin 4s linear infinite; }
         .music-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
         .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; display:flex; align-items:center; justify-content:center; gap: 6px; cursor: pointer; border: none; font-weight: bold; transition: 0.2s;}
-        .music-btn.play { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
-        .music-btn.sync { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; }
-        .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
         .music-btn:active { transform: scale(0.92); }
-        
-        audio { width: 100%; height: 45px; margin-bottom: 20px; border-radius: 25px; outline: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .music-btn.play-btn { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); font-weight:bold;}
+        .music-btn.sync { padding: 10px 15px; font-size: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 15px;}
+        .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
@@ -166,6 +164,7 @@
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
@@ -187,7 +186,7 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<audio id="sharedAudio" controls style="display:none;"></audio>
+<audio id="sharedAudio" style="display:none;"></audio>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
@@ -307,16 +306,19 @@
     let activeGame = 'home';
     let gameState = {}; let wordGameState = {}; let MOVIE_COLLECTION = []; 
 
-    // --- 🎵 RAW DIRECT ARRAY ---
+    // --- 🎵 CDN JS DELIVR MUSIC SYSTEM (100% WORKS) ---
     const songs = [
-        "https://raw.githubusercontent.com/immusarena/Moviename/main/smackthar.mp3",
-        "https://raw.githubusercontent.com/immusarena/Moviename/main/unakkulnaane.mp3",
-        "https://raw.githubusercontent.com/immusarena/Moviename/main/malaimangum.mp3"
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
     ];
     let currentSong = 0;
     let playing = false;
     let isRemoteAction = false;
     const audio = document.getElementById("sharedAudio");
+
+    // Initialize first song
+    audio.src = songs[currentSong];
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -463,93 +465,83 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // ================= 🎵 ORIGINAL ARRAY MUSIC ENGINE =================
+    // ================= 🎵 ORIGINAL ASYNC/AWAIT MUSIC ENGINE =================
     
-    function loadSong() {
-        audio.src = songs[currentSong];
-        let sName = songs[currentSong].split('/').pop().replace('.mp3', '');
+    function updateMusicUI() {
+        let pBtn = document.getElementById("mainPlayBtn");
+        let vRec = document.getElementById("vinylRecord");
+        if(playing) {
+            if(pBtn) pBtn.innerText = "PAUSE";
+            if(vRec) vRec.classList.add("spin-anim");
+        } else {
+            if(pBtn) pBtn.innerText = "PLAY";
+            if(vRec) vRec.classList.remove("spin-anim");
+        }
+        let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
         let displayEl = document.getElementById('songNameDisplay');
         if(displayEl) displayEl.innerText = "🎵 " + sName;
     }
 
-    function togglePlayPause() {
-        const playBtn = document.getElementById("mainPlayBtn");
-        const vinyl = document.getElementById("vinylRecord");
-
-        if(!playing) {
-            // First time load fallback
-            if(!audio.src || audio.src === window.location.href) loadSong();
-
-            audio.play().then(() => {
-                playing = true;
-                if(playBtn) playBtn.innerText = "PAUSE";
-                if(vinyl) vinyl.classList.add("spin-anim");
-                db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
-            }).catch(e => alert("Please click anywhere on screen first to allow audio!"));
+    async function togglePlayPause() {
+        if(!playing){
+            await audio.play();
+            playing = true;
+            updateMusicUI();
+            db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
         } else {
             audio.pause();
             playing = false;
-            if(playBtn) playBtn.innerText = "PLAY";
-            if(vinyl) vinyl.classList.remove("spin-anim");
+            updateMusicUI();
             db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
         }
     }
 
-    function nextSong() {
+    async function nextSong() {
         currentSong++;
-        if(currentSong >= songs.length){ currentSong = 0; }
-        loadSong();
-        audio.play().then(() => {
-            playing = true;
-            document.getElementById("mainPlayBtn").innerText = "PAUSE";
-            document.getElementById("vinylRecord").classList.add("spin-anim");
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
-        }).catch(e=>{});
-    }
-
-    function prevSong() {
-        currentSong--;
-        if(currentSong < 0){ currentSong = songs.length - 1; }
-        loadSong();
-        audio.play().then(() => {
-            playing = true;
-            document.getElementById("mainPlayBtn").innerText = "PAUSE";
-            document.getElementById("vinylRecord").classList.add("spin-anim");
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
-        }).catch(e=>{});
-    }
-
-    // Auto next triggered only by the one who is playing
-    audio.addEventListener("ended", () => {
-        nextSong();
-    });
-
-    // Native Controls tracking
-    audio.addEventListener("play", () => {
-        if(!isRemoteAction && !playing) {
-            playing = true;
-            document.getElementById("mainPlayBtn").innerText = "PAUSE";
-            document.getElementById("vinylRecord").classList.add("spin-anim");
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+        if(currentSong >= songs.length){
+            currentSong = 0;
         }
-    });
+        audio.src = songs[currentSong];
+        await audio.play();
+        playing = true;
+        updateMusicUI();
+        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+    }
 
-    audio.addEventListener("pause", () => {
-        if(!isRemoteAction && playing) {
-            playing = false;
-            document.getElementById("mainPlayBtn").innerText = "PLAY";
-            document.getElementById("vinylRecord").classList.remove("spin-anim");
-            db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+    async function prevSong() {
+        currentSong--;
+        if(currentSong < 0){
+            currentSong = songs.length - 1;
+        }
+        audio.src = songs[currentSong];
+        await audio.play();
+        playing = true;
+        updateMusicUI();
+        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+    }
+
+    /* AUTO NEXT */
+    audio.addEventListener("ended", async () => {
+        if(activeGame === 'music' && playing && !isRemoteAction) {
+            currentSong++;
+            if(currentSong >= songs.length){
+                currentSong = 0;
+            }
+            audio.src = songs[currentSong];
+            await audio.play();
+            playing = true;
+            updateMusicUI();
+            db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
         }
     });
 
     function forceSync() {
         db.ref('musicState').update({ action: playing ? 'play' : 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
-        showToast("SYNC COMMAND SENT!");
+        showToast("SYNC SENT!");
     }
 
     // Remote Sync Listener
-    db.ref('musicState').on('value', snapshot => {
+    db.ref('musicState').on('value', async snapshot => {
         const data = snapshot.val();
         if(!data) return;
 
@@ -558,7 +550,7 @@
             
             if (data.index !== currentSong) {
                 currentSong = data.index;
-                loadSong();
+                audio.src = songs[currentSong];
             }
 
             if (Math.abs(audio.currentTime - data.time) > 1.5) {
@@ -566,22 +558,17 @@
             }
 
             if (data.action === 'play') {
-                audio.play().then(() => {
+                try {
+                    await audio.play();
                     playing = true;
-                    let pBtn = document.getElementById("mainPlayBtn");
-                    let vRec = document.getElementById("vinylRecord");
-                    if(pBtn) pBtn.innerText = "PAUSE";
-                    if(vRec) vRec.classList.add("spin-anim");
-                }).catch(e => showToast("TAP PLAY TO ALLOW AUDIO"));
+                } catch(e) {
+                    showToast("TAP PLAY TO ALLOW AUDIO");
+                }
             } else {
                 audio.pause();
                 playing = false;
-                let pBtn = document.getElementById("mainPlayBtn");
-                let vRec = document.getElementById("vinylRecord");
-                if(pBtn) pBtn.innerText = "PLAY";
-                if(vRec) vRec.classList.remove("spin-anim");
             }
-
+            updateMusicUI();
             setTimeout(() => { isRemoteAction = false; }, 500);
         }
     });
@@ -602,21 +589,15 @@
                     🎵 ${sName}
                 </p>
 
-                <div id="audioContainer"></div>
-
                 <div class="music-controls" style="display:flex; justify-content:center; align-items:center; gap: 10px;">
                     <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="prevSong()" title="Previous">⏮️</button>
-                    <button class="btn-main" style="margin:0; padding:15px; flex:1;" id="mainPlayBtn" onclick="togglePlayPause()">${playText}</button>
+                    <button class="btn-main play-btn" style="margin:0; padding:15px; flex:1;" id="mainPlayBtn" onclick="togglePlayPause()">${playText}</button>
                     <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="nextSong()" title="Next">⏭️</button>
                 </div>
                 
                 <button class="btn-main" style="background:transparent; border:1px solid var(--border-color); box-shadow:none; color:var(--text-muted);" onclick="forceSync()">🔄 FORCE SYNC WITH PARTNER</button>
             </div>
         `;
-        
-        // Append Native Audio Tag directly to the UI
-        document.getElementById('audioContainer').appendChild(audio);
-        audio.style.display = 'block';
     }
 
     // ================= MOVIE GUESSING UI =================
@@ -939,8 +920,8 @@
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        const copySvg = `<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-        const delSvg = `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+        const copySvg = `<svg viewBox="0 0 24 24" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+        const delSvg = `<svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
 
         const copyBtn = `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="copyMsg('${msgKey}')" title="Copy">${copySvg}</button>`;
         const delBtn = isMine ? `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="deleteMsg('${msgKey}')" title="Delete">${delSvg}</button>` : '';
