@@ -50,7 +50,7 @@
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
         @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Toast Notification */
@@ -113,9 +113,9 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px; text-transform: uppercase;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
-        input::placeholder { color: #666; font-weight: 600; text-transform: uppercase;}
+        input::placeholder { color: #666; font-weight: 600;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
@@ -152,7 +152,6 @@
         .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
         .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
         .spin-anim { animation: spin 4s linear infinite; }
-
         .music-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
         .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; }
         .music-btn.play { background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
@@ -167,15 +166,19 @@
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
         
-        /* UPDATED TYPING INDICATOR (Just above input box) */
         .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
         .message { padding: 10px 14px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px;}
+        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between;}
         .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
         
+        /* Copy & Delete Action Buttons */
+        .msg-actions { display: inline-flex; gap: 8px; }
+        .msg-action-btn { background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0.5; transition: 0.2s; padding: 0; width: auto; margin: 0; box-shadow: none; color: white; display: inline-block;}
+        .msg-action-btn:hover { opacity: 1; transform: scale(1.2); background: transparent; box-shadow: none;}
+
         .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         
@@ -300,7 +303,7 @@
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
         <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:1px; font-size:16px;">RESET GAME?</h3>
-        <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing:1px;">Scores will reset for the current game.</p>
+        <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing:1px;">Scores and Chat History will be cleared.</p>
         <div class="modal-btn-group" id="movieResetBtns">
             <button onclick="confirmReset('immu')" style="background: var(--accent-color); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);">IMMU START</button>
             <button onclick="confirmReset('sappii')">SAPPII START</button>
@@ -430,8 +433,8 @@
         requestAnimationFrame(animateParticles);
     }
     
-    resizeCanvas(); // Set initial size
-    animateParticles(); // Start animation loop
+    resizeCanvas(); 
+    animateParticles(); 
 
     // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
@@ -482,7 +485,7 @@
                     hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 }
                 
-                // AUTO FIX: If the English file contains Tamil characters, swap the arrays automatically!
+                // AUTO FIX
                 if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) {
                     let temp = eLines;
                     eLines = tLines;
@@ -495,7 +498,6 @@
                         MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
                     }
                 }
-                console.log("Successfully loaded " + MOVIE_COLLECTION.length + " movies!");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
 
@@ -551,6 +553,12 @@
             document.getElementById('resetScoresBtn').classList.add('hidden');
             renderMusicUI();
         }
+        
+        // Auto scroll chat to bottom when opening game
+        setTimeout(() => {
+            const chatDiv = document.getElementById('chatMessages');
+            if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight;
+        }, 100);
     }
 
     function goHome() {
@@ -562,6 +570,7 @@
     // --- DB LISTENERS ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
+        
         let dbEng = data.movieEng || "";
         let finalTamil = data.movieTamil || "";
         let finalHint = data.hint || "";
@@ -600,7 +609,7 @@
                 audioEl.currentTime = musicStateObj.currentTime;
             }
             if (musicStateObj.isPlaying && audioEl.paused) {
-                audioEl.play().catch(e => console.log("Autoplay prevented. Please interact first."));
+                audioEl.play().catch(e => console.log("Autoplay prevented."));
             } else if (!musicStateObj.isPlaying && !audioEl.paused) {
                 audioEl.pause();
             }
@@ -692,7 +701,7 @@
     }
     
     function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! Movies are loading...");
+        if (MOVIE_COLLECTION.length === 0) return alert("Movie list loading... wait 2 seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
         if(randomObj.hero) { document.getElementById('hintInput').value = randomObj.hero.toUpperCase(); } 
@@ -931,15 +940,19 @@
         showToast("AUDIO SYNCED!");
     }
 
-    // --- RESET MODALS ---
+    // --- RESET MODALS (CHAT CLEARS ON RESET) ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
+    
     function confirmReset(starter) { 
         db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
+        db.ref('chatMessages').remove(); // WIPES CHAT HISTORY
         closeResetModal(); 
     }
+    
     function confirmResetWord() { 
         db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0, usedWords: null }); 
+        db.ref('chatMessages').remove(); // WIPES CHAT HISTORY
         closeResetModal(); 
     }
 
@@ -965,16 +978,39 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
+    // Copy Message
+    function copyMsg(id) {
+        const txt = document.getElementById('text-' + id).innerText;
+        navigator.clipboard.writeText(txt);
+        showToast("COPIED!");
+    }
+
+    // Delete Message
+    function deleteMsg(id) {
+        db.ref('chatMessages/' + id).remove();
+        showToast("DELETED!");
+    }
+
+    // Handle Chat Wipe in UI real-time
+    db.ref('chatMessages').on('value', (snapshot) => {
+        if(!snapshot.exists()) {
+            document.getElementById('chatMessages').innerHTML = ''; // Clear div if wiped
+        }
+    });
+
     let isChatLoaded = false;
     db.ref('chatMessages').once('value', () => { isChatLoaded = true; });
 
     db.ref('chatMessages').on('child_added', (snapshot) => {
         const data = snapshot.val();
+        const msgKey = snapshot.key;
         const chatMessagesDiv = document.getElementById('chatMessages');
         const isMine = data.sender === myName.toUpperCase();
         const isSystem = data.sender === "SYSTEM" || data.sender === "ANTI-CHEAT";
         
         const messageDiv = document.createElement('div');
+        messageDiv.id = `msg-${msgKey}`;
+
         if (isSystem) { 
             messageDiv.className = data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message'; 
         } else { 
@@ -982,11 +1018,29 @@
         }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        messageDiv.innerHTML = `<div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">${isMine ? 'YOU' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
+        
+        // Copy & Delete Buttons UI
+        const copyBtn = `<button class="msg-action-btn" onclick="copyMsg('${msgKey}')" title="Copy">📋</button>`;
+        const delBtn = isMine ? `<button class="msg-action-btn" onclick="deleteMsg('${msgKey}')" title="Delete">🗑️</button>` : '';
+
+        messageDiv.innerHTML = `
+            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">
+                ${isMine ? 'YOU' : data.sender} (${time})
+                ${!isSystem ? `<span class="msg-actions">${copyBtn}${delBtn}</span>` : ''}
+            </div>
+            <div class="message-text" id="text-${msgKey}">${data.text}</div>
+        `;
+        
         chatMessagesDiv.appendChild(messageDiv);
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
         if (isChatLoaded && !isMine && !isSystem) { showToast(`NEW MESSAGE FROM ${data.sender}`); }
+    });
+
+    // Handle single message deletion in UI
+    db.ref('chatMessages').on('child_removed', (snapshot) => {
+        const msgDiv = document.getElementById(`msg-${snapshot.key}`);
+        if(msgDiv) msgDiv.remove();
     });
 
     function sendChatMessage() {
