@@ -367,8 +367,8 @@
         try {
             // நீங்க சொன்ன மாதிரி File names மாத்தி உக்காந்திருக்கு!
             // movies_tamil.txt-குள்ள இங்கிலீஷ் இருக்கு, movies_eng.txt-குள்ள தமிழ் இருக்கு.
-            const engRes = await fetch('movies_tamil.txt'); // English names fetch
-            const tamilRes = await fetch('movies_eng.txt'); // Tamil names fetch
+            const engRes = await fetch('movies_eng.txt'); // English names fetch
+            const tamilRes = await fetch('movies_tamil.txt'); // Tamil names fetch
             const heroRes = await fetch('heroes.txt');
             
             if (engRes.ok && tamilRes.ok) {
