@@ -9,7 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Latha&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&family=Latha&display=swap');
         
         /* CSS Variables for Dynamic Themes */
         :root {
@@ -24,34 +24,25 @@
             --glow-shadow: rgba(255, 75, 114, 0.4);
         }
 
+        *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
         body { 
             background: radial-gradient(circle at top left, #2b1340, var(--bg-color)); 
             background-attachment: fixed;
             color: var(--text-main); 
             font-family: 'Poppins', 'Latha', sans-serif; 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0; overflow-x: hidden; flex-direction: column; 
+            display: flex; justify-content: center; align-items: flex-start; 
+            min-height: 100vh; overflow-x: hidden; 
             transition: background 0.5s ease; 
         }
 
         /* NEON BACKGROUND CANVAS */
-        #neonCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-        }
+        #neonCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
 
-        .container { width: 90%; max-width: 420px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1;}
+        .container { width: 100%; max-width: 430px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1; padding-bottom: 50px;}
         
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
-        @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* Toast Notification */
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; padding: 12px 24px; border-radius: 30px; font-weight: bold; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease; opacity: 0; z-index: 2000; pointer-events: none; }
@@ -65,22 +56,21 @@
         .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
         .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
 
-        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
         .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
-        .game-menu-btn.purple { border-left: 4px solid #d946ef; }
-        .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(217, 70, 239, 0.3); border-left: 8px solid #d946ef; }
+        .game-menu-btn.purple { border-left: 4px solid #a855f7; }
+        .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3); border-left: 8px solid #a855f7; }
         
         /* SLEEK TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
         .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
-        .back-btn svg { width: 10px; height: 10px; }
-        .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0; display:flex; align-items:center; gap:5px;}
+        .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* SLEEK THEME BUTTON */
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
@@ -91,15 +81,13 @@
         /* VS Scoreboard */
         .vs-container { display: flex; justify-content: space-around; align-items: center; margin-bottom: 20px; }
         .player-box { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; width: 90px; padding: 15px 10px; border-radius: 20px; transition: all 0.4s ease; box-shadow: 0 8px 32px rgba(0,0,0,0.3);}
-        .active-turn { animation: pulseGlow 2s infinite; border: 1px solid var(--primary-color); transform: scale(1.05); }
-        .racing-turn { animation: pulseGlowAccent 2s infinite; border: 1px solid var(--accent-color); transform: scale(1.05); }
+        .active-turn { border: 1px solid var(--primary-color); transform: scale(1.05); box-shadow: 0 0 20px var(--glow-shadow);}
+        .racing-turn { border: 1px solid var(--accent-color); transform: scale(1.05); box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);}
         
-        /* Avatars */
         .avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--border-color); background-size: cover; background-position: center; background-color: #1D102E; transition: 0.3s; }
         .immu-pic { background-image: url('1000242624.jpg'); } 
         .sappii-pic { background-image: url('1000242625.jpg'); } 
-        .active-turn .sappii-pic { border-color: var(--primary-color); }
-        .active-turn .immu-pic { border-color: var(--primary-color); }
+        .active-turn .sappii-pic, .active-turn .immu-pic { border-color: var(--primary-color); }
         .racing-turn .avatar { border-color: var(--accent-color); }
         
         .name-container { display: flex; align-items: center; gap: 6px; margin-top: 5px;}
@@ -113,52 +101,29 @@
         /* Cards & Inputs */
         .card { background: var(--card-bg); backdrop-filter: blur(15px); border-radius: 20px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid var(--border-color); margin-bottom: 20px; transition: 0.5s ease; position: relative; overflow: hidden;}
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); letter-spacing: 1px;}
+        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; letter-spacing: 1px;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
-        input::placeholder { color: #666; font-weight: 600; text-transform: uppercase;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
-        .order-btn:hover { background: rgba(74, 222, 128, 0.1); transform: scale(1.02); }
-
+        
         button { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
         button:active { transform: scale(0.96); }
         
-        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; }
-        .random-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
+        .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 10px; box-shadow: none; }
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
-        .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
-        
-        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: 0.3s;}
-        .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
-
+        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; border-radius: 12px; font-weight: 800; letter-spacing: 1px; cursor: pointer; transition: 0.3s; box-shadow: none;}
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
-        .reset-btn:hover { background: rgba(255, 75, 114, 0.1); border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 15px var(--glow-shadow); }
 
-        /* PERFECT MASKING VIEW - Tamil Native Format */
+        /* PERFECT MASKING VIEW */
         .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
-        .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
-        .mask-space { width: 15px; }
         .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
         .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;}
 
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
-
-        /* MUSIC LOUNGE ELEMENTS */
-        .vinyl-container { width: 120px; height: 120px; margin: 0 auto 20px auto; border-radius: 50%; border: 4px solid var(--primary-color); padding: 5px; box-shadow: 0 0 25px var(--glow-shadow); position: relative; display: flex; justify-content: center; align-items: center; background: #111; }
-        .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
-        .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
-        .spin-anim { animation: spin 4s linear infinite; }
-        
-        .music-controls { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px; }
-        .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; display:flex; align-items:center; justify-content:center; gap: 6px;}
-        .music-btn.play { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); }
-        .music-btn.sync { padding: 10px 15px; font-size: 12px; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; border-radius: 15px; display: flex; align-items: center; justify-content: center;}
-        .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
-
         .hidden { display: none !important; }
         .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
 
@@ -171,7 +136,7 @@
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         
-        .message { padding: 10px 14px; max-width: 75%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
         .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
         
@@ -186,22 +151,54 @@
         .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
         .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
         
-        /* Chat Inputs */
         .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
         .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
         .chat-input:focus { box-shadow: none; background: transparent;}
-        .chat-btn-group { display: flex; gap: 5px; width: auto; align-items: center;}
-        
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
-        /* Emoji Picker */
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
         .emoji-item:hover { transform: scale(1.3); }
 
-        /* Modal */
+        /* ================= VELORA MUSIC PLAYER ================= */
+        .velora-player { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 36px; overflow: hidden; backdrop-filter: blur(25px); box-shadow: 0 15px 50px rgba(0,0,0,.45), inset 0 0 40px rgba(255,255,255,.02); padding-bottom: 20px;}
+        .velora-cover-wrap { position: relative; padding: 18px; }
+        .velora-cover-img { width: 100%; height: 280px; object-fit: cover; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+        .velora-cover-overlay { position: absolute; inset: 18px; border-radius: 28px; background: linear-gradient(to top, rgba(0,0,0,.8), transparent 60%); }
+        
+        .velora-info { padding: 0 24px; text-align: left; }
+        .velora-song-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.5px; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        .velora-artist { color: var(--accent-color); font-size: .9rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
+        
+        .velora-seek { margin-top: 25px; }
+        .velora-line { height: 6px; border-radius: 999px; background: rgba(255,255,255,.1); overflow: hidden; position: relative;}
+        .velora-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); border-radius: 999px; transition: width 0.1s linear;}
+        .velora-time { margin-top: 10px; display: flex; justify-content: space-between; color: #94a3b8; font-size: .75rem; font-weight: 600; letter-spacing: 1px;}
+        
+        .velora-controls { margin-top: 25px; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .velora-ctrl-btn { width: 55px; height: 55px; border: none; border-radius: 18px; background: rgba(255,255,255,.05); display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; color: #fff;}
+        .velora-ctrl-btn:hover { background: rgba(255,255,255,.1); transform: scale(1.05); color: var(--accent-color);}
+        .velora-play-btn { width: 75px; height: 75px; border-radius: 24px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; border: none;}
+        .velora-play-btn:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 15px 40px var(--glow-shadow); }
+        .velora-play-btn svg, .velora-ctrl-btn svg { fill: currentColor; }
+
+        .velora-playlist-sec { margin-top: 30px; text-align: left; }
+        .velora-ph { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;}
+        .velora-ph h3 { font-size: 1.1rem; font-weight: 600; color: #fff; }
+        .velora-ph span { color: #64748b; font-size: .8rem; font-weight: 600;}
+        
+        .velora-track { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.05); border-radius: 20px; padding: 12px 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 10px; cursor: pointer; transition: 0.3s;}
+        .velora-track:hover { background: rgba(255,255,255,.08); transform: translateX(5px); border-color: rgba(255,255,255,.1);}
+        .velora-track.active-track { border-color: var(--primary-color); background: rgba(255,255,255,.08); }
+        
+        .velora-track-icon { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.05); display: flex; justify-content: center; align-items: center; color: var(--accent-color); }
+        .velora-track-icon svg { width: 16px; height: 16px; fill: currentColor; }
+        .velora-track-info { flex: 1; overflow: hidden; }
+        .velora-track-name { font-size: .95rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .velora-track-artist { font-size: .75rem; color: #94a3b8; margin-top: 3px; }
+        
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
         .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
@@ -213,16 +210,13 @@
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
         
-        /* General SVG standard class */
         .svg-icon { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
     </style>
 </head>
 <body>
 
 <canvas id="neonCanvas"></canvas>
-
 <audio id="sharedAudio" src="" preload="auto"></audio>
-
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
@@ -254,7 +248,10 @@
 
 <div class="container hidden" id="sharedUIContainer">
     <div class="top-nav">
-        <button class="back-btn" onclick="goHome()">BACK</button>
+        <button class="back-btn" onclick="goHome()">
+            <svg class="svg-icon" viewBox="0 0 24 24" width="12" height="12"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            BACK
+        </button>
         <h2 id="activeGameBadge" class="game-title-text">GAME</h2>
     </div>
 
@@ -283,7 +280,6 @@
     </div>
 
     <datalist id="movieList"></datalist>
-    <datalist id="songList"></datalist>
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
@@ -346,25 +342,18 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; 
-    let wordGameState = {}; 
-    let musicStateObj = {}; 
-    let MOVIE_COLLECTION = []; 
-    let SONG_COLLECTION = [];
+    let gameState = {}; let wordGameState = {}; let musicStateObj = {}; 
+    let MOVIE_COLLECTION = []; let SONG_COLLECTION = [];
 
-    // --- AUDIO UNLOCK HACK FOR MOBILE BROWSERS ---
+    // --- AUDIO UNLOCK SYSTEM ---
     let audioUnlocked = false;
     function unlockAudio() {
         if(audioUnlocked) return;
         const audioEl = document.getElementById('sharedAudio');
-        // A silent play trigger to convince the browser we have user interaction
         audioEl.play().then(() => {
             if(!musicStateObj.isPlaying) audioEl.pause();
             audioUnlocked = true;
-        }).catch(err => {
-            // Ignore error if no source is loaded yet, interaction is registered anyway
-            audioUnlocked = true; 
-        });
+        }).catch(err => { audioUnlocked = true; });
         document.body.removeEventListener('click', unlockAudio);
         document.body.removeEventListener('touchstart', unlockAudio);
     }
@@ -383,89 +372,50 @@
         { vars: { '--bg-color': '#08121a', '--card-bg': 'rgba(12, 25, 35, 0.7)', '--primary-color': '#38bdf8', '--secondary-color': '#0ea5e9', '--accent-color': '#bae6fd', '--border-color': 'rgba(56, 189, 248, 0.2)' } }
     ];
     let currentThemeIndex = localStorage.getItem('appTheme') ? parseInt(localStorage.getItem('appTheme')) : 0;
-    
-    let particleColor1 = '#FF4B72';
-    let particleColor2 = '#4ade80';
+    let particleColor1 = '#FF4B72'; let particleColor2 = '#4ade80';
 
     function applyTheme(index) {
-        for (const [key, value] of Object.entries(themes[index].vars)) { 
-            document.documentElement.style.setProperty(key, value); 
-        }
-        particleColor1 = themes[index].vars['--primary-color'];
-        particleColor2 = themes[index].vars['--accent-color'];
+        for (const [key, value] of Object.entries(themes[index].vars)) { document.documentElement.style.setProperty(key, value); }
+        particleColor1 = themes[index].vars['--primary-color']; particleColor2 = themes[index].vars['--accent-color'];
     }
-
     function cycleTheme() {
-        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
-        localStorage.setItem('appTheme', currentThemeIndex);
-        applyTheme(currentThemeIndex);
+        currentThemeIndex = (currentThemeIndex + 1) % themes.length; localStorage.setItem('appTheme', currentThemeIndex); applyTheme(currentThemeIndex);
     }
     applyTheme(currentThemeIndex);
 
     // --- 🌌 NEON BACKGROUND PARTICLES ENGINE ---
-    const canvas = document.getElementById('neonCanvas');
-    const ctx = canvas.getContext('2d');
-    let particlesArray = [];
-
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        initParticles();
-    }
+    const canvas = document.getElementById('neonCanvas'); const ctx = canvas.getContext('2d'); let particlesArray = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
     window.addEventListener('resize', resizeCanvas);
-    
     class Particle {
         constructor() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
+            this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
             this.size = Math.random() * 2 + 1;
-            this.speedX = Math.random() * 0.4 - 0.2;
-            this.speedY = Math.random() * 0.4 - 0.2;
-            this.colorType = Math.random() > 0.5 ? 1 : 2;
-            this.opacity = Math.random() * 0.5 + 0.1;
+            this.speedX = Math.random() * 0.4 - 0.2; this.speedY = Math.random() * 0.4 - 0.2;
+            this.colorType = Math.random() > 0.5 ? 1 : 2; this.opacity = Math.random() * 0.5 + 0.1;
         }
         update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-
-            if (this.x < 0) this.x = canvas.width;
-            if (this.x > canvas.width) this.x = 0;
-            if (this.y < 0) this.y = canvas.height;
-            if (this.y > canvas.height) this.y = 0;
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x < 0) this.x = canvas.width; if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height; if (this.y > canvas.height) this.y = 0;
         }
         draw() {
-            ctx.globalAlpha = this.opacity;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            let color = this.colorType === 1 ? particleColor1 : particleColor2;
-            ctx.fillStyle = color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = color;
-            ctx.fill();
-            ctx.globalAlpha = 1; 
+            ctx.globalAlpha = this.opacity; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.colorType === 1 ? particleColor1 : particleColor2;
+            ctx.shadowBlur = 15; ctx.shadowColor = ctx.fillStyle; ctx.fill(); ctx.globalAlpha = 1; 
         }
     }
-
     function initParticles() {
-        particlesArray = [];
-        let numberOfParticles = (canvas.width * canvas.height) / 12000;
+        particlesArray = []; let numberOfParticles = (canvas.width * canvas.height) / 12000;
         if (numberOfParticles > 60) numberOfParticles = 60;
-        for (let i = 0; i < numberOfParticles; i++) {
-            particlesArray.push(new Particle());
-        }
+        for (let i = 0; i < numberOfParticles; i++) particlesArray.push(new Particle());
     }
-
     function animateParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-        }
+        for (let i = 0; i < particlesArray.length; i++) { particlesArray[i].update(); particlesArray[i].draw(); }
         requestAnimationFrame(animateParticles);
     }
-    
-    resizeCanvas(); 
-    animateParticles(); 
+    resizeCanvas(); animateParticles(); 
 
     // --- 🚨 ANTI-CHEAT SYSTEM ---
     let cheatCooldown = false;
@@ -483,26 +433,19 @@
     // --- TYPING INDICATOR ---
     let typingTimer;
     document.getElementById('chatInput').addEventListener('input', () => {
-        db.ref(`typingStatus/${myName}`).set(true);
-        clearTimeout(typingTimer);
+        db.ref(`typingStatus/${myName}`).set(true); clearTimeout(typingTimer);
         typingTimer = setTimeout(() => { db.ref(`typingStatus/${myName}`).set(false); }, 1500);
     });
 
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        const isTyping = snapshot.val();
-        const indicator = document.getElementById('typingIndicator');
-        if (isTyping) {
-            indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`;
-            indicator.classList.remove('hidden');
-        } else {
-            indicator.classList.add('hidden');
-        }
+        const isTyping = snapshot.val(); const indicator = document.getElementById('typingIndicator');
+        if (isTyping) { indicator.innerText = `${partnerName.toUpperCase()} IS TYPING...`; indicator.classList.remove('hidden'); } 
+        else { indicator.classList.add('hidden'); }
     });
 
     // --- AUTO-SWAP TXT LOADER ---
     async function loadMoviesFromTXT() {
-        MOVIE_COLLECTION = []; 
-        SONG_COLLECTION = [];
+        MOVIE_COLLECTION = []; SONG_COLLECTION = [];
         try {
             const cacheBuster = "?v=" + new Date().getTime();
             const engRes = await fetch('movies_eng.txt' + cacheBuster);
@@ -514,39 +457,15 @@
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let hLines = [];
-                if (heroRes.ok) {
-                    hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
-                }
-                
-                // AUTO FIX
-                if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) {
-                    let temp = eLines;
-                    eLines = tLines;
-                    tLines = temp;
-                }
-                
+                if (heroRes.ok) hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
+                if (eLines.length > 0 && /[\u0B80-\u0BFF]/.test(eLines[0])) { let temp = eLines; eLines = tLines; tLines = temp; }
                 const minLen = Math.min(eLines.length, tLines.length);
-                for(let i=0; i<minLen; i++){
-                    if(eLines[i] && tLines[i]) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
-                    }
-                }
+                for(let i=0; i<minLen; i++){ if(eLines[i] && tLines[i]) MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" }); }
             }
             if (songsRes.ok) {
                 SONG_COLLECTION = (await songsRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== "");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
-
-        const list = document.getElementById('movieList');
-        list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(m => {
-            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
-        });
-        const songList = document.getElementById('songList');
-        songList.innerHTML = "";
-        SONG_COLLECTION.forEach(s => {
-            const option = document.createElement('option'); option.value = s; songList.appendChild(option);
-        });
     }
 
     window.onload = () => {
@@ -554,16 +473,13 @@
         const picker = document.getElementById('emojiPicker');
         const emojis = ['❤️', '🔥', '😂', '🥺', '👍', '👎', '✨', '💀', '💯', '👏'];
         emojis.forEach(emoji => {
-            const btn = document.createElement('button');
-            btn.className = 'emoji-item'; btn.innerText = emoji;
+            const btn = document.createElement('button'); btn.className = 'emoji-item'; btn.innerText = emoji;
             btn.onclick = () => { document.getElementById('chatInput').value += emoji; document.getElementById('chatInput').focus(); document.getElementById('emojiPicker').classList.add('hidden'); };
             picker.appendChild(btn);
         });
-
         document.addEventListener('click', function(event) {
-            var picker = document.getElementById('emojiPicker');
-            var btn = document.getElementById('emojiBtn');
-            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) { picker.classList.add('hidden'); }
+            var picker = document.getElementById('emojiPicker'); var btn = document.getElementById('emojiBtn');
+            if (!picker.contains(event.target) && event.target !== btn && !btn.contains(event.target)) picker.classList.add('hidden'); 
         });
     };
 
@@ -594,12 +510,7 @@
             document.getElementById('resetScoresBtn').classList.add('hidden');
             renderMusicUI();
         }
-        
-        // Auto scroll chat to bottom when opening game
-        setTimeout(() => {
-            const chatDiv = document.getElementById('chatMessages');
-            if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight;
-        }, 100);
+        setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
     }
 
     function goHome() {
@@ -611,16 +522,11 @@
     // --- DB LISTENERS ---
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        
-        let dbEng = data.movieEng || "";
-        let finalTamil = data.movieTamil || "";
-        let finalHint = data.hint || "";
-
+        let dbEng = data.movieEng || ""; let finalTamil = data.movieTamil || ""; let finalHint = data.hint || "";
         if (dbEng !== "" && MOVIE_COLLECTION.length > 0) {
             const match = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === dbEng.toLowerCase());
-            if (match) { finalTamil = match.tamil; }
+            if (match) finalTamil = match.tamil; 
         }
-
         gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: dbEng, movieTamil: finalTamil, hint: finalHint };
         if(activeGame === 'movie') renderMovieGameUI();
     });
@@ -640,45 +546,53 @@
         musicStateObj = { isPlaying: data.isPlaying || false, currentTime: data.currentTime || 0, url: data.url || '', updatedBy: data.updatedBy || '' };
         
         let playUrl = musicStateObj.url;
-        if (playUrl && !playUrl.startsWith('http') && !playUrl.startsWith('songs/')) {
-            playUrl = 'songs/' + playUrl;
-        }
+        if (playUrl && !playUrl.startsWith('http') && !playUrl.startsWith('songs/')) playUrl = 'songs/' + playUrl;
 
         if (playUrl && playUrl !== audioEl.src && !audioEl.src.includes(playUrl)) {
-            audioEl.src = playUrl;
-            audioEl.load();
+            audioEl.src = playUrl; audioEl.load();
         }
 
         if (musicStateObj.updatedBy !== myName) {
             ignoreNextSync = true;
-            if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) {
-                audioEl.currentTime = musicStateObj.currentTime;
-            }
-            if (musicStateObj.isPlaying && audioEl.paused) {
-                audioEl.play().catch(e => console.log("Autoplay waiting for user tap."));
-            } else if (!musicStateObj.isPlaying && !audioEl.paused) {
-                audioEl.pause();
-            }
+            if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) audioEl.currentTime = musicStateObj.currentTime;
+            if (musicStateObj.isPlaying && audioEl.paused) audioEl.play().catch(e => console.log("Waiting for user tap."));
+            else if (!musicStateObj.isPlaying && !audioEl.paused) audioEl.pause();
         }
         
         if (activeGame === 'music') renderMusicUI();
     });
 
-    audioEl.addEventListener('seeked', () => {
-        if (!ignoreNextSync) {
-            db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
+    audioEl.addEventListener('timeupdate', () => {
+        if (activeGame === 'music') {
+            const progress = document.getElementById('musicProgress');
+            const currDisplay = document.getElementById('currentTimeDisplay');
+            const durDisplay = document.getElementById('durationDisplay');
+            if (progress && audioEl.duration) {
+                const pct = (audioEl.currentTime / audioEl.duration) * 100;
+                progress.style.width = `${pct}%`;
+                currDisplay.innerText = formatTime(audioEl.currentTime);
+                durDisplay.innerText = formatTime(audioEl.duration);
+            }
         }
+    });
+
+    audioEl.addEventListener('seeked', () => {
+        if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
         ignoreNextSync = false;
     });
 
+    function formatTime(secs) {
+        if(isNaN(secs)) return "00:00";
+        const m = Math.floor(secs / 60); const s = Math.floor(secs % 60);
+        return `${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
+    }
+
+    // ================= MOVIE GUESSING LOGIC =================
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1;
-        document.getElementById('sappiiScore').innerText = gameState.score2;
-        
+        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
-        
         document.getElementById('turn-immu').innerText = gameState.status === 'set' ? 'SETTING...' : 'GUESSING';
         document.getElementById('turn-sappii').innerText = gameState.status === 'set' ? 'SETTING...' : 'GUESSING';
         document.getElementById('turn-immu').classList.toggle('hidden', gameState.turn !== 'immu');
@@ -738,29 +652,26 @@
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
         if(foundMovie) { 
-            if(foundMovie.hero) { document.getElementById('hintInput').value = foundMovie.hero.toUpperCase(); } 
-            else { document.getElementById('hintInput').value = ""; }
+            if(foundMovie.hero) document.getElementById('hintInput').value = foundMovie.hero.toUpperCase(); 
+            else document.getElementById('hintInput').value = ""; 
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
-        } else {
-            document.getElementById('tamilPreview').innerText = "Select from list!";
-        }
+        } else { document.getElementById('tamilPreview').innerText = "Select from list!"; }
     }
     
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds! Movies are loading...");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
-        if(randomObj.hero) { document.getElementById('hintInput').value = randomObj.hero.toUpperCase(); } 
-        else { document.getElementById('hintInput').value = "GUESS THE HERO!"; }
+        if(randomObj.hero) document.getElementById('hintInput').value = randomObj.hero.toUpperCase(); 
+        else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
     function setMovie() { 
-        const rawEng = document.getElementById('movieInput').value.trim(); 
-        const h = document.getElementById('hintInput').value; 
+        const rawEng = document.getElementById('movieInput').value.trim(); const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        if (!foundMovie) { return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); }
+        if (!foundMovie) return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); 
         db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
     }
     
@@ -789,8 +700,7 @@
     
     function getLetterCountExact(str) {
         if (!str) return 0;
-        let safeStr = str;
-        let segments = [];
+        let safeStr = str; let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
             segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
@@ -933,14 +843,97 @@
         db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
-    // ================= MUSIC LOUNGE LOGIC =================
+    // ================= PREMIUM VELORA MUSIC LOUNGE =================
+    function renderMusicUI() {
+        const container = document.getElementById('gameContentArea');
+        const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
+        
+        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '') : "Select a track";
+        let isPlaying = musicStateObj.isPlaying;
+        
+        const playIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
+        const pauseIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
+        const prevIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
+        const nextIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="13 19 22 12 13 5"></polygon><polygon points="2 19 11 12 2 5"></polygon></svg>`;
+        const syncIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" style="margin-right:5px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> SYNC AUDIO`;
+
+        container.innerHTML = `
+        <div class="velora-player">
+            <div style="text-align:left; padding: 15px 22px 5px 22px;">
+                <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); border-radius:999px; color:#cbd5e1; font-size:.75rem; font-weight:800; text-transform:uppercase;">
+                    <div style="width:8px; height:8px; border-radius:50%; background:var(--accent-color); box-shadow:0 0 10px var(--accent-color); ${isPlaying ? 'animation: blink 1.5s infinite;' : ''}"></div>
+                    Synced Session
+                </div>
+                <h2 style="font-size:2rem; margin-top:15px; font-weight:800; text-transform:uppercase; line-height:1.1;">Listen<br>Together</h2>
+            </div>
+
+            <div>
+                <div class="velora-cover-wrap">
+                    <img src="image_605d04.png" onerror="this.src='1000243510.png'" class="velora-cover-img ${isSpinning}">
+                    <div class="velora-cover-overlay"></div>
+                </div>
+                <div class="velora-info">
+                    <div class="velora-song-title">${displayUrl}</div>
+                    <div class="velora-artist">Immu & Sappii Radio</div>
+
+                    <div class="velora-seek">
+                        <div class="velora-line"><div class="velora-progress" id="musicProgress" style="width: 0%;"></div></div>
+                        <div class="velora-time">
+                            <span id="currentTimeDisplay">00:00</span>
+                            <span id="durationDisplay">00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="velora-controls">
+                        <button class="velora-ctrl-btn" onclick="prevSong()">${prevIcon}</button>
+                        <button class="velora-play-btn" onclick="togglePlayPause()">${isPlaying ? pauseIcon : playIcon}</button>
+                        <button class="velora-ctrl-btn" onclick="nextSong()">${nextIcon}</button>
+                    </div>
+
+                    <button class="theme-btn" style="width:100%; justify-content:center; margin-top:25px; padding: 12px; border-radius:15px;" onclick="forceSync()">${syncIcon}</button>
+                </div>
+            </div>
+
+            <div class="velora-playlist-sec" style="padding: 0 22px;">
+                <div class="velora-ph" style="margin-top: 25px;">
+                    <h3>Shared Collection</h3>
+                    <span>${SONG_COLLECTION.length} Tracks</span>
+                </div>
+                <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
+                    ${SONG_COLLECTION.map(song => `
+                        <div class="velora-track ${musicStateObj.url === 'songs/'+song ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
+                            <div class="velora-track-icon">${playIcon}</div>
+                            <div class="velora-track-info">
+                                <div class="velora-track-name">${song}</div>
+                                <div class="velora-track-artist">Immu & Sappii</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                    ${SONG_COLLECTION.length === 0 ? `<div style="text-align:center; color:#64748b; font-size:10px; margin-top:20px;">No songs found in songs.txt</div>` : ''}
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    function togglePlayPause() {
+        const newState = !musicStateObj.isPlaying;
+        if (newState) { audioEl.play().catch(e => alert("Please tap anywhere on screen first to allow audio!")); } 
+        else { audioEl.pause(); }
+        db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
+    }
+
+    function playSpecificSong(songName) {
+        let newUrl = 'songs/' + songName;
+        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+    }
+
     function nextSong() {
         if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
         let currentFile = musicStateObj.url.replace('songs/', '');
         let idx = SONG_COLLECTION.indexOf(currentFile);
         if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
-        let newUrl = 'songs/' + SONG_COLLECTION[idx];
-        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+        playSpecificSong(SONG_COLLECTION[idx]);
     }
 
     function prevSong() {
@@ -948,68 +941,7 @@
         let currentFile = musicStateObj.url.replace('songs/', '');
         let idx = SONG_COLLECTION.indexOf(currentFile);
         if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
-        let newUrl = 'songs/' + SONG_COLLECTION[idx];
-        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
-    }
-
-    function renderMusicUI() {
-        const container = document.getElementById('gameContentArea');
-        const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
-        
-        // PREMIUM SVG PLAY/PAUSE ICONS
-        const playIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> PLAY`;
-        const pauseIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg> PAUSE`;
-        const playBtnText = musicStateObj.isPlaying ? pauseIcon : playIcon;
-        
-        const prevIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
-        const nextIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon"><polygon points="13 19 22 12 13 5"></polygon><polygon points="2 19 11 12 2 5"></polygon></svg>`;
-        const syncIcon = `<svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" style="margin-right:5px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> SYNC AUDIO`;
-        const noteIcon = `<svg viewBox="0 0 24 24" width="12" height="12" class="svg-icon" style="margin-right:4px;"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>`;
-        
-        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '') : "";
-        
-        container.innerHTML = `
-            <div class="card" style="text-align:center;">
-                <div class="vinyl-container">
-                    <img src="1000243510.png" class="vinyl-record ${isSpinning}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z\'/></svg>'">
-                </div>
-                <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
-                <p style="font-size:10px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; display:flex; justify-content:center; align-items:center;">
-                    ${musicStateObj.isPlaying ? noteIcon + ' Playing in sync' : 'Paused (Tap screen to unlock audio)'}
-                </p>
-                
-                <input type="text" id="musicUrl" placeholder="Select from list or type link..." value="${displayUrl}" list="songList" style="font-size:10px; text-transform:none;">
-                <button onclick="changeSong()" style="margin-top:5px; margin-bottom:20px; padding:12px; font-size:10px;">LOAD SONG</button>
-
-                <div class="music-controls" style="display:flex; align-items:center; gap: 10px;">
-                    <button class="music-btn sync" style="padding: 10px;" onclick="prevSong()" title="Previous">${prevIcon}</button>
-                    <button class="music-btn play" style="flex:1;" onclick="togglePlayPause()">${playBtnText}</button>
-                    <button class="music-btn sync" style="padding: 10px;" onclick="nextSong()" title="Next">${nextIcon}</button>
-                </div>
-                <button class="music-btn sync" style="margin-top:15px; width:100%;" onclick="forceSync()">${syncIcon}</button>
-            </div>
-        `;
-    }
-
-    function togglePlayPause() {
-        const newState = !musicStateObj.isPlaying;
-        if (newState) {
-            audioEl.play().catch(e => alert("Please tap anywhere on screen first to allow audio!"));
-        } else {
-            audioEl.pause();
-        }
-        db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
-    }
-
-    function changeSong() {
-        let newUrl = document.getElementById('musicUrl').value.trim();
-        if(!newUrl) return alert("Please enter a valid link or filename!");
-        
-        if (!newUrl.startsWith('http') && !newUrl.startsWith('songs/')) {
-            newUrl = 'songs/' + newUrl;
-        }
-        
-        db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
+        playSpecificSong(SONG_COLLECTION[idx]);
     }
 
     function forceSync() {
