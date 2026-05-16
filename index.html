@@ -116,10 +116,10 @@
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
         .give-up-btn:hover { background: rgba(255,255,255,0.05); box-shadow: none; border-color: white; color: white;}
         
-        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 10px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; }
+        .manual-point-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); margin-top: 10px; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
         .manual-point-btn:hover { background: rgba(74, 222, 128, 0.15); box-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
         
-        .reveal-btn { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; color: #3b82f6; margin-top: 5px; padding: 10px; font-size: 10px; width: 100%; border-radius: 12px; }
+        .reveal-btn { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; color: #3b82f6; margin-top: 5px; padding: 12px; font-size: 10px; width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
         .reveal-btn:hover { background: rgba(59, 130, 246, 0.2); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
 
         .reset-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 20px; font-size: 9px; padding: 8px 15px; width: auto; border-radius: 20px;}
@@ -187,7 +187,6 @@
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
-    
     <div class="home-top-bar">
         <div class="theme-wrapper">
             <button id="themeSwitcher" class="theme-btn" onclick="cycleTheme()" title="Change Theme">
@@ -201,7 +200,7 @@
         <img src="1000243508.jpg" alt="Banner" class="home-banner-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\'/></svg>'">
     </div>
 
-    <h1 class="app-title">GAMING HUB</h1>
+    <h1 class="app-title">IMMU'S HUB</h1>
     <p class="app-subtitle">CHOOSE YOUR ARENA</p>
     
     <div class="card" style="padding: 35px 20px;">
@@ -312,9 +311,7 @@
     let activeGame = 'home';
     let gameState = {}; 
     let wordGameState = {}; 
-    
     let MOVIE_COLLECTION = []; 
-    let selectedPerfectTamil = "";
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -371,14 +368,8 @@
         }
     });
 
-    // --- MASTER DATABASE ---
-    const MASTER_DATABASE = [
-        { eng: "Ghilli", tamil: "கில்லி", hero: "Vijay" }, { eng: "Master", tamil: "மாஸ்டர்", hero: "Vijay" }, { eng: "Mankatha", tamil: "மங்காத்தா", hero: "Ajith" }, { eng: "Vikram", tamil: "விக்ரம்", hero: "Kamal Haasan" }, { eng: "Asuran", tamil: "அசுரன்", hero: "Dhanush" }
-    ];
-
-    // --- TXT LOADER ---
+    // --- TXT LOADER (STRICTLY FROM TXT) ---
     async function loadMoviesFromTXT() {
-        MOVIE_COLLECTION = [...MASTER_DATABASE];
         try {
             const engRes = await fetch('movies_eng.txt');
             const tamilRes = await fetch('movies_tamil.txt');
@@ -389,28 +380,33 @@
                 const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const hLines = (await heroRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 
+                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length, hLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
-                    }
+                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] });
                 }
+                console.log("Loaded TXT files perfectly!");
             } else if (engRes.ok && tamilRes.ok) {
+                // Failsafe if heroes.txt is missing
                 const eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
                 const tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== '');
+                
+                MOVIE_COLLECTION = [];
                 const minLen = Math.min(eLines.length, tLines.length);
                 for(let i=0; i<minLen; i++){
-                    if(!MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === eLines[i].toLowerCase())) {
-                        MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
-                    }
+                    MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: "" });
                 }
+            } else {
+                console.warn("TXT files missing.");
             }
-        } catch (error) { console.error("Using Master DB fallback"); }
+        } catch (error) { console.error("Error loading TXT:", error); }
 
         const list = document.getElementById('movieList');
         list.innerHTML = "";
-        MOVIE_COLLECTION.forEach(m => {
-            const option = document.createElement('option'); option.value = m.eng; list.appendChild(option);
+        MOVIE_COLLECTION.forEach(movieObj => {
+            const option = document.createElement('option');
+            option.value = movieObj.eng;
+            list.appendChild(option);
         });
     }
 
@@ -461,15 +457,13 @@
 
     db.ref('gameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
-        let mt = data.movieTamil || data.movie || "";
-        if (/[a-zA-Z]/.test(mt)) { mt = transliterate(mt); }
         gameState = { 
             turn: data.turn || "immu", 
             status: data.status || "set", 
             score1: data.score1 || 0, 
             score2: data.score2 || 0, 
             movieEng: data.movieEng || data.movie || "", 
-            movieTamil: mt, 
+            movieTamil: data.movieTamil || "", 
             hint: data.hint || "",
             revealCount: data.revealCount || 0
         };
@@ -481,22 +475,6 @@
         wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0 };
         if(activeGame === 'word') renderWordGameUI();
     });
-
-    // Translation fallback
-    const tamilMapping = { 'a':'அ','aa':'ஆ','i':'இ','ee':'ஈ','u':'உ','oo':'ஊ','e':'எ','ae':'ஏ','ai':'ஐ','o':'ஒ','oa':'ஓ','au':'ஔ','k':'க்','ka':'க','kaa':'கா','ki':'கி','kee':'கீ','ku':'கு','koo':'கூ','ke':'கெ','kae':'கே','kai':'கை','ko':'கொ','koa':'கோ','g':'க்','ga':'க','gaa':'கா','ch':'ச்','cha':'ச','chaa':'சா','chi':'சி','chee':'சீ','chu':'சு','choo':'சூ','che':'செ','chae':'சே','chai':'சை','cho':'சொ','choa':'சோ','s':'ஸ்','sa':'ச','saa':'சா','si':'சி','see':'சீ','su':'சு','soo':'சூ','se':'செ','sae':'சே','sai':'சை','so':'சொ','soa':'சோ','sh':'ஷ்','sha':'ஷ','shaa':'ஷா','shi':'ஷி','shee':'ஷீ','shu':'ஷு','shoo':'ஷூ','she':'ஷெ','shae':'ஷே','shai':'ஷை','sho':'ஷொ','shoa':'ஷோ','j':'ஜ்','ja':'ஜ','jaa':'ஜா','ji':'ஜி','jee':'ஜீ','ju':'ஜு','joo':'ஜூ','je':'ஜெ','jae':'ஜே','jai':'ஜை','jo':'ஜொ','t':'ட்','ta':'ட','taa':'டா','ti':'டி','tee':'டீ','tu':'டு','too':'டூ','te':'டெ','tae':'டே','tai':'டை','to':'டொ','toa':'டோ','d':'ட்','da':'ட','daa':'டா','n':'ண்','na':'ண','naa':'ணா','ni':'ணி','nee':'ணீ','nu':'ணு','noo':'ணூ','ne':'ணெ','nae':'ணே','nai':'ணை','no':'ணொ','noa':'டோ','th':'த்','tha':'த','thaa':'தா','thi':'தி','thee':'தீ','thu':'து','thoo':'தூ','the':'தெ','thae':'தே','thai':'தை','tho':'தொ','thoa':'தோ','dh':'த்','dha':'த','dhaa':'தா','p':'ப்','pa':'ப','paa':'பா','pi':'பி','pee':'பீ','pu':'பு','poo':'பூ','pe':'பெ','pae':'பே','pai':'பை','po':'பொ','poa':'போ','b':'ப்','ba':'ப','baa':'பா','m':'ம்','ma':'ம','maa':'மா','mi':'மி','mee':'மீ','mu':'மு','moo':'மூ','me':'மெ','mae':'மே','mai':'மை','mo':'மொ','moa':'மோ','y':'ய்','ya':'ய','yaa':'யா','yi':'யி','yee':'யீ','yu':'யு','yoo':'யூ','ye':'யெ','yae':'யே','yai':'யை','yo':'யொ','yoa':'யோ','r':'ர்','ra':'ர','raa':'ரா','ri':'ரி','ree':'ரீ','ru':'ரு','roo':'ரூ','re':'ரெ','rae':'ரே','rai':'ரை','ro':'ரொ','roa':'ரோ','l':'ல்','la':'ல','laa':'லா','li':'லி','lee':'லீ','lu':'லு','loo':'லூ','le':'லெ','lae':'லே','lai':'லை','lo':'லொ','loa':'லோ','v':'வ்','va':'வ','vaa':'வா','vi':'வி','vee':'வீ','vu':'வு','voo':'வூ','ve':'வெ','vae':'வே','vai':'வை','vo':'வொ','voa':'வோ','w':'வ்','wa':'வ','waa':'வா','zh':'ழ்','zha':'ழ','zhaa':'ழா','zhi':'ழி','zhee':'ழீ','zhu':'ழு','zhoo':'ழூ','zhe':'ழெ','zhae':'ழே','zhai':'ழை','zho':'ழொ','zhoa':'ழோ','L':'ள்','La':'ள','Laa':'ளா','Li':'ளி','Lee':'ளீ','Lu':'ளு','Loo':'ளூ','Le':'ளெ','Lae':'ளே','Lai':'ளை','Lo':'ளொ','Loa':'ளோ','R':'ற்','Ra':'ற','Raa':'றா','Ri':'றி','Ree':'றீ','Ru':'று','Roo':'றூ','Re':'றெ','Rae':'றே','Rai':'றை','Ro':'றொ','Roa':'றோ','nn':'ன்','nna':'ன','nnaa':'னா','nni':'னி','nnee':'னீ','nnu':'னு','nnoo':'னூ','nne':'னெ','nnae':'னே','nnai':'னை','nno':'னொ','nnoa':'னோ' };
-
-    function transliterate(text) {
-        let result = ""; let i = 0; const lower = text.toLowerCase();
-        while (i < lower.length) {
-            let found = false;
-            for (let len = 4; len >= 1; len--) {
-                let chunk = lower.substring(i, i + len);
-                if (tamilMapping[chunk]) { result += tamilMapping[chunk]; i += len; found = true; break; }
-            }
-            if (!found) { result += text[i]; i++; }
-        }
-        return result;
-    }
 
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
@@ -539,8 +517,8 @@
                         
                         <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">HELP YOUR PARTNER:</p>
-                        <button class="reveal-btn" onclick="revealLetters()">🔍 REVEAL 2 LETTERS</button>
-                        <button class="manual-point-btn" onclick="awardManualPoint()">✅ GIVE POINT & NEXT TURN</button>
+                        <button class="reveal-btn" onclick="revealLetters()">REVEAL 1 LETTER</button>
+                        <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
                     </div>`;
             } else {
                 container.innerHTML = `
@@ -558,10 +536,10 @@
         }
     }
 
-    // --- REVEAL LETTERS FIX ---
+    // --- REVEAL 1 LETTER FIX ---
     function revealLetters() {
         let current = gameState.revealCount || 0;
-        db.ref('gameState').update({ revealCount: current + 2 });
+        db.ref('gameState').update({ revealCount: current + 1 });
     }
 
     // --- MANUAL POINT FIX ---
@@ -579,11 +557,9 @@
         if(foundMovie) { 
             if(foundMovie.hero) { document.getElementById('hintInput').value = "HERO: " + foundMovie.hero.toUpperCase(); } 
             else { document.getElementById('hintInput').value = ""; }
-            selectedPerfectTamil = foundMovie.tamil;
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
         } else {
-            selectedPerfectTamil = "";
-            document.getElementById('tamilPreview').innerText = val ? transliterate(val) : "";
+            document.getElementById('tamilPreview').innerText = "";
         }
     }
     
@@ -595,7 +571,6 @@
         if(randomObj.hero) { document.getElementById('hintInput').value = "HERO: " + randomObj.hero.toUpperCase(); } 
         else { document.getElementById('hintInput').value = "GUESS THE HERO!"; }
         
-        selectedPerfectTamil = randomObj.tamil;
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
     }
     
@@ -604,8 +579,8 @@
         const h = document.getElementById('hintInput').value; 
         if(!rawEng) return alert("ENTER MOVIE!"); 
         
-        let finalTamil = selectedPerfectTamil || transliterate(rawEng);
-        if(/[a-zA-Z]/.test(finalTamil)) { finalTamil = transliterate(finalTamil); } // Force Translation
+        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
+        const finalTamil = foundMovie ? foundMovie.tamil : rawEng; // Use text file content directly
 
         db.ref('gameState').update({ movieEng: rawEng.toLowerCase(), movieTamil: finalTamil, hint: h, status: "guessing", revealCount: 0 }); 
     }
@@ -614,10 +589,8 @@
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
-        const guessTamil = transliterate(guessRaw);
-        const answerTamil = gameState.movieTamil;
-
-        if ((normalizedGuess === normalizedAnswer && normalizedGuess !== "") || (guessTamil === answerTamil && guessTamil !== "")) { 
+        // Simple English match check
+        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
             db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "", revealCount: 0 }); 
@@ -637,51 +610,45 @@
     
     function getLetterCount(str) { 
         if(!str) return 0; 
-        const clusters = str.replace(/\s+/g, '').match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[0-9]/g) || []; 
-        return clusters.length; 
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]|\s/g) || []; 
+        let count = 0;
+        for (let i = 0; i < clusters.length; i++) {
+            if (clusters[i].trim() !== "") count++;
+        }
+        return count; 
     }
     
-    // PERFECT MASKING: First and Last of the ENTIRE STRING & Support for Reveal Count
+    // PERFECT MASKING: Exactly from Text file, properly handling spaces
     function maskTamilFull(str, revealCount = 0) {
         if(!str) return "";
-        let safeStr = str;
-        if (/[a-zA-Z]/.test(safeStr)) { safeStr = transliterate(safeStr); }
+        const clusters = str.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]|\s/g) || [];
+        const letterIndices = [];
         
-        let clusterData = [];
-        let globalHiddenIndices = [];
-        let globalIndex = 0;
-        
-        const words = safeStr.split(" ");
-        
-        words.forEach(word => {
-            const wordClusters = word.match(/[\u0B80-\u0BFF][\u0BC0-\u0BD7\u0BBE-\u0BBF\u0BC6-\u0BC8\u0BCA-\u0BCC\u0BCD]*|[a-zA-Z0-9]/g) || [];
-            if (wordClusters.length <= 2) {
-                wordClusters.forEach((c, i) => {
-                    const isHidden = (i !== 0);
-                    clusterData.push({ char: c, isHidden: isHidden, isSpace: false });
-                    if (isHidden) globalHiddenIndices.push(globalIndex);
-                    globalIndex++;
-                });
-            } else {
-                wordClusters.forEach((c, i) => {
-                    const isHidden = (i !== 0 && i !== wordClusters.length - 1);
-                    clusterData.push({ char: c, isHidden: isHidden, isSpace: false });
-                    if (isHidden) globalHiddenIndices.push(globalIndex);
-                    globalIndex++;
-                });
+        for (let i = 0; i < clusters.length; i++) {
+            if (clusters[i].trim() !== "") {
+                letterIndices.push(i);
             }
-            clusterData.push({ char: "&nbsp;&nbsp;&nbsp;&nbsp;", isHidden: false, isSpace: true });
-            globalIndex++;
-        });
+        }
 
-        clusterData.pop(); // Remove last space
+        if (letterIndices.length === 0) return "_";
 
-        let indicesToReveal = globalHiddenIndices.slice(0, revealCount);
+        if (letterIndices.length <= 2) {
+            return clusters.map((c, i) => {
+                if (c.trim() === "") return "&nbsp;&nbsp;";
+                if (i === letterIndices[0]) return c;
+                return "_";
+            }).join(" ");
+        }
 
-        return clusterData.map((data, idx) => {
-            if (data.isSpace) return data.char;
-            if (!data.isHidden) return data.char;
-            if (indicesToReveal.includes(idx)) return `<span style="color:var(--text-main);">${data.char}</span>`;
+        const firstIdx = letterIndices[0];
+        const lastIdx = letterIndices[letterIndices.length - 1];
+        const hiddenIndices = letterIndices.slice(1, -1);
+        const revealedIndices = hiddenIndices.slice(0, revealCount);
+
+        return clusters.map((c, i) => {
+            if (c.trim() === "") return "&nbsp;&nbsp;";
+            if (i === firstIdx || i === lastIdx) return c;
+            if (revealedIndices.includes(i)) return `<span style="color:var(--text-main);">${c}</span>`;
             return "_";
         }).join(" ");
     }
