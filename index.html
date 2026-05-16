@@ -59,7 +59,7 @@
         .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
         .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
 
-        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
         .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
@@ -106,6 +106,7 @@
         
         input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--border-color); background-color: rgba(0,0,0,0.3); color: var(--text-main); box-sizing: border-box; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; transition: all 0.3s ease; letter-spacing: 1px;}
         input:focus { outline: none; border-color: var(--primary-color); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px var(--glow-shadow); background-color: rgba(0,0,0,0.5);}
+        input::placeholder { color: #666; font-weight: 600;}
         
         .letter-box { font-size: 26px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);}
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
@@ -121,46 +122,16 @@
 
         /* PERFECT MASKING VIEW */
         .masked-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin: 15px 0 20px 0; line-height: 1.6; font-family: 'Latha', sans-serif;}
+        .mask-word { display: flex; gap: 6px; margin-bottom: 8px;}
+        .mask-space { width: 15px; }
         .mask-char { color: var(--text-main); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(255,255,255,0.4); font-family: 'Latha', sans-serif;}
         .mask-dash { color: var(--accent-color); font-size: 28px; font-weight: 800; text-shadow: 0 0 15px rgba(74, 222, 128, 0.4); font-family: 'Latha', sans-serif;}
 
         .letter-count { font-size: 9px; font-weight: 800; background: rgba(74, 222, 128, 0.1); color: var(--accent-color); display: inline-block; padding: 4px 12px; border-radius: 8px; border: 1px solid var(--accent-color); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 20px;}
         .preview-text { color: var(--accent-color); font-size: 20px; font-weight: 800; margin: 5px 0 15px 0; min-height: 30px; font-family: 'Latha', sans-serif; opacity: 0.9;}
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
-        .hidden { display: none !important; }
 
-        /* Modern Chat Box */
-        .chat-container { text-align: left; padding: 20px; position: relative;}
-        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
-        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
-
-        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
-        .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
-        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
-        .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
-        
-        .msg-actions { display: inline-flex; gap: 8px; }
-        .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
-        .msg-action-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
-        .msg-action-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 10px var(--glow-shadow); }
-
-        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
-        .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
-        .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
-        
-        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
-        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
-        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
-        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
-
-        /* Emoji Picker */
-        .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
-        .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
-        .emoji-item:hover { transform: scale(1.3); }
-
-        /* ================= VELORA MUSIC PLAYER ================= */
+        /* VELORA MUSIC PLAYER */
         .velora-player { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 36px; overflow: hidden; backdrop-filter: blur(25px); box-shadow: 0 15px 50px rgba(0,0,0,.45), inset 0 0 40px rgba(255,255,255,.02); padding-bottom: 20px;}
         .velora-cover-wrap { position: relative; padding: 18px; }
         .velora-cover-img { width: 100%; height: 280px; object-fit: cover; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
@@ -196,12 +167,52 @@
         .velora-track-info { flex: 1; overflow: hidden; }
         .velora-track-name { font-size: .95rem; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .velora-track-artist { font-size: .75rem; color: #94a3b8; margin-top: 3px; }
+
+        .hidden { display: none !important; }
+        .turn-indicator { font-size: 9px; color: var(--accent-color); font-weight: 800; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px;}
+
+        /* Modern Chat Box */
+        .chat-container { text-align: left; padding: 20px; position: relative;}
+        .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
         
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
+
+        .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
+        
+        .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
+        .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
+        .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
+        
+        /* PREMIUM SVG ACTION BUTTONS */
+        .msg-actions { display: inline-flex; gap: 8px; }
+        .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
+        .msg-action-btn svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+        .msg-action-btn:hover { background: var(--primary-color); color: #fff; border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 10px var(--glow-shadow); }
+        .msg-action-btn.copy-btn:hover { background: var(--accent-color); border-color: var(--accent-color); color: #120A1E; box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);}
+
+        .my-message { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); align-self: flex-end; color: #fff; border-radius: 16px 16px 0 16px; }
+        .partner-message { background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid var(--border-color); align-self: flex-start; color: var(--text-main); border-radius: 16px 16px 16px 0; }
+        .system-message { background: rgba(74, 222, 128, 0.05); color: var(--accent-color); align-self: center; text-align: center; border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 12px; padding: 8px 15px; max-width: 90%; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .chat-input-group { display: flex; gap: 10px; align-items: center; position: relative; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 25px; padding: 4px 4px 4px 10px;}
+        .chat-input { margin: 0; text-align: left; background: transparent; border: none; padding: 10px 0; box-shadow: none; font-size: 12px; text-transform: none; font-weight: 600;}
+        .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
+        .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
+
+        /* Emoji Picker */
+        .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
+        .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
+        .emoji-item:hover { transform: scale(1.3); }
+
+        /* Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
         .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
         .btn-cancel { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); margin-top: 15px; padding: 12px; border-radius: 12px; box-shadow: none; font-size:11px;}
         .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; border-color: white;}
+
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
@@ -211,8 +222,10 @@
 </head>
 <body>
 
-<canvas id="neonCanvas"></canvas>
 <audio id="sharedAudio" src="" preload="auto"></audio>
+
+<canvas id="neonCanvas"></canvas>
+
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
@@ -276,6 +289,7 @@
     </div>
 
     <datalist id="movieList"></datalist>
+    <datalist id="songList"></datalist>
     <div id="gameContentArea"></div>
 
     <div class="chat-container card">
@@ -338,25 +352,11 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; let wordGameState = {}; let musicStateObj = {}; 
-    let MOVIE_COLLECTION = []; let SONG_COLLECTION = [];
-
-    // --- 🔊 AUTO-PLAY UNLOCKER FIX ---
-    let audioUnlocked = false;
-    function unlockAudio() {
-        if(audioUnlocked) return;
-        const audioEl = document.getElementById('sharedAudio');
-        audioEl.play().then(() => {
-            if(!musicStateObj.isPlaying) audioEl.pause();
-            audioUnlocked = true;
-        }).catch(err => {
-            audioUnlocked = true; // Prevents endless retries
-        });
-        document.body.removeEventListener('click', unlockAudio);
-        document.body.removeEventListener('touchstart', unlockAudio);
-    }
-    document.body.addEventListener('click', unlockAudio);
-    document.body.addEventListener('touchstart', unlockAudio);
+    let gameState = {}; 
+    let wordGameState = {}; 
+    let musicStateObj = {}; 
+    let MOVIE_COLLECTION = []; 
+    let SONG_COLLECTION = [];
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -441,7 +441,7 @@
         else { indicator.classList.add('hidden'); }
     });
 
-    // --- AUTO-SWAP TXT LOADER WITH FORMATTER ---
+    // --- AUTO-SWAP TXT LOADER WITH SONGS ---
     async function loadMoviesFromTXT() {
         MOVIE_COLLECTION = []; SONG_COLLECTION = [];
         try {
@@ -463,11 +463,16 @@
                     if(eLines[i] && tLines[i]) MOVIE_COLLECTION.push({ eng: eLines[i], tamil: tLines[i], hero: hLines[i] || "" });
                 }
             }
-
             if (songsRes.ok) {
                 SONG_COLLECTION = (await songsRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim()).filter(l => l !== "");
             }
         } catch (error) { console.error("TXT Load Error:", error); }
+
+        const list = document.getElementById('movieList'); list.innerHTML = "";
+        MOVIE_COLLECTION.forEach(m => { const option = document.createElement('option'); option.value = m.eng; list.appendChild(option); });
+
+        const songList = document.getElementById('songList'); songList.innerHTML = "";
+        SONG_COLLECTION.forEach(s => { const option = document.createElement('option'); option.value = s; songList.appendChild(option); });
     }
 
     window.onload = () => {
@@ -539,18 +544,17 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // --- MUSIC SYNC LISTENER (WITH 404 AUTO-FIX) ---
+    // --- MUSIC SYNC LISTENER (WITH FIX FOR SPACES & UNLOCK BUTTON) ---
     const audioEl = document.getElementById('sharedAudio');
     let ignoreNextSync = false;
 
-    // Helper: Safely format URL to always include .mp3
     function formatAudioUrl(rawUrl) {
         if (!rawUrl) return "";
-        if (rawUrl.startsWith('http')) return rawUrl;
+        if (rawUrl.startsWith('http')) return encodeURI(rawUrl);
         let finalUrl = rawUrl;
         if (!finalUrl.startsWith('songs/')) finalUrl = 'songs/' + finalUrl;
         if (!finalUrl.endsWith('.mp3')) finalUrl += '.mp3';
-        return finalUrl;
+        return encodeURI(finalUrl); // Converts spaces to %20 to avoid 404 errors!
     }
 
     db.ref('musicState').on('value', (snapshot) => {
@@ -570,7 +574,7 @@
             if (Math.abs(audioEl.currentTime - musicStateObj.currentTime) > 1.5) audioEl.currentTime = musicStateObj.currentTime;
             
             if (musicStateObj.isPlaying && audioEl.paused) {
-                audioEl.play().catch(e => console.log("Waiting for user tap to allow audio."));
+                audioEl.play().catch(e => console.log("Waiting for user interaction."));
             } else if (!musicStateObj.isPlaying && !audioEl.paused) {
                 audioEl.pause();
             }
@@ -582,12 +586,6 @@
     audioEl.addEventListener('seeked', () => {
         if (!ignoreNextSync) db.ref('musicState').update({ currentTime: audioEl.currentTime, updatedBy: myName });
         ignoreNextSync = false;
-    });
-
-    audioEl.addEventListener('error', (e) => {
-        if(activeGame === 'music' && musicStateObj.url) {
-            showToast("⚠️ SONG FILE NOT FOUND! Check GitHub name.");
-        }
     });
 
     audioEl.addEventListener('timeupdate', () => {
@@ -868,14 +866,13 @@
 
     // ================= PREMIUM VELORA MUSIC LOUNGE =================
     function playSpecificSong(songName) {
-        // Formats properly to add .mp3 automatically
-        const newUrl = formatAudioUrl(songName);
+        let newUrl = formatAudioUrl(songName);
         db.ref('musicState').update({ url: newUrl, isPlaying: true, currentTime: 0, updatedBy: myName, timestamp: Date.now() });
     }
 
     function nextSong() {
         if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = musicStateObj.url.replace('songs/', '').replace('.mp3', '');
+        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
         let idx = SONG_COLLECTION.indexOf(currentFile);
         if (idx === -1) idx = 0; else idx = (idx + 1) % SONG_COLLECTION.length;
         playSpecificSong(SONG_COLLECTION[idx]);
@@ -883,7 +880,7 @@
 
     function prevSong() {
         if (SONG_COLLECTION.length === 0) return alert("Playlist is empty!");
-        let currentFile = musicStateObj.url.replace('songs/', '').replace('.mp3', '');
+        let currentFile = decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '');
         let idx = SONG_COLLECTION.indexOf(currentFile);
         if (idx === -1) idx = 0; else idx = (idx - 1 + SONG_COLLECTION.length) % SONG_COLLECTION.length;
         playSpecificSong(SONG_COLLECTION[idx]);
@@ -893,10 +890,9 @@
         const container = document.getElementById('gameContentArea');
         const isSpinning = musicStateObj.isPlaying ? 'spin-anim' : '';
         
-        let displayUrl = musicStateObj.url ? musicStateObj.url.replace('songs/', '').replace('.mp3', '') : "Select a track";
+        let displayUrl = musicStateObj.url ? decodeURI(musicStateObj.url).replace('songs/', '').replace('.mp3', '') : "Select a track";
         let isPlaying = musicStateObj.isPlaying;
         
-        // PREMIUM SVG ICONS
         const playIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
         const pauseIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
         const prevIcon = `<svg viewBox="0 0 24 24" width="24" height="24" class="svg-icon" stroke="none" fill="currentColor"><polygon points="11 19 2 12 11 5"></polygon><polygon points="22 19 13 12 22 5"></polygon></svg>`;
@@ -907,16 +903,16 @@
         container.innerHTML = `
         <div class="velora-player">
             <div style="text-align:left; padding: 15px 22px 5px 22px;">
-                <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); border-radius:999px; color:#cbd5e1; font-size:.75rem; font-weight:800; text-transform:uppercase;">
+                <div style="display:inline-flex; align-items:center; gap:10px; padding:8px 12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.06); border-radius:999px; color:#cbd5e1; font-size:.75rem; font-weight:800; text-transform:uppercase; cursor:pointer;" onclick="unlockAudio()">
                     <div style="width:8px; height:8px; border-radius:50%; background:var(--accent-color); box-shadow:0 0 10px var(--accent-color); ${isPlaying ? 'animation: blink 1.5s infinite;' : ''}"></div>
-                    Synced Session
+                    🔓 TAP TO UNLOCK AUDIO
                 </div>
                 <h2 style="font-size:2rem; margin-top:15px; font-weight:800; text-transform:uppercase; line-height:1.1;">Listen<br>Together</h2>
             </div>
 
             <div>
                 <div class="velora-cover-wrap">
-                    <img src="1000243510.png" onerror="this.src='image_605d04.png'" class="velora-cover-img ${isSpinning}">
+                    <img src="image_605d04.png" onerror="this.src='1000243510.png'" class="velora-cover-img ${isSpinning}">
                     <div class="velora-cover-overlay"></div>
                 </div>
                 <div class="velora-info">
@@ -952,15 +948,17 @@
                     <span>${SONG_COLLECTION.length} Tracks</span>
                 </div>
                 <div style="max-height: 200px; overflow-y: auto; padding-right: 5px;">
-                    ${SONG_COLLECTION.map(song => `
-                        <div class="velora-track ${musicStateObj.url && musicStateObj.url.includes(song) ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
-                            <div class="velora-track-icon"><svg viewBox="0 0 24 24" width="16" height="16" class="svg-icon" stroke="none" fill="currentColor"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg></div>
+                    ${SONG_COLLECTION.map(song => {
+                        let isMatch = musicStateObj.url && decodeURI(musicStateObj.url).includes(song);
+                        return `
+                        <div class="velora-track ${isMatch ? 'active-track' : ''}" onclick="playSpecificSong('${song}')">
+                            <div class="velora-track-icon">${isMatch && isPlaying ? pauseIcon : playIcon}</div>
                             <div class="velora-track-info">
                                 <div class="velora-track-name">${song}</div>
                                 <div class="velora-track-artist">Immu & Sappii</div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                     ${SONG_COLLECTION.length === 0 ? `<div style="text-align:center; color:#64748b; font-size:10px; margin-top:20px;">No songs found in songs.txt</div>` : ''}
                 </div>
             </div>
@@ -970,8 +968,11 @@
 
     function togglePlayPause() {
         const newState = !musicStateObj.isPlaying;
-        if (newState) { audioEl.play().catch(e => alert("Please tap anywhere on screen first to allow audio!")); } 
-        else { audioEl.pause(); }
+        if (newState) { 
+            audioEl.play().catch(e => alert("Please tap the 'TAP TO UNLOCK AUDIO' button first!")); 
+        } else { 
+            audioEl.pause(); 
+        }
         db.ref('musicState').update({ isPlaying: newState, currentTime: audioEl.currentTime, updatedBy: myName, timestamp: Date.now() });
     }
 
@@ -1095,7 +1096,6 @@
         const text = chatInput.value.trim();
         if(!text) return;
 
-        // 🔥 IMMU'S SECRET ADMIN POWERS 🔥
         if (myName === 'immu') {
             if (text.startsWith('/add ')) {
                 const pts = parseInt(text.replace('/add ', ''));
