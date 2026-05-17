@@ -138,13 +138,16 @@
         .music-btn.play-btn { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); font-weight:bold;}
         .music-btn.sync { padding: 10px 15px; font-size: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 15px;}
         .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
+        
+        /* Native Audio Player */
+        audio { width: 100%; height: 45px; margin-bottom: 20px; border-radius: 25px; outline: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        audio::-webkit-media-controls-panel { background-color: rgba(255,255,255,0.8); }
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
-        
-        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 5px; margin-bottom: 8px; display: none;}
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: block;}
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
@@ -186,8 +189,6 @@
 <body>
 
 <canvas id="neonCanvas"></canvas>
-
-<audio id="sharedAudio" style="display:none;"></audio>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
@@ -254,7 +255,7 @@
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         
-        <span id="typingIndicator" class="typing-indicator">TYPING...</span>
+        <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
         
         <div class="chat-input-group">
             <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">😊</button>
@@ -307,7 +308,7 @@
     let activeGame = 'home';
     let gameState = {}; let wordGameState = {}; let MOVIE_COLLECTION = []; 
 
-    // --- 🎵 CDN JS DELIVR MUSIC SYSTEM (100% WORKS) ---
+    // --- 🎵 CDN JS DELIVR MUSIC SYSTEM ---
     const songs = [
         "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
         "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
@@ -316,10 +317,6 @@
     let currentSong = 0;
     let playing = false;
     let isRemoteAction = false;
-    const audio = document.getElementById("sharedAudio");
-
-    // Initialize first song
-    audio.src = songs[currentSong];
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -466,11 +463,13 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // ================= 🎵 ORIGINAL ASYNC/AWAIT MUSIC ENGINE =================
+    // ================= 🎵 NATIVE AUDIO PLAYER & FIREBASE LOGIC =================
     
     function updateMusicUI() {
         let pBtn = document.getElementById("mainPlayBtn");
         let vRec = document.getElementById("vinylRecord");
+        let displayEl = document.getElementById('songNameDisplay');
+
         if(playing) {
             if(pBtn) pBtn.innerText = "PAUSE";
             if(vRec) vRec.classList.add("spin-anim");
@@ -478,101 +477,49 @@
             if(pBtn) pBtn.innerText = "PLAY";
             if(vRec) vRec.classList.remove("spin-anim");
         }
-        let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
-        let displayEl = document.getElementById('songNameDisplay');
-        if(displayEl) displayEl.innerText = "🎵 " + sName;
+
+        if(displayEl) {
+            let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
+            displayEl.innerText = "🎵 " + sName;
+        }
     }
 
-    async function togglePlayPause() {
-        if(!playing){
+    function loadSong() {
+        const audio = document.getElementById("sharedAudio");
+        if(audio) audio.src = songs[currentSong];
+        updateMusicUI();
+    }
+
+    async function toggleCustomPlay() {
+        const audio = document.getElementById("sharedAudio");
+        if (!audio.src || audio.src === window.location.href) {
+            loadSong();
+        }
+
+        if(!playing) {
             await audio.play();
-            playing = true;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+            // The audio 'play' event listener will handle the rest (UI update & Firebase sync)
         } else {
             audio.pause();
-            playing = false;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+            // The audio 'pause' event listener will handle the rest
         }
     }
 
     async function nextSong() {
+        const audio = document.getElementById("sharedAudio");
         currentSong++;
-        if(currentSong >= songs.length){
-            currentSong = 0;
-        }
-        audio.src = songs[currentSong];
+        if(currentSong >= songs.length) currentSong = 0;
+        loadSong();
         await audio.play();
-        playing = true;
-        updateMusicUI();
-        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
     }
 
     async function prevSong() {
+        const audio = document.getElementById("sharedAudio");
         currentSong--;
-        if(currentSong < 0){
-            currentSong = songs.length - 1;
-        }
-        audio.src = songs[currentSong];
+        if(currentSong < 0) currentSong = songs.length - 1;
+        loadSong();
         await audio.play();
-        playing = true;
-        updateMusicUI();
-        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
     }
-
-    /* AUTO NEXT */
-    audio.addEventListener("ended", async () => {
-        if(activeGame === 'music' && playing && !isRemoteAction) {
-            currentSong++;
-            if(currentSong >= songs.length){
-                currentSong = 0;
-            }
-            audio.src = songs[currentSong];
-            await audio.play();
-            playing = true;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
-        }
-    });
-
-    function forceSync() {
-        db.ref('musicState').update({ action: playing ? 'play' : 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
-        showToast("SYNC SENT!");
-    }
-
-    // Remote Sync Listener
-    db.ref('musicState').on('value', async snapshot => {
-        const data = snapshot.val();
-        if(!data) return;
-
-        if (data.by !== myName) {
-            isRemoteAction = true;
-            
-            if (data.index !== currentSong) {
-                currentSong = data.index;
-                audio.src = songs[currentSong];
-            }
-
-            if (Math.abs(audio.currentTime - data.time) > 1.5) {
-                audio.currentTime = data.time;
-            }
-
-            if (data.action === 'play') {
-                try {
-                    await audio.play();
-                    playing = true;
-                } catch(e) {
-                    showToast("TAP PLAY TO ALLOW AUDIO");
-                }
-            } else {
-                audio.pause();
-                playing = false;
-            }
-            updateMusicUI();
-            setTimeout(() => { isRemoteAction = false; }, 500);
-        }
-    });
 
     function renderMusicUI() {
         const container = document.getElementById('gameContentArea');
@@ -586,20 +533,100 @@
                     <img src="1000243510.png" class="vinyl-record ${isSpinning}" id="vinylRecord" onerror="this.src='image_605d04.png'">
                 </div>
                 <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
-                <p id="songNameDisplay" style="font-size:12px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; font-weight:bold;">
+                <p id="songNameDisplay" style="font-size:12px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; font-weight:bold;">
                     🎵 ${sName}
                 </p>
 
+                <audio id="sharedAudio" controls style="width:100%; height:45px; border-radius:25px; outline:none; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.4);"></audio>
+
                 <div class="music-controls" style="display:flex; justify-content:center; align-items:center; gap: 10px;">
                     <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="prevSong()" title="Previous">⏮️</button>
-                    <button class="btn-main play-btn" style="margin:0; padding:15px; flex:1;" id="mainPlayBtn" onclick="togglePlayPause()">${playText}</button>
+                    <button class="btn-main play-btn" style="margin:0; padding:15px; flex:1;" id="mainPlayBtn" onclick="toggleCustomPlay()">${playText}</button>
                     <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="nextSong()" title="Next">⏭️</button>
                 </div>
-                
-                <button class="btn-main" style="background:transparent; border:1px solid var(--border-color); box-shadow:none; color:var(--text-muted);" onclick="forceSync()">🔄 FORCE SYNC WITH PARTNER</button>
             </div>
         `;
+
+        // Wait for the audio element to be added to DOM, then attach Native Listeners
+        setTimeout(() => {
+            const audio = document.getElementById("sharedAudio");
+            if(audio) {
+                // Keep the current song loaded
+                audio.src = songs[currentSong];
+                if (playing) {
+                    audio.play().catch(e=>console.log(e));
+                }
+
+                // Listeners that catch both Custom Button clicks AND Native Controls
+                audio.addEventListener('play', () => {
+                    playing = true;
+                    updateMusicUI();
+                    if(!isRemoteAction) {
+                        db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+                    }
+                });
+
+                audio.addEventListener('pause', () => {
+                    playing = false;
+                    updateMusicUI();
+                    if(!isRemoteAction) {
+                        db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+                    }
+                });
+
+                audio.addEventListener('seeked', () => {
+                    if(!isRemoteAction) {
+                        db.ref('musicState').update({ action: playing ? 'play' : 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+                    }
+                });
+
+                audio.addEventListener("ended", async () => {
+                    // Let each device auto-next independently, don't broadcast to avoid double skips
+                    currentSong++;
+                    if(currentSong >= songs.length) currentSong = 0;
+                    loadSong();
+                    isRemoteAction = true; 
+                    await audio.play();
+                    setTimeout(() => isRemoteAction = false, 1000);
+                });
+            }
+        }, 100);
     }
+
+    // Remote Sync Listener
+    db.ref('musicState').on('value', async snapshot => {
+        const data = snapshot.val();
+        if(!data) return;
+
+        if (data.by !== myName) {
+            isRemoteAction = true;
+            const audio = document.getElementById("sharedAudio");
+            if (!audio) return;
+            
+            if (data.index !== currentSong) {
+                currentSong = data.index;
+                loadSong();
+            }
+
+            if (Math.abs(audio.currentTime - data.time) > 1.5) {
+                audio.currentTime = data.time;
+            }
+
+            if (data.action === 'play') {
+                try {
+                    await audio.play();
+                    playing = true;
+                } catch(e) {
+                    showToast("PARTNER PLAYED A SONG! TAP NATIVE PLAY BUTTON 🎵");
+                }
+            } else {
+                audio.pause();
+                playing = false;
+            }
+            updateMusicUI();
+            setTimeout(() => { isRemoteAction = false; }, 500);
+        }
+    });
 
     // ================= MOVIE GUESSING UI =================
     function renderMovieGameUI() {
@@ -836,23 +863,20 @@
             }
         } catch (e) {}
 
-        // --- FIREBASE TRANSACTION FOR EXACT SAME TIME ---
         const wordRef = db.ref(`wordGameState/usedWords/${word}`);
         wordRef.transaction((currentValue) => {
             if (currentValue === null) {
-                return myName; // Not used, claim it!
+                return myName; 
             } else {
-                return; // Abort, already used!
+                return; 
             }
         }, (error, committed, snapshot) => {
             if (error) {
                 document.getElementById('raceFeedback').innerText = `NETWORK ERROR!`;
             } else if (!committed) {
-                // Someone else claimed it while we were checking the dictionary!
                 document.getElementById('raceFeedback').innerText = `TOO LATE! SAPPII TYPED IT FIRST 🏃💨`;
                 document.getElementById('raceFeedback').style.color = "var(--primary-color)";
             } else {
-                // Claimed successfully!
                 const scoreKey = (myName === "immu") ? 'score1' : 'score2';
                 db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
                 db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
@@ -903,29 +927,11 @@
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
-    // Chat Typing Fix
-    const typingIndicator = document.getElementById('typingIndicator');
-    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        if (snapshot.val()) { 
-            typingIndicator.style.display = 'block'; 
-        } else { 
-            typingIndicator.style.display = 'none'; 
-        }
-    });
-
-    function copyMsg(id) {
-        const txt = document.getElementById('text-' + id).innerText;
-        navigator.clipboard.writeText(txt);
-        showToast("COPIED!");
-    }
-
-    function deleteMsg(id) {
-        db.ref('chatMessages/' + id).remove();
-        showToast("DELETED!");
-    }
-
+    // CHAT SYSTEM
     db.ref('chatMessages').on('value', (snapshot) => {
-        if(!snapshot.exists()) { document.getElementById('chatMessages').innerHTML = ''; }
+        if(!snapshot.exists()) {
+            document.getElementById('chatMessages').innerHTML = ''; 
+        }
     });
 
     let isChatLoaded = false;
@@ -949,16 +955,9 @@
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
-        const copySvg = `<svg viewBox="0 0 24 24" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-        const delSvg = `<svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
-
-        const copyBtn = `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="copyMsg('${msgKey}')" title="Copy">${copySvg}</button>`;
-        const delBtn = isMine ? `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="deleteMsg('${msgKey}')" title="Delete">${delSvg}</button>` : '';
-
         messageDiv.innerHTML = `
-            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}; display:flex; justify-content:space-between; align-items:center;">
-                <span>${isMine ? 'YOU' : data.sender} (${time})</span>
-                ${!isSystem ? `<span>${copyBtn}${delBtn}</span>` : ''}
+            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}">
+                ${isMine ? 'YOU' : data.sender} (${time})
             </div>
             <div class="message-text" id="text-${msgKey}">${data.text}</div>
         `;
@@ -967,11 +966,6 @@
         chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
 
         if (isChatLoaded && !isMine && !isSystem) { showToast(`NEW MESSAGE FROM ${data.sender}`); }
-    });
-
-    db.ref('chatMessages').on('child_removed', (snapshot) => {
-        const msgDiv = document.getElementById(`msg-${snapshot.key}`);
-        if(msgDiv) msgDiv.remove();
     });
 
     function sendChatMessage() {
