@@ -143,8 +143,7 @@
         .chat-container { text-align: left; padding: 20px; position: relative;}
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
-        
-        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 5px; margin-bottom: 8px; display: none;}
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: none;}
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
@@ -165,7 +164,6 @@
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
@@ -187,7 +185,7 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<audio id="audio" style="display:none;"></audio>
+<audio id="sharedAudio" style="display:none;"></audio>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
@@ -306,26 +304,6 @@
 
     let activeGame = 'home';
     let gameState = {}; let wordGameState = {}; let MOVIE_COLLECTION = []; 
-
-    // --- 🎵 PERFECTED AUDIO ENGINE (YOUR LOGIC) ---
-    const songs = [
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
-    ];
-    let currentSong = 0;
-    let playing = false;
-    let isRemoteAction = false;
-    const audio = document.getElementById("audio");
-
-    // Initialize first song source
-    function loadSong() {
-        audio.src = songs[currentSong];
-        let sName = songs[currentSong].split('/').pop().replace('.mp3', '');
-        let displayEl = document.getElementById('songNameDisplay');
-        if(displayEl) displayEl.innerText = "🎵 " + sName;
-    }
-    loadSong();
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -472,11 +450,38 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // ================= 🎵 NATIVE ASYNC/AWAIT MUSIC ENGINE =================
+    // ================= 🎵 FIXED MOBILE MUSIC ENGINE =================
     
+    const songs = [
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
+    ];
+    
+    let currentSong = 0;
+    let playing = false;
+    let isRemoteAction = false;
+    const audio = document.getElementById("sharedAudio");
+
+    // Fix for iOS Safari and Mobile Chrome
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("webkit-playsinline", "true");
+    audio.preload = "auto";
+    audio.volume = 1;
+    audio.muted = false;
+
+    function loadSong() {
+        audio.src = songs[currentSong];
+        updateMusicUI();
+    }
+    
+    // Load first song initially
+    loadSong();
+
     function updateMusicUI() {
         let pBtn = document.getElementById("mainPlayBtn");
         let vRec = document.getElementById("vinylRecord");
+
         if(playing) {
             if(pBtn) pBtn.innerText = "PAUSE";
             if(vRec) vRec.classList.add("spin-anim");
@@ -484,22 +489,52 @@
             if(pBtn) pBtn.innerText = "PLAY";
             if(vRec) vRec.classList.remove("spin-anim");
         }
+
         let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
         let displayEl = document.getElementById('songNameDisplay');
-        if(displayEl) displayEl.innerText = "🎵 " + sName;
+        if(displayEl) {
+            displayEl.innerText = "🎵 " + sName;
+        }
     }
 
     async function togglePlayPause() {
-        if(!playing){
-            await audio.play();
-            playing = true;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
-        } else {
-            audio.pause();
-            playing = false;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+        try {
+            if(!playing) {
+                audio.muted = false;
+                audio.volume = 1;
+                
+                if(!audio.src || audio.src === window.location.href){
+                    loadSong();
+                }
+
+                await audio.play();
+                playing = true;
+                updateMusicUI();
+
+                db.ref('musicState').update({
+                    action: 'play',
+                    index: currentSong,
+                    time: audio.currentTime,
+                    by: myName,
+                    ts: Date.now()
+                });
+            } else {
+                audio.pause();
+                playing = false;
+                updateMusicUI();
+
+                db.ref('musicState').update({
+                    action: 'pause',
+                    index: currentSong,
+                    time: audio.currentTime,
+                    by: myName,
+                    ts: Date.now()
+                });
+            }
+        } catch(err) {
+            console.log("PLAY ERROR:", err);
+            showToast("PRESS PLAY AGAIN 🎵");
+            audio.load();
         }
     }
 
@@ -509,10 +544,22 @@
             currentSong = 0;
         }
         loadSong();
-        await audio.play();
-        playing = true;
-        updateMusicUI();
-        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+        try {
+            await audio.play();
+            playing = true;
+            updateMusicUI();
+
+            db.ref('musicState').update({
+                action: 'next',
+                index: currentSong,
+                time: 0,
+                by: myName,
+                ts: Date.now()
+            });
+        } catch(err){
+            console.log(err);
+            showToast("TAP PLAY 🎵");
+        }
     }
 
     async function prevSong() {
@@ -521,10 +568,22 @@
             currentSong = songs.length - 1;
         }
         loadSong();
-        await audio.play();
-        playing = true;
-        updateMusicUI();
-        db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+        try {
+            await audio.play();
+            playing = true;
+            updateMusicUI();
+
+            db.ref('musicState').update({
+                action: 'prev',
+                index: currentSong,
+                time: 0,
+                by: myName,
+                ts: Date.now()
+            });
+        } catch(err){
+            console.log(err);
+            showToast("TAP PLAY 🎵");
+        }
     }
 
     /* AUTO NEXT */
@@ -535,15 +594,31 @@
                 currentSong = 0;
             }
             loadSong();
-            await audio.play();
-            playing = true;
-            updateMusicUI();
-            db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+            try {
+                await audio.play();
+                playing = true;
+                updateMusicUI();
+                db.ref('musicState').update({
+                    action: 'play',
+                    index: currentSong,
+                    time: 0,
+                    by: myName,
+                    ts: Date.now()
+                });
+            } catch(err) {
+                console.log(err);
+            }
         }
     });
 
     function forceSync() {
-        db.ref('musicState').update({ action: playing ? 'play' : 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
+        db.ref('musicState').update({
+            action: playing ? 'play' : 'pause',
+            index: currentSong,
+            time: audio.currentTime,
+            by: myName,
+            ts: Date.now()
+        });
         showToast("SYNC SENT!");
     }
 
@@ -564,17 +639,18 @@
                 audio.currentTime = data.time;
             }
 
-            if (data.action === 'play') {
-                try {
+            try {
+                if (data.action === 'play' || data.action === 'next' || data.action === 'prev') {
                     await audio.play();
                     playing = true;
-                } catch(e) {
-                    showToast("TAP PLAY TO ALLOW AUDIO");
+                } else {
+                    audio.pause();
+                    playing = false;
                 }
-            } else {
-                audio.pause();
-                playing = false;
+            } catch(e) {
+                showToast("TAP PLAY TO ENABLE AUDIO");
             }
+            
             updateMusicUI();
             setTimeout(() => { isRemoteAction = false; }, 500);
         }
@@ -905,16 +981,6 @@
         toast.innerText = msg; toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
-
-    // Chat Typing Fix
-    const typingIndicator = document.getElementById('typingIndicator');
-    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        if (snapshot.val()) { 
-            typingIndicator.style.display = 'block'; 
-        } else { 
-            typingIndicator.style.display = 'none'; 
-        }
-    });
 
     function copyMsg(id) {
         const txt = document.getElementById('text-' + id).innerText;
