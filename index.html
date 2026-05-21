@@ -40,6 +40,8 @@
         .container { width: 90%; max-width: 420px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1;}
         
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
+        @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -52,7 +54,9 @@
         
         .home-banner-wrapper { position: relative; width: 100%; height: 180px; margin-bottom: 20px; border-radius: 20px; padding: 2px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); overflow: hidden; transition: all 0.4s ease; cursor: pointer; }
         .home-banner-img { width: 100%; height: 100%; border-radius: 18px; object-fit: cover; opacity: 0.85; transition: 0.4s ease; filter: contrast(1.1); }
-        
+        .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
+        .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
+
         .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
         .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 25px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
@@ -64,10 +68,12 @@
         /* TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
+        .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
         .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* THEME BUTTON */
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+        .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
         .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease; }
         .theme-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
@@ -131,6 +137,7 @@
         .music-btn.sync { padding: 10px 15px; font-size: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 15px;}
         .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
         
+        /* Native Audio Player */
         audio { width: 100%; height: 45px; margin-bottom: 20px; border-radius: 25px; outline: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         audio::-webkit-media-controls-panel { background-color: rgba(255,255,255,0.8); }
 
@@ -304,8 +311,8 @@
         <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:1px; font-size:16px;">RESET GAME?</h3>
         
         <div class="modal-btn-group" id="movieResetBtns">
-            <button class="btn-main" onclick="confirmReset('immu')" style="margin-top:0;">IMMU START</button>
-            <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmReset('sappii')">SAPPII START</button>
+            <button class="btn-main" onclick="confirmReset('immu')" style="margin-top:0;">IMMU START (MOVIE)</button>
+            <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmReset('sappii')">SAPPII START (MOVIE)</button>
         </div>
         <div class="modal-btn-group hidden" id="wordResetBtns">
             <button class="btn-main" style="margin-top:0;" onclick="confirmResetWord()">YES, RESET WORD</button>
@@ -350,6 +357,9 @@
     let playing = false;
     let isRemoteAction = false;
     const audio = document.getElementById("sharedAudio");
+    
+    audio.volume = 1;
+    audio.muted = false;
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -448,7 +458,6 @@
         document.getElementById('homeScreen').classList.add('hidden');
         document.getElementById('sharedUIContainer').classList.remove('hidden');
         
-        // Chat is visible everywhere except Home
         document.getElementById('chatArea').classList.remove('hidden');
         activeGame = tab;
 
@@ -521,12 +530,10 @@
         if (!drawCanvas) return;
         drawCtx = drawCanvas.getContext('2d');
         
-        // Setup internal resolution for sharp lines
         drawCanvas.width = drawCanvas.offsetWidth * 2;
         drawCanvas.height = drawCanvas.offsetHeight * 2;
         drawCtx.scale(2, 2);
 
-        // Only drawer can draw
         if (drawGameState.turn !== myName || drawGameState.status !== 'guessing') return;
 
         let prevX = 0, prevY = 0;
@@ -551,11 +558,8 @@
             if (!isDrawingPath) return;
             e.preventDefault();
             const pos = getXY(e);
-            
             drawOnBoard(prevX, prevY, pos.x, pos.y, brushConfig.color, brushConfig.size, true);
-            
-            prevX = pos.x;
-            prevY = pos.y;
+            prevX = pos.x; prevY = pos.y;
         };
 
         const onUp = () => { isDrawingPath = false; };
@@ -573,28 +577,17 @@
 
     function drawOnBoard(x0, y0, x1, y1, color, size, emit) {
         if (!drawCtx || !drawCanvas) return;
-        
-        const w = drawCanvas.offsetWidth;
-        const h = drawCanvas.offsetHeight;
-        
-        drawCtx.beginPath();
-        drawCtx.moveTo(x0 * w, y0 * h);
-        drawCtx.lineTo(x1 * w, y1 * h);
-        drawCtx.strokeStyle = color;
-        drawCtx.lineWidth = size;
-        drawCtx.lineCap = 'round';
-        drawCtx.stroke();
-        drawCtx.closePath();
+        const w = drawCanvas.offsetWidth; const h = drawCanvas.offsetHeight;
+        drawCtx.beginPath(); drawCtx.moveTo(x0 * w, y0 * h); drawCtx.lineTo(x1 * w, y1 * h);
+        drawCtx.strokeStyle = color; drawCtx.lineWidth = size; drawCtx.lineCap = 'round'; drawCtx.stroke(); drawCtx.closePath();
 
         if (!emit) return;
-        
         db.ref('drawState/paths').push({ x0, y0, x1, y1, c: color, s: size });
     }
 
     function setBrushColor(color, el) {
         brushConfig.color = color;
-        brushConfig.size = color === '#ffffff' ? 15 : 3; // Eraser size is bigger
-        
+        brushConfig.size = color === '#1a1a1a' ? 20 : 3; 
         document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
         if(el) el.classList.add('active');
     }
@@ -604,7 +597,6 @@
         if (emit) db.ref('drawState/paths').remove();
     }
 
-    // Global Listener for Drawing
     db.ref('drawState/paths').on('child_added', (snap) => {
         const p = snap.val();
         if (p) drawOnBoard(p.x0, p.y0, p.x1, p.y1, p.c, p.s, false);
@@ -620,11 +612,7 @@
         document.getElementById('sappiiScore').innerText = drawGameState.score2;
         document.getElementById('box-immu').className = `player-box ${drawGameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${drawGameState.turn === 'sappii' ? 'active-turn' : ''}`;
-        document.getElementById('turn-immu').innerText = drawGameState.status === 'set' ? 'THINKING' : 'DRAWING';
-        document.getElementById('turn-sappii').innerText = drawGameState.status === 'set' ? 'THINKING' : 'DRAWING';
-        document.getElementById('turn-immu').classList.toggle('hidden', drawGameState.turn !== 'immu');
-        document.getElementById('turn-sappii').classList.toggle('hidden', drawGameState.turn !== 'sappii');
-
+        
         if (drawGameState.status === "set") {
             if (drawGameState.turn === myName) {
                 container.innerHTML = `
@@ -686,7 +674,7 @@
     function setDrawWord() {
         const word = document.getElementById('drawWordInput').value.trim();
         if(!word) return alert("Enter a word!");
-        db.ref('drawState/paths').remove(); // Clear board before start
+        db.ref('drawState/paths').remove(); 
         db.ref('drawGameState').update({ word: word, status: "guessing" });
     }
 
@@ -717,7 +705,7 @@
         }, 2500);
     }
 
-    // ================= 🎵 AUDIO FUNCTIONS =================
+    // ================= 🎵 AUDIO FUNCTIONS (MOBILE FIX) =================
     function loadSong() {
         audio.src = songs[currentSong];
         updateMusicUI();
@@ -746,7 +734,9 @@
                 audio.muted = false;
                 audio.volume = 1;
 
-                if(!audio.src || audio.src === window.location.href) loadSong();
+                if(!audio.src || audio.src === window.location.href){
+                    loadSong();
+                }
 
                 await audio.play();
                 playing = true;
@@ -760,6 +750,7 @@
                 db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
             }
         } catch(err){
+            console.log("PLAY ERROR:", err);
             showToast("PRESS PLAY AGAIN 🎵");
             audio.load();
         }
@@ -799,7 +790,7 @@
                 playing = true;
                 updateMusicUI();
                 db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
-            } catch(err){}
+            } catch(err){ console.log(err); }
         }
     });
 
@@ -868,7 +859,281 @@
         `;
     }
 
-    // ================= RESET MODALS =================
+    // ================= MOVIE GUESSING UI =================
+    function renderMovieGameUI() {
+        const container = document.getElementById('gameContentArea');
+        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
+        document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
+        document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
+        
+        if (gameState.status === "set") {
+            if (gameState.turn === myName) {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select movie from the list</p>
+                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
+                        <div id="tamilPreview" class="preview-text"></div>
+                        <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
+                        <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
+                        <button class="btn-main" onclick="setMovie()">START GAME</button>
+                    </div>`;
+            } else {
+                container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
+            }
+        } else if (gameState.status === "guessing") {
+            const letterCount = getLetterCountExact(gameState.movieTamil);
+            if (gameState.turn === myName) {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
+                        ${maskExactString(gameState.movieTamil)}
+                        <div class="letter-count">${letterCount} LETTERS</div>
+                        <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
+                        <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
+                    </div>`;
+            } else {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
+                        ${maskExactString(gameState.movieTamil)}
+                        <div class="letter-count">${letterCount} LETTERS</div>
+                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
+                        <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
+                        <button class="btn-main" onclick="checkGuess()">SUBMIT ANSWER</button>
+                        <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
+                        <p id="feedback" style="margin-top:15px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                    </div>`;
+            }
+        }
+    }
+
+    function awardManualPoint() {
+        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
+        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
+        db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "" });
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+    }
+
+    function handleMovieInput() {
+        const val = document.getElementById('movieInput').value.trim().toLowerCase();
+        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        if(foundMovie) { 
+            if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); 
+            else document.getElementById('hintInput').value = ""; 
+            document.getElementById('tamilPreview').innerText = foundMovie.tamil;
+        } else { document.getElementById('tamilPreview').innerText = "Select from list!"; }
+    }
+    
+    function suggestRandomMovie() { 
+        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
+        const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
+        document.getElementById('movieInput').value = randomObj.eng; 
+        if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase(); 
+        else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
+        document.getElementById('tamilPreview').innerText = randomObj.tamil; 
+    }
+    
+    function setMovie() { 
+        const rawEng = document.getElementById('movieInput').value.trim(); const h = document.getElementById('hintInput').value; 
+        if(!rawEng) return alert("ENTER MOVIE!"); 
+        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
+        if (!foundMovie) return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); 
+        db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
+    }
+    
+    function checkGuess() { 
+        const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
+        const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
+        const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
+
+        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
+            const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
+            db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
+            db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
+        } else { 
+            document.getElementById('feedback').innerText = "WRONG SPELLING! TRY AGAIN"; 
+            document.getElementById('feedback').style.color = "var(--primary-color)";
+        } 
+    }
+    
+    function giveUp() { 
+        document.getElementById('feedback').innerText = "ANSWER: " + (gameState.movieEng || "").toUpperCase(); 
+        document.getElementById('feedback').style.color = "var(--accent-color)";
+        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
+        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
+        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
+    }
+    
+    function getLetterCountExact(str) {
+        if (!str) return 0;
+        let safeStr = str; let segments = [];
+        if (window.Intl && Intl.Segmenter) {
+            const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
+            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
+        } else { segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
+        return segments.filter(c => c.trim() !== '').length;
+    }
+
+    function maskExactString(str) {
+        if (!str) return "";
+        let safeStr = str;
+        let html = `<div class="masked-container">`;
+        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
+
+        let firstIdx = -1; let lastIdx = -1;
+        for (let i = 0; i < tokens.length; i++) {
+            if (tokens[i].trim() !== '') {
+                if (firstIdx === -1) firstIdx = i;
+                lastIdx = i;
+            }
+        }
+        if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
+
+        let wordHtml = `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">`;
+        tokens.forEach((char, idx) => {
+            if (char.trim() === '') {
+                wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
+            } else if (idx === firstIdx || idx === lastIdx) {
+                wordHtml += `<span class="mask-char">${char}</span>`;
+            } else {
+                wordHtml += `<span class="mask-dash">_</span>`;
+            }
+        });
+
+        wordHtml += `</div>`; html += wordHtml + `</div>`;
+        return html;
+    }
+
+    // ================= WORD GAME LOGIC (STRICT LOCK RESTORED) =================
+    function renderWordGameUI() {
+        const container = document.getElementById('gameContentArea');
+        document.getElementById('immuScore').innerText = wordGameState.score1;
+        document.getElementById('sappiiScore').innerText = wordGameState.score2;
+        
+        document.getElementById('box-immu').className = `player-box racing-turn`;
+        document.getElementById('box-sappii').className = `player-box racing-turn`;
+        
+        if (wordGameState.status === "letter_phase") {
+            const myLetter = (myName === 'immu') ? wordGameState.p1Letter : wordGameState.p2Letter;
+            const partnerLetter = (myName === 'immu') ? wordGameState.p2Letter : wordGameState.p1Letter;
+
+            if (!myLetter) {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR LETTER?</h3>
+                        <p style="color:var(--text-muted); font-size: 9px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
+                        <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S OR K" class="letter-box">
+                        <button class="btn-main" onclick="submitLetter()">SEND LETTER</button>
+                    </div>`;
+            } else if (!partnerLetter) {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">WAITING...</h3>
+                        <p style="font-size: 10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">${partnerName} IS CHOOSING A LETTER</p>
+                        <p style="font-size: 20px; color: var(--accent-color); font-weight:800; margin-top:15px; letter-spacing:2px;">YOU PICKED: ${myLetter.toUpperCase()}</p>
+                    </div>`;
+            } else {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="color:var(--accent-color); margin-top:0; font-size:13px; letter-spacing:2px;">LETTERS READY!</h3>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">FIRST LETTER ETHU, LAST LETTER ETHU?</p>
+                        <button class="btn-main" style="margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
+                            START: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b>
+                        </button>
+                        <button class="btn-main" style="margin-top:10px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p2Letter}', '${wordGameState.p1Letter}')">
+                            START: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b>
+                        </button>
+                    </div>`;
+            }
+        } else if (wordGameState.status === "race_phase") {
+            container.innerHTML = `
+                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 30px rgba(74, 222, 128, 0.15);">
+                    <h3 style="margin-top:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-main);">FORM A WORD!</h3>
+                    <p style="font-size: 10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.endLetter.toUpperCase()}</b></p>
+                    <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 14px; font-weight: bold; text-transform: uppercase;">
+                    <button class="btn-main" id="submitRaceBtn" onclick="submitRaceWord()">SUBMIT FAST</button>
+                    <button class="btn-main" style="background:transparent; box-shadow:none; color:var(--text-muted);" onclick="skipWord()">SKIP ROUND</button>
+                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                </div>`;
+        }
+    }
+
+    function submitLetter() {
+        const letter = document.getElementById('letterInput').value.trim().toLowerCase();
+        if(!letter || letter.length > 1 || !/[a-z]/.test(letter)) return alert("PLEASE ENTER EXACTLY 1 ENGLISH LETTER (A-Z)!");
+        const letterKey = (myName === "immu") ? 'p1Letter' : 'p2Letter';
+        db.ref(`wordGameState`).update({ [letterKey]: letter });
+    }
+
+    function setWordOrder(start, end) { db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end }); }
+
+    async function submitRaceWord() {
+        const btn = document.getElementById('submitRaceBtn');
+        if (btn && btn.disabled) return; // Prevent double click
+        
+        const rawInput = document.getElementById('raceWordInput').value;
+        const word = rawInput.toLowerCase().replace(/[^a-z]/g, ''); // Extract only alphabets
+        const start = wordGameState.startLetter.toLowerCase(); 
+        const end = wordGameState.endLetter.toLowerCase();
+        
+        if (word.length < 2 || !word.startsWith(start) || !word.endsWith(end)) {
+            document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`;
+            return;
+        }
+
+        if (wordGameState.usedWords && wordGameState.usedWords[word]) {
+            const winner = (typeof wordGameState.usedWords[word] === 'string') ? wordGameState.usedWords[word] : "PARTNER";
+            document.getElementById('raceFeedback').innerText = `ALREADY USED BY ${winner.toUpperCase()}!`;
+            return;
+        }
+
+        if (btn) btn.disabled = true; // Lock button
+        document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
+        document.getElementById('raceFeedback').style.color = "var(--text-main)";
+
+        try {
+            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+            if (!res.ok) {
+                document.getElementById('raceFeedback').innerText = `NOT A VALID ENGLISH WORD!`;
+                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
+                if (btn) btn.disabled = false;
+                return;
+            }
+        } catch (e) {}
+
+        // Firebase Transaction for exact millisecond clash
+        const wordRef = db.ref(`wordGameState/usedWords/${word}`);
+        wordRef.transaction((currentValue) => {
+            if (currentValue === null) {
+                return myName; 
+            } else {
+                return; // Abort transaction if word is already there
+            }
+        }, (error, committed, snapshot) => {
+            if (btn) btn.disabled = false;
+            
+            if (error) {
+                document.getElementById('raceFeedback').innerText = `NETWORK ERROR!`;
+            } else if (!committed) {
+                const winner = snapshot.val() || "PARTNER";
+                document.getElementById('raceFeedback').innerText = `TOO LATE! ${winner.toUpperCase()} TYPED IT FIRST 🏃💨`;
+                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
+            } else {
+                const scoreKey = (myName === "immu") ? 'score1' : 'score2';
+                db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
+                db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
+                db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+            }
+        });
+    }
+
+    function skipWord() {
+        db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+    }
+
+    // --- RESET MODALS ---
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     
@@ -891,7 +1156,7 @@
         closeResetModal(); 
     }
 
-    // ================= ONLINE STATUS & CHAT =================
+    // --- ONLINE STATUS & CHAT ---
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
             const myPresenceRef = db.ref(`presence/${myName}`);
@@ -911,16 +1176,6 @@
         toast.innerText = msg; toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
-
-    // Chat Typing Fix
-    const typingIndicator = document.getElementById('typingIndicator');
-    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        if (snapshot.val()) { 
-            typingIndicator.style.display = 'block'; 
-        } else { 
-            typingIndicator.style.display = 'none'; 
-        }
-    });
 
     function copyMsg(id) {
         const txt = document.getElementById('text-' + id).innerText;
