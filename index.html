@@ -40,8 +40,6 @@
         .container { width: 90%; max-width: 420px; padding: 20px; animation: slideUp 0.6s ease-out forwards; z-index: 1;}
         
         @keyframes slideUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } 50% { box-shadow: 0 0 25px var(--primary-color), inset 0 0 20px var(--primary-color); } 100% { box-shadow: 0 0 10px var(--primary-color), inset 0 0 10px var(--primary-color); } }
-        @keyframes pulseGlowAccent { 0% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } 50% { box-shadow: 0 0 25px var(--accent-color), inset 0 0 20px var(--accent-color); } 100% { box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color); } }
         @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -54,28 +52,22 @@
         
         .home-banner-wrapper { position: relative; width: 100%; height: 180px; margin-bottom: 20px; border-radius: 20px; padding: 2px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 30px var(--glow-shadow); overflow: hidden; transition: all 0.4s ease; cursor: pointer; }
         .home-banner-img { width: 100%; height: 100%; border-radius: 18px; object-fit: cover; opacity: 0.85; transition: 0.4s ease; filter: contrast(1.1); }
-        .home-banner-wrapper:hover { box-shadow: 0 15px 40px var(--glow-shadow); transform: translateY(-3px); }
-        .home-banner-wrapper:hover .home-banner-img { opacity: 1; transform: scale(1.05); }
-
-        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
-        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 35px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
         
-        .game-menu-btn { width: 100%; padding: 22px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
-        .game-menu-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px var(--glow-shadow); border-left: 8px solid var(--primary-color); background: rgba(255,255,255,0.05);}
+        .app-title { text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Poppins', sans-serif; font-size: 36px; margin-bottom: 5px; font-weight: 800; filter: drop-shadow(0px 5px 10px var(--glow-shadow)); text-transform: uppercase; letter-spacing: 2px;}
+        .app-subtitle { text-align: center; color: var(--text-muted); font-size: 10px; margin-bottom: 25px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;}
+        
+        .game-menu-btn { width: 100%; padding: 18px; margin-bottom: 15px; background: var(--card-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); border-radius: 16px; color: var(--text-main); font-weight: 600; cursor: pointer; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border-left: 4px solid var(--primary-color); }
         .game-menu-btn.blue { border-left: 4px solid var(--accent-color); }
-        .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
         .game-menu-btn.purple { border-left: 4px solid #a855f7; }
-        .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3); border-left: 8px solid #a855f7; }
+        .game-menu-btn.yellow { border-left: 4px solid #fbbf24; }
         
         /* TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .back-btn { background: transparent; border: none; color: var(--text-muted); font-size: 9px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: 0.2s; padding: 2px 0; opacity: 0.6;}
-        .back-btn:hover { opacity: 1; color: var(--text-main); transform: translateX(-3px); }
         .game-title-text { font-size: 12px; font-weight: 800; letter-spacing: 4px; color: var(--accent-color); text-transform: uppercase; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); margin:0;}
         
         /* THEME BUTTON */
         .theme-btn { background: var(--card-bg); backdrop-filter: blur(10px); border: 1px solid var(--border-color); border-radius: 30px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; padding: 6px 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
-        .theme-btn:hover { border-color: var(--primary-color); box-shadow: 0 5px 20px var(--glow-shadow); transform: translateY(-2px);}
         .theme-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 10px var(--primary-color); transition: background 0.5s ease; }
         .theme-label { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; }
 
@@ -110,8 +102,8 @@
         .order-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--accent-color); color: var(--accent-color); margin: 6px 0; padding: 15px; border-radius: 12px;}
         
         button.btn-main { width: 100%; padding: 16px; margin-top: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; box-shadow: 0 5px 15px var(--glow-shadow);}
-        button.btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--glow-shadow); }
         button.btn-main:active { transform: scale(0.96); }
+        button.btn-main:disabled { background: #555; cursor: not-allowed; box-shadow: none; color: #999; transform: none; }
         
         .random-btn { background: rgba(74, 222, 128, 0.05); border: 1px dashed var(--accent-color); color: var(--accent-color); margin: 0 0 10px 0; padding: 12px; font-size: 10px; width: 100%; box-shadow: none; border-radius: 12px;}
         .give-up-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); box-shadow: none; margin-top: 10px; }
@@ -138,6 +130,18 @@
         .music-btn.play-btn { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); font-weight:bold;}
         .music-btn.sync { padding: 10px 15px; font-size: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 15px;}
         .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
+        
+        audio { width: 100%; height: 45px; margin-bottom: 20px; border-radius: 25px; outline: none; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        audio::-webkit-media-controls-panel { background-color: rgba(255,255,255,0.8); }
+
+        /* PICTIONARY ELEMENTS */
+        .canvas-container { width: 100%; height: 280px; background: #fff; border-radius: 16px; border: 4px solid var(--border-color); position: relative; overflow: hidden; touch-action: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
+        #drawCanvas { width: 100%; height: 100%; cursor: crosshair; }
+        .palette { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .color-btn { width: 35px; height: 35px; border-radius: 50%; border: 3px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
+        .color-btn:active { transform: scale(0.9); }
+        .color-btn.active { border-color: var(--primary-color); transform: scale(1.1); }
+        .eraser-btn { width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; background: #fff; color: #000; border-radius: 20px; display: flex; align-items: center; cursor: pointer; border: 3px solid var(--border-color);}
 
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
@@ -164,15 +168,22 @@
         .chat-input:focus { box-shadow: none; background: transparent;}
         .chat-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; padding: 0; box-shadow: none; margin-top: 0;}
         .chat-icon-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .chat-send-btn { width: auto; padding: 10px 16px; margin-top: 0; border-radius: 20px; font-size: 10px; box-shadow: 0 4px 15px var(--glow-shadow);}
 
         .emoji-picker { position: absolute; bottom: 120%; left: 0; width: 100%; max-width: 260px; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; overflow-y: auto; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: slideUp 0.2s ease-out;}
         .emoji-item { font-size: 20px; background: none; border: none; width: auto; padding: 5px; cursor: pointer; transition: 0.2s; box-shadow: none; margin: 0;}
         .emoji-item:hover { transform: scale(1.3); }
 
+        /* Navigation Bar */
+        .navbar { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 390px; padding: 10px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); border-radius: 30px; backdrop-filter: blur(25px); display: flex; justify-content: space-around; box-shadow: 0 10px 35px rgba(0,0,0,.45); z-index: 100; }
+        .nav-item { width: 45px; height: 45px; border-radius: 20px; background: transparent; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #64748b; transition: 0.3s; }
+        .nav-item.active { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); box-shadow: 0 10px 25px var(--glow-shadow); color: white; }
+        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+
         /* Modal */
         .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px; box-sizing: border-box;}
         .modal-content { background: var(--card-bg); backdrop-filter: blur(20px); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid var(--border-color); width: 100%; max-width: 320px; box-shadow: 0 15px 50px rgba(0,0,0,0.6); animation: slideUp 0.3s ease-out;}
-        .modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        .modal-btn-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -185,9 +196,27 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<audio id="sharedAudio" style="display:none;"></audio>
+<audio id="sharedAudio" style="display:none;" playsinline webkit-playsinline preload="auto"></audio>
 
 <div id="toast" class="toast">NEW MESSAGE</div>
+
+<div class="navbar" id="bottomNav">
+    <div class="nav-item active" onclick="switchTab('home', this)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    </div>
+    <div class="nav-item" onclick="switchTab('movie', this)">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+    </div>
+    <div class="nav-item" onclick="switchTab('word', this)">
+        <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+    </div>
+    <div class="nav-item" onclick="switchTab('draw', this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.66 0 3-1.34 3-3 0-.79-.31-1.5-.8-2.04-.46-.51-.43-1.31.06-1.78.43-.41 1.05-.41 1.48 0 .49.49 1.15.82 1.87.82 1.66 0 3-1.34 3-3 0-5.52-4.48-10-10-10z"></path><circle cx="7" cy="14" r="1.5"></circle><circle cx="7" cy="9.5" r="1.5"></circle><circle cx="11.5" cy="6.5" r="1.5"></circle><circle cx="16.5" cy="9.5" r="1.5"></circle></svg>
+    </div>
+    <div class="nav-item" onclick="switchTab('music', this)">
+        <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+    </div>
+</div>
 
 <div class="container" id="homeScreen">
     <div class="home-top-bar">
@@ -207,9 +236,10 @@
     <p class="app-subtitle">CHOOSE YOUR ARENA</p>
     
     <div class="card" style="padding: 35px 20px;">
-        <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
-        <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
-        <button class="game-menu-btn purple" onclick="openGame('music')">MUSIC LOUNGE 🎧</button>
+        <button class="game-menu-btn" onclick="switchTab('movie', document.querySelectorAll('.nav-item')[1])">MOVIE GUESSING</button>
+        <button class="game-menu-btn blue" onclick="switchTab('word', document.querySelectorAll('.nav-item')[2])">WORD RACE</button>
+        <button class="game-menu-btn yellow" onclick="switchTab('draw', document.querySelectorAll('.nav-item')[3])">MINI PICTIONARY 🎨</button>
+        <button class="game-menu-btn purple" onclick="switchTab('music', document.querySelectorAll('.nav-item')[4])">MUSIC LOUNGE 🎧</button>
     </div>
 </div>
 
@@ -272,15 +302,20 @@
 <div id="resetModal" class="modal hidden">
     <div class="modal-content">
         <h3 style="margin-top: 0; color: var(--text-main); font-weight:800; letter-spacing:1px; font-size:16px;">RESET GAME?</h3>
-        <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing:1px;">Scores and Chat History will be cleared.</p>
+        
         <div class="modal-btn-group" id="movieResetBtns">
             <button class="btn-main" onclick="confirmReset('immu')" style="margin-top:0;">IMMU START</button>
             <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmReset('sappii')">SAPPII START</button>
         </div>
         <div class="modal-btn-group hidden" id="wordResetBtns">
-            <button class="btn-main" style="margin-top:0;" onclick="confirmResetWord()">YES, RESET</button>
+            <button class="btn-main" style="margin-top:0;" onclick="confirmResetWord()">YES, RESET WORD</button>
         </div>
-        <button class="btn-main" style="background: transparent; border: 1px dashed red; color: red; box-shadow: none;" onclick="closeResetModal()">CANCEL</button>
+        <div class="modal-btn-group hidden" id="drawResetBtns">
+            <button class="btn-main" onclick="confirmResetDraw('immu')" style="margin-top:0; background:var(--accent-color); color:#000;">IMMU START (DRAW)</button>
+            <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmResetDraw('sappii')">SAPPII START (DRAW)</button>
+        </div>
+
+        <button class="btn-main" style="background: transparent; border: 1px dashed red; color: red; box-shadow: none; margin-top: 15px;" onclick="closeResetModal()">CANCEL</button>
     </div>
 </div>
 
@@ -303,7 +338,18 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; let wordGameState = {}; let MOVIE_COLLECTION = []; 
+    let gameState = {}; let wordGameState = {}; let drawGameState = {}; let MOVIE_COLLECTION = []; 
+
+    // --- 🎵 PERFECTED MOBILE AUDIO ENGINE ---
+    const songs = [
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
+        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
+    ];
+    let currentSong = 0;
+    let playing = false;
+    let isRemoteAction = false;
+    const audio = document.getElementById("sharedAudio");
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -365,7 +411,6 @@
             const cacheBuster = "?v=" + new Date().getTime();
             const engRes = await fetch('movies_eng.txt' + cacheBuster);
             const tamilRes = await fetch('movies_tamil.txt' + cacheBuster);
-            
             if (engRes.ok && tamilRes.ok) {
                 let eLines = (await engRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
                 let tLines = (await tamilRes.text()).split('\n').map(l => l.replace(/\r/g, '').trim());
@@ -395,41 +440,51 @@
     };
     function toggleEmojiPicker(e) { if(e) e.stopPropagation(); document.getElementById('emojiPicker').classList.toggle('hidden'); }
 
-    // --- NAVIGATION ---
-    function openGame(gameType) {
-        activeGame = gameType;
+    // --- NAVIGATION LOGIC ---
+    function switchTab(tab, element) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        if(element) element.classList.add('active');
+        
         document.getElementById('homeScreen').classList.add('hidden');
         document.getElementById('sharedUIContainer').classList.remove('hidden');
         
-        if (gameType === 'movie') {
+        // Chat is visible everywhere except Home
+        document.getElementById('chatArea').classList.remove('hidden');
+        activeGame = tab;
+
+        document.getElementById('movieResetBtns').classList.add('hidden');
+        document.getElementById('wordResetBtns').classList.add('hidden');
+        document.getElementById('drawResetBtns').classList.add('hidden');
+        document.getElementById('resetScoresBtn').classList.remove('hidden');
+        document.getElementById('vsScoreBoard').classList.remove('hidden');
+
+        if (tab === 'movie') {
             document.getElementById('activeGameBadge').innerText = "MOVIE GUESSING";
-            document.getElementById('vsScoreBoard').classList.remove('hidden');
-            document.getElementById('chatArea').classList.remove('hidden');
-            document.getElementById('resetScoresBtn').classList.remove('hidden');
             document.getElementById('movieResetBtns').classList.remove('hidden');
-            document.getElementById('wordResetBtns').classList.add('hidden');
             renderMovieGameUI();
-        } else if (gameType === 'word') {
+        } else if (tab === 'word') {
             document.getElementById('activeGameBadge').innerText = "WORD RACE";
-            document.getElementById('vsScoreBoard').classList.remove('hidden');
-            document.getElementById('chatArea').classList.remove('hidden');
-            document.getElementById('resetScoresBtn').classList.remove('hidden');
-            document.getElementById('movieResetBtns').classList.add('hidden');
             document.getElementById('wordResetBtns').classList.remove('hidden');
             renderWordGameUI();
-        } else if (gameType === 'music') {
+        } else if (tab === 'draw') {
+            document.getElementById('activeGameBadge').innerText = "MINI PICTIONARY 🎨";
+            document.getElementById('drawResetBtns').classList.remove('hidden');
+            renderDrawGameUI();
+        } else if (tab === 'music') {
             document.getElementById('activeGameBadge').innerText = "MUSIC LOUNGE 🎧";
             document.getElementById('vsScoreBoard').classList.add('hidden');
-            document.getElementById('chatArea').classList.add('hidden');
             document.getElementById('resetScoresBtn').classList.add('hidden');
             renderMusicUI();
         }
         setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
     }
+
     function goHome() {
         activeGame = 'home';
         document.getElementById('sharedUIContainer').classList.add('hidden');
         document.getElementById('homeScreen').classList.remove('hidden');
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item')[0].classList.add('active');
     }
 
     // --- DB LISTENERS ---
@@ -450,33 +505,223 @@
         if(activeGame === 'word') renderWordGameUI();
     });
 
-    // ================= 🎵 FIXED MOBILE MUSIC ENGINE =================
-    
-    const songs = [
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
-    ];
-    
-    let currentSong = 0;
-    let playing = false;
-    let isRemoteAction = false;
-    const audio = document.getElementById("sharedAudio");
+    db.ref('drawGameState').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        drawGameState = { turn: data.turn || "immu", status: data.status || "set", word: data.word || "", score1: data.score1 || 0, score2: data.score2 || 0 };
+        if(activeGame === 'draw') renderDrawGameUI();
+    });
 
-    // Fix for iOS Safari and Mobile Chrome
-    audio.setAttribute("playsinline", "true");
-    audio.setAttribute("webkit-playsinline", "true");
-    audio.preload = "auto";
-    audio.volume = 1;
-    audio.muted = false;
+    // ================= 🎨 PICTIONARY (DRAW & GUESS) LOGIC =================
+    let drawCanvas, drawCtx;
+    let isDrawingPath = false;
+    let brushConfig = { color: '#ffffff', size: 3 };
 
+    function initDrawCanvas() {
+        drawCanvas = document.getElementById('drawCanvas');
+        if (!drawCanvas) return;
+        drawCtx = drawCanvas.getContext('2d');
+        
+        // Setup internal resolution for sharp lines
+        drawCanvas.width = drawCanvas.offsetWidth * 2;
+        drawCanvas.height = drawCanvas.offsetHeight * 2;
+        drawCtx.scale(2, 2);
+
+        // Only drawer can draw
+        if (drawGameState.turn !== myName || drawGameState.status !== 'guessing') return;
+
+        let prevX = 0, prevY = 0;
+
+        const getXY = (e) => {
+            const rect = drawCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) / rect.width,
+                y: (clientY - rect.top) / rect.height
+            };
+        };
+
+        const onDown = (e) => {
+            isDrawingPath = true;
+            const pos = getXY(e);
+            prevX = pos.x; prevY = pos.y;
+        };
+
+        const onMove = (e) => {
+            if (!isDrawingPath) return;
+            e.preventDefault();
+            const pos = getXY(e);
+            
+            drawOnBoard(prevX, prevY, pos.x, pos.y, brushConfig.color, brushConfig.size, true);
+            
+            prevX = pos.x;
+            prevY = pos.y;
+        };
+
+        const onUp = () => { isDrawingPath = false; };
+
+        drawCanvas.addEventListener('mousedown', onDown);
+        drawCanvas.addEventListener('mousemove', onMove);
+        drawCanvas.addEventListener('mouseup', onUp);
+        drawCanvas.addEventListener('mouseout', onUp);
+
+        drawCanvas.addEventListener('touchstart', onDown, {passive: false});
+        drawCanvas.addEventListener('touchmove', onMove, {passive: false});
+        drawCanvas.addEventListener('touchend', onUp);
+        drawCanvas.addEventListener('touchcancel', onUp);
+    }
+
+    function drawOnBoard(x0, y0, x1, y1, color, size, emit) {
+        if (!drawCtx || !drawCanvas) return;
+        
+        const w = drawCanvas.offsetWidth;
+        const h = drawCanvas.offsetHeight;
+        
+        drawCtx.beginPath();
+        drawCtx.moveTo(x0 * w, y0 * h);
+        drawCtx.lineTo(x1 * w, y1 * h);
+        drawCtx.strokeStyle = color;
+        drawCtx.lineWidth = size;
+        drawCtx.lineCap = 'round';
+        drawCtx.stroke();
+        drawCtx.closePath();
+
+        if (!emit) return;
+        
+        db.ref('drawState/paths').push({ x0, y0, x1, y1, c: color, s: size });
+    }
+
+    function setBrushColor(color, el) {
+        brushConfig.color = color;
+        brushConfig.size = color === '#ffffff' ? 15 : 3; // Eraser size is bigger
+        
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        if(el) el.classList.add('active');
+    }
+
+    function clearDrawBoard(emit = true) {
+        if (drawCtx && drawCanvas) drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        if (emit) db.ref('drawState/paths').remove();
+    }
+
+    // Global Listener for Drawing
+    db.ref('drawState/paths').on('child_added', (snap) => {
+        const p = snap.val();
+        if (p) drawOnBoard(p.x0, p.y0, p.x1, p.y1, p.c, p.s, false);
+    });
+
+    db.ref('drawState/paths').on('value', (snap) => {
+        if (!snap.exists()) clearDrawBoard(false);
+    });
+
+    function renderDrawGameUI() {
+        const container = document.getElementById('gameContentArea');
+        document.getElementById('immuScore').innerText = drawGameState.score1; 
+        document.getElementById('sappiiScore').innerText = drawGameState.score2;
+        document.getElementById('box-immu').className = `player-box ${drawGameState.turn === 'immu' ? 'active-turn' : ''}`;
+        document.getElementById('box-sappii').className = `player-box ${drawGameState.turn === 'sappii' ? 'active-turn' : ''}`;
+        document.getElementById('turn-immu').innerText = drawGameState.status === 'set' ? 'THINKING' : 'DRAWING';
+        document.getElementById('turn-sappii').innerText = drawGameState.status === 'set' ? 'THINKING' : 'DRAWING';
+        document.getElementById('turn-immu').classList.toggle('hidden', drawGameState.turn !== 'immu');
+        document.getElementById('turn-sappii').classList.toggle('hidden', drawGameState.turn !== 'sappii');
+
+        if (drawGameState.status === "set") {
+            if (drawGameState.turn === myName) {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">DRAW & GUESS</h3>
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Enter a word for partner to guess</p>
+                        <input type="text" id="drawWordInput" placeholder="SECRET WORD">
+                        <button class="btn-main" onclick="setDrawWord()">START DRAWING</button>
+                    </div>`;
+            } else {
+                container.innerHTML = `
+                    <div class="card">
+                        <h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3>
+                        <p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${drawGameState.turn} IS CHOOSING A WORD</p>
+                    </div>`;
+            }
+        } else if (drawGameState.status === "guessing") {
+            if (drawGameState.turn === myName) {
+                container.innerHTML = `
+                    <div class="card" style="padding: 15px;">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">YOU ARE DRAWING: <span style="color:var(--text-main)">${drawGameState.word}</span></h3>
+                        
+                        <div class="canvas-container" style="background:#1a1a1a;">
+                            <canvas id="drawCanvas"></canvas>
+                        </div>
+                        
+                        <div class="palette">
+                            <div class="color-btn active" style="background:#ffffff;" onclick="setBrushColor('#ffffff', this)"></div>
+                            <div class="color-btn" style="background:#FF4B72;" onclick="setBrushColor('#FF4B72', this)"></div>
+                            <div class="color-btn" style="background:#4ade80;" onclick="setBrushColor('#4ade80', this)"></div>
+                            <div class="color-btn" style="background:#38bdf8;" onclick="setBrushColor('#38bdf8', this)"></div>
+                            <div class="color-btn" style="background:#fbbf24;" onclick="setBrushColor('#fbbf24', this)"></div>
+                            <div class="eraser-btn" onclick="setBrushColor('#1a1a1a', this)">ERASER</div>
+                        </div>
+                        
+                        <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none; padding:12px; margin-top:15px; font-size:10px;" onclick="clearDrawBoard(true)">CLEAR BOARD</button>
+                    </div>`;
+            } else {
+                let mask = drawGameState.word.replace(/[a-zA-Z]/g, '_ ').trim();
+                container.innerHTML = `
+                    <div class="card" style="padding: 15px;">
+                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE DRAWING</h3>
+                        <p style="font-size:14px; font-weight:800; letter-spacing:4px; color:var(--accent-color);">${mask}</p>
+                        
+                        <div class="canvas-container" style="background:#1a1a1a;">
+                            <canvas id="drawCanvas"></canvas>
+                        </div>
+                        
+                        <input type="text" id="drawGuessInput" placeholder="TYPE YOUR GUESS">
+                        <button class="btn-main" onclick="checkDrawGuess()">SUBMIT GUESS</button>
+                        <button class="give-up-btn" onclick="giveUpDraw()">GIVE UP</button>
+                        <p id="drawFeedback" style="margin-top:10px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                    </div>`;
+            }
+            setTimeout(initDrawCanvas, 100);
+        }
+    }
+
+    function setDrawWord() {
+        const word = document.getElementById('drawWordInput').value.trim();
+        if(!word) return alert("Enter a word!");
+        db.ref('drawState/paths').remove(); // Clear board before start
+        db.ref('drawGameState').update({ word: word, status: "guessing" });
+    }
+
+    function checkDrawGuess() {
+        const guessRaw = document.getElementById('drawGuessInput').value.trim().toLowerCase();
+        const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
+        const normalizedAnswer = (drawGameState.word || "").replace(/[^a-z0-9]/g, '');
+
+        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") {
+            const scoreKey = (myName === "immu") ? 'score1' : 'score2';
+            db.ref(`drawGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
+            db.ref('drawGameState').update({ turn: myName, status: "set", word: "" });
+            db.ref('drawState/paths').remove();
+        } else {
+            document.getElementById('drawFeedback').innerText = "WRONG GUESS! TRY AGAIN";
+            document.getElementById('drawFeedback').style.color = "var(--primary-color)";
+        }
+    }
+
+    function giveUpDraw() {
+        document.getElementById('drawFeedback').innerText = "ANSWER: " + (drawGameState.word || "").toUpperCase();
+        document.getElementById('drawFeedback').style.color = "var(--accent-color)";
+        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
+        db.ref(`drawGameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
+        setTimeout(() => {
+            db.ref('drawGameState').update({ turn: myName, status: "set", word: "" });
+            db.ref('drawState/paths').remove();
+        }, 2500);
+    }
+
+    // ================= 🎵 AUDIO FUNCTIONS =================
     function loadSong() {
         audio.src = songs[currentSong];
         updateMusicUI();
     }
-    
-    // Load first song initially
-    loadSong();
 
     function updateMusicUI() {
         let pBtn = document.getElementById("mainPlayBtn");
@@ -492,47 +737,29 @@
 
         let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
         let displayEl = document.getElementById('songNameDisplay');
-        if(displayEl) {
-            displayEl.innerText = "🎵 " + sName;
-        }
+        if(displayEl){ displayEl.innerText = "🎵 " + sName; }
     }
 
     async function togglePlayPause() {
         try {
-            if(!playing) {
+            if(!playing){
                 audio.muted = false;
                 audio.volume = 1;
-                
-                if(!audio.src || audio.src === window.location.href){
-                    loadSong();
-                }
+
+                if(!audio.src || audio.src === window.location.href) loadSong();
 
                 await audio.play();
                 playing = true;
                 updateMusicUI();
 
-                db.ref('musicState').update({
-                    action: 'play',
-                    index: currentSong,
-                    time: audio.currentTime,
-                    by: myName,
-                    ts: Date.now()
-                });
+                db.ref('musicState').update({ action: 'play', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
             } else {
                 audio.pause();
                 playing = false;
                 updateMusicUI();
-
-                db.ref('musicState').update({
-                    action: 'pause',
-                    index: currentSong,
-                    time: audio.currentTime,
-                    by: myName,
-                    ts: Date.now()
-                });
+                db.ref('musicState').update({ action: 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
             }
-        } catch(err) {
-            console.log("PLAY ERROR:", err);
+        } catch(err){
             showToast("PRESS PLAY AGAIN 🎵");
             audio.load();
         }
@@ -540,117 +767,75 @@
 
     async function nextSong() {
         currentSong++;
-        if(currentSong >= songs.length){
-            currentSong = 0;
-        }
+        if(currentSong >= songs.length){ currentSong = 0; }
         loadSong();
         try {
             await audio.play();
             playing = true;
             updateMusicUI();
-
-            db.ref('musicState').update({
-                action: 'next',
-                index: currentSong,
-                time: 0,
-                by: myName,
-                ts: Date.now()
-            });
-        } catch(err){
-            console.log(err);
-            showToast("TAP PLAY 🎵");
-        }
+            db.ref('musicState').update({ action: 'next', index: currentSong, time: 0, by: myName, ts: Date.now() });
+        } catch(err){ showToast("TAP PLAY 🎵"); }
     }
 
     async function prevSong() {
         currentSong--;
-        if(currentSong < 0){
-            currentSong = songs.length - 1;
-        }
+        if(currentSong < 0){ currentSong = songs.length - 1; }
         loadSong();
         try {
             await audio.play();
             playing = true;
             updateMusicUI();
-
-            db.ref('musicState').update({
-                action: 'prev',
-                index: currentSong,
-                time: 0,
-                by: myName,
-                ts: Date.now()
-            });
-        } catch(err){
-            console.log(err);
-            showToast("TAP PLAY 🎵");
-        }
+            db.ref('musicState').update({ action: 'prev', index: currentSong, time: 0, by: myName, ts: Date.now() });
+        } catch(err){ showToast("TAP PLAY 🎵"); }
     }
 
-    /* AUTO NEXT */
     audio.addEventListener("ended", async () => {
-        if(activeGame === 'music' && playing && !isRemoteAction) {
+        if(activeGame === 'music' && playing && !isRemoteAction){
             currentSong++;
-            if(currentSong >= songs.length){
-                currentSong = 0;
-            }
+            if(currentSong >= songs.length){ currentSong = 0; }
             loadSong();
             try {
                 await audio.play();
                 playing = true;
                 updateMusicUI();
-                db.ref('musicState').update({
-                    action: 'play',
-                    index: currentSong,
-                    time: 0,
-                    by: myName,
-                    ts: Date.now()
-                });
-            } catch(err) {
-                console.log(err);
-            }
+                db.ref('musicState').update({ action: 'play', index: currentSong, time: 0, by: myName, ts: Date.now() });
+            } catch(err){}
         }
     });
 
     function forceSync() {
-        db.ref('musicState').update({
-            action: playing ? 'play' : 'pause',
-            index: currentSong,
-            time: audio.currentTime,
-            by: myName,
-            ts: Date.now()
-        });
+        db.ref('musicState').update({ action: playing ? 'play' : 'pause', index: currentSong, time: audio.currentTime, by: myName, ts: Date.now() });
         showToast("SYNC SENT!");
     }
 
-    // Remote Sync Listener
     db.ref('musicState').on('value', async snapshot => {
         const data = snapshot.val();
         if(!data) return;
 
-        if (data.by !== myName) {
+        if(data.by !== myName){
             isRemoteAction = true;
-            
-            if (data.index !== currentSong) {
+
+            if(data.index !== currentSong){
                 currentSong = data.index;
                 loadSong();
             }
 
-            if (Math.abs(audio.currentTime - data.time) > 1.5) {
+            if(Math.abs(audio.currentTime - data.time) > 1.5){
                 audio.currentTime = data.time;
             }
 
             try {
-                if (data.action === 'play' || data.action === 'next' || data.action === 'prev') {
+                if(data.action === 'play' || data.action === 'next' || data.action === 'prev'){
                     await audio.play();
                     playing = true;
                 } else {
                     audio.pause();
                     playing = false;
                 }
-            } catch(e) {
+            } catch(e){
                 showToast("TAP PLAY TO ENABLE AUDIO");
             }
-            
+
             updateMusicUI();
             setTimeout(() => { isRemoteAction = false; }, 500);
         }
@@ -683,269 +868,7 @@
         `;
     }
 
-    // ================= MOVIE GUESSING UI =================
-    function renderMovieGameUI() {
-        const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
-        document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
-        document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
-        
-        if (gameState.status === "set") {
-            if (gameState.turn === myName) {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select movie from the list</p>
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
-                        <div id="tamilPreview" class="preview-text"></div>
-                        <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
-                        <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
-                        <button class="btn-main" onclick="setMovie()">START GAME</button>
-                    </div>`;
-            } else {
-                container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
-            }
-        } else if (gameState.status === "guessing") {
-            const letterCount = getLetterCountExact(gameState.movieTamil);
-            if (gameState.turn === myName) {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
-                        ${maskExactString(gameState.movieTamil)}
-                        <div class="letter-count">${letterCount} LETTERS</div>
-                        <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
-                        <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
-                    </div>`;
-            } else {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
-                        ${maskExactString(gameState.movieTamil)}
-                        <div class="letter-count">${letterCount} LETTERS</div>
-                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
-                        <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
-                        <button class="btn-main" onclick="checkGuess()">SUBMIT ANSWER</button>
-                        <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
-                        <p id="feedback" style="margin-top:15px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
-                    </div>`;
-            }
-        }
-    }
-
-    function awardManualPoint() {
-        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1';
-        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1);
-        db.ref('gameState').update({ turn: partnerName, status: "set", movieEng: "", movieTamil: "", hint: "" });
-        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} GAVE A MANUAL POINT TO ${partnerName.toUpperCase()}!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
-    }
-
-    function handleMovieInput() {
-        const val = document.getElementById('movieInput').value.trim().toLowerCase();
-        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
-        if(foundMovie) { 
-            if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); 
-            else document.getElementById('hintInput').value = ""; 
-            document.getElementById('tamilPreview').innerText = foundMovie.tamil;
-        } else { document.getElementById('tamilPreview').innerText = "Select from list!"; }
-    }
-    
-    function suggestRandomMovie() { 
-        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
-        const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
-        document.getElementById('movieInput').value = randomObj.eng; 
-        if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase(); 
-        else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
-        document.getElementById('tamilPreview').innerText = randomObj.tamil; 
-    }
-    
-    function setMovie() { 
-        const rawEng = document.getElementById('movieInput').value.trim(); const h = document.getElementById('hintInput').value; 
-        if(!rawEng) return alert("ENTER MOVIE!"); 
-        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        if (!foundMovie) return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); 
-        db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
-    }
-    
-    function checkGuess() { 
-        const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
-        const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
-        const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
-
-        if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
-            const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
-            db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
-            db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }); 
-        } else { 
-            document.getElementById('feedback').innerText = "WRONG SPELLING! TRY AGAIN"; 
-            document.getElementById('feedback').style.color = "var(--primary-color)";
-        } 
-    }
-    
-    function giveUp() { 
-        document.getElementById('feedback').innerText = "ANSWER: " + (gameState.movieEng || "").toUpperCase(); 
-        document.getElementById('feedback').style.color = "var(--accent-color)";
-        const partnerScoreKey = (myName === "immu") ? 'score2' : 'score1'; 
-        db.ref(`gameState/${partnerScoreKey}`).transaction(s => (s || 0) + 1); 
-        setTimeout(() => db.ref('gameState').update({ turn: myName, status: "set", movieEng: "", movieTamil: "" }), 2500); 
-    }
-    
-    function getLetterCountExact(str) {
-        if (!str) return 0;
-        let safeStr = str; let segments = [];
-        if (window.Intl && Intl.Segmenter) {
-            const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
-        } else { segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
-        return segments.filter(c => c.trim() !== '').length;
-    }
-
-    function maskExactString(str) {
-        if (!str) return "";
-        let safeStr = str;
-        let html = `<div class="masked-container">`;
-        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
-
-        let firstIdx = -1; let lastIdx = -1;
-        for (let i = 0; i < tokens.length; i++) {
-            if (tokens[i].trim() !== '') {
-                if (firstIdx === -1) firstIdx = i;
-                lastIdx = i;
-            }
-        }
-        if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
-
-        let wordHtml = `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">`;
-        tokens.forEach((char, idx) => {
-            if (char.trim() === '') {
-                wordHtml += `</div><div style="width:15px; height:5px;"></div><div style="display:flex; gap:6px;">`;
-            } else if (idx === firstIdx || idx === lastIdx) {
-                wordHtml += `<span class="mask-char">${char}</span>`;
-            } else {
-                wordHtml += `<span class="mask-dash">_</span>`;
-            }
-        });
-
-        wordHtml += `</div>`; html += wordHtml + `</div>`;
-        return html;
-    }
-
-    // ================= WORD GAME LOGIC =================
-    function renderWordGameUI() {
-        const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = wordGameState.score1;
-        document.getElementById('sappiiScore').innerText = wordGameState.score2;
-        
-        document.getElementById('box-immu').className = `player-box racing-turn`;
-        document.getElementById('box-sappii').className = `player-box racing-turn`;
-        
-        if (wordGameState.status === "letter_phase") {
-            const myLetter = (myName === 'immu') ? wordGameState.p1Letter : wordGameState.p2Letter;
-            const partnerLetter = (myName === 'immu') ? wordGameState.p2Letter : wordGameState.p1Letter;
-
-            if (!myLetter) {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR LETTER?</h3>
-                        <p style="color:var(--text-muted); font-size: 9px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
-                        <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S OR K" class="letter-box">
-                        <button class="btn-main" onclick="submitLetter()">SEND LETTER</button>
-                    </div>`;
-            } else if (!partnerLetter) {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">WAITING...</h3>
-                        <p style="font-size: 10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">${partnerName} IS CHOOSING A LETTER</p>
-                        <p style="font-size: 20px; color: var(--accent-color); font-weight:800; margin-top:15px; letter-spacing:2px;">YOU PICKED: ${myLetter.toUpperCase()}</p>
-                    </div>`;
-            } else {
-                container.innerHTML = `
-                    <div class="card">
-                        <h3 style="color:var(--accent-color); margin-top:0; font-size:13px; letter-spacing:2px;">LETTERS READY!</h3>
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">FIRST LETTER ETHU, LAST LETTER ETHU?</p>
-                        <button class="btn-main" style="margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
-                            START: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b>
-                        </button>
-                        <button class="btn-main" style="margin-top:10px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p2Letter}', '${wordGameState.p1Letter}')">
-                            START: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b>
-                        </button>
-                    </div>`;
-            }
-        } else if (wordGameState.status === "race_phase") {
-            container.innerHTML = `
-                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 30px rgba(74, 222, 128, 0.15);">
-                    <h3 style="margin-top:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-main);">FORM A WORD!</h3>
-                    <p style="font-size: 10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.endLetter.toUpperCase()}</b></p>
-                    <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 14px; font-weight: bold; text-transform: uppercase;">
-                    <button class="btn-main" onclick="submitRaceWord()">SUBMIT FAST</button>
-                    <button class="btn-main" style="background:transparent; box-shadow:none; color:var(--text-muted);" onclick="skipWord()">SKIP ROUND</button>
-                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
-                </div>`;
-        }
-    }
-
-    function submitLetter() {
-        const letter = document.getElementById('letterInput').value.trim().toLowerCase();
-        if(!letter || letter.length > 1 || !/[a-z]/.test(letter)) return alert("PLEASE ENTER EXACTLY 1 ENGLISH LETTER (A-Z)!");
-        const letterKey = (myName === "immu") ? 'p1Letter' : 'p2Letter';
-        db.ref(`wordGameState`).update({ [letterKey]: letter });
-    }
-
-    function setWordOrder(start, end) { db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end }); }
-
-    async function submitRaceWord() {
-        const word = document.getElementById('raceWordInput').value.trim().toLowerCase();
-        const start = wordGameState.startLetter.toLowerCase(); const end = wordGameState.endLetter.toLowerCase();
-        
-        if (word.length < 2 || !word.startsWith(start) || !word.endsWith(end)) {
-            document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`;
-            return;
-        }
-
-        if (wordGameState.usedWords && wordGameState.usedWords[word]) {
-            document.getElementById('raceFeedback').innerText = `ALREADY USED! FIND A NEW WORD.`;
-            return;
-        }
-
-        document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
-        document.getElementById('raceFeedback').style.color = "var(--text-main)";
-
-        try {
-            const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-            if (!res.ok) {
-                document.getElementById('raceFeedback').innerText = `NOT A VALID ENGLISH WORD!`;
-                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
-                return;
-            }
-        } catch (e) {}
-
-        const wordRef = db.ref(`wordGameState/usedWords/${word}`);
-        wordRef.transaction((currentValue) => {
-            if (currentValue === null) {
-                return myName; 
-            } else {
-                return; 
-            }
-        }, (error, committed, snapshot) => {
-            if (error) {
-                document.getElementById('raceFeedback').innerText = `NETWORK ERROR!`;
-            } else if (!committed) {
-                document.getElementById('raceFeedback').innerText = `TOO LATE! SAPPII TYPED IT FIRST 🏃💨`;
-                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
-            } else {
-                const scoreKey = (myName === "immu") ? 'score1' : 'score2';
-                db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
-                db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-                db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
-            }
-        });
-    }
-
-    function skipWord() {
-        db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-        db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
-    }
-
-    // --- RESET MODALS ---
+    // ================= RESET MODALS =================
     function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     
@@ -961,7 +884,14 @@
         closeResetModal(); 
     }
 
-    // --- ONLINE STATUS & CHAT ---
+    function confirmResetDraw(starter) { 
+        db.ref('drawGameState').set({ turn: starter, status: "set", word: "", score1: 0, score2: 0 }); 
+        db.ref('drawState/paths').remove();
+        db.ref('chatMessages').remove(); 
+        closeResetModal(); 
+    }
+
+    // ================= ONLINE STATUS & CHAT =================
     db.ref('.info/connected').on('value', (snapshot) => {
         if (snapshot.val() === true) {
             const myPresenceRef = db.ref(`presence/${myName}`);
@@ -981,6 +911,16 @@
         toast.innerText = msg; toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
     }
+
+    // Chat Typing Fix
+    const typingIndicator = document.getElementById('typingIndicator');
+    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
+        if (snapshot.val()) { 
+            typingIndicator.style.display = 'block'; 
+        } else { 
+            typingIndicator.style.display = 'none'; 
+        }
+    });
 
     function copyMsg(id) {
         const txt = document.getElementById('text-' + id).innerText;
@@ -1054,6 +994,7 @@
                 if (!isNaN(pts)) {
                     if (activeGame === 'movie') db.ref(`gameState/score1`).transaction(s => (s || 0) + pts);
                     if (activeGame === 'word') db.ref(`wordGameState/score1`).transaction(s => (s || 0) + pts);
+                    if (activeGame === 'draw') db.ref(`drawGameState/score1`).transaction(s => (s || 0) + pts);
                     showToast(`SECRET: +${pts} POINTS ADDED!`);
                 }
                 chatInput.value = ""; return; 
@@ -1063,6 +1004,7 @@
                 if (!isNaN(pts)) {
                     if (activeGame === 'movie') db.ref(`gameState/score2`).transaction(s => (s || 0) - pts);
                     if (activeGame === 'word') db.ref(`wordGameState/score2`).transaction(s => (s || 0) - pts);
+                    if (activeGame === 'draw') db.ref(`drawGameState/score2`).transaction(s => (s || 0) - pts);
                     showToast(`SECRET: -${pts} POINTS TAKEN FROM SAPPII!`);
                 }
                 chatInput.value = ""; return; 
