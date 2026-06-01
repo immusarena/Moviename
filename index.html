@@ -416,7 +416,7 @@
     };
     function toggleEmojiPicker(e) { if(e) e.stopPropagation(); document.getElementById('emojiPicker').classList.toggle('hidden'); }
 
-    // --- NAVIGATION ---
+    // --- NAVIGATION LOGIC ---
     function openGame(gameType) {
         activeGame = gameType;
         document.getElementById('homeScreen').classList.add('hidden');
@@ -691,7 +691,7 @@
         `;
     }
 
-    // ================= MOVIE GUESSING UI =================
+    // ================= MOVIE GUESSING UI (WITH MANUAL TAMIL INPUT) =================
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
         document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
@@ -703,8 +703,12 @@
                 container.innerHTML = `
                     <div class="card">
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select movie from the list</p>
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
+                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select from list OR type your own</p>
+                        
+                        <input type="text" id="movieInput" placeholder="MOVIE NAME (ENGLISH)" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
+                        
+                        <input type="text" id="manualTamilInput" placeholder="TYPE TAMIL NAME HERE" style="display:none; margin-top:5px; border-color:var(--accent-color);">
+                        
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
                         <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
@@ -750,28 +754,57 @@
     function handleMovieInput() {
         const val = document.getElementById('movieInput').value.trim().toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
+        const manualTamil = document.getElementById('manualTamilInput');
+        
         if(foundMovie) { 
             if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); 
             else document.getElementById('hintInput').value = ""; 
+            
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
-        } else { document.getElementById('tamilPreview').innerText = "Select from list!"; }
+            if(manualTamil) manualTamil.style.display = 'none'; // Hide if found
+        } else { 
+            document.getElementById('tamilPreview').innerText = "Custom Movie Mode"; 
+            if(manualTamil) manualTamil.style.display = 'block'; // Show to type custom Tamil name
+        }
     }
     
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
         document.getElementById('movieInput').value = randomObj.eng; 
+        
         if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase(); 
         else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
+        
         document.getElementById('tamilPreview').innerText = randomObj.tamil; 
+        
+        const manualTamil = document.getElementById('manualTamilInput');
+        if(manualTamil) manualTamil.style.display = 'none';
     }
     
     function setMovie() { 
-        const rawEng = document.getElementById('movieInput').value.trim(); const h = document.getElementById('hintInput').value; 
-        if(!rawEng) return alert("ENTER MOVIE!"); 
+        const rawEng = document.getElementById('movieInput').value.trim(); 
+        const h = document.getElementById('hintInput').value; 
+        
+        if(!rawEng) return alert("ENTER MOVIE IN ENGLISH!"); 
+        
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        if (!foundMovie) return alert("PLEASE SELECT A MOVIE EXACTLY FROM THE DROPDOWN LIST!"); 
-        db.ref('gameState').update({ movieEng: foundMovie.eng, movieTamil: foundMovie.tamil, hint: h, status: "guessing" }); 
+        
+        let finalEng = rawEng;
+        let finalTamil = "";
+
+        if (foundMovie) {
+            finalEng = foundMovie.eng;
+            finalTamil = foundMovie.tamil;
+        } else {
+            const manualTamil = document.getElementById('manualTamilInput');
+            if(!manualTamil || !manualTamil.value.trim()) {
+                return alert("PLEASE ENTER THE TAMIL NAME FOR YOUR CUSTOM MOVIE!");
+            }
+            finalTamil = manualTamil.value.trim();
+        }
+        
+        db.ref('gameState').update({ movieEng: finalEng, movieTamil: finalTamil, hint: h, status: "guessing" }); 
     }
     
     function checkGuess() { 
@@ -837,7 +870,7 @@
         return html;
     }
 
-    // ================= WORD GAME LOGIC (STRICT LOCK RESTORED) =================
+    // ================= WORD GAME LOGIC =================
     function renderWordGameUI() {
         const container = document.getElementById('gameContentArea');
         document.getElementById('immuScore').innerText = wordGameState.score1;
@@ -931,7 +964,6 @@
         document.getElementById('raceFeedback').style.color = "var(--text-main)";
 
         try {
-            // Fast API check with 4 second timeout
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 4000);
             
