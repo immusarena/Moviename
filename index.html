@@ -131,6 +131,25 @@
 
         /* MUSIC LOUNGE ELEMENTS */
         .vinyl-container { width: 120px; height: 120px; margin: 0 auto 20px auto; border-radius: 50%; border: 4px solid var(--primary-color); padding: 5px; box-shadow: 0 0 25px var(--glow-shadow); position: relative; display: flex; justify-content: center; align-items: center; background: #111; }
+
+        /* Premium Cards UI */
+        .card-hand-wrapper { width: 100%; overflow-x: auto; padding: 18px 0; display: flex; justify-content: center; }
+        .card-hand { display: flex; gap: -20px; justify-content: center; min-width: max-content; align-items: flex-end; }
+        .playing-card { width: 72px; height: 100px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2)); border-radius: 10px; box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 6px 12px rgba(0,0,0,0.4) inset; display: flex; align-items: center; justify-content: center; user-select: none; margin-left: -36px; transition: transform 0.25s ease, box-shadow 0.25s ease; border: 1px solid rgba(255,255,255,0.06); cursor: default; }
+        .playing-card.clickable { cursor: pointer; }
+        .playing-card .card-inner { width: 100%; height: 100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color: #fff; font-weight:900; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .playing-card .rank { font-size:18px; opacity:0.95; }
+        .playing-card .suit { font-size:30px; margin-top:2px; }
+        .playing-card.card-red { background: linear-gradient(180deg, rgba(255,245,245,0.03), rgba(80,10,10,0.18)); }
+        .playing-card.card-black { background: linear-gradient(180deg, rgba(245,245,255,0.02), rgba(10,10,40,0.18)); }
+        .playing-card:hover { transform: translateY(-18px) scale(1.05); box-shadow: 0 20px 45px rgba(0,0,0,0.7); z-index:60; }
+
+        .table-area { min-height: 140px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.25)); border-radius: 14px; display:flex; justify-content:center; align-items:center; padding:16px; margin: 15px 0; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+        .table-card-slot { display:flex; flex-direction:column; align-items:center; gap:8px; margin: 0 10px; }
+        .table-card-name { font-size:10px; font-weight:800; color:var(--text-muted); }
+        .table-card-played { width:72px; height:100px; border-radius:10px; display:flex; align-items:center; justify-content:center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.04); }
+        .table-card-played .inner { display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-weight:900; }
+        .card-back { width:72px; height:100px; border-radius:10px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 6px, rgba(0,0,0,0.12) 6px, rgba(0,0,0,0.12) 12px); border:1px solid rgba(255,255,255,0.04); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
         .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
         .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
         .spin-anim { animation: spin 4s linear infinite; }
@@ -212,6 +231,7 @@
     <div class="card" style="padding: 35px 20px;">
         <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
         <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
+        <button class="game-menu-btn yellow" onclick="openGame('cards')">SPADES CARDS 🃏</button>
         <button class="game-menu-btn purple" onclick="openGame('music')">MUSIC LOUNGE 🎧</button>
     </div>
 </div>
@@ -309,7 +329,7 @@
     const partnerName = (myName === "immu") ? "sappii" : "immu";
 
     let activeGame = 'home';
-    let gameState = {}; let wordGameState = {}; let MOVIE_COLLECTION = []; 
+    let gameState = {}; let wordGameState = {}; let cardsGameState = {}; let MOVIE_COLLECTION = []; 
 
     // --- 🎵 PERFECTED MOBILE AUDIO ENGINE ---
     const songs = [
@@ -444,6 +464,12 @@
             document.getElementById('chatArea').classList.add('hidden');
             document.getElementById('resetScoresBtn').classList.add('hidden');
             renderMusicUI();
+        } else if (gameType === 'cards') {
+            document.getElementById('activeGameBadge').innerText = "SPADES CARDS 🃏";
+            document.getElementById('vsScoreBoard').classList.add('hidden');
+            document.getElementById('chatArea').classList.remove('hidden');
+            document.getElementById('resetScoresBtn').classList.remove('hidden');
+            renderCardsGameUI();
         }
         setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
     }
@@ -475,6 +501,248 @@
             renderWordGameUI();
         }
     });
+
+    // ================= CARDS GAME LOGIC (SPADES & CUT) =================
+    const CARD_SUITS = { 'S': '♠️', 'H': '♥️', 'D': '♦️', 'C': '♣️' };
+    const CARD_RANKS = { 14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: '10', 9: '9', 8: '8', 7: '7', 6: '6', 5: '5', 4: '4', 3: '3', 2: '2' };
+
+    function initCardsGame(playerCount) {
+        let deck = [];
+        for (let suit in CARD_SUITS) {
+            for (let rank in CARD_RANKS) {
+                deck.push({ suit: suit, rank: parseInt(rank) });
+            }
+        }
+        
+        // Shuffle
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+
+        let hands = { 'immu': [], 'sappii': [] };
+        if (playerCount === 3) {
+            hands['player3'] = [];
+            // Remove 2 of Clubs for 3 players (51 cards)
+            deck = deck.filter(c => !(c.suit === 'C' && c.rank === 2));
+        }
+
+        const players = Object.keys(hands);
+        players.forEach((p, idx) => {
+            hands[p] = deck.filter((_, i) => i % playerCount === idx);
+            // Sort hand: Group by Suit, then Rank
+            hands[p].sort((a, b) => {
+                if (a.suit === b.suit) return b.rank - a.rank;
+                return a.suit.localeCompare(b.suit);
+            });
+        });
+
+        // Find who has Ace of Spades (S 14)
+        let starter = 'immu';
+        for (let p in hands) {
+            if (hands[p].some(c => c.suit === 'S' && c.rank === 14)) {
+                starter = p; break;
+            }
+        }
+
+        db.ref('cardsGameState').set({
+            status: 'playing',
+            playerCount: playerCount,
+            turn: starter,
+            ledSuit: '',
+            table: {},
+            hands: hands,
+            scores: { 'immu': 0, 'sappii': 0, 'player3': 0 }
+        });
+
+        closeResetModal();
+    }
+
+    db.ref('cardsGameState').on('value', (snapshot) => {
+        cardsGameState = snapshot.val() || { status: 'setup' };
+        if (activeGame === 'cards') renderCardsGameUI();
+    });
+
+    function playCard(index) {
+        if (!cardsGameState || cardsGameState.turn !== myName) return alert("NOT YOUR TURN!");
+        
+        const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
+        const card = myHand[index];
+        const ledSuit = cardsGameState.ledSuit;
+
+        // Validation Rule: Must follow suit if possessed
+        if (ledSuit && card.suit !== ledSuit) {
+            const hasLedSuit = myHand.some(c => c.suit === ledSuit);
+            if (hasLedSuit) {
+                return alert(`YOU MUST PLAY A ${CARD_SUITS[ledSuit]}!`);
+            }
+        }
+
+        // Play card
+        myHand.splice(index, 1);
+        let newTable = cardsGameState.table || {};
+        newTable[myName] = card;
+
+        let updates = {
+            [`hands/${myName}`]: myHand,
+            table: newTable
+        };
+
+        if (!ledSuit) updates.ledSuit = card.suit;
+
+        // Determine next turn or resolve trick
+        const players = Object.keys(cardsGameState.scores).filter(p => p !== 'player3' || cardsGameState.playerCount === 3);
+        
+        if (Object.keys(newTable).length === players.length) {
+            // Trick complete. Nobody's turn until resolved.
+            updates.turn = 'resolving';
+            db.ref('cardsGameState').update(updates);
+            
+            // Resolve trick after 2 seconds
+            setTimeout(() => {
+                let winner = '';
+                let maxVal = -1;
+                let isCut = Object.values(newTable).some(c => c.suit === 'S'); // Spades is Trump
+                let targetSuit = isCut ? 'S' : (updates.ledSuit || ledSuit);
+
+                for (let p in newTable) {
+                    let c = newTable[p];
+                    let val = 0;
+                    if (isCut) {
+                        if (c.suit === 'S') val = c.rank + 100;
+                    } else {
+                        if (c.suit === targetSuit) val = c.rank;
+                    }
+                    if (val > maxVal) { maxVal = val; winner = p; }
+                }
+
+                db.ref(`cardsGameState/scores/${winner}`).transaction(s => (s || 0) + 1);
+                db.ref('cardsGameState').update({
+                    table: null,
+                    ledSuit: '',
+                    turn: winner
+                });
+                
+            }, 2000);
+
+        } else {
+            // Next player's turn
+            let myIdx = players.indexOf(myName);
+            let nextPlayer = players[(myIdx + 1) % players.length];
+            updates.turn = nextPlayer;
+            db.ref('cardsGameState').update(updates);
+        }
+    }
+
+    function renderCardsGameUI() {
+        const container = document.getElementById('gameContentArea');
+        if (!cardsGameState || cardsGameState.status === 'setup') {
+            container.innerHTML = `
+                <div class="card" style="padding: 40px 20px;">
+                    <h2 style="font-size:20px; font-weight:800; color:var(--accent-color); margin-bottom:10px;">SPADES (TRICK-TAKING)</h2>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
+                        ♠️ Ace of Spades starts.<br>
+                        🃏 Must follow suit. If not, Cut with Spades!
+                    </p>
+                    <button class="btn-main" onclick="initCardsGame(2)">START 2 PLAYERS</button>
+                    <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="initCardsGame(3)">START 3 PLAYERS</button>
+                </div>
+            `;
+            return;
+        }
+
+        const players = Object.keys(cardsGameState.scores).filter(p => p !== 'player3' || cardsGameState.playerCount === 3);
+        const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
+        const table = cardsGameState.table || {};
+        
+        // Opponents Stats
+        let oppsHTML = `<div style="display:flex; justify-content:space-around; width:100%; margin-bottom:15px;">`;
+        players.forEach(p => {
+            if (p !== myName) {
+                let cardCount = cardsGameState.hands[p] ? cardsGameState.hands[p].length : 0;
+                let activeClass = cardsGameState.turn === p ? 'active-turn' : '';
+                oppsHTML += `
+                    <div class="player-box ${activeClass}" style="transform:scale(0.85); padding:10px;">
+                        <div class="player-name" style="color:var(--primary-color);">${p.toUpperCase()}</div>
+                        <div style="font-size:18px; font-weight:800; color:#fff;">${cardsGameState.scores[p] || 0} PTS</div>
+                        <div style="font-size:9px; color:var(--text-muted); margin-top:5px;">${cardCount} CARDS</div>
+                    </div>
+                `;
+            }
+        });
+        oppsHTML += `</div>`;
+
+        // Table Area
+        let tableHTML = `<div class="table-area">`;
+        if (Object.keys(table).length === 0) {
+            tableHTML += `<div style="font-size:12px; color:rgba(255,255,255,0.25); font-weight:800; letter-spacing:2px;">TABLE IS EMPTY — READY</div>`;
+        } else {
+            for (let p in table) {
+                let c = table[p];
+                let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
+                tableHTML += `
+                    <div class="table-card-slot">
+                        <div class="table-card-name">${p}</div>
+                        <div class="table-card-played ${cColor}">
+                            <div class="inner"><div class="rank">${CARD_RANKS[c.rank]}</div><div class="suit">${CARD_SUITS[c.suit]}</div></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        tableHTML += `</div>`;
+
+        // Status Bar
+        let statusMsg = "";
+        if (cardsGameState.turn === myName) {
+            statusMsg = `<div style="color:var(--accent-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px; animation:blink 1.5s infinite;">YOUR TURN! PLAY A CARD</div>`;
+        } else if (cardsGameState.turn === 'resolving') {
+            statusMsg = `<div style="color:var(--primary-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px;">RESOLVING TRICK...</div>`;
+        } else {
+            statusMsg = `<div style="color:var(--text-muted); font-weight:800; font-size:10px; letter-spacing:1px; margin-bottom:10px; text-transform:uppercase;">WAITING FOR ${cardsGameState.turn}...</div>`;
+        }
+
+        // My Hand Area
+        let handHTML = `<div class="card-hand-wrapper"><div class="card-hand">`;
+        myHand.forEach((c, idx) => {
+            let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
+            let isMyTurn = cardsGameState.turn === myName;
+            // Highlight valid cards slightly
+            let canPlay = isMyTurn && (!cardsGameState.ledSuit || c.suit === cardsGameState.ledSuit || !myHand.some(x => x.suit === cardsGameState.ledSuit));
+            let styleExt = canPlay ? 'border-color:var(--accent-color);' : '';
+            let clickableClass = canPlay ? 'clickable' : '';
+            
+            handHTML += `
+                <div class="playing-card ${cColor} ${clickableClass}" style="${styleExt}" onclick="playCard(${idx})">
+                    <div class="card-inner"><div class="rank">${CARD_RANKS[c.rank]}</div><div class="suit">${CARD_SUITS[c.suit]}</div></div>
+                </div>
+            `;
+        });
+        handHTML += `</div></div>`;
+
+        // My Stats
+        let myClass = cardsGameState.turn === myName ? 'active-turn' : '';
+        let myStatsHTML = `
+            <div style="display:flex; justify-content:center; margin-top:10px;">
+                <div class="player-box ${myClass}" style="flex-direction:row; width:100%; max-width:250px; justify-content:space-between; padding:10px 20px;">
+                    <div style="text-align:left;">
+                        <div class="player-name" style="color:var(--accent-color);">YOU (${myName.toUpperCase()})</div>
+                        <div style="font-size:10px; color:var(--text-muted);">Points: <span style="color:#fff; font-size:14px; font-weight:800;">${cardsGameState.scores[myName] || 0}</span></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = `
+            <div class="card" style="padding: 20px 10px;">
+                ${oppsHTML}
+                ${tableHTML}
+                ${statusMsg}
+                ${handHTML}
+                ${myStatsHTML}
+            </div>
+        `;
+    }
 
     // ================= 🎵 FIXED MOBILE MUSIC ENGINE =================
     
@@ -705,10 +973,7 @@
                         <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
                         <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select from list OR type your own</p>
                         
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME (ENGLISH)" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
-                        
-                        <input type="text" id="manualTamilInput" placeholder="TYPE TAMIL NAME HERE" style="display:none; margin-top:5px; border-color:var(--accent-color);">
-                        
+                        <input type="text" id="movieInput" placeholder="MOVIE NAME (ENGLISH) OR THANLISH" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
                         <div id="tamilPreview" class="preview-text"></div>
                         <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
                         <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
@@ -752,59 +1017,146 @@
     }
 
     function handleMovieInput() {
-        const val = document.getElementById('movieInput').value.trim().toLowerCase();
+        const inputEl = document.getElementById('movieInput');
+        const raw = inputEl.value.trim();
+        const val = raw.toLowerCase();
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === val);
-        const manualTamil = document.getElementById('manualTamilInput');
-        
-        if(foundMovie) { 
-            if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase(); 
-            else document.getElementById('hintInput').value = ""; 
-            
+
+        if (foundMovie) {
+            if(foundMovie.hero) document.getElementById('hintInput').value = "HINT: " + foundMovie.hero.toUpperCase();
+            else document.getElementById('hintInput').value = "";
             document.getElementById('tamilPreview').innerText = foundMovie.tamil;
-            if(manualTamil) manualTamil.style.display = 'none'; // Hide if found
-        } else { 
-            document.getElementById('tamilPreview').innerText = "Custom Movie Mode"; 
-            if(manualTamil) manualTamil.style.display = 'block'; // Show to type custom Tamil name
+        } else {
+            document.getElementById('hintInput').value = "";
+            document.getElementById('tamilPreview').innerText = convertTamilishToTamil(raw) || "TYPE TAMIL NAME OR THANLISH HERE";
         }
     }
+
+    function isTamilText(text) {
+        return /[\u0B80-\u0BFF]/.test(text);
+    }
+
+    function convertTamilishToTamil(input) {
+        if (!input) return "";
+        if (isTamilText(input)) return input;
+
+        const lower = input.toLowerCase().trim();
+        const tokens = lower.split(/(\s+)/);
+
+        const independentVowel = {
+            a: 'அ', aa: 'ஆ', i: 'இ', ii: 'ஈ', u: 'உ', uu: 'ஊ', e: 'எ', ee: 'ஏ', ai: 'ஐ', o: 'ஒ', oo: 'ஓ', au: 'ஔ'
+        };
+
+        const consonantMap = {
+            ng: 'ங', nj: 'ஞ', ny: 'ஞ', nn: 'ண', ch: 'ச', sh: 'ஷ', zh: 'ழ', j: 'ஜ', c: 'ச', k: 'க', kh: 'க', g: 'க', gh: 'க', q: 'க', x: 'க', t: 'ட', th: 'த', d: 'ட', dh: 'த', p: 'ப', ph: 'ப', b: 'ப', m: 'ம', y: 'ய', r: 'ர', rr: 'ற', l: 'ல', ll: 'ள', v: 'வ', w: 'வ', h: 'ஹ', f: 'ஃ', n: 'ந'
+        };
+
+        const vowelSignMap = {
+            a: '', aa: 'ா', i: 'ி', ii: 'ீ', u: 'ு', uu: 'ூ', e: 'ெ', ee: 'ே', ai: 'ை', o: 'ொ', oo: 'ோ', au: 'ௌ'
+        };
+
+        const vowelKeys = ['au','aa','ii','ee','oo','ai','a','i','u','e','o'];
+        const consonantKeys = ['ng','nj','ny','ch','sh','zh','kh','gh','ph','th','dh','rr','ll','nn','k','g','c','j','t','d','n','p','b','m','y','r','l','v','w','h','f','z','s'];
+
+        return tokens.map(token => {
+            if (/^\s*$/.test(token)) return token;
+            let result = '';
+            let i = 0;
+
+            while (i < token.length) {
+                const chunk = token.slice(i);
+
+                let vow = '';
+                for (const key of vowelKeys) {
+                    if (chunk.startsWith(key)) { vow = key; break; }
+                }
+
+                let cons = '';
+                for (const key of consonantKeys) {
+                    if (chunk.startsWith(key)) { cons = key; break; }
+                }
+
+                if (!cons && consonantMap[chunk[0]]) {
+                    cons = chunk[0];
+                }
+
+                // Handle consonant + vowel combinations
+                if (cons && chunk.startsWith(cons)) {
+                    const base = consonantMap[cons] || '';
+                    const remainder = chunk.slice(cons.length);
+                    let vow = '';
+                    
+                    // Check for vowel sign after consonant
+                    // But 'a' alone is the inherent vowel, only 'aa' is a vowel sign
+                    for (const key of vowelKeys) {
+                        if (remainder.startsWith(key)) { 
+                            vow = key; 
+                            break; 
+                        }
+                    }
+                    
+                    // 'a' after consonant is just inherent vowel, skip it
+                    if (vow === 'a') {
+                        result += base; // consonant with inherent 'a'
+                        i += cons.length + 1; // skip the 'a'
+                    } else if (vow && vowelSignMap[vow] !== undefined) {
+                        // Other vowel signs attach to consonant
+                        const sign = vowelSignMap[vow];
+                        result += base + sign;
+                        i += cons.length + vow.length;
+                    } else {
+                        // No vowel after consonant, add virama
+                        result += base + '்';
+                        i += cons.length;
+                    }
+                }
+                // Handle standalone vowels
+                else if (vow && independentVowel[vow]) {
+                    result += independentVowel[vow];
+                    i += vow.length;
+                } 
+                // Fallback: preserve unknown characters
+                else {
+                    result += chunk[0];
+                    i += 1;
+                }
+            }
+
+            return result;
+        }).join('');
+    }
+
+    // Note: tamil preview now derives directly from the single `movieInput` field.
     
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
-        document.getElementById('movieInput').value = randomObj.eng; 
-        
-        if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase(); 
-        else document.getElementById('hintInput').value = "GUESS THE HERO!"; 
-        
-        document.getElementById('tamilPreview').innerText = randomObj.tamil; 
-        
-        const manualTamil = document.getElementById('manualTamilInput');
-        if(manualTamil) manualTamil.style.display = 'none';
+        document.getElementById('movieInput').value = randomObj.eng;
+        if(randomObj.hero) document.getElementById('hintInput').value = "HINT: " + randomObj.hero.toUpperCase();
+        else document.getElementById('hintInput').value = "GUESS THE HERO!";
+        document.getElementById('tamilPreview').innerText = randomObj.tamil;
     }
     
     function setMovie() { 
-        const rawEng = document.getElementById('movieInput').value.trim(); 
-        const h = document.getElementById('hintInput').value; 
-        
-        if(!rawEng) return alert("ENTER MOVIE IN ENGLISH!"); 
-        
-        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === rawEng.toLowerCase());
-        
-        let finalEng = rawEng;
+        const raw = document.getElementById('movieInput').value.trim();
+        const h = document.getElementById('hintInput').value;
+
+        if(!raw) return alert("ENTER MOVIE IN ENGLISH OR THANLISH!");
+
+        const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === raw.toLowerCase());
+
+        let finalEng = raw;
         let finalTamil = "";
 
         if (foundMovie) {
             finalEng = foundMovie.eng;
             finalTamil = foundMovie.tamil;
         } else {
-            const manualTamil = document.getElementById('manualTamilInput');
-            if(!manualTamil || !manualTamil.value.trim()) {
-                return alert("PLEASE ENTER THE TAMIL NAME FOR YOUR CUSTOM MOVIE!");
-            }
-            finalTamil = manualTamil.value.trim();
+            finalTamil = convertTamilishToTamil(raw);
+            if(!finalTamil) return alert("PLEASE ENTER THE TAMIL NAME OR THANLISH FOR YOUR CUSTOM MOVIE!");
         }
-        
-        db.ref('gameState').update({ movieEng: finalEng, movieTamil: finalTamil, hint: h, status: "guessing" }); 
+
+        db.ref('gameState').update({ movieEng: finalEng, movieTamil: finalTamil, hint: h, status: "guessing" });
     }
     
     function checkGuess() { 
