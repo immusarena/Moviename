@@ -150,6 +150,19 @@
         .table-card-played { width:72px; height:100px; border-radius:10px; display:flex; align-items:center; justify-content:center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.04); }
         .table-card-played .inner { display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-weight:900; }
         .card-back { width:72px; height:100px; border-radius:10px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02) 6px, rgba(0,0,0,0.12) 6px, rgba(0,0,0,0.12) 12px); border:1px solid rgba(255,255,255,0.04); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+
+        /* Premium Movie & Word UI */
+        .game-panel { display:flex; flex-direction:column; gap:12px; align-items:stretch; }
+        .game-header { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+        .game-title { font-size:14px; font-weight:800; letter-spacing:2px; color:var(--text-main); }
+        .subtle { font-size:11px; color:var(--text-muted); }
+        .input-gradient { padding:12px; border-radius:12px; background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.18)); border:1px solid rgba(255,255,255,0.04); }
+        .hint-badge { display:inline-block; padding:6px 10px; border-radius:999px; background: rgba(255,75,114,0.08); color:var(--primary-color); font-weight:800; font-size:11px; border:1px solid rgba(255,75,114,0.15); }
+        .tamil-pill { display:block; padding:10px 14px; border-radius:12px; background: linear-gradient(90deg, rgba(74,222,128,0.06), rgba(255,75,114,0.03)); color:var(--accent-color); font-weight:800; text-align:center; }
+        .action-row { display:flex; gap:10px; align-items:center; }
+        .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.06); color:var(--text-muted); padding:10px 12px; border-radius:10px; cursor:pointer; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color:#fff; padding:12px 14px; border-radius:12px; border:none; font-weight:900; cursor:pointer; box-shadow: 0 8px 25px var(--glow-shadow); }
+        .hint-text.premium { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); padding:8px 12px; border-radius:10px; font-weight:800; color:var(--primary-color); }
         .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
         .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
         .spin-anim { animation: spin 4s linear infinite; }
@@ -164,7 +177,12 @@
         .chat-container { text-align: left; padding: 20px; position: relative;}
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .chat-header h3 { margin: 0; color: var(--text-main); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;}
-        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; animation: blink 1.5s infinite; margin-left: 10px; margin-bottom: 8px; display: none;}
+        .typing-indicator { font-size: 10px; color: var(--accent-color); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-left: 10px; margin-bottom: 8px; display: none; align-items: center; gap: 6px; }
+        .typing-indicator .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-color); display: inline-block; animation: typingDots 1s infinite ease-in-out; opacity: 0.35; }
+        .typing-indicator .typing-dot:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+        .typing-indicator .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingDots { 0%, 100% { opacity: 0.35; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-2px); } }
 
         .chat-messages { height: 220px; overflow-y: auto; padding: 15px 10px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(0,0,0,0.2); margin-bottom: 5px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;}
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
@@ -207,7 +225,7 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<audio id="sharedAudio" style="display:none;" playsinline webkit-playsinline preload="auto"></audio>
+<!-- Music Lounge removed -->
 
 <div id="toast" class="toast">NEW MESSAGE</div>
 
@@ -232,7 +250,16 @@
         <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
         <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
         <button class="game-menu-btn yellow" onclick="openGame('cards')">SPADES CARDS 🃏</button>
-        <button class="game-menu-btn purple" onclick="openGame('music')">MUSIC LOUNGE 🎧</button>
+    </div>
+
+    <div class="card" style="padding: 20px;">
+        <div style="font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:15px;">PLAYER LINKS</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn-ghost" style="width:100%; padding:10px; font-size:10px; text-align:center; word-break:break-all;" onclick="copyToClipboard('immu')">🎮 IMMU: ?u=immu</button>
+            <button class="btn-ghost" style="width:100%; padding:10px; font-size:10px; text-align:center; word-break:break-all;" onclick="copyToClipboard('sappii')">👯 SAPPII: ?u=sappii</button>
+            <button class="btn-ghost" style="width:100%; padding:10px; font-size:10px; text-align:center; word-break:break-all;" onclick="copyToClipboard('tharkuri')">🎭 THARKURI: ?u=tharkuri</button>
+        </div>
+        <p style="font-size:9px; color:var(--text-muted); margin-top:12px; text-align:center;">Click a link to copy to clipboard</p>
     </div>
 </div>
 
@@ -275,7 +302,7 @@
         </div>
         <div id="chatMessages" class="chat-messages"></div>
         
-        <span id="typingIndicator" class="typing-indicator hidden">TYPING...</span>
+        <span id="typingIndicator" class="typing-indicator hidden"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>typing...</span>
         
         <div class="chat-input-group">
             <button id="emojiBtn" class="chat-icon-btn" onclick="toggleEmojiPicker(event)">😊</button>
@@ -303,6 +330,9 @@
         <div class="modal-btn-group hidden" id="wordResetBtns">
             <button class="btn-main" style="margin-top:0;" onclick="confirmResetWord()">YES, RESET</button>
         </div>
+        <div class="modal-btn-group hidden" id="cardResetBtns">
+            <button class="btn-main" style="margin-top:0;" onclick="confirmResetCards()">YES, RESET</button>
+        </div>
         <button class="btn-main" style="background: transparent; border: 1px dashed red; color: red; box-shadow: none;" onclick="closeResetModal()">CANCEL</button>
     </div>
 </div>
@@ -326,25 +356,15 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const myName = (urlParams.get('u') || "immu").toLowerCase(); 
-    const partnerName = (myName === "immu") ? "sappii" : "immu";
+    let partnerName = "";
+    if (myName === "immu") partnerName = "sappii";
+    else if (myName === "sappii") partnerName = "immu";
+    else if (myName === "tharkuri") partnerName = "immu"; // Third player pairs with immu
 
     let activeGame = 'home';
     let gameState = {}; let wordGameState = {}; let cardsGameState = {}; let MOVIE_COLLECTION = []; 
 
-    // --- 🎵 PERFECTED MOBILE AUDIO ENGINE ---
-    const songs = [
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/smackthar.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/unakkulnaane.mp3",
-        "https://cdn.jsdelivr.net/gh/immusarena/Moviename@main/malaimangum.mp3"
-    ];
-    let currentSong = 0;
-    let playing = false;
-    let isRemoteAction = false;
-    const audio = document.getElementById("sharedAudio");
-    
-    // Explicitly enabling mobile auto-play properties
-    audio.volume = 1;
-    audio.muted = false;
+    // Music Lounge feature removed
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -398,6 +418,17 @@
         requestAnimationFrame(animateParticles);
     }
     resizeCanvas(); animateParticles(); 
+
+    // --- PLAYER LINK COPIER ---
+    function copyToClipboard(playerName) {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const fullUrl = baseUrl + "?u=" + playerName;
+        navigator.clipboard.writeText(fullUrl).then(() => {
+            showToast("LINK COPIED: ?u=" + playerName);
+        }).catch(() => {
+            alert("LINK: " + fullUrl);
+        });
+    }
 
     // --- MOVIES LOADER ---
     async function loadMoviesFromTXT() {
@@ -458,12 +489,6 @@
             document.getElementById('movieResetBtns').classList.add('hidden');
             document.getElementById('wordResetBtns').classList.remove('hidden');
             renderWordGameUI();
-        } else if (gameType === 'music') {
-            document.getElementById('activeGameBadge').innerText = "MUSIC LOUNGE 🎧";
-            document.getElementById('vsScoreBoard').classList.add('hidden');
-            document.getElementById('chatArea').classList.add('hidden');
-            document.getElementById('resetScoresBtn').classList.add('hidden');
-            renderMusicUI();
         } else if (gameType === 'cards') {
             document.getElementById('activeGameBadge').innerText = "SPADES CARDS 🃏";
             document.getElementById('vsScoreBoard').classList.add('hidden');
@@ -520,15 +545,26 @@
             [deck[i], deck[j]] = [deck[j], deck[i]];
         }
 
-        let hands = { 'immu': [], 'sappii': [] };
+        // Get player names for the game
+        let playerNames = ['immu', 'sappii'];
+        
         if (playerCount === 3) {
-            hands['player3'] = [];
+            playerNames = ['immu', 'sappii', 'tharkuri'];
+        }
+
+        startCardsGameWithPlayers(playerCount, deck, playerNames);
+    }
+
+    function startCardsGameWithPlayers(playerCount, deck, playerNames) {
+        let hands = {};
+        playerNames.forEach(p => hands[p] = []);
+
+        if (playerCount === 3) {
             // Remove 2 of Clubs for 3 players (51 cards)
             deck = deck.filter(c => !(c.suit === 'C' && c.rank === 2));
         }
 
-        const players = Object.keys(hands);
-        players.forEach((p, idx) => {
+        playerNames.forEach((p, idx) => {
             hands[p] = deck.filter((_, i) => i % playerCount === idx);
             // Sort hand: Group by Suit, then Rank
             hands[p].sort((a, b) => {
@@ -545,21 +581,59 @@
             }
         }
 
+        // Create scores object with actual player names
+        let scores = {};
+        playerNames.forEach(p => scores[p] = 0);
+
         db.ref('cardsGameState').set({
             status: 'playing',
             playerCount: playerCount,
+            playerNames: playerNames,
             turn: starter,
             ledSuit: '',
             table: {},
             hands: hands,
-            scores: { 'immu': 0, 'sappii': 0, 'player3': 0 }
+            scores: scores
         });
 
         closeResetModal();
     }
 
     db.ref('cardsGameState').on('value', (snapshot) => {
-        cardsGameState = snapshot.val() || { status: 'setup' };
+        let state = snapshot.val() || { status: 'setup' };
+        if (state.playerCount === 3 && state.hands && state.hands.player3) {
+            let updates = {};
+            let newHands = { ...state.hands, tharkuri: state.hands.player3 };
+            delete newHands.player3;
+            updates.hands = newHands;
+
+            if (state.scores && state.scores.player3 !== undefined) {
+                let newScores = { ...state.scores, tharkuri: state.scores.player3 };
+                delete newScores.player3;
+                updates.scores = newScores;
+            }
+
+            if (Array.isArray(state.playerNames)) {
+                updates.playerNames = state.playerNames.map(p => p === 'player3' ? 'tharkuri' : p);
+            } else {
+                updates.playerNames = ['immu', 'sappii', 'tharkuri'];
+            }
+
+            if (state.turn === 'player3') {
+                updates.turn = 'tharkuri';
+            }
+
+            if (state.table && state.table.player3) {
+                let newTable = { ...state.table, tharkuri: state.table.player3 };
+                delete newTable.player3;
+                updates.table = newTable;
+            }
+
+            db.ref('cardsGameState').update(updates);
+            state = { ...state, ...updates };
+        }
+
+        cardsGameState = state;
         if (activeGame === 'cards') renderCardsGameUI();
     });
 
@@ -591,7 +665,8 @@
         if (!ledSuit) updates.ledSuit = card.suit;
 
         // Determine next turn or resolve trick
-        const players = Object.keys(cardsGameState.scores).filter(p => p !== 'player3' || cardsGameState.playerCount === 3);
+        const playerNames = cardsGameState.playerNames || Object.keys(cardsGameState.scores || {});
+        const players = playerNames;
         
         if (Object.keys(newTable).length === players.length) {
             // Trick complete. Nobody's turn until resolved.
@@ -602,11 +677,14 @@
             setTimeout(() => {
                 let winner = '';
                 let maxVal = -1;
-                let isCut = Object.values(newTable).some(c => c.suit === 'S'); // Spades is Trump
-                let targetSuit = isCut ? 'S' : (updates.ledSuit || ledSuit);
+                // Get fresh table data from the current cardsGameState
+                let currentTable = cardsGameState.table || newTable;
+                let isCut = Object.values(currentTable).some(c => c.suit === 'S'); // Spades is Trump
+                let currentLedSuit = cardsGameState.ledSuit || updates.ledSuit || ledSuit;
+                let targetSuit = isCut ? 'S' : currentLedSuit;
 
-                for (let p in newTable) {
-                    let c = newTable[p];
+                for (let p in currentTable) {
+                    let c = currentTable[p];
                     let val = 0;
                     if (isCut) {
                         if (c.suit === 'S') val = c.rank + 100;
@@ -617,11 +695,27 @@
                 }
 
                 db.ref(`cardsGameState/scores/${winner}`).transaction(s => (s || 0) + 1);
-                db.ref('cardsGameState').update({
-                    table: null,
-                    ledSuit: '',
-                    turn: winner
-                });
+                
+                // Check if hands are empty (game over) before starting next trick
+                const hands = cardsGameState.hands || {};
+                const allHandsEmpty = players.every(p => !hands[p] || hands[p].length === 0);
+                
+                if (allHandsEmpty) {
+                    // Game Over - All tricks played
+                    db.ref('cardsGameState').update({
+                        table: null,
+                        ledSuit: '',
+                        turn: 'game_over',
+                        status: 'finished'
+                    });
+                } else {
+                    // Next trick - properly clear previous trick
+                    db.ref('cardsGameState').update({
+                        table: {},
+                        ledSuit: '',
+                        turn: winner
+                    });
+                }
                 
             }, 2000);
 
@@ -651,9 +745,52 @@
             return;
         }
 
-        const players = Object.keys(cardsGameState.scores).filter(p => p !== 'player3' || cardsGameState.playerCount === 3);
+        // Handle game over state
+        if (cardsGameState.status === 'finished' || cardsGameState.turn === 'game_over') {
+            const scores = cardsGameState.scores || {};
+            const playerNames = cardsGameState.playerNames || ['immu', 'sappii'];
+            const winner = playerNames.reduce((a, b) => (scores[a] > scores[b]) ? a : b);
+            
+            let scoresHTML = '';
+            playerNames.forEach(p => {
+                scoresHTML += `<div><div style="color:var(--accent-color); font-size:28px; font-weight:800;">${scores[p] || 0}</div><div style="color:var(--text-muted); font-size:10px; font-weight:600;">${p.toUpperCase()}</div></div>`;
+            });
+            
+            container.innerHTML = `
+                <div class="card" style="padding: 40px 20px; text-align: center;">
+                    <h2 style="font-size:20px; font-weight:800; color:var(--accent-color); margin-bottom:10px;">🎉 GAME OVER!</h2>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
+                        ${winner.toUpperCase()} WINS! 👑
+                    </p>
+                    <div style="display:flex; justify-content:space-around; margin-bottom:20px;">
+                        ${scoresHTML}
+                    </div>
+                    <button class="btn-main" onclick="initCardsGame(${cardsGameState.playerCount || 2})" style="margin-bottom:10px;">PLAY AGAIN</button>
+                    <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="goHome()">BACK HOME</button>
+                </div>
+            `;
+            return;
+        }
+
+        const playerNames = cardsGameState.playerNames || Object.keys(cardsGameState.scores || {});
+        const players = playerNames;
         const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
         const table = cardsGameState.table || {};
+        
+        // Safety check: if myName not in game, show message
+        if (!cardsGameState.hands || !cardsGameState.hands[myName]) {
+            container.innerHTML = `
+                <div class="card" style="padding: 40px 20px; text-align: center;">
+                    <h2 style="font-size:20px; font-weight:800; color:var(--primary-color); margin-bottom:10px;">⚠️ NOT IN GAME</h2>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
+                        You (${myName.toUpperCase()}) are not in this game.<br>
+                        Active players: ${playerNames.join(', ').toUpperCase()}
+                    </p>
+                    <button class="btn-main" onclick="location.reload()">REFRESH PAGE</button>
+                </div>
+            `;
+            return;
+        }
         
         // Opponents Stats
         let oppsHTML = `<div style="display:flex; justify-content:space-around; width:100%; margin-bottom:15px;">`;
@@ -744,220 +881,7 @@
         `;
     }
 
-    // ================= 🎵 FIXED MOBILE MUSIC ENGINE =================
-    
-    function loadSong() {
-        audio.src = songs[currentSong];
-        updateMusicUI();
-    }
-    
-    // Load first song initially
-    loadSong();
-
-    function updateMusicUI() {
-        let pBtn = document.getElementById("mainPlayBtn");
-        let vRec = document.getElementById("vinylRecord");
-
-        if(playing) {
-            if(pBtn) pBtn.innerText = "PAUSE";
-            if(vRec) vRec.classList.add("spin-anim");
-        } else {
-            if(pBtn) pBtn.innerText = "PLAY";
-            if(vRec) vRec.classList.remove("spin-anim");
-        }
-
-        let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
-        let displayEl = document.getElementById('songNameDisplay');
-        if(displayEl) {
-            displayEl.innerText = "🎵 " + sName;
-        }
-    }
-
-    async function togglePlayPause() {
-        try {
-            if(!playing) {
-                audio.muted = false;
-                audio.volume = 1;
-                
-                if(!audio.src || audio.src === window.location.href){
-                    loadSong();
-                }
-
-                await audio.play();
-                playing = true;
-                updateMusicUI();
-
-                db.ref('musicState').update({
-                    action: 'play',
-                    index: currentSong,
-                    time: audio.currentTime,
-                    by: myName,
-                    ts: Date.now()
-                });
-            } else {
-                audio.pause();
-                playing = false;
-                updateMusicUI();
-
-                db.ref('musicState').update({
-                    action: 'pause',
-                    index: currentSong,
-                    time: audio.currentTime,
-                    by: myName,
-                    ts: Date.now()
-                });
-            }
-        } catch(err) {
-            console.log("PLAY ERROR:", err);
-            showToast("PRESS PLAY AGAIN 🎵");
-            audio.load();
-        }
-    }
-
-    async function nextSong() {
-        currentSong++;
-        if(currentSong >= songs.length){
-            currentSong = 0;
-        }
-        loadSong();
-        try {
-            await audio.play();
-            playing = true;
-            updateMusicUI();
-
-            db.ref('musicState').update({
-                action: 'next',
-                index: currentSong,
-                time: 0,
-                by: myName,
-                ts: Date.now()
-            });
-        } catch(err){
-            console.log(err);
-            showToast("TAP PLAY 🎵");
-        }
-    }
-
-    async function prevSong() {
-        currentSong--;
-        if(currentSong < 0){
-            currentSong = songs.length - 1;
-        }
-        loadSong();
-        try {
-            await audio.play();
-            playing = true;
-            updateMusicUI();
-
-            db.ref('musicState').update({
-                action: 'prev',
-                index: currentSong,
-                time: 0,
-                by: myName,
-                ts: Date.now()
-            });
-        } catch(err){
-            console.log(err);
-            showToast("TAP PLAY 🎵");
-        }
-    }
-
-    /* AUTO NEXT */
-    audio.addEventListener("ended", async () => {
-        if(activeGame === 'music' && playing && !isRemoteAction) {
-            currentSong++;
-            if(currentSong >= songs.length){
-                currentSong = 0;
-            }
-            loadSong();
-            try {
-                await audio.play();
-                playing = true;
-                updateMusicUI();
-                db.ref('musicState').update({
-                    action: 'play',
-                    index: currentSong,
-                    time: 0,
-                    by: myName,
-                    ts: Date.now()
-                });
-            } catch(err) {
-                console.log(err);
-            }
-        }
-    });
-
-    function forceSync() {
-        db.ref('musicState').update({
-            action: playing ? 'play' : 'pause',
-            index: currentSong,
-            time: audio.currentTime,
-            by: myName,
-            ts: Date.now()
-        });
-        showToast("SYNC SENT!");
-    }
-
-    // Remote Sync Listener
-    db.ref('musicState').on('value', async snapshot => {
-        const data = snapshot.val();
-        if(!data) return;
-
-        if (data.by !== myName) {
-            isRemoteAction = true;
-            
-            if (data.index !== currentSong) {
-                currentSong = data.index;
-                loadSong();
-            }
-
-            if (Math.abs(audio.currentTime - data.time) > 1.5) {
-                audio.currentTime = data.time;
-            }
-
-            try {
-                if (data.action === 'play' || data.action === 'next' || data.action === 'prev') {
-                    await audio.play();
-                    playing = true;
-                } else {
-                    audio.pause();
-                    playing = false;
-                }
-            } catch(e) {
-                showToast("TAP PLAY TO ENABLE AUDIO");
-            }
-            
-            updateMusicUI();
-            setTimeout(() => { isRemoteAction = false; }, 500);
-        }
-    });
-
-    function renderMusicUI() {
-        const container = document.getElementById('gameContentArea');
-        const isSpinning = playing ? 'spin-anim' : '';
-        const playText = playing ? 'PAUSE' : 'PLAY';
-        let sName = songs[currentSong] ? songs[currentSong].split('/').pop().replace('.mp3', '') : "Ready to play";
-
-        container.innerHTML = `
-            <div class="card" style="text-align:center;">
-                <div class="vinyl-container">
-                    <img src="1000243510.png" class="vinyl-record ${isSpinning}" id="vinylRecord" onerror="this.src='image_605d04.png'">
-                </div>
-                <h3 style="color:var(--text-main); margin-top:15px; letter-spacing:2px;">COUPLE'S RADIO</h3>
-                <p id="songNameDisplay" style="font-size:12px; color:var(--accent-color); text-transform:uppercase; letter-spacing:1px; margin-bottom:20px; font-weight:bold;">
-                    🎵 ${sName}
-                </p>
-
-                <div class="music-controls" style="display:flex; justify-content:center; align-items:center; gap: 10px;">
-                    <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="prevSong()" title="Previous">⏮️</button>
-                    <button class="btn-main play-btn" style="margin:0; padding:15px; flex:1;" id="mainPlayBtn" onclick="togglePlayPause()">${playText}</button>
-                    <button class="music-btn sync" style="padding: 15px; font-size: 16px;" onclick="nextSong()" title="Next">⏭️</button>
-                </div>
-                
-                <button class="btn-main" style="background:transparent; border:1px solid var(--border-color); box-shadow:none; color:var(--text-muted);" onclick="forceSync()">🔄 FORCE SYNC WITH PARTNER</button>
-            </div>
-        `;
-    }
+    // Music Lounge removed from the app.
 
     // ================= MOVIE GUESSING UI (WITH MANUAL TAMIL INPUT) =================
     function renderMovieGameUI() {
@@ -969,15 +893,25 @@
         if (gameState.status === "set") {
             if (gameState.turn === myName) {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">YOUR TURN</h3>
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">Select from list OR type your own</p>
-                        
-                        <input type="text" id="movieInput" placeholder="MOVIE NAME (ENGLISH) OR THANLISH" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()">
-                        <div id="tamilPreview" class="preview-text"></div>
-                        <button class="random-btn" onclick="suggestRandomMovie()">SUGGEST RANDOM MOVIE</button>
-                        <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)">
-                        <button class="btn-main" onclick="setMovie()">START GAME</button>
+                    <div class="card game-panel">
+                        <div class="game-header">
+                            <div>
+                                <div class="game-title">YOUR TURN</div>
+                                <div class="subtle">Select from the list or type Thanlish</div>
+                            </div>
+                            <div class="hint-badge">${gameState.turn.toUpperCase()}</div>
+                        </div>
+
+                        <div class="input-gradient">
+                            <input type="text" id="movieInput" placeholder="MOVIE NAME (ENGLISH) OR THANLISH" list="movieList" oninput="handleMovieInput()" onchange="handleMovieInput()" style="border:none; background:transparent; padding:8px 0; font-weight:800; font-size:14px; text-transform:none;">
+                            <div id="tamilPreview" class="tamil-pill" style="margin-top:8px;">TYPE TAMIL NAME OR THANLISH HERE</div>
+                        </div>
+
+                        <div class="action-row">
+                            <button class="btn-ghost" onclick="suggestRandomMovie()">Random</button>
+                            <input type="text" id="hintInput" placeholder="HINT (OPTIONAL)" style="flex:1; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:var(--text-main); font-weight:700;">
+                            <button class="btn-primary" onclick="setMovie()">START</button>
+                        </div>
                     </div>`;
             } else {
                 container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${gameState.turn} IS CHOOSING A MOVIE</p></div>`;
@@ -986,24 +920,26 @@
             const letterCount = getLetterCountExact(gameState.movieTamil);
             if (gameState.turn === myName) {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-muted);">PARTNER GUESSING</h3>
-                        ${maskExactString(gameState.movieTamil)}
-                        <div class="letter-count">${letterCount} LETTERS</div>
-                        <hr style="border:0; border-top:1px solid var(--border-color); margin: 20px 0;">
+                    <div class="card game-panel">
+                        <div class="game-header"><div><div class="game-title" style="color:var(--text-muted);">PARTNER GUESSING</div></div><div class="hint-badge">${gameState.turn.toUpperCase()}</div></div>
+                        <div style="margin-top:6px;">${maskExactString(gameState.movieTamil)}</div>
+                        <div class="letter-count" style="margin-top:8px;">${letterCount} LETTERS</div>
+                        <div style="width:100%; height:1px; background:transparent; margin:12px 0;"></div>
                         <button class="manual-point-btn" onclick="awardManualPoint()">GIVE POINT & NEXT TURN</button>
                     </div>`;
             } else {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">GUESS THE MOVIE</h3>
-                        ${maskExactString(gameState.movieTamil)}
+                    <div class="card game-panel">
+                        <div class="game-header"><div><div class="game-title">GUESS THE MOVIE</div><div class="subtle">Type your answer in English</div></div><div class="hint-badge">GUESS</div></div>
+                        <div style="margin-top:8px;">${maskExactString(gameState.movieTamil)}</div>
                         <div class="letter-count">${letterCount} LETTERS</div>
-                        ${gameState.hint ? `<div class="hint-text">HINT: ${gameState.hint}</div>` : ''}
-                        <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH">
-                        <button class="btn-main" onclick="checkGuess()">SUBMIT ANSWER</button>
-                        <button class="give-up-btn" onclick="giveUp()">GIVE UP</button>
-                        <p id="feedback" style="margin-top:15px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                        ${gameState.hint ? `<div class="hint-text premium">HINT: ${gameState.hint}</div>` : ''}
+                        <input type="text" id="guessInput" placeholder="TYPE ANSWER IN ENGLISH" style="margin-top:10px; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; font-weight:800;">
+                        <div class="action-row" style="margin-top:10px;">
+                            <button class="btn-primary" onclick="checkGuess()">SUBMIT</button>
+                            <button class="btn-ghost" onclick="giveUp()">GIVE UP</button>
+                        </div>
+                        <p id="feedback" style="margin-top:12px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                     </div>`;
             }
         }
@@ -1237,41 +1173,37 @@
 
             if (!myLetter) {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--text-main);">YOUR LETTER?</h3>
-                        <p style="color:var(--text-muted); font-size: 9px; text-transform:uppercase; letter-spacing:1px;">TYPE ONE ENGLISH LETTER (A-Z)</p>
-                        <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S OR K" class="letter-box">
-                        <button class="btn-main" onclick="submitLetter()">SEND LETTER</button>
+                    <div class="card game-panel">
+                        <div class="game-header"><div><div class="game-title">YOUR LETTER?</div><div class="subtle">Type one English letter (A-Z)</div></div><div class="hint-badge">${myName.toUpperCase()}</div></div>
+                        <div class="input-gradient" style="margin-top:8px;">
+                            <input type="text" id="letterInput" maxlength="1" placeholder="E.G. S" class="letter-box" style="font-size:28px; padding:16px;">
+                        </div>
+                        <div class="action-row"><button class="btn-primary" onclick="submitLetter()">SEND LETTER</button></div>
                     </div>`;
             } else if (!partnerLetter) {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:2px;">WAITING...</h3>
-                        <p style="font-size: 10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">${partnerName} IS CHOOSING A LETTER</p>
-                        <p style="font-size: 20px; color: var(--accent-color); font-weight:800; margin-top:15px; letter-spacing:2px;">YOU PICKED: ${myLetter.toUpperCase()}</p>
+                    <div class="card game-panel">
+                        <div class="game-header"><div><div class="game-title">WAITING...</div><div class="subtle">${partnerName} is choosing</div></div><div class="hint-badge">${myLetter.toUpperCase()}</div></div>
+                        <div style="text-align:center; margin-top:12px;"><span style="font-size:20px; font-weight:900; color:var(--accent-color);">YOU PICKED: ${myLetter.toUpperCase()}</span></div>
                     </div>`;
             } else {
                 container.innerHTML = `
-                    <div class="card">
-                        <h3 style="color:var(--accent-color); margin-top:0; font-size:13px; letter-spacing:2px;">LETTERS READY!</h3>
-                        <p style="font-size:9px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">FIRST LETTER ETHU, LAST LETTER ETHU?</p>
-                        <button class="btn-main" style="margin-top:5px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">
-                            START: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b>
-                        </button>
-                        <button class="btn-main" style="margin-top:10px; background:rgba(0,0,0,0.3); border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="setWordOrder('${wordGameState.p2Letter}', '${wordGameState.p1Letter}')">
-                            START: <b style="color:white; font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b> &nbsp;|&nbsp; END: <b style="color:white; font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b>
-                        </button>
+                    <div class="card game-panel">
+                        <div class="game-header"><div><div class="game-title" style="color:var(--accent-color);">LETTERS READY!</div><div class="subtle">Choose start and end order</div></div><div class="hint-badge">READY</div></div>
+                        <div style="display:flex; gap:10px; margin-top:12px;">
+                            <button class="btn-primary" style="flex:1;" onclick="setWordOrder('${wordGameState.p1Letter}', '${wordGameState.p2Letter}')">START: <b style="font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b> → <b style="font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b></button>
+                            <button class="btn-ghost" style="flex:1;" onclick="setWordOrder('${wordGameState.p2Letter}', '${wordGameState.p1Letter}')">START: <b style="font-size:16px;">${wordGameState.p2Letter.toUpperCase()}</b> → <b style="font-size:16px;">${wordGameState.p1Letter.toUpperCase()}</b></button>
+                        </div>
                     </div>`;
             }
         } else if (wordGameState.status === "race_phase") {
             container.innerHTML = `
-                <div class="card" style="border-color:var(--accent-color); box-shadow: 0 0 30px rgba(74, 222, 128, 0.15);">
-                    <h3 style="margin-top:0; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-main);">FORM A WORD!</h3>
-                    <p style="font-size: 10px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted);">STARTS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.startLetter.toUpperCase()}</b> & ENDS WITH <b class="letter-box" style="font-size: 24px; margin:0 5px;">${wordGameState.endLetter.toUpperCase()}</b></p>
-                    <input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="font-size: 14px; font-weight: bold; text-transform: uppercase;">
-                    <button class="btn-main" id="submitRaceBtn" onclick="submitRaceWord()">SUBMIT FAST</button>
-                    <button class="btn-main" style="background:transparent; box-shadow:none; color:var(--text-muted);" onclick="skipWord()">SKIP ROUND</button>
-                    <p id="raceFeedback" style="margin-top:15px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                <div class="card game-panel" style="border-color:var(--accent-color); box-shadow: 0 10px 40px rgba(74, 222, 128, 0.08);">
+                    <div class="game-header"><div><div class="game-title">FORM A WORD!</div><div class="subtle">Make a valid English word</div></div><div class="hint-badge">RACE</div></div>
+                    <div style="margin-top:8px; text-align:center;">START: <span class="letter-box" style="font-size:22px;">${wordGameState.startLetter.toUpperCase()}</span> &nbsp;|&nbsp; END: <span class="letter-box" style="font-size:22px;">${wordGameState.endLetter.toUpperCase()}</span></div>
+                    <div style="margin-top:12px;" class="input-gradient"><input type="text" id="raceWordInput" placeholder="TYPE A VALID WORD..." style="width:100%; border:none; background:transparent; padding:10px; font-weight:800; text-transform:uppercase; font-size:16px;"></div>
+                    <div class="action-row" style="margin-top:10px;"><button class="btn-primary" id="submitRaceBtn" onclick="submitRaceWord()">SUBMIT FAST</button><button class="btn-ghost" onclick="skipWord()">SKIP</button></div>
+                    <p id="raceFeedback" style="margin-top:12px; color:var(--primary-color); font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
                 </div>`;
         }
     }
@@ -1378,7 +1310,16 @@
     }
 
     // --- RESET MODALS ---
-    function openResetModal() { document.getElementById('resetModal').classList.remove('hidden'); }
+    function openResetModal() { 
+        document.getElementById('resetModal').classList.remove('hidden');
+        document.getElementById('movieResetBtns').classList.add('hidden');
+        document.getElementById('wordResetBtns').classList.add('hidden');
+        document.getElementById('cardResetBtns').classList.add('hidden');
+        
+        if (activeGame === 'movie') document.getElementById('movieResetBtns').classList.remove('hidden');
+        else if (activeGame === 'word') document.getElementById('wordResetBtns').classList.remove('hidden');
+        else if (activeGame === 'cards') document.getElementById('cardResetBtns').classList.remove('hidden');
+    }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
     
     function confirmReset(starter) { 
@@ -1392,6 +1333,12 @@
         db.ref('chatMessages').remove(); 
         closeResetModal(); 
     }
+    
+    function confirmResetCards() { 
+        db.ref('cardsGameState').set({ status: "setup" }); 
+        db.ref('chatMessages').remove(); 
+        closeResetModal(); 
+    }
 
     // --- ONLINE STATUS & CHAT ---
     db.ref('.info/connected').on('value', (snapshot) => {
@@ -1399,13 +1346,17 @@
             const myPresenceRef = db.ref(`presence/${myName}`);
             myPresenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
             myPresenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-            document.getElementById(`status-${myName}`).className = 'status-dot online';
+            const myStatusEl = document.getElementById(`status-${myName}`);
+            if (myStatusEl) myStatusEl.className = 'status-dot online';
         }
     });
 
     db.ref(`presence/${partnerName}`).on('value', (snapshot) => {
         const data = snapshot.val();
-        document.getElementById(`status-${partnerName}`).className = data && data.online ? 'status-dot online' : 'status-dot offline';
+        const partnerStatusEl = document.getElementById(`status-${partnerName}`);
+        if (partnerStatusEl) {
+            partnerStatusEl.className = data && data.online ? 'status-dot online' : 'status-dot offline';
+        }
     });
 
     function showToast(msg) {
@@ -1416,9 +1367,38 @@
 
     // Chat Typing Fix
     const typingIndicator = document.getElementById('typingIndicator');
+    const myTypingRef = db.ref(`typingStatus/${myName}`);
+    let typingTimeout = null;
+
+    function updateTypingStatus(isTyping) {
+        myTypingRef.set(isTyping);
+    }
+
+    function scheduleTypingEnd() {
+        if (typingTimeout) clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+            updateTypingStatus(false);
+        }, 1200);
+    }
+
+    const chatInputElement = document.getElementById('chatInput');
+    if (chatInputElement) {
+        chatInputElement.addEventListener('input', () => {
+            updateTypingStatus(true);
+            scheduleTypingEnd();
+        });
+        chatInputElement.addEventListener('blur', () => {
+            updateTypingStatus(false);
+        });
+    }
+
+    window.addEventListener('beforeunload', () => {
+        updateTypingStatus(false);
+    });
+
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
         if (snapshot.val()) { 
-            typingIndicator.style.display = 'block'; 
+            typingIndicator.style.display = 'flex'; 
         } else { 
             typingIndicator.style.display = 'none'; 
         }
@@ -1512,7 +1492,9 @@
         }
 
         db.ref('chatMessages').push({ sender: myName.toUpperCase(), text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
-        chatInput.value = ""; document.getElementById('emojiPicker').classList.add('hidden');
+        chatInput.value = "";
+        updateTypingStatus(false);
+        document.getElementById('emojiPicker').classList.add('hidden');
     }
 
     document.getElementById('chatInput').addEventListener('keypress', e => { if (e.key === 'Enter') sendChatMessage(); });
