@@ -1397,10 +1397,10 @@
     });
 
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        if (snapshot.val()) { 
-            typingIndicator.style.display = 'flex'; 
-        } else { 
-            typingIndicator.style.display = 'none'; 
+        if (snapshot.val()) {
+            typingIndicator.classList.remove('hidden');
+        } else {
+            typingIndicator.classList.add('hidden');
         }
     });
 
