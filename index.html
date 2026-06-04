@@ -188,12 +188,16 @@
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
         .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
-        .emoji-message { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); }
-        .emoji-message .message-text { font-size: 32px; line-height: 1; padding: 0; }
-        .emoji-message.my-message { background: transparent; color: #fff; }
-        .emoji-message.partner-message { background: transparent; color: #fff; }
-        .emoji-burst { animation: emojiBurst 0.8s ease-out forwards; }
-        @keyframes emojiBurst { 0% { transform: scale(0.3) translateY(12px); opacity: 0; } 60% { transform: scale(1.15) translateY(-4px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .emoji-message { background: transparent; border: none; padding: 0; }
+        .emoji-message .message-sender { display: none; }
+        .emoji-message .message-text { font-size: 46px; line-height: 1; padding: 0; margin: 0; text-align: center; letter-spacing: normal; }
+        .emoji-message.my-message { align-self: flex-end; }
+        .emoji-message.partner-message { align-self: flex-start; }
+        .emoji-burst { animation: emojiBurst 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        @keyframes emojiBurst { 0% { transform: scale(0.35) translateY(18px); opacity: 0; }
+        45% { transform: scale(1.2) translateY(-8px); opacity: 1; }
+        80% { transform: scale(0.95) translateY(2px); opacity: 1; }
+        100% { transform: scale(1) translateY(0); opacity: 1; } }
         
         .msg-actions { display: inline-flex; gap: 8px; }
         .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
@@ -1405,9 +1409,10 @@
     function isEmojiOnly(text) {
         const trimmed = (text || '').trim();
         if (!trimmed) return false;
-        const stripped = trimmed.replace(/\uFE0F/g, '');
-        if (/[A-Za-z0-9]/.test(stripped)) return false;
-        return /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(stripped);
+        const stripped = trimmed.replace(/[\uFE0F\u200D\s]/g, '');
+        if (!stripped) return false;
+        const chars = Array.from(stripped);
+        return chars.every(ch => /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(ch));
     }
 
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
