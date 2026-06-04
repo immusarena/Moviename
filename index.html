@@ -66,6 +66,8 @@
         .game-menu-btn.blue:hover { box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3); border-left: 8px solid var(--accent-color); }
         .game-menu-btn.purple { border-left: 4px solid #a855f7; }
         .game-menu-btn.purple:hover { box-shadow: 0 15px 35px rgba(168, 85, 247, 0.3); border-left: 8px solid #a855f7; }
+        .game-menu-btn.orange { border-left: 4px solid #f97316; }
+        .game-menu-btn.orange:hover { box-shadow: 0 15px 35px rgba(249, 115, 22, 0.3); border-left: 8px solid #f97316; }
         
         /* TOP NAV */
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -129,8 +131,13 @@
         .hint-text { background: rgba(255, 75, 114, 0.1); color: var(--primary-color); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 15px; padding: 6px 15px; border-radius: 8px; display: inline-block; border: 1px solid rgba(255, 75, 114, 0.3);}
         .hidden { display: none !important; }
 
-        /* MUSIC LOUNGE ELEMENTS */
-        .vinyl-container { width: 120px; height: 120px; margin: 0 auto 20px auto; border-radius: 50%; border: 4px solid var(--primary-color); padding: 5px; box-shadow: 0 0 25px var(--glow-shadow); position: relative; display: flex; justify-content: center; align-items: center; background: #111; }
+        /* CANVAS BOARD FOR DRAWING GAME */
+        .draw-board-container { background: #ffffff; border-radius: 14px; padding: 2px; margin: 15px 0; box-shadow: 0 10px 35px rgba(0,0,0,0.5); position: relative; border: 1px solid var(--border-color); }
+        #drawCanvas { background: #ffffff; width: 100%; height: 260px; border-radius: 12px; display: block; cursor: crosshair; touch-action: none; }
+        .draw-controls { display: flex; gap: 10px; margin-top: 12px; justify-content: space-between; align-items: center; }
+        .color-picker-group { display: flex; gap: 8px; align-items: center; }
+        .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; }
+        .color-dot.active { border-color: #120A1E; transform: scale(1.15); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
 
         /* Premium Cards UI */
         .card-hand-wrapper { width: 100%; overflow-x: auto; padding: 18px 0; display: flex; justify-content: center; }
@@ -163,16 +170,7 @@
         .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.06); color:var(--text-muted); padding:10px 12px; border-radius:10px; cursor:pointer; }
         .btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color:#fff; padding:12px 14px; border-radius:12px; border:none; font-weight:900; cursor:pointer; box-shadow: 0 8px 25px var(--glow-shadow); }
         .hint-text.premium { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); padding:8px 12px; border-radius:10px; font-weight:800; color:var(--primary-color); }
-        .vinyl-record { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 10px solid #000; box-sizing: border-box; }
-        .vinyl-container::after { content: ''; position: absolute; width: 20px; height: 20px; background: var(--bg-color); border: 2px solid var(--primary-color); border-radius: 50%; z-index: 2; }
-        .spin-anim { animation: spin 4s linear infinite; }
-        .music-controls { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
-        .music-btn { width: auto; padding: 12px 25px; margin-top: 0; border-radius: 30px; font-size: 11px; display:flex; align-items:center; justify-content:center; gap: 6px; cursor: pointer; border: none; font-weight: bold; transition: 0.2s;}
-        .music-btn:active { transform: scale(0.92); }
-        .music-btn.play-btn { flex: 1; background: linear-gradient(135deg, var(--accent-color), #22c55e); color: #120A1E; box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4); font-weight:bold;}
-        .music-btn.sync { padding: 10px 15px; font-size: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 15px;}
-        .music-btn.sync:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
-
+        
         /* Modern Chat Box */
         .chat-container { text-align: left; padding: 20px; position: relative;}
         .chat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -235,8 +233,6 @@
 
 <canvas id="neonCanvas"></canvas>
 
-<!-- Music Lounge removed -->
-
 <div id="toast" class="toast">NEW MESSAGE</div>
 
 <div class="container" id="homeScreen">
@@ -258,8 +254,9 @@
     
     <div class="card" style="padding: 35px 20px;">
         <button class="game-menu-btn" onclick="openGame('movie')">MOVIE GUESSING</button>
+        <button class="game-menu-btn orange" onclick="openGame('draw')">DRAW & GUESS 🎨</button>
         <button class="game-menu-btn blue" onclick="openGame('word')">WORD RACE</button>
-        <button class="game-menu-btn yellow" onclick="openGame('cards')">SPADES CARDS 🃏</button>
+        <button class="game-menu-btn purple" onclick="openGame('cards')">SPADES CARDS 🃏</button>
     </div>
 
     <div class="card" style="padding: 20px;">
@@ -337,6 +334,10 @@
             <button class="btn-main" onclick="confirmReset('immu')" style="margin-top:0;">IMMU START</button>
             <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmReset('sappii')">SAPPII START</button>
         </div>
+        <div class="modal-btn-group hidden" id="drawResetBtns">
+            <button class="btn-main" onclick="confirmResetDraw('immu')" style="margin-top:0;">IMMU DRAW</button>
+            <button class="btn-main" style="margin-top:0; background:transparent; border:1px solid var(--border-color); box-shadow:none;" onclick="confirmResetDraw('sappii')">SAPPII DRAW</button>
+        </div>
         <div class="modal-btn-group hidden" id="wordResetBtns">
             <button class="btn-main" style="margin-top:0;" onclick="confirmResetWord()">YES, RESET</button>
         </div>
@@ -372,9 +373,7 @@
     else if (myName === "tharkuri") partnerName = "immu"; // Third player pairs with immu
 
     let activeGame = 'home';
-    let gameState = {}; let wordGameState = {}; let cardsGameState = {}; let MOVIE_COLLECTION = []; 
-
-    // Music Lounge feature removed
+    let gameState = {}; let wordGameState = {}; let cardsGameState = {}; let drawGameState = {}; let MOVIE_COLLECTION = []; 
 
     // --- 🎨 PREMIUM THEME SYSTEM ---
     const themes = [
@@ -483,27 +482,30 @@
         document.getElementById('homeScreen').classList.add('hidden');
         document.getElementById('sharedUIContainer').classList.remove('hidden');
         
+        document.getElementById('vsScoreBoard').classList.remove('hidden');
+        document.getElementById('chatArea').classList.remove('hidden');
+        document.getElementById('resetScoresBtn').classList.remove('hidden');
+        
+        document.getElementById('movieResetBtns').classList.add('hidden');
+        document.getElementById('drawResetBtns').classList.add('hidden');
+        document.getElementById('wordResetBtns').classList.add('hidden');
+        document.getElementById('cardResetBtns').classList.add('hidden');
+
         if (gameType === 'movie') {
             document.getElementById('activeGameBadge').innerText = "MOVIE GUESSING";
-            document.getElementById('vsScoreBoard').classList.remove('hidden');
-            document.getElementById('chatArea').classList.remove('hidden');
-            document.getElementById('resetScoresBtn').classList.remove('hidden');
             document.getElementById('movieResetBtns').classList.remove('hidden');
-            document.getElementById('wordResetBtns').classList.add('hidden');
             renderMovieGameUI();
+        } else if (gameType === 'draw') {
+            document.getElementById('activeGameBadge').innerText = "DRAW & GUESS 🎨";
+            document.getElementById('drawResetBtns').classList.remove('hidden');
+            renderDrawGameUI();
         } else if (gameType === 'word') {
             document.getElementById('activeGameBadge').innerText = "WORD RACE";
-            document.getElementById('vsScoreBoard').classList.remove('hidden');
-            document.getElementById('chatArea').classList.remove('hidden');
-            document.getElementById('resetScoresBtn').classList.remove('hidden');
-            document.getElementById('movieResetBtns').classList.add('hidden');
             document.getElementById('wordResetBtns').classList.remove('hidden');
             renderWordGameUI();
         } else if (gameType === 'cards') {
             document.getElementById('activeGameBadge').innerText = "SPADES CARDS 🃏";
             document.getElementById('vsScoreBoard').classList.add('hidden');
-            document.getElementById('chatArea').classList.remove('hidden');
-            document.getElementById('resetScoresBtn').classList.remove('hidden');
             renderCardsGameUI();
         }
         setTimeout(() => { const chatDiv = document.getElementById('chatMessages'); if (chatDiv) chatDiv.scrollTop = chatDiv.scrollHeight; }, 100);
@@ -523,380 +525,238 @@
             if (match) finalTamil = match.tamil; 
         }
         gameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: dbEng, movieTamil: finalTamil, hint: finalHint };
-        if(activeGame === 'movie') renderMovieGameUI();
+        if(activeGame === 'movie') {
+            document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
+            renderMovieGameUI();
+        }
+    });
+
+    db.ref('drawGameState').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        drawGameState = { turn: data.turn || "immu", status: data.status || "set", score1: data.score1 || 0, score2: data.score2 || 0, movieEng: data.movieEng || "", drawingData: data.drawingData || "" };
+        if(activeGame === 'draw') {
+            document.getElementById('immuScore').innerText = drawGameState.score1; document.getElementById('sappiiScore').innerText = drawGameState.score2;
+            renderDrawGameUI();
+        }
     });
 
     db.ref('wordGameState').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         wordGameState = { status: data.status || "letter_phase", p1Letter: data.p1Letter || "", p2Letter: data.p2Letter || "", startLetter: data.startLetter || "", endLetter: data.endLetter || "", score1: data.score1 || 0, score2: data.score2 || 0, usedWords: data.usedWords || {} };
-        
-        // ONLY render if the user is NOT actively waiting for a dictionary fetch result.
-        // This prevents the UI from flickering back to the initial state while checking.
         if(activeGame === 'word' && !window.isCheckingWord) {
+            document.getElementById('immuScore').innerText = wordGameState.score1; document.getElementById('sappiiScore').innerText = wordGameState.score2;
             renderWordGameUI();
         }
     });
 
-    // ================= CARDS GAME LOGIC (SPADES & CUT) =================
-    const CARD_SUITS = { 'S': '♠️', 'H': '♥️', 'D': '♦️', 'C': '♣️' };
-    const CARD_RANKS = { 14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: '10', 9: '9', 8: '8', 7: '7', 6: '6', 5: '5', 4: '4', 3: '3', 2: '2' };
+    // ================= DRAW & GUESS GAME LOGIC =================
+    let isDrawing = false;
+    let lastX = 0; let lastY = 0;
+    let drawColor = "#000000";
+    let localCanvas, localCtx;
 
-    function initCardsGame(playerCount) {
-        let deck = [];
-        for (let suit in CARD_SUITS) {
-            for (let rank in CARD_RANKS) {
-                deck.push({ suit: suit, rank: parseInt(rank) });
-            }
-        }
-        
-        // Shuffle
-        for (let i = deck.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [deck[i], deck[j]] = [deck[j], deck[i]];
-        }
-
-        // Get player names for the game
-        let playerNames = ['immu', 'sappii'];
-        
-        if (playerCount === 3) {
-            playerNames = ['immu', 'sappii', 'tharkuri'];
-        }
-
-        startCardsGameWithPlayers(playerCount, deck, playerNames);
-    }
-
-    function startCardsGameWithPlayers(playerCount, deck, playerNames) {
-        let hands = {};
-        playerNames.forEach(p => hands[p] = []);
-
-        if (playerCount === 3) {
-            // Remove 2 of Clubs for 3 players (51 cards)
-            deck = deck.filter(c => !(c.suit === 'C' && c.rank === 2));
-        }
-
-        playerNames.forEach((p, idx) => {
-            hands[p] = deck.filter((_, i) => i % playerCount === idx);
-            // Sort hand: Group by Suit, then Rank
-            hands[p].sort((a, b) => {
-                if (a.suit === b.suit) return b.rank - a.rank;
-                return a.suit.localeCompare(b.suit);
-            });
-        });
-
-        // Find who has Ace of Spades (S 14)
-        let starter = 'immu';
-        for (let p in hands) {
-            if (hands[p].some(c => c.suit === 'S' && c.rank === 14)) {
-                starter = p; break;
-            }
-        }
-
-        // Create scores object with actual player names
-        let scores = {};
-        playerNames.forEach(p => scores[p] = 0);
-
-        db.ref('cardsGameState').set({
-            status: 'playing',
-            playerCount: playerCount,
-            playerNames: playerNames,
-            turn: starter,
-            ledSuit: '',
-            table: {},
-            hands: hands,
-            scores: scores
-        });
-
-        closeResetModal();
-    }
-
-    db.ref('cardsGameState').on('value', (snapshot) => {
-        let state = snapshot.val() || { status: 'setup' };
-        if (state.playerCount === 3 && state.hands && state.hands.player3) {
-            let updates = {};
-            let newHands = { ...state.hands, tharkuri: state.hands.player3 };
-            delete newHands.player3;
-            updates.hands = newHands;
-
-            if (state.scores && state.scores.player3 !== undefined) {
-                let newScores = { ...state.scores, tharkuri: state.scores.player3 };
-                delete newScores.player3;
-                updates.scores = newScores;
-            }
-
-            if (Array.isArray(state.playerNames)) {
-                updates.playerNames = state.playerNames.map(p => p === 'player3' ? 'tharkuri' : p);
-            } else {
-                updates.playerNames = ['immu', 'sappii', 'tharkuri'];
-            }
-
-            if (state.turn === 'player3') {
-                updates.turn = 'tharkuri';
-            }
-
-            if (state.table && state.table.player3) {
-                let newTable = { ...state.table, tharkuri: state.table.player3 };
-                delete newTable.player3;
-                updates.table = newTable;
-            }
-
-            db.ref('cardsGameState').update(updates);
-            state = { ...state, ...updates };
-        }
-
-        cardsGameState = state;
-        if (activeGame === 'cards') renderCardsGameUI();
-    });
-
-    function playCard(index) {
-        if (!cardsGameState || cardsGameState.turn !== myName) return alert("NOT YOUR TURN!");
-        
-        const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
-        const card = myHand[index];
-        const ledSuit = cardsGameState.ledSuit;
-
-        // Validation Rule: Must follow suit if possessed
-        if (ledSuit && card.suit !== ledSuit) {
-            const hasLedSuit = myHand.some(c => c.suit === ledSuit);
-            if (hasLedSuit) {
-                return alert(`YOU MUST PLAY A ${CARD_SUITS[ledSuit]}!`);
-            }
-        }
-
-        // Play card
-        myHand.splice(index, 1);
-        let newTable = cardsGameState.table || {};
-        newTable[myName] = card;
-
-        let updates = {
-            [`hands/${myName}`]: myHand,
-            table: newTable
-        };
-
-        if (!ledSuit) updates.ledSuit = card.suit;
-
-        // Determine next turn or resolve trick
-        const playerNames = cardsGameState.playerNames || Object.keys(cardsGameState.scores || {});
-        const players = playerNames;
-        
-        if (Object.keys(newTable).length === players.length) {
-            // Trick complete. Nobody's turn until resolved.
-            updates.turn = 'resolving';
-            db.ref('cardsGameState').update(updates);
-            
-            // Resolve trick after 2 seconds
-            setTimeout(() => {
-                let winner = '';
-                let maxVal = -1;
-                // Get fresh table data from the current cardsGameState
-                let currentTable = cardsGameState.table || newTable;
-                let isCut = Object.values(currentTable).some(c => c.suit === 'S'); // Spades is Trump
-                let currentLedSuit = cardsGameState.ledSuit || updates.ledSuit || ledSuit;
-                let targetSuit = isCut ? 'S' : currentLedSuit;
-
-                for (let p in currentTable) {
-                    let c = currentTable[p];
-                    let val = 0;
-                    if (isCut) {
-                        if (c.suit === 'S') val = c.rank + 100;
-                    } else {
-                        if (c.suit === targetSuit) val = c.rank;
-                    }
-                    if (val > maxVal) { maxVal = val; winner = p; }
-                }
-
-                db.ref(`cardsGameState/scores/${winner}`).transaction(s => (s || 0) + 1);
-                
-                // Check if hands are empty (game over) before starting next trick
-                const hands = cardsGameState.hands || {};
-                const allHandsEmpty = players.every(p => !hands[p] || hands[p].length === 0);
-                
-                if (allHandsEmpty) {
-                    // Game Over - All tricks played
-                    db.ref('cardsGameState').update({
-                        table: null,
-                        ledSuit: '',
-                        turn: 'game_over',
-                        status: 'finished'
-                    });
-                } else {
-                    // Next trick - properly clear previous trick
-                    db.ref('cardsGameState').update({
-                        table: {},
-                        ledSuit: '',
-                        turn: winner
-                    });
-                }
-                
-            }, 2000);
-
-        } else {
-            // Next player's turn
-            let myIdx = players.indexOf(myName);
-            let nextPlayer = players[(myIdx + 1) % players.length];
-            updates.turn = nextPlayer;
-            db.ref('cardsGameState').update(updates);
-        }
-    }
-
-    function renderCardsGameUI() {
+    function renderDrawGameUI() {
         const container = document.getElementById('gameContentArea');
-        if (!cardsGameState || cardsGameState.status === 'setup') {
-            container.innerHTML = `
-                <div class="card" style="padding: 40px 20px;">
-                    <h2 style="font-size:20px; font-weight:800; color:var(--accent-color); margin-bottom:10px;">SPADES (TRICK-TAKING)</h2>
-                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
-                        ♠️ Ace of Spades starts.<br>
-                        🃏 Must follow suit. If not, Cut with Spades!
-                    </p>
-                    <button class="btn-main" onclick="initCardsGame(2)">START 2 PLAYERS</button>
-                    <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="initCardsGame(3)">START 3 PLAYERS</button>
-                </div>
-            `;
-            return;
-        }
+        document.getElementById('box-immu').className = `player-box ${drawGameState.turn === 'immu' ? 'active-turn' : ''}`;
+        document.getElementById('box-sappii').className = `player-box ${drawGameState.turn === 'sappii' ? 'active-turn' : ''}`;
 
-        // Handle game over state
-        if (cardsGameState.status === 'finished' || cardsGameState.turn === 'game_over') {
-            const scores = cardsGameState.scores || {};
-            const playerNames = cardsGameState.playerNames || ['immu', 'sappii'];
-            const winner = playerNames.reduce((a, b) => (scores[a] > scores[b]) ? a : b);
-            
-            let scoresHTML = '';
-            playerNames.forEach(p => {
-                scoresHTML += `<div><div style="color:var(--accent-color); font-size:28px; font-weight:800;">${scores[p] || 0}</div><div style="color:var(--text-muted); font-size:10px; font-weight:600;">${p.toUpperCase()}</div></div>`;
-            });
-            
-            container.innerHTML = `
-                <div class="card" style="padding: 40px 20px; text-align: center;">
-                    <h2 style="font-size:20px; font-weight:800; color:var(--accent-color); margin-bottom:10px;">🎉 GAME OVER!</h2>
-                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
-                        ${winner.toUpperCase()} WINS! 👑
-                    </p>
-                    <div style="display:flex; justify-content:space-around; margin-bottom:20px;">
-                        ${scoresHTML}
-                    </div>
-                    <button class="btn-main" onclick="initCardsGame(${cardsGameState.playerCount || 2})" style="margin-bottom:10px;">PLAY AGAIN</button>
-                    <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="goHome()">BACK HOME</button>
-                </div>
-            `;
-            return;
-        }
-
-        const playerNames = cardsGameState.playerNames || Object.keys(cardsGameState.scores || {});
-        const players = playerNames;
-        const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
-        const table = cardsGameState.table || {};
-        
-        // Safety check: if myName not in game, show message
-        if (!cardsGameState.hands || !cardsGameState.hands[myName]) {
-            container.innerHTML = `
-                <div class="card" style="padding: 40px 20px; text-align: center;">
-                    <h2 style="font-size:20px; font-weight:800; color:var(--primary-color); margin-bottom:10px;">⚠️ NOT IN GAME</h2>
-                    <p style="font-size:11px; color:var(--text-muted); margin-bottom: 25px; line-height:1.6;">
-                        You (${myName.toUpperCase()}) are not in this game.<br>
-                        Active players: ${playerNames.join(', ').toUpperCase()}
-                    </p>
-                    <button class="btn-main" onclick="location.reload()">REFRESH PAGE</button>
-                </div>
-            `;
-            return;
-        }
-        
-        // Opponents Stats
-        let oppsHTML = `<div style="display:flex; justify-content:space-around; width:100%; margin-bottom:15px;">`;
-        players.forEach(p => {
-            if (p !== myName) {
-                let cardCount = cardsGameState.hands[p] ? cardsGameState.hands[p].length : 0;
-                let activeClass = cardsGameState.turn === p ? 'active-turn' : '';
-                oppsHTML += `
-                    <div class="player-box ${activeClass}" style="transform:scale(0.85); padding:10px;">
-                        <div class="player-name" style="color:var(--primary-color);">${p.toUpperCase()}</div>
-                        <div style="font-size:18px; font-weight:800; color:#fff;">${cardsGameState.scores[p] || 0} PTS</div>
-                        <div style="font-size:9px; color:var(--text-muted); margin-top:5px;">${cardCount} CARDS</div>
-                    </div>
-                `;
-            }
-        });
-        oppsHTML += `</div>`;
-
-        // Table Area
-        let tableHTML = `<div class="table-area">`;
-        if (Object.keys(table).length === 0) {
-            tableHTML += `<div style="font-size:12px; color:rgba(255,255,255,0.25); font-weight:800; letter-spacing:2px;">TABLE IS EMPTY — READY</div>`;
-        } else {
-            for (let p in table) {
-                let c = table[p];
-                let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
-                tableHTML += `
-                    <div class="table-card-slot">
-                        <div class="table-card-name">${p}</div>
-                        <div class="table-card-played ${cColor}">
-                            <div class="inner"><div class="rank">${CARD_RANKS[c.rank]}</div><div class="suit">${CARD_SUITS[c.suit]}</div></div>
+        if (drawGameState.status === "set") {
+            if (drawGameState.turn === myName) {
+                container.innerHTML = `
+                    <div class="card game-panel">
+                        <div class="game-header">
+                            <div>
+                                <div class="game-title">YOUR TURN TO DRAW</div>
+                                <div class="subtle">Select or type a movie name for your partner to guess</div>
+                            </div>
+                            <div class="hint-badge">${drawGameState.turn.toUpperCase()}</div>
                         </div>
-                    </div>
-                `;
+                        <div class="input-gradient">
+                            <input type="text" id="drawMovieInput" placeholder="MOVIE NAME IN ENGLISH" list="movieList">
+                        </div>
+                        <div class="action-row">
+                            <button class="btn-ghost" onclick="suggestDrawMovie()">Random</button>
+                            <button class="btn-primary" onclick="setDrawMovie()">START DRAWING</button>
+                        </div>
+                    </div>`;
+            } else {
+                container.innerHTML = `<div class="card"><h3 style="font-size:13px; text-transform:uppercase; letter-spacing:2px; margin-top:0;">WAITING...</h3><p style="font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">${drawGameState.turn} IS CHOOSING A MOVIE TO DRAW</p></div>`;
             }
-        }
-        tableHTML += `</div>`;
-
-        // Status Bar
-        let statusMsg = "";
-        if (cardsGameState.turn === myName) {
-            statusMsg = `<div style="color:var(--accent-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px; animation:blink 1.5s infinite;">YOUR TURN! PLAY A CARD</div>`;
-        } else if (cardsGameState.turn === 'resolving') {
-            statusMsg = `<div style="color:var(--primary-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px;">RESOLVING TRICK...</div>`;
-        } else {
-            statusMsg = `<div style="color:var(--text-muted); font-weight:800; font-size:10px; letter-spacing:1px; margin-bottom:10px; text-transform:uppercase;">WAITING FOR ${cardsGameState.turn}...</div>`;
-        }
-
-        // My Hand Area
-        let handHTML = `<div class="card-hand-wrapper"><div class="card-hand">`;
-        myHand.forEach((c, idx) => {
-            let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
-            let isMyTurn = cardsGameState.turn === myName;
-            // Highlight valid cards slightly
-            let canPlay = isMyTurn && (!cardsGameState.ledSuit || c.suit === cardsGameState.ledSuit || !myHand.some(x => x.suit === cardsGameState.ledSuit));
-            let styleExt = canPlay ? 'border-color:var(--accent-color);' : '';
-            let clickableClass = canPlay ? 'clickable' : '';
+        } else if (drawGameState.status === "drawing") {
+            const isArtist = drawGameState.turn === myName;
             
-            handHTML += `
-                <div class="playing-card ${cColor} ${clickableClass}" style="${styleExt}" onclick="playCard(${idx})">
-                    <div class="card-inner"><div class="rank">${CARD_RANKS[c.rank]}</div><div class="suit">${CARD_SUITS[c.suit]}</div></div>
-                </div>
-            `;
-        });
-        handHTML += `</div></div>`;
-
-        // My Stats
-        let myClass = cardsGameState.turn === myName ? 'active-turn' : '';
-        let myStatsHTML = `
-            <div style="display:flex; justify-content:center; margin-top:10px;">
-                <div class="player-box ${myClass}" style="flex-direction:row; width:100%; max-width:250px; justify-content:space-between; padding:10px 20px;">
-                    <div style="text-align:left;">
-                        <div class="player-name" style="color:var(--accent-color);">YOU (${myName.toUpperCase()})</div>
-                        <div style="font-size:10px; color:var(--text-muted);">Points: <span style="color:#fff; font-size:14px; font-weight:800;">${cardsGameState.scores[myName] || 0}</span></div>
+            container.innerHTML = `
+                <div class="card game-panel">
+                    <div class="game-header">
+                        <div>
+                            <div class="game-title">${isArtist ? `DRAW THIS: ${drawGameState.movieEng.toUpperCase()}` : "GUESS THE MOVIE!"}</div>
+                        </div>
+                        <div class="hint-badge">${drawGameState.turn.toUpperCase()} IS DRAWING</div>
                     </div>
-                </div>
-            </div>
-        `;
+                    
+                    <div class="draw-board-container">
+                        <canvas id="drawCanvas"></canvas>
+                    </div>
 
-        container.innerHTML = `
-            <div class="card" style="padding: 20px 10px;">
-                ${oppsHTML}
-                ${tableHTML}
-                ${statusMsg}
-                ${handHTML}
-                ${myStatsHTML}
-            </div>
-        `;
+                    ${isArtist ? `
+                        <div class="draw-controls">
+                            <div class="color-picker-group">
+                                <div class="color-dot active" style="background:#000000;" onclick="changeDrawColor('#000000', this)"></div>
+                                <div class="color-dot" style="background:#FF4B72;" onclick="changeDrawColor('#FF4B72', this)"></div>
+                                <div class="color-dot" style="background:#00d2ff;" onclick="changeDrawColor('#00d2ff', this)"></div>
+                                <div class="color-dot" style="background:#4ade80;" onclick="changeDrawColor('#4ade80', this)"></div>
+                            </div>
+                            <button class="btn-ghost" style="padding: 6px 12px; font-size:10px; font-weight:800;" onclick="clearDrawBoard()">CLEAR BOARD</button>
+                        </div>
+                        <button class="manual-point-btn" onclick="awardDrawPoint()">PARTNER GUESSED IT RIGHT!</button>
+                    ` : `
+                        <div class="input-gradient">
+                            <input type="text" id="drawGuessInput" placeholder="TYPE ANSWER IN ENGLISH">
+                        </div>
+                        <div class="action-row">
+                            <button class="btn-primary" onclick="checkDrawGuess()">SUBMIT ANSWER</button>
+                            <button class="btn-ghost" onclick="giveUpDraw()">GIVE UP</button>
+                        </div>
+                        <p id="drawFeedback" style="margin-top:12px; font-weight:800; font-size:11px; text-transform:uppercase; letter-spacing:1px;"></p>
+                    `}
+                </div>`;
+            
+            setupCanvasLogic(isArtist);
+        }
     }
 
-    // Music Lounge removed from the app.
+    function suggestDrawMovie() {
+        if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
+        const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
+        document.getElementById('drawMovieInput').value = randomObj.eng;
+    }
+
+    function setDrawMovie() {
+        const raw = document.getElementById('drawMovieInput').value.trim();
+        if(!raw) return alert("ENTER MOVIE NAME FIRST!");
+        db.ref('drawGameState').update({ movieEng: raw, drawingData: "", status: "drawing" });
+    }
+
+    function setupCanvasLogic(isArtist) {
+        localCanvas = document.getElementById('drawCanvas');
+        if (!localCanvas) return;
+        localCtx = localCanvas.getContext('2d');
+        
+        localCanvas.width = localCanvas.offsetWidth;
+        localCanvas.height = localCanvas.offsetHeight;
+        
+        localCtx.strokeStyle = drawColor;
+        localCtx.lineJoin = 'round';
+        localCtx.lineCap = 'round';
+        localCtx.lineWidth = 4;
+
+        if (drawGameState.drawingData) {
+            const img = new Image();
+            img.onload = () => localCtx.drawImage(img, 0, 0);
+            img.src = drawGameState.drawingData;
+        }
+
+        if (!isArtist) {
+            db.ref('drawGameState/drawingData').on('value', (snap) => {
+                const base64 = snap.val();
+                if (base64 && !isDrawing) {
+                    const img = new Image();
+                    img.onload = () => {
+                        if(localCtx) {
+                            localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+                            localCtx.drawImage(img, 0, 0);
+                        }
+                    };
+                    img.src = base64;
+                } else if (!base64 && localCtx) {
+                    localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+                }
+            });
+            return;
+        }
+
+        function startDraw(e) {
+            isDrawing = true;
+            const pos = getMousePos(localCanvas, e);
+            [lastX, lastY] = [pos.x, pos.y];
+        }
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getMousePos(localCanvas, e);
+            localCtx.beginPath();
+            localCtx.moveTo(lastX, lastY);
+            localCtx.lineTo(pos.x, pos.y);
+            localCtx.stroke();
+            [lastX, lastY] = [pos.x, pos.y];
+        }
+        function stopDraw() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            db.ref('drawGameState').update({ drawingData: localCanvas.toDataURL() });
+        }
+
+        localCanvas.addEventListener('mousedown', startDraw);
+        localCanvas.addEventListener('mousemove', draw);
+        localCanvas.addEventListener('mouseup', stopDraw);
+        localCanvas.addEventListener('mouseout', stopDraw);
+
+        localCanvas.addEventListener('touchstart', (e) => { startDraw(e.touches[0]); e.preventDefault(); });
+        localCanvas.addEventListener('touchmove', (e) => { draw(e.touches[0]); e.preventDefault(); });
+        localCanvas.addEventListener('touchend', stopDraw);
+    }
+
+    function getMousePos(canvasEl, evt) {
+        const rect = canvasEl.getBoundingClientRect();
+        return {
+            x: (evt.clientX - rect.left) * (canvasEl.width / rect.width),
+            y: (evt.clientY - rect.top) * (canvasEl.height / rect.height)
+        };
+    }
+
+    function changeDrawColor(color, el) {
+        drawColor = color;
+        if(localCtx) localCtx.strokeStyle = color;
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function clearDrawBoard() {
+        if(localCtx) {
+            localCtx.clearRect(0, 0, localCanvas.width, localCanvas.height);
+            db.ref('drawGameState').update({ drawingData: "" });
+        }
+    }
+
+    function checkDrawGuess() {
+        const guess = document.getElementById('drawGuessInput').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        const answer = drawGameState.movieEng.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        if (guess === answer && guess !== "") {
+            awardDrawPoint();
+        } else {
+            document.getElementById('drawFeedback').innerText = "WRONG SPELLING! TRY AGAIN";
+            document.getElementById('drawFeedback').style.color = "var(--primary-color)";
+        }
+    }
+
+    function awardDrawPoint() {
+        const scoreKey = (drawGameState.turn === "immu") ? 'score2' : 'score1'; 
+        db.ref(`drawGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
+        db.ref('chatMessages').push({ sender: "SYSTEM", text: `${partnerName.toUpperCase()} FOUND THE MOVIE "${drawGameState.movieEng.toUpperCase()}" BY DRAWING!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        db.ref('drawGameState').update({ turn: partnerName, status: "set", movieEng: "", drawingData: "" });
+    }
+
+    function giveUpDraw() {
+        document.getElementById('drawFeedback').innerText = "ANSWER: " + drawGameState.movieEng.toUpperCase();
+        document.getElementById('drawFeedback').style.color = "var(--accent-color)";
+        setTimeout(() => {
+            db.ref('drawGameState').update({ turn: drawGameState.turn, status: "set", movieEng: "", drawingData: "" });
+        }, 2500);
+    }
 
     // ================= MOVIE GUESSING UI (WITH MANUAL TAMIL INPUT) =================
     function renderMovieGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = gameState.score1; document.getElementById('sappiiScore').innerText = gameState.score2;
         document.getElementById('box-immu').className = `player-box ${gameState.turn === 'immu' ? 'active-turn' : ''}`;
         document.getElementById('box-sappii').className = `player-box ${gameState.turn === 'sappii' ? 'active-turn' : ''}`;
         
@@ -978,9 +838,7 @@
         }
     }
 
-    function isTamilText(text) {
-        return /[\u0B80-\u0BFF]/.test(text);
-    }
+    function isTamilText(text) { return /[\u0B80-\u0BFF]/.test(text); }
 
     function convertTamilishToTamil(input) {
         if (!input) return "";
@@ -992,11 +850,9 @@
         const independentVowel = {
             a: 'அ', aa: 'ஆ', i: 'இ', ii: 'ஈ', u: 'உ', uu: 'ஊ', e: 'எ', ee: 'ஏ', ai: 'ஐ', o: 'ஒ', oo: 'ஓ', au: 'ஔ'
         };
-
         const consonantMap = {
             ng: 'ங', nj: 'ஞ', ny: 'ஞ', nn: 'ண', ch: 'ச', sh: 'ஷ', zh: 'ழ', j: 'ஜ', c: 'ச', k: 'க', kh: 'க', g: 'க', gh: 'க', q: 'க', x: 'க', t: 'ட', th: 'த', d: 'ட', dh: 'த', p: 'ப', ph: 'ப', b: 'ப', m: 'ம', y: 'ய', r: 'ர', rr: 'ற', l: 'ல', ll: 'ள', v: 'வ', w: 'வ', h: 'ஹ', f: 'ஃ', n: 'ந'
         };
-
         const vowelSignMap = {
             a: '', aa: 'ா', i: 'ி', ii: 'ீ', u: 'ு', uu: 'ூ', e: 'ெ', ee: 'ே', ai: 'ை', o: 'ொ', oo: 'ோ', au: 'ௌ'
         };
@@ -1006,74 +862,38 @@
 
         return tokens.map(token => {
             if (/^\s*$/.test(token)) return token;
-            let result = '';
-            let i = 0;
-
+            let result = ''; let i = 0;
             while (i < token.length) {
                 const chunk = token.slice(i);
-
                 let vow = '';
-                for (const key of vowelKeys) {
-                    if (chunk.startsWith(key)) { vow = key; break; }
-                }
-
+                for (const key of vowelKeys) { if (chunk.startsWith(key)) { vow = key; break; } }
                 let cons = '';
-                for (const key of consonantKeys) {
-                    if (chunk.startsWith(key)) { cons = key; break; }
-                }
+                for (const key of consonantKeys) { if (chunk.startsWith(key)) { cons = key; break; } }
+                if (!cons && consonantMap[chunk[0]]) cons = chunk[0];
 
-                if (!cons && consonantMap[chunk[0]]) {
-                    cons = chunk[0];
-                }
-
-                // Handle consonant + vowel combinations
                 if (cons && chunk.startsWith(cons)) {
                     const base = consonantMap[cons] || '';
                     const remainder = chunk.slice(cons.length);
                     let vow = '';
+                    for (const key of vowelKeys) { if (remainder.startsWith(key)) { vow = key; break; } }
                     
-                    // Check for vowel sign after consonant
-                    // But 'a' alone is the inherent vowel, only 'aa' is a vowel sign
-                    for (const key of vowelKeys) {
-                        if (remainder.startsWith(key)) { 
-                            vow = key; 
-                            break; 
-                        }
-                    }
-                    
-                    // 'a' after consonant is just inherent vowel, skip it
                     if (vow === 'a') {
-                        result += base; // consonant with inherent 'a'
-                        i += cons.length + 1; // skip the 'a'
+                        result += base; i += cons.length + 1;
                     } else if (vow && vowelSignMap[vow] !== undefined) {
-                        // Other vowel signs attach to consonant
-                        const sign = vowelSignMap[vow];
-                        result += base + sign;
-                        i += cons.length + vow.length;
+                        result += base + vowelSignMap[vow]; i += cons.length + vow.length;
                     } else {
-                        // No vowel after consonant, add virama
-                        result += base + '்';
-                        i += cons.length;
+                        result += base + '்'; i += cons.length;
                     }
-                }
-                // Handle standalone vowels
-                else if (vow && independentVowel[vow]) {
-                    result += independentVowel[vow];
-                    i += vow.length;
-                } 
-                // Fallback: preserve unknown characters
-                else {
-                    result += chunk[0];
-                    i += 1;
+                } else if (vow && independentVowel[vow]) {
+                    result += independentVowel[vow]; i += vow.length;
+                } else {
+                    result += chunk[0]; i += 1;
                 }
             }
-
             return result;
         }).join('');
     }
 
-    // Note: tamil preview now derives directly from the single `movieInput` field.
-    
     function suggestRandomMovie() { 
         if (MOVIE_COLLECTION.length === 0) return alert("Wait a few seconds!");
         const randomObj = MOVIE_COLLECTION[Math.floor(Math.random() * MOVIE_COLLECTION.length)];
@@ -1086,22 +906,15 @@
     function setMovie() { 
         const raw = document.getElementById('movieInput').value.trim();
         const h = document.getElementById('hintInput').value;
-
         if(!raw) return alert("ENTER MOVIE IN ENGLISH OR THANLISH!");
-
         const foundMovie = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === raw.toLowerCase());
-
-        let finalEng = raw;
-        let finalTamil = "";
-
+        let finalEng = raw; let finalTamil = "";
         if (foundMovie) {
-            finalEng = foundMovie.eng;
-            finalTamil = foundMovie.tamil;
+            finalEng = foundMovie.eng; finalTamil = foundMovie.tamil;
         } else {
             finalTamil = convertTamilishToTamil(raw);
-            if(!finalTamil) return alert("PLEASE ENTER THE TAMIL NAME OR THANLISH FOR YOUR CUSTOM MOVIE!");
+            if(!finalTamil) return alert("PLEASE ENTER THE TAMIL NAME FOR YOUR CUSTOM MOVIE!");
         }
-
         db.ref('gameState').update({ movieEng: finalEng, movieTamil: finalTamil, hint: h, status: "guessing" });
     }
     
@@ -1109,7 +922,6 @@
         const guessRaw = document.getElementById('guessInput').value.trim().toLowerCase(); 
         const normalizedGuess = guessRaw.replace(/[^a-z0-9]/g, '');
         const normalizedAnswer = (gameState.movieEng || "").replace(/[^a-z0-9]/g, '');
-
         if (normalizedGuess === normalizedAnswer && normalizedGuess !== "") { 
             const scoreKey = (myName === "immu") ? 'score1' : 'score2'; 
             db.ref(`gameState/${scoreKey}`).transaction(s => (s || 0) + 1); 
@@ -1130,20 +942,18 @@
     
     function getLetterCountExact(str) {
         if (!str) return 0;
-        let safeStr = str; let segments = [];
+        let segments = [];
         if (window.Intl && Intl.Segmenter) {
             const segmenter = new Intl.Segmenter('ta-IN', { granularity: 'grapheme' });
-            segments = Array.from(segmenter.segment(safeStr)).map(s => s.segment);
-        } else { segments = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
+            segments = Array.from(segmenter.segment(str)).map(s => s.segment);
+        } else { segments = str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*/g) || []; }
         return segments.filter(c => c.trim() !== '').length;
     }
 
     function maskExactString(str) {
         if (!str) return "";
-        let safeStr = str;
         let html = `<div class="masked-container">`;
-        const tokens = safeStr.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
-
+        const tokens = str.match(/[\u0B80-\u0BFF][\u0BBE-\u0BCC\u0BCD\u0BD7]*|\s+/g) || [];
         let firstIdx = -1; let lastIdx = -1;
         for (let i = 0; i < tokens.length; i++) {
             if (tokens[i].trim() !== '') {
@@ -1152,7 +962,6 @@
             }
         }
         if (firstIdx === -1) return `<span class="mask-dash">_</span>`;
-
         let wordHtml = `<div style="display:flex; gap:6px; flex-wrap:wrap; justify-content:center;">`;
         tokens.forEach((char, idx) => {
             if (char.trim() === '') {
@@ -1163,7 +972,6 @@
                 wordHtml += `<span class="mask-dash">_</span>`;
             }
         });
-
         wordHtml += `</div>`; html += wordHtml + `</div>`;
         return html;
     }
@@ -1171,9 +979,6 @@
     // ================= WORD GAME LOGIC =================
     function renderWordGameUI() {
         const container = document.getElementById('gameContentArea');
-        document.getElementById('immuScore').innerText = wordGameState.score1;
-        document.getElementById('sappiiScore').innerText = wordGameState.score2;
-        
         document.getElementById('box-immu').className = `player-box racing-turn`;
         document.getElementById('box-sappii').className = `player-box racing-turn`;
         
@@ -1228,297 +1033,225 @@
     function setWordOrder(start, end) { db.ref('wordGameState').update({ status: "race_phase", startLetter: start, endLetter: end }); }
 
     async function submitRaceWord() {
-        const btn = document.getElementById('submitRaceBtn');
-        const inputEl = document.getElementById('raceWordInput');
-        
+        const btn = document.getElementById('submitRaceBtn'); const inputEl = document.getElementById('raceWordInput');
         if (btn && btn.disabled) return; 
-        
-        const rawInput = inputEl.value;
-        const word = rawInput.toLowerCase().replace(/[^a-z]/g, ''); 
-        const start = wordGameState.startLetter.toLowerCase(); 
-        const end = wordGameState.endLetter.toLowerCase();
+        const word = inputEl.value.toLowerCase().replace(/[^a-z]/g, ''); 
+        const start = wordGameState.startLetter.toLowerCase(); const end = wordGameState.endLetter.toLowerCase();
         
         if (word.length < 2 || !word.startsWith(start) || !word.endsWith(end)) {
             document.getElementById('raceFeedback').innerText = `WORD MUST START WITH ${start.toUpperCase()} AND END WITH ${end.toUpperCase()}!`;
             return;
         }
-
         if (wordGameState.usedWords && wordGameState.usedWords[word]) {
-            const winner = (typeof wordGameState.usedWords[word] === 'string') ? wordGameState.usedWords[word] : "PARTNER";
-            document.getElementById('raceFeedback').innerText = `ALREADY USED BY ${winner.toUpperCase()}!`;
-            return;
+            document.getElementById('raceFeedback').innerText = `ALREADY USED!`; return;
         }
 
-        // --- UI FREEZE (To prevent flickering) ---
         window.isCheckingWord = true;
-        if (btn) btn.disabled = true;
-        if (inputEl) inputEl.disabled = true;
-        
+        if (btn) btn.disabled = true; if (inputEl) inputEl.disabled = true;
         document.getElementById('raceFeedback').innerText = `CHECKING DICTIONARY... ⏳`;
-        document.getElementById('raceFeedback').style.color = "var(--text-main)";
 
         try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 4000);
-            
+            const controller = new AbortController(); const id = setTimeout(() => controller.abort(), 4000);
             const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, { signal: controller.signal });
-            clearTimeout(timeoutId);
-
+            clearTimeout(id);
             if (!res.ok) {
                 document.getElementById('raceFeedback').innerText = `NOT A VALID ENGLISH WORD!`;
-                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
-                if (btn) btn.disabled = false;
-                if (inputEl) { inputEl.disabled = false; inputEl.focus(); }
-                window.isCheckingWord = false;
-                return;
+                if (btn) btn.disabled = false; if (inputEl) { inputEl.disabled = false; inputEl.focus(); }
+                window.isCheckingWord = false; return;
             }
         } catch (e) {
             document.getElementById('raceFeedback').innerText = `SERVER SLOW! TRY AGAIN.`;
-            document.getElementById('raceFeedback').style.color = "var(--primary-color)";
-            if (btn) btn.disabled = false;
-            if (inputEl) { inputEl.disabled = false; inputEl.focus(); }
-            window.isCheckingWord = false;
-            return;
+            if (btn) btn.disabled = false; if (inputEl) { inputEl.disabled = false; inputEl.focus(); }
+            window.isCheckingWord = false; return;
         }
 
-        // Firebase Transaction for exact millisecond clash
-        const wordRef = db.ref(`wordGameState/usedWords/${word}`);
-        wordRef.transaction((currentValue) => {
-            if (currentValue === null) {
-                return myName; 
-            } else {
-                return; 
-            }
-        }, (error, committed, snapshot) => {
-            window.isCheckingWord = false; // UNLOCK
-            
-            if (error) {
-                document.getElementById('raceFeedback').innerText = `NETWORK ERROR!`;
-                if (btn) btn.disabled = false;
-                if (inputEl) inputEl.disabled = false;
-            } else if (!committed) {
-                const winner = snapshot.val() || "PARTNER";
-                document.getElementById('raceFeedback').innerText = `TOO LATE! ${winner.toUpperCase()} TYPED IT FIRST 🏃💨`;
-                document.getElementById('raceFeedback').style.color = "var(--primary-color)";
-                if (btn) btn.disabled = false;
-                if (inputEl) inputEl.disabled = false;
-            } else {
-                const scoreKey = (myName === "immu") ? 'score1' : 'score2';
-                db.ref(`wordGameState/${scoreKey}`).transaction(s => (s || 0) + 1);
+        db.ref(`wordGameState/usedWords/${word}`).transaction((curr) => {
+            return curr === null ? myName : undefined;
+        }, (err, comm, snap) => {
+            window.isCheckingWord = false;
+            if (comm) {
+                const sKey = (myName === "immu") ? 'score1' : 'score2';
+                db.ref(`wordGameState/${sKey}`).transaction(s => (s || 0) + 1);
                 db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-                db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED 1 POINT WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
-                
-                // Manually trigger render since we blocked the listener
+                db.ref('chatMessages').push({ sender: "SYSTEM", text: `${myName.toUpperCase()} SCORED WITH "${word.toUpperCase()}"!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
                 renderWordGameUI();
+            } else {
+                document.getElementById('raceFeedback').innerText = `TOO LATE! RUNNER FIRST 🏃💨`;
+                if (btn) btn.disabled = false; if (inputEl) inputEl.disabled = false;
             }
         });
     }
 
     function skipWord() {
         db.ref('wordGameState').update({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "" });
-        db.ref('chatMessages').push({ sender: "SYSTEM", text: `THIS ROUND WAS SKIPPED!`, timestamp: firebase.database.ServerValue.TIMESTAMP });
     }
 
-    // --- RESET MODALS ---
-    function openResetModal() { 
-        document.getElementById('resetModal').classList.remove('hidden');
-        document.getElementById('movieResetBtns').classList.add('hidden');
-        document.getElementById('wordResetBtns').classList.add('hidden');
-        document.getElementById('cardResetBtns').classList.add('hidden');
+    // ================= CARDS GAME LOGIC (SPADES & CUT) =================
+    const CARD_SUITS = { 'S': '♠️', 'H': '♥️', 'D': '♦️', 'C': '♣️' };
+    const CARD_RANKS = { 14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: '10', 9: '9', 8: '8', 7: '7', 6: '6', 5: '5', 4: '4', 3: '3', 2: '2' };
+
+    function initCardsGame(playerCount) {
+        let deck = [];
+        for (let suit in CARD_SUITS) {
+            for (let rank in CARD_RANKS) { deck.push({ suit: suit, rank: parseInt(rank) }); }
+        }
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        let playerNames = ['immu', 'sappii'];
+        if (playerCount === 3) playerNames = ['immu', 'sappii', 'tharkuri'];
+        startCardsGameWithPlayers(playerCount, deck, playerNames);
+    }
+
+    function startCardsGameWithPlayers(playerCount, deck, playerNames) {
+        let hands = {}; playerNames.forEach(p => hands[p] = []);
+        if (playerCount === 3) deck = deck.filter(c => !(c.suit === 'C' && c.rank === 2));
+        playerNames.forEach((p, idx) => {
+            hands[p] = deck.filter((_, i) => i % playerCount === idx);
+            hands[p].sort((a, b) => a.suit === b.suit ? b.rank - a.rank : a.suit.localeCompare(b.suit));
+        });
+        let starter = 'immu';
+        for (let p in hands) { if (hands[p].some(c => c.suit === 'S' && c.rank === 14)) { starter = p; break; } }
+        let scores = {}; playerNames.forEach(p => scores[p] = 0);
+        db.ref('cardsGameState').set({ status: 'playing', playerCount: playerCount, playerNames: playerNames, turn: starter, ledSuit: '', table: {}, hands: hands, scores: scores });
+        closeResetModal();
+    }
+
+    db.ref('cardsGameState').on('value', (snapshot) => {
+        let state = snapshot.val() || { status: 'setup' };
+        cardsGameState = state;
+        if (activeGame === 'cards') renderCardsGameUI();
+    });
+
+    function playCard(index) {
+        if (!cardsGameState || cardsGameState.turn !== myName) return alert("NOT YOUR TURN!");
+        const myHand = cardsGameState.hands[myName] || []; const card = myHand[index]; const ledSuit = cardsGameState.ledSuit;
+        if (ledSuit && card.suit !== ledSuit && myHand.some(c => c.suit === ledSuit)) {
+            return alert(`YOU MUST PLAY A ${CARD_SUITS[ledSuit]}!`);
+        }
+        myHand.splice(index, 1);
+        let newTable = cardsGameState.table || {}; newTable[myName] = card;
+        let updates = { [`hands/${myName}`]: myHand, table: newTable };
+        if (!ledSuit) updates.ledSuit = card.suit;
+
+        const players = cardsGameState.playerNames || [];
+        if (Object.keys(newTable).length === players.length) {
+            updates.turn = 'resolving'; db.ref('cardsGameState').update(updates);
+            setTimeout(() => {
+                let winner = ''; let maxVal = -1; let currentTable = cardsGameState.table || newTable;
+                let isCut = Object.values(currentTable).some(c => c.suit === 'S');
+                let targetSuit = isCut ? 'S' : (cardsGameState.ledSuit || updates.ledSuit);
+                for (let p in currentTable) {
+                    let c = currentTable[p]; let val = isCut ? (c.suit === 'S' ? c.rank + 100 : 0) : (c.suit === targetSuit ? c.rank : 0);
+                    if (val > maxVal) { maxVal = val; winner = p; }
+                }
+                db.ref(`cardsGameState/scores/${winner}`).transaction(s => (s || 0) + 1);
+                const allEmpty = players.every(p => !cardsGameState.hands[p] || cardsGameState.hands[p].length === 0);
+                db.ref('cardsGameState').update(allEmpty ? { table: null, ledSuit: '', turn: 'game_over', status: 'finished' } : { table: {}, ledSuit: '', turn: winner });
+            }, 2000);
+        } else {
+            let next = players[(players.indexOf(myName) + 1) % players.length];
+            updates.turn = next; db.ref('cardsGameState').update(updates);
+        }
+    }
+
+    function renderCardsGameUI() {
+        const container = document.getElementById('gameContentArea');
+        if (!cardsGameState || cardsGameState.status === 'setup') {
+            container.innerHTML = `<div class="card"><h2>SPADES CARDS 🃏</h2><button class="btn-main" onclick="initCardsGame(2)">START 2 PLAYERS</button><button class="btn-main" style="margin-top:10px;" onclick="initCardsGame(3)">START 3 PLAYERS</button></div>`;
+            return;
+        }
+        if (cardsGameState.status === 'finished') {
+            container.innerHTML = `<div class="card"><h2>🎉 GAME OVER!</h2><button class="btn-main" onclick="goHome()">BACK HOME</button></div>`; return;
+        }
+        const myHand = cardsGameState.hands[myName] || []; const table = cardsGameState.table || {};
+        let tableHTML = `<div class="table-area">`;
+        for (let p in table) {
+            let c = table[p]; let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
+            tableHTML += `<div class="table-card-slot"><div class="table-card-name">${p}</div><div class="table-card-played ${cColor}"><div class="inner"><div class="rank">${CARD_RANKS[c.rank]}</div><div class="suit">${CARD_SUITS[c.suit]}</div></div></div></div>`;
+        }
+        tableHTML += `</div>`;
+        let handHTML = `<div class="card-hand-wrapper"><div class="card-hand">`;
+        myHand.forEach((c, idx) => {
+            let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
+            handHTML += `<div class="playing-card ${cColor} clickable" onclick="playCard(${idx})"><div class="card-inner"><div>${CARD_RANKS[c.rank]}</div><div>${CARD_SUITS[c.suit]}</div></div></div>`;
+        });
+        handHTML += `</div></div>`;
+        container.innerHTML = `<div class="card"><h3>TURN: ${cardsGameState.turn.toUpperCase()}</h3>${tableHTML}${handHTML}</div>`;
+    }
+
+    // --- ONLINE STATUS & CHAT ---
+    db.ref('.info/connected').on('value', (snap) => {
+        if (snap.val() === true) {
+            db.ref(`presence/${myName}`).set({ online: true });
+            db.ref(`presence/${myName}`).onDisconnect().set({ online: false });
+        }
+    });
+
+    db.ref(`presence/${partnerName}`).on('value', (snap) => {
+        const val = snap.val(); const el = document.getElementById(`status-${partnerName}`);
+        if (el) el.className = val && val.online ? 'status-dot online' : 'status-dot offline';
+    });
+
+    function showToast(msg) {
+        const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function isEmojiOnly(text) {
+        const trimmed = (text || '').trim(); if (!trimmed) return false;
+        const chars = Array.from(trimmed.replace(/[\uFE0F\u200D\s]/g, ''));
+        return chars.every(ch => /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(ch));
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById('chatInput'); const text = input.value.trim(); if(!text) return;
+        if (myName === 'immu') {
+            if (text.startsWith('/add ')) {
+                let pts = parseInt(text.replace('/add ', ''));
+                if (activeGame === 'movie') db.ref(`gameState/score1`).transaction(s => (s || 0) + pts);
+                if (activeGame === 'draw') db.ref(`drawGameState/score1`).transaction(s => (s || 0) + pts);
+                if (activeGame === 'word') db.ref(`wordGameState/score1`).transaction(s => (s || 0) + pts);
+                input.value = ""; return;
+            }
+            if (text.startsWith('/minus ')) {
+                let pts = parseInt(text.replace('/minus ', ''));
+                if (activeGame === 'movie') db.ref(`gameState/score2`).transaction(s => (s || 0) - pts);
+                if (activeGame === 'draw') db.ref(`drawGameState/score2`).transaction(s => (s || 0) - pts);
+                if (activeGame === 'word') db.ref(`wordGameState/score2`).transaction(s => (s || 0) - pts);
+                input.value = ""; return;
+            }
+        }
+        db.ref('chatMessages').push({ sender: myName.toUpperCase(), text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
+        input.value = "";
+    }
+
+    db.ref('chatMessages').on('child_added', (snapshot) => {
+        const data = snapshot.val(); const chatMessagesDiv = document.getElementById('chatMessages');
+        if(!chatMessagesDiv) return;
+        const isMine = data.sender === myName.toUpperCase(); const isSystem = data.sender === "SYSTEM";
+        const messageDiv = document.createElement('div');
+        messageDiv.className = isSystem ? 'message system-message' : (isMine ? 'message my-message' : 'message partner-message');
+        if (!isSystem && isEmojiOnly(data.text)) messageDiv.className += ' emoji-message emoji-burst';
         
+        const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messageDiv.innerHTML = `<div class="message-sender">${isMine ? 'YOU' : data.sender} (${time})</div><div class="message-text">${data.text}</div>`;
+        chatMessagesDiv.appendChild(messageDiv); chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+    });
+
+    // --- RESET SYSTEM ---
+    function openResetModal() {
+        document.getElementById('resetModal').classList.remove('hidden');
         if (activeGame === 'movie') document.getElementById('movieResetBtns').classList.remove('hidden');
+        else if (activeGame === 'draw') document.getElementById('drawResetBtns').classList.remove('hidden');
         else if (activeGame === 'word') document.getElementById('wordResetBtns').classList.remove('hidden');
         else if (activeGame === 'cards') document.getElementById('cardResetBtns').classList.remove('hidden');
     }
     function closeResetModal() { document.getElementById('resetModal').classList.add('hidden'); }
-    
-    function confirmReset(starter) { 
-        db.ref('gameState').set({ turn: starter, status: "set", score1: 0, score2: 0, movieEng: "", movieTamil: "", hint: "" }); 
-        db.ref('chatMessages').remove(); 
-        closeResetModal(); 
-    }
-    
-    function confirmResetWord() { 
-        db.ref('wordGameState').set({ status: "letter_phase", p1Letter: "", p2Letter: "", startLetter: "", endLetter: "", score1: 0, score2: 0, usedWords: null }); 
-        db.ref('chatMessages').remove(); 
-        closeResetModal(); 
-    }
-    
-    function confirmResetCards() { 
-        db.ref('cardsGameState').set({ status: "setup" }); 
-        db.ref('chatMessages').remove(); 
-        closeResetModal(); 
-    }
-
-    // --- ONLINE STATUS & CHAT ---
-    db.ref('.info/connected').on('value', (snapshot) => {
-        if (snapshot.val() === true) {
-            const myPresenceRef = db.ref(`presence/${myName}`);
-            myPresenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-            myPresenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-            const myStatusEl = document.getElementById(`status-${myName}`);
-            if (myStatusEl) myStatusEl.className = 'status-dot online';
-        }
-    });
-
-    db.ref(`presence/${partnerName}`).on('value', (snapshot) => {
-        const data = snapshot.val();
-        const partnerStatusEl = document.getElementById(`status-${partnerName}`);
-        if (partnerStatusEl) {
-            partnerStatusEl.className = data && data.online ? 'status-dot online' : 'status-dot offline';
-        }
-    });
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg; toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    // Chat Typing Fix
-    const typingIndicator = document.getElementById('typingIndicator');
-    const myTypingRef = db.ref(`typingStatus/${myName}`);
-    let typingTimeout = null;
-
-    function updateTypingStatus(isTyping) {
-        myTypingRef.set(isTyping);
-    }
-
-    function scheduleTypingEnd() {
-        if (typingTimeout) clearTimeout(typingTimeout);
-        typingTimeout = setTimeout(() => {
-            updateTypingStatus(false);
-        }, 1200);
-    }
-
-    const chatInputElement = document.getElementById('chatInput');
-    if (chatInputElement) {
-        chatInputElement.addEventListener('input', () => {
-            updateTypingStatus(true);
-            scheduleTypingEnd();
-        });
-        chatInputElement.addEventListener('blur', () => {
-            updateTypingStatus(false);
-        });
-    }
-
-    window.addEventListener('beforeunload', () => {
-        updateTypingStatus(false);
-    });
-
-    function isEmojiOnly(text) {
-        const trimmed = (text || '').trim();
-        if (!trimmed) return false;
-        const stripped = trimmed.replace(/[\uFE0F\u200D\s]/g, '');
-        if (!stripped) return false;
-        const chars = Array.from(stripped);
-        return chars.every(ch => /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(ch));
-    }
-
-    db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
-        if (snapshot.val()) {
-            typingIndicator.classList.remove('hidden');
-        } else {
-            typingIndicator.classList.add('hidden');
-        }
-    });
-
-    function copyMsg(id) {
-        const txt = document.getElementById('text-' + id).innerText;
-        navigator.clipboard.writeText(txt);
-        showToast("COPIED!");
-    }
-
-    function deleteMsg(id) {
-        db.ref('chatMessages/' + id).remove();
-        showToast("DELETED!");
-    }
-
-    db.ref('chatMessages').on('value', (snapshot) => {
-        if(!snapshot.exists()) { document.getElementById('chatMessages').innerHTML = ''; }
-    });
-
-    let isChatLoaded = false;
-    db.ref('chatMessages').once('value', () => { isChatLoaded = true; });
-
-    db.ref('chatMessages').on('child_added', (snapshot) => {
-        const data = snapshot.val();
-        const msgKey = snapshot.key;
-        const chatMessagesDiv = document.getElementById('chatMessages');
-        const isMine = data.sender === myName.toUpperCase();
-        const isSystem = data.sender === "SYSTEM" || data.sender === "ANTI-CHEAT";
-        
-        const messageDiv = document.createElement('div');
-        messageDiv.id = `msg-${msgKey}`;
-
-        if (isSystem) { 
-            messageDiv.className = data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message'; 
-        } else {
-            const emojiOnly = isEmojiOnly(data.text);
-            messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; 
-            if (emojiOnly) {
-                messageDiv.className += ' emoji-message emoji-burst';
-            }
-        }
-        
-        const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        const copySvg = `<svg viewBox="0 0 24 24" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
-        const delSvg = `<svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
-
-        const copyBtn = `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="copyMsg('${msgKey}')" title="Copy">${copySvg}</button>`;
-        const delBtn = isMine ? `<button class="msg-action-btn" style="background:transparent; border:none; padding:0; margin-left:5px; opacity:0.5; color:white; cursor:pointer;" onclick="deleteMsg('${msgKey}')" title="Delete">${delSvg}</button>` : '';
-
-        messageDiv.innerHTML = `
-            <div class="message-sender" style="${isSystem ? 'color:inherit; font-size:10px;' : ''}; display:flex; justify-content:space-between; align-items:center;">
-                <span>${isMine ? 'YOU' : data.sender} (${time})</span>
-                ${!isSystem ? `<span>${copyBtn}${delBtn}</span>` : ''}
-            </div>
-            <div class="message-text" id="text-${msgKey}">${data.text}</div>
-        `;
-        
-        chatMessagesDiv.appendChild(messageDiv);
-        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-
-        if (isChatLoaded && !isMine && !isSystem) { showToast(`NEW MESSAGE FROM ${data.sender}`); }
-    });
-
-    db.ref('chatMessages').on('child_removed', (snapshot) => {
-        const msgDiv = document.getElementById(`msg-${snapshot.key}`);
-        if(msgDiv) msgDiv.remove();
-    });
-
-    function sendChatMessage() {
-        const chatInput = document.getElementById('chatInput');
-        const text = chatInput.value.trim();
-        if(!text) return;
-
-        if (myName === 'immu') {
-            if (text.startsWith('/add ')) {
-                const pts = parseInt(text.replace('/add ', ''));
-                if (!isNaN(pts)) {
-                    if (activeGame === 'movie') db.ref(`gameState/score1`).transaction(s => (s || 0) + pts);
-                    if (activeGame === 'word') db.ref(`wordGameState/score1`).transaction(s => (s || 0) + pts);
-                    showToast(`SECRET: +${pts} POINTS ADDED!`);
-                }
-                chatInput.value = ""; return; 
-            }
-            if (text.startsWith('/minus ')) {
-                const pts = parseInt(text.replace('/minus ', ''));
-                if (!isNaN(pts)) {
-                    if (activeGame === 'movie') db.ref(`gameState/score2`).transaction(s => (s || 0) - pts);
-                    if (activeGame === 'word') db.ref(`wordGameState/score2`).transaction(s => (s || 0) - pts);
-                    showToast(`SECRET: -${pts} POINTS TAKEN FROM SAPPII!`);
-                }
-                chatInput.value = ""; return; 
-            }
-        }
-
-        db.ref('chatMessages').push({ sender: myName.toUpperCase(), text: text, timestamp: firebase.database.ServerValue.TIMESTAMP });
-        chatInput.value = "";
-        updateTypingStatus(false);
-        document.getElementById('emojiPicker').classList.add('hidden');
-    }
+    function confirmReset(s) { db.ref('gameState').set({ turn: s, status: "set", score1: 0, score2: 0 }); closeResetModal(); }
+    function confirmResetDraw(s) { db.ref('drawGameState').set({ turn: s, status: "set", score1: 0, score2: 0 }); closeResetModal(); }
+    function confirmResetWord() { db.ref('wordGameState').set({ status: "letter_phase", score1: 0, score2: 0 }); closeResetModal(); }
+    function confirmResetCards() { db.ref('cardsGameState').set({ status: "setup" }); closeResetModal(); }
 
     document.getElementById('chatInput').addEventListener('keypress', e => { if (e.key === 'Enter') sendChatMessage(); });
 </script>
