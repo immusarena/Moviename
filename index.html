@@ -188,6 +188,12 @@
         .message { padding: 10px 14px; max-width: 80%; display: flex; flex-direction: column; position: relative; animation: slideUp 0.3s ease-out; box-shadow: 0 4px 15px rgba(0,0,0,0.2);}
         .message-sender { font-size: 8px; font-weight: 800; margin-bottom: 4px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center;}
         .message-text { font-size: 12px; line-height: 1.4; word-wrap: break-word; font-weight: 600;}
+        .emoji-message { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); }
+        .emoji-message .message-text { font-size: 32px; line-height: 1; padding: 0; }
+        .emoji-message.my-message { background: transparent; color: #fff; }
+        .emoji-message.partner-message { background: transparent; color: #fff; }
+        .emoji-burst { animation: emojiBurst 0.8s ease-out forwards; }
+        @keyframes emojiBurst { 0% { transform: scale(0.3) translateY(12px); opacity: 0; } 60% { transform: scale(1.15) translateY(-4px); opacity: 1; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
         
         .msg-actions { display: inline-flex; gap: 8px; }
         .msg-action-btn { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 5px; padding: 4px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; color: var(--text-muted); margin-left: 5px; }
@@ -1396,6 +1402,14 @@
         updateTypingStatus(false);
     });
 
+    function isEmojiOnly(text) {
+        const trimmed = (text || '').trim();
+        if (!trimmed) return false;
+        const stripped = trimmed.replace(/\uFE0F/g, '');
+        if (/[A-Za-z0-9]/.test(stripped)) return false;
+        return /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(stripped);
+    }
+
     db.ref(`typingStatus/${partnerName}`).on('value', (snapshot) => {
         if (snapshot.val()) {
             typingIndicator.classList.remove('hidden');
@@ -1434,8 +1448,12 @@
 
         if (isSystem) { 
             messageDiv.className = data.sender === "ANTI-CHEAT" ? 'message cheat-message' : 'message system-message'; 
-        } else { 
+        } else {
+            const emojiOnly = isEmojiOnly(data.text);
             messageDiv.className = isMine ? 'message my-message' : 'message partner-message'; 
+            if (emojiOnly) {
+                messageDiv.className += ' emoji-message emoji-burst';
+            }
         }
         
         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
