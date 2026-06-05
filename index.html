@@ -555,24 +555,16 @@
             [deck[i], deck[j]] = [deck[j], deck[i]];
         }
 
-        // Get player names for the game
-        let playerNames = ['immu', 'sappii'];
-        
-        if (playerCount === 3) {
-            playerNames = ['immu', 'sappii', 'tharkuri'];
-        }
-
-        startCardsGameWithPlayers(playerCount, deck, playerNames);
+        // Force ONLY 2 players
+        const playerNames = ['immu', 'sappii'];
+        startCardsGameWithPlayers(2, deck, playerNames);
     }
 
     function startCardsGameWithPlayers(playerCount, deck, playerNames) {
         let hands = {};
         playerNames.forEach(p => hands[p] = []);
 
-        if (playerCount === 3) {
-            // Remove 2 of Clubs for 3 players (51 cards)
-            deck = deck.filter(c => !(c.suit === 'C' && c.rank === 2));
-        }
+        // Only 2-player mode is used; no 3-player deck modifications.
 
         playerNames.forEach((p, idx) => {
             hands[p] = deck.filter((_, i) => i % playerCount === idx);
@@ -611,38 +603,6 @@
 
     db.ref('cardsGameState').on('value', (snapshot) => {
         let state = snapshot.val() || { status: 'setup' };
-        if (state.playerCount === 3 && state.hands && state.hands.player3) {
-            let updates = {};
-            let newHands = { ...state.hands, tharkuri: state.hands.player3 };
-            delete newHands.player3;
-            updates.hands = newHands;
-
-            if (state.scores && state.scores.player3 !== undefined) {
-                let newScores = { ...state.scores, tharkuri: state.scores.player3 };
-                delete newScores.player3;
-                updates.scores = newScores;
-            }
-
-            if (Array.isArray(state.playerNames)) {
-                updates.playerNames = state.playerNames.map(p => p === 'player3' ? 'tharkuri' : p);
-            } else {
-                updates.playerNames = ['immu', 'sappii', 'tharkuri'];
-            }
-
-            if (state.turn === 'player3') {
-                updates.turn = 'tharkuri';
-            }
-
-            if (state.table && state.table.player3) {
-                let newTable = { ...state.table, tharkuri: state.table.player3 };
-                delete newTable.player3;
-                updates.table = newTable;
-            }
-
-            db.ref('cardsGameState').update(updates);
-            state = { ...state, ...updates };
-        }
-
         cardsGameState = state;
         if (activeGame === 'cards') renderCardsGameUI();
     });
@@ -749,7 +709,6 @@
                         🃏 Must follow suit. If not, Cut with Spades!
                     </p>
                     <button class="btn-main" onclick="initCardsGame(2)">START 2 PLAYERS</button>
-                    <button class="btn-main" style="background:transparent; border:1px solid var(--accent-color); color:var(--accent-color); box-shadow:none;" onclick="initCardsGame(3)">START 3 PLAYERS</button>
                 </div>
             `;
             return;
