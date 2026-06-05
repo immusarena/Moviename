@@ -608,7 +608,8 @@
     });
 
     function playCard(index) {
-        if (!cardsGameState || cardsGameState.turn !== myName) return alert("NOT YOUR TURN!");
+        const normalizedTurn = (cardsGameState && cardsGameState.turn ? cardsGameState.turn : '').toString().trim().toLowerCase();
+        if (!cardsGameState || normalizedTurn !== myName) return alert("NOT YOUR TURN!");
         
         const myHand = (cardsGameState.hands && cardsGameState.hands[myName]) || [];
         const card = myHand[index];
@@ -799,10 +800,11 @@
         tableHTML += `</div>`;
 
         // Status Bar
+        const normalizedTurn = (cardsGameState.turn || '').toString().trim().toLowerCase();
         let statusMsg = "";
-        if (cardsGameState.turn === myName) {
+        if (normalizedTurn === myName) {
             statusMsg = `<div style="color:var(--accent-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px; animation:blink 1.5s infinite;">YOUR TURN! PLAY A CARD</div>`;
-        } else if (cardsGameState.turn === 'resolving') {
+        } else if (normalizedTurn === 'resolving') {
             statusMsg = `<div style="color:var(--primary-color); font-weight:800; font-size:12px; letter-spacing:1px; margin-bottom:10px;">RESOLVING TRICK...</div>`;
         } else {
             statusMsg = `<div style="color:var(--text-muted); font-weight:800; font-size:10px; letter-spacing:1px; margin-bottom:10px; text-transform:uppercase;">WAITING FOR ${cardsGameState.turn}...</div>`;
@@ -812,7 +814,7 @@
         let handHTML = `<div class="card-hand-wrapper"><div class="card-hand">`;
         myHand.forEach((c, idx) => {
             let cColor = (c.suit === 'H' || c.suit === 'D') ? 'card-red' : 'card-black';
-            let isMyTurn = cardsGameState.turn === myName;
+            let isMyTurn = normalizedTurn === myName;
             // Highlight valid cards slightly
             let canPlay = isMyTurn && (!cardsGameState.ledSuit || c.suit === cardsGameState.ledSuit || !myHand.some(x => x.suit === cardsGameState.ledSuit));
             let styleExt = canPlay ? 'border-color:var(--accent-color);' : '';
@@ -827,7 +829,7 @@
         handHTML += `</div></div>`;
 
         // My Stats
-        let myClass = cardsGameState.turn === myName ? 'active-turn' : '';
+        let myClass = normalizedTurn === myName ? 'active-turn' : '';
         let myStatsHTML = `
             <div style="display:flex; justify-content:center; margin-top:10px;">
                 <div class="player-box ${myClass}" style="flex-direction:row; width:100%; max-width:250px; justify-content:space-between; padding:10px 20px;">
