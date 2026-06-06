@@ -689,23 +689,54 @@
                     <!-- Custom inputs URL container for Audio -->
                     <div id="audioCustomInputSection" class="border-t border-white/5 pt-4 text-left space-y-2">
                         <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PLAY CUSTOM AUDIO STREAM URL</span>
-                        <div class="flex gap-2">
-                            <input type="text" id="musicCustomUrlInput" placeholder="PASTE DIRECT MP3 AUDIO LINK HERE..." class="w-full flex-1 bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
-                            <button onclick="playCustomSongURL()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 hover:scale-102 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md shrink-0 flex items-center justify-center gap-1.5 cursor-pointer">
-                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>SYNC URL
-                            </button>
+                        <div class="space-y-2">
+                            <input type="text" id="musicCustomUrlInput" placeholder="PASTE DIRECT MP3 AUDIO LINK HERE..." class="w-full bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                            <div class="flex gap-2">
+                                <button onclick="playCustomSongURL()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 hover:scale-101 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>PLAY NOW
+                                </button>
+                                <button onclick="addCustomSongToQueue()" class="flex-1 py-2.5 bg-neutral-800 hover:bg-neutral-700 hover:text-[var(--accent-color)] hover:border-neutral-700 text-stone-200 font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer border border-white/5">
+                                    <i data-lucide="list-plus" class="w-3.5 h-3.5"></i>+ ADD TO QUEUE
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Custom inputs URL container for Video -->
                     <div id="videoCustomInputSection" class="hidden border-t border-white/5 pt-4 text-left space-y-2">
                         <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PLAY CUSTOM VIDEO / CINEMA URL</span>
-                        <div class="flex gap-2">
-                            <input type="text" id="videoCustomUrlInput" placeholder="PASTE DIRECT MP4 VIDEO LINK HERE..." class="w-full flex-1 bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
-                            <button onclick="playCustomVideoURL()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 hover:scale-102 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md shrink-0 flex items-center justify-center gap-1.5 cursor-pointer">
-                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>SYNC MOVIE
-                            </button>
+                        <div class="space-y-2">
+                            <input type="text" id="videoCustomUrlInput" placeholder="PASTE DIRECT MP4 VIDEO LINK HERE..." class="w-full bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                            <div class="flex gap-2">
+                                <button onclick="playCustomVideoURL()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 hover:scale-101 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
+                                    <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>PLAY NOW
+                                </button>
+                                <button onclick="addCustomVideoToQueue()" class="flex-1 py-2.5 bg-neutral-800 hover:bg-neutral-700 hover:text-[var(--accent-color)] hover:border-neutral-700 text-stone-200 font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer border border-white/5">
+                                    <i data-lucide="list-plus" class="w-3.5 h-3.5"></i>+ ADD TO QUEUE
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Shared Upcoming Playlist/Queue Glass Card -->
+                <div id="mediaQueueSection" class="glass-card rounded-2xl p-5 text-left space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5 select-none">
+                        <span class="text-[10px] text-stone-200 font-black tracking-widest uppercase flex items-center gap-1.5">
+                            <i data-lucide="list-video" class="w-4 h-4 text-[var(--accent-color)] animate-bounce"></i>SHARED UPCOMING QUEUE
+                        </span>
+                        <span id="queueCountBadge" class="text-[8px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded-full font-mono font-black">0 ITEMS</span>
+                    </div>
+                    
+                    <!-- Empty queue placeholder -->
+                    <div id="mediaQueueEmptyState" class="text-center py-5 space-y-2 select-none">
+                        <i data-lucide="music" class="w-6 h-6 text-stone-600 mx-auto"></i>
+                        <p class="text-[9px] text-stone-500 uppercase tracking-widest font-bold">QUEUE IS EMPTY</p>
+                        <span class="text-[8px] text-stone-600 uppercase tracking-wide block">Add custom links above to auto-play sequentially!</span>
+                    </div>
+
+                    <!-- Active queue list -->
+                    <div id="mediaQueueActiveList" class="space-y-2 max-h-[160px] overflow-y-auto pr-1 hidden">
                     </div>
                 </div>
             </div>
@@ -2082,8 +2113,25 @@
         ];
 
         let musicState = {};
+        let localMediaQueue = [];
         const audioNode = document.getElementById('syncAudioPlayer');
         const videoNode = document.getElementById('syncVideoPlayer');
+
+        // Listen for shared media queue
+        db.ref('mediaQueue').on('value', (snap) => {
+            const val = snap.val();
+            localMediaQueue = [];
+            if (val) {
+                for (let k in val) {
+                    localMediaQueue.push({
+                        key: k,
+                        ...val[k]
+                    });
+                }
+                localMediaQueue.sort((a, b) => a.timestamp - b.timestamp);
+            }
+            renderSharedQueueUI();
+        });
 
         // URL parsing safety helper to prevent loop reloads
         function isSameUrl(srcA, srcB) {
@@ -2097,17 +2145,49 @@
             }
         }
 
-        // Handle Media End events safely updating status to pause
+        // Play the next link in the Shared Queue automatically
+        function playNextFromQueue() {
+            if (localMediaQueue && localMediaQueue.length > 0) {
+                const nextItem = localMediaQueue[0];
+                db.ref('musicState').set({
+                    trackUrl: nextItem.url,
+                    trackTitle: nextItem.title,
+                    trackAuthor: `Enqueued by ${nextItem.addedBy.toUpperCase()}`,
+                    mediaType: nextItem.mediaType,
+                    status: 'playing',
+                    seekTime: 0,
+                    sentTime: Date.now(),
+                    triggeredBy: nextItem.addedBy
+                });
+                // Remove from Firebase queue
+                db.ref(`mediaQueue/${nextItem.key}`).remove();
+                triggerLiveToast(`PLAYING NEXT QUEUED ITEM: ${nextItem.title}`);
+                db.ref('chatMessages').push({
+                    sender: "AI-ROBOT",
+                    text: `🎵 AUTOPLAYING NEXT QUEUED ITEM: "${nextItem.title.toUpperCase()}"`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            } else {
+                triggerLiveToast("QUEUE EXHAUSTED! PLAYBACK FINISHED.");
+            }
+        }
+
+        // Handle Media End events safely updating status to pause or playing next enqueued item
         function handleMediaEnded() {
             if (!musicState || musicState.status !== 'playing') return;
             const activeNode = (musicState.mediaType === 'video') ? videoNode : audioNode;
-            db.ref('musicState').update({
-                status: 'paused',
-                seekTime: activeNode.duration || 0,
-                sentTime: Date.now(),
-                triggeredBy: 'SYSTEM_END'
-            });
-            triggerLiveToast("MEDIA PLAYBACK COMPLETED!");
+            
+            if (localMediaQueue && localMediaQueue.length > 0) {
+                playNextFromQueue();
+            } else {
+                db.ref('musicState').update({
+                    status: 'paused',
+                    seekTime: activeNode.duration || 0,
+                    sentTime: Date.now(),
+                    triggeredBy: 'SYSTEM_END'
+                });
+                triggerLiveToast("MEDIA PLAYBACK COMPLETED!");
+            }
         }
 
         if (audioNode) audioNode.addEventListener('ended', handleMediaEnded);
@@ -2544,6 +2624,166 @@
             });
             inputField.value = "";
             triggerLiveToast("CUSTOM VIDEO MOVIE SYNCE_PLAY!");
+        }
+
+        // --- Shared Realtime Queue Logic ---
+        function addCustomSongToQueue() {
+            const inputField = document.getElementById('musicCustomUrlInput');
+            let url = inputField.value.trim();
+            if (!url) return triggerLiveToast("ENTER A VALID MP3 LINK TO ENQUEUE!");
+            
+            let customTitle = "SOUNDTRACK STREAM";
+            try {
+                const parts = url.split('/');
+                const fileName = parts[parts.length - 1].split('?')[0];
+                if (fileName.length > 4) {
+                    customTitle = decodeURIComponent(fileName).toUpperCase();
+                }
+            } catch (e) {}
+
+            db.ref('mediaQueue').push({
+                url: url,
+                title: customTitle,
+                mediaType: 'audio',
+                addedBy: myName,
+                timestamp: Date.now()
+            });
+
+            inputField.value = "";
+            playSynthSound('success');
+            triggerLiveToast("ADDED TO AUDIO QUEUE!");
+            
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW AUDIO: "${customTitle.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function addCustomVideoToQueue() {
+            const inputField = document.getElementById('videoCustomUrlInput');
+            let url = inputField.value.trim();
+            if (!url) return triggerLiveToast("ENTER A VALID MP4 LINK TO ENQUEUE!");
+
+            let customTitle = "CINEMA MOVIE STREAM";
+            try {
+                const parts = url.split('/');
+                const fileName = parts[parts.length - 1].split('?')[0];
+                if (fileName.length > 4) {
+                    customTitle = decodeURIComponent(fileName).toUpperCase();
+                }
+            } catch (e) {}
+
+            db.ref('mediaQueue').push({
+                url: url,
+                title: customTitle,
+                mediaType: 'video',
+                addedBy: myName,
+                timestamp: Date.now()
+            });
+
+            inputField.value = "";
+            playSynthSound('success');
+            triggerLiveToast("ADDED TO CINEMA QUEUE!");
+
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW VIDEO: "${customTitle.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function removeQueueItem(key, title) {
+            db.ref(`mediaQueue/${key}`).remove();
+            playSynthSound('toast');
+            triggerLiveToast("DEQUEUED ITEM REMOVED!");
+            
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `➖ REMOVED QUEUE ITEM: "${title.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function playQueueItemImmediately(key) {
+            const item = localMediaQueue.find(i => i.key === key);
+            if (!item) return;
+
+            db.ref('musicState').set({
+                trackUrl: item.url,
+                trackTitle: item.title,
+                trackAuthor: `Enqueued by ${item.addedBy.toUpperCase()}`,
+                mediaType: item.mediaType,
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+
+            // Delete from queue since it is now active
+            db.ref(`mediaQueue/${key}`).remove();
+            playSynthSound('success');
+            triggerLiveToast(`PLAYING QUEUE: ${item.title}`);
+
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `⚡ PLAYING ENQUEUED ITEM: "${item.title.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function renderSharedQueueUI() {
+            const emptyState = document.getElementById('mediaQueueEmptyState');
+            const activeList = document.getElementById('mediaQueueActiveList');
+            const qtyBadge = document.getElementById('queueCountBadge');
+
+            if (!emptyState || !activeList || !qtyBadge) return;
+
+            qtyBadge.innerText = `${localMediaQueue.length} ITEMS`;
+
+            if (localMediaQueue.length === 0) {
+                emptyState.classList.remove('hidden');
+                activeList.classList.add('hidden');
+                activeList.innerHTML = "";
+            } else {
+                emptyState.classList.add('hidden');
+                activeList.classList.remove('hidden');
+                
+                activeList.innerHTML = "";
+                localMediaQueue.forEach((item) => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between p-2.5 bg-white/5 border border-white/5 rounded-xl text-xs hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group";
+                    
+                    const isVideo = (item.mediaType === 'video');
+                    const iconName = isVideo ? 'video' : 'music';
+                    const iconColor = isVideo ? 'text-amber-400' : 'text-rose-400';
+                    const typeLabel = isVideo ? 'VIDEO' : 'AUDIO';
+                    
+                    row.innerHTML = `
+                        <div class="flex items-center gap-2 relative z-10 shrink min-w-0 pr-1 select-none pointer-events-none">
+                            <div class="w-7 h-7 rounded bg-white/5 flex items-center justify-center shrink-0">
+                                <i data-lucide="${iconName}" class="w-3.5 h-3.5 ${iconColor}"></i>
+                            </div>
+                            <div class="truncate text-left min-w-0">
+                                <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal truncate text-white/90">${item.title}</span>
+                                <span class="text-[8px] text-stone-500 uppercase font-mono mt-1 block">
+                                    [${typeLabel}] BY: <span class="text-rose-300 font-bold">${item.addedBy.toUpperCase()}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1 shrink-0 z-10">
+                            <button onclick="playQueueItemImmediately('${item.key}')" class="p-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500 hover:text-black rounded-lg transition-all cursor-pointer" title="Play Queue Item Immediately">
+                                <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                            </button>
+                            <button onclick="removeQueueItem('${item.key}', '${item.title}')" class="p-1.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500 hover:text-white rounded-lg transition-all cursor-pointer" title="Remove from Queue">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    `;
+                    activeList.appendChild(row);
+                });
+                lucide.createIcons();
+            }
         }
 
         function setMediaLoungeMode(mode) {
