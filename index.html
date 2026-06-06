@@ -633,13 +633,14 @@
             triggerLiveToast("THEME PRESET CHANGED!");
         }
 
+        let pColor1 = '#FF4B72', pColor2 = '#4ade80';
+
         applyPremiumTheme(currentThemeIndex);
 
         // ================= BACKGROUND PARTICLES CANVAS =================
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        let pColor1 = '#FF4B72', pColor2 = '#4ade80';
 
         function initCanvasParticlesColors() {
             pColor1 = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
