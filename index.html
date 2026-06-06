@@ -398,7 +398,7 @@
                         </div>
                         <div class="flex gap-2 flex-col sm:flex-row justify-center">
                             <button onclick="getHintFromGemini()" id="geminiHintBtn" class="px-4 py-2.5 bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/25 text-[var(--accent-color)] border border-[var(--accent-color)]/20 hover:border-[var(--accent-color)]/50 rounded-xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-1.5 transition-all">
-                                <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i>ASK CLUE
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i>ASK GEMINI ROBOT CLUE
                             </button>
                             <button onclick="movieAwardManualPoint()" class="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white border border-white/10 rounded-xl font-black text-[10px] tracking-widest uppercase transition-all">
                                 AWARD PARTNER POINT
@@ -577,7 +577,7 @@
                                 <i data-lucide="music" class="w-4 h-4 text-rose-400"></i>CO-OP MEDIA LOUNGE
                             </h3>
                         </div>
-                        <span id="musicPlaybackStatusBadge" class="text-[9px] bg-rose-500/20 text-rose-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">LIVE SYNCED</span>
+                        <span id="musicPlaybackStatusBadge" onclick="forceManualSync()" class="text-[9px] bg-rose-500/20 text-rose-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono cursor-pointer hover:bg-rose-500/35 transition-all" title="Click to manually force precise real-time synchronization">LIVE SYNCED</span>
                     </div>
 
                     <!-- Media mode toggle selection segment -->
@@ -627,7 +627,7 @@
 
                     <!-- Video Cinema Lounge View -->
                     <div id="mediaLoungeVideoWrapper" class="hidden py-1 relative">
-                        <video id="syncVideoPlayer" class="w-full rounded-xl border border-white/10 bg-black aspect-video shadow-2xl" preload="auto" playsinline></video>
+                        <video id="syncVideoPlayer" class="w-full rounded-xl border border-white/10 bg-black aspect-video shadow-2xl cursor-pointer hover:border-rose-500/50 transition-all" preload="auto" playsinline onclick="toggleMusicPlaybackSync()"></video>
                     </div>
 
                     <!-- Song/Cinema Playing Metadata -->
@@ -1964,6 +1964,65 @@
         const audioNode = document.getElementById('syncAudioPlayer');
         const videoNode = document.getElementById('syncVideoPlayer');
 
+        // URL parsing safety helper to prevent loop reloads
+        function isSameUrl(srcA, srcB) {
+            if (!srcA || !srcB) return false;
+            try {
+                const urlA = new URL(srcA, window.location.href).href.replace(/\/$/, "");
+                const urlB = new URL(srcB, window.location.href).href.replace(/\/$/, "");
+                return urlA === urlB;
+            } catch (e) {
+                return srcA.replace(/\/$/, "") === srcB.replace(/\/$/, "");
+            }
+        }
+
+        // Handle Media End events safely updating status to pause
+        function handleMediaEnded() {
+            if (!musicState || musicState.status !== 'playing') return;
+            const activeNode = (musicState.mediaType === 'video') ? videoNode : audioNode;
+            db.ref('musicState').update({
+                status: 'paused',
+                seekTime: activeNode.duration || 0,
+                sentTime: Date.now(),
+                triggeredBy: 'SYSTEM_END'
+            });
+            triggerLiveToast("MEDIA PLAYBACK COMPLETED!");
+        }
+
+        if (audioNode) audioNode.addEventListener('ended', handleMediaEnded);
+        if (videoNode) videoNode.addEventListener('ended', handleMediaEnded);
+
+        // Click manually on live badge to trigger instantaneous catch-up realignment
+        function forceManualSync() {
+            if (!musicState || !musicState.status) return;
+            const activeNode = (musicState.mediaType === 'video') ? videoNode : audioNode;
+            
+            // Ensure correct source is loaded
+            if (!isSameUrl(activeNode.src, musicState.trackUrl)) {
+                activeNode.src = musicState.trackUrl;
+                activeNode.load();
+            }
+
+            if (musicState.status === 'playing') {
+                const deltaSeconds = (Date.now() - (musicState.sentTime || Date.now())) / 1000;
+                let targetSeek = Math.max(0, musicState.seekTime + deltaSeconds);
+                if (activeNode.duration && targetSeek > activeNode.duration) {
+                    targetSeek = 0;
+                }
+                activeNode.currentTime = targetSeek;
+                activeNode.play().then(() => {
+                    triggerLiveToast("PERFECT CHRONO SYNC ALIGNED!");
+                }).catch(err => {
+                    console.log("Sync play unblock failed:", err);
+                    triggerLiveToast("TAP PLAY BUTTON TO UNMUTE SYNCHRONIZATION!");
+                });
+            } else {
+                activeNode.currentTime = musicState.seekTime;
+                activeNode.pause();
+                triggerLiveToast("SYNCED PAUSE POSITION!");
+            }
+        }
+
         function renderSongsPresets() {
             const listDiv = document.getElementById('songsPresetGridList');
             if (!listDiv) return;
@@ -2088,7 +2147,7 @@
                 }
                 
                 // Src check & load
-                if (activeNode.src !== data.trackUrl) {
+                if (!isSameUrl(activeNode.src, data.trackUrl)) {
                     activeNode.src = data.trackUrl;
                     activeNode.load();
                 }
@@ -2127,7 +2186,7 @@
                 if (armNode) armNode.style.transform = "rotate(-15deg)";
                 
                 // Src check & load
-                if (activeNode.src !== data.trackUrl) {
+                if (!isSameUrl(activeNode.src, data.trackUrl)) {
                     activeNode.src = data.trackUrl;
                     activeNode.load();
                 }
@@ -2220,7 +2279,33 @@
         });
 
         function toggleMusicPlaybackSync() {
+            if (!musicState || !musicState.status) return;
             const activeNode = (musicState.mediaType === 'video') ? videoNode : audioNode;
+
+            // Handle browser Autoplay protect / lag bypass gracefully
+            const isLocalBlockedOrPaused = (musicState.status === 'playing' && activeNode.paused);
+            if (isLocalBlockedOrPaused) {
+                // Ensure correct source loaded
+                if (!isSameUrl(activeNode.src, musicState.trackUrl)) {
+                    activeNode.src = musicState.trackUrl;
+                    activeNode.load();
+                }
+
+                const deltaSeconds = (Date.now() - (musicState.sentTime || Date.now())) / 1000;
+                let targetSeek = Math.max(0, musicState.seekTime + deltaSeconds);
+                if (activeNode.duration && targetSeek > activeNode.duration) {
+                    targetSeek = 0;
+                }
+                activeNode.currentTime = targetSeek;
+                activeNode.play().then(() => {
+                    triggerLiveToast("LOCALLY MATCHED MASTER STREAM!");
+                }).catch(err => {
+                    console.log("Autoplay unblock failed locally:", err);
+                    triggerLiveToast("TAP AGAIN OR ALLOW BROWSER AUDIO!");
+                });
+                return;
+            }
+
             const currentStatus = (musicState.status === 'playing') ? 'paused' : 'playing';
             db.ref('musicState').update({
                 status: currentStatus,
