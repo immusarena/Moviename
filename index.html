@@ -56,11 +56,25 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
-            box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.06);
         }
 
         .neon-border {
             border-color: var(--primary-color);
+            box-shadow: 0 0 18px var(--glow-color);
+        }
+
+        /* Ambient glowing circles animation */
+        @keyframes dynamicGlow {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(15px, -15px) scale(1.1); opacity: 0.25; }
+        }
+
+        /* Elegant custom input and gameplay interactive focuses */
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color) !important;
+            box-sizing: border-box;
             box-shadow: 0 0 15px var(--glow-color);
         }
 
@@ -102,7 +116,7 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -126,6 +140,10 @@
 
     <!-- Active floating particles canvas in background -->
     <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Dynamic Premium Backdrop Ambient Glow circles -->
+    <div class="fixed top-1/4 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full bg-[var(--primary-color)] opacity-20 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
+    <div class="fixed bottom-1/4 translate-y-1/2 left-1/2 -translate-x-1/2 w-[285px] h-[285px] rounded-full bg-[var(--accent-color)] opacity-10 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
 
     <!-- Main dynamic app container wrapper limited to standard portable viewport -->
     <div class="w-full max-w-md my-4 space-y-4 z-10 transition-all duration-500 animate-floatUp">
@@ -172,34 +190,40 @@
 
             <!-- List of game portals -->
             <div class="space-y-3">
-                <button onclick="enterArena('movie')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-[var(--primary-color)] hover:border-l-8 hover:translate-x-1 hover:border-l-[var(--primary-color)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group">
-                    <div class="text-left">
+                <button onclick="enterArena('movie')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-[var(--primary-color)] hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(255,75,114,0.25)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10">
                         <span class="text-[9px] text-[#FF7694] font-black tracking-widest block uppercase font-mono">TAMIL CINEMA</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-[var(--primary-color)] transition-colors uppercase font-display">
                             MOVIE GUESSING ROUND
                         </span>
                     </div>
-                    <i data-lucide="film" class="w-5 h-5 text-stone-500 group-hover:text-[var(--primary-color)] transition-colors shrink-0 ml-2"></i>
+                    <i data-lucide="film" class="w-5 h-5 text-stone-500 group-hover:text-[var(--primary-color)] transition-colors shrink-0 ml-2 relative z-10"></i>
                 </button>
 
-                <button onclick="enterArena('word')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-[var(--accent-color)] hover:border-l-8 hover:translate-x-1 hover:border-l-[var(--accent-color)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group">
-                    <div class="text-left">
+                <button onclick="enterArena('word')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-[var(--accent-color)] hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(74,222,128,0.25)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10">
                         <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest block uppercase font-mono font-bold">VOCABULARY HYPER</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-[var(--accent-color)] transition-colors uppercase font-display">
                             WORD SPEED RACE
                         </span>
                     </div>
-                    <i data-lucide="zap" class="w-5 h-5 text-stone-500 group-hover:text-[var(--accent-color)] transition-colors shrink-0 ml-2"></i>
+                    <i data-lucide="zap" class="w-5 h-5 text-stone-500 group-hover:text-[var(--accent-color)] transition-colors shrink-0 ml-2 relative z-10"></i>
                 </button>
 
-                <button onclick="enterArena('cards')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-amber-400 hover:border-l-8 hover:translate-x-1 hover:border-l-amber-400 rounded-2xl transition-all duration-300 shadow-md cursor-pointer group">
-                    <div class="text-left">
+                <button onclick="enterArena('cards')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-amber-400 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(251,191,36,0.25)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10">
                         <span class="text-[9px] text-amber-300 font-black tracking-widest block uppercase font-mono">TACTICAL SHUFFLE</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase font-display">
                             VETTU CARDS GAME
                         </span>
                     </div>
-                    <i data-lucide="layers" class="w-5 h-5 text-stone-500 group-hover:text-amber-400 transition-colors shrink-0 ml-2"></i>
+                    <i data-lucide="layers" class="w-5 h-5 text-stone-500 group-hover:text-amber-400 transition-colors shrink-0 ml-2 relative z-10"></i>
                 </button>
             </div>
 
@@ -494,12 +518,16 @@
                     <div id="spadesPlayerStatsRow" class="flex flex-wrap gap-2.5 justify-center select-none text-center"></div>
 
                     <!-- Table board area displaying trick elements -->
-                    <div class="py-5 bg-black/45 rounded-xl border border-white/5 relative flex flex-col items-center justify-center min-h-[145px] shadow-inner space-y-4">
-                        <div id="spadesTrickDischargedDeck" class="flex justify-center items-center gap-5"></div>
-                        <span id="spadesDryBoardPlaceholder" class="hidden text-[10px] text-stone-600 font-extrabold tracking-widest uppercase">
+                    <div class="py-6 bg-gradient-to-b from-neutral-900/90 to-black border border-white/10 relative flex flex-col items-center justify-center min-h-[160px] shadow-inner rounded-2xl overflow-hidden space-y-4 group">
+                        <!-- Holographic Circular Deck Felt Grid Interface -->
+                        <div class="absolute w-36 h-36 rounded-full border border-dashed border-white/5 group-hover:border-white/10 group-hover:scale-105 transition-all duration-700 pointer-events-none flex items-center justify-center">
+                            <div class="w-24 h-24 rounded-full border border-double border-white/5 pointer-events-none"></div>
+                        </div>
+                        <div id="spadesTrickDischargedDeck" class="flex justify-center items-center gap-5 relative z-10"></div>
+                        <span id="spadesDryBoardPlaceholder" class="hidden text-[10px] text-stone-500 font-extrabold tracking-widest uppercase relative z-10">
                             TABLE IS EMPTY -- PLAY ANY CARD
                         </span>
-                        <span id="spadesActiveLedSuitIcon" class="hidden text-[9px] bg-white/5 border border-white/10 text-stone-400 px-3 py-1 rounded-full uppercase tracking-wider font-bold"></span>
+                        <span id="spadesActiveLedSuitIcon" class="hidden text-[9px] bg-white/10 border border-white/10 text-[var(--accent-color)] px-3 py-1 rounded-full uppercase tracking-wider font-black relative z-10 shadow-lg glow-accent"></span>
                     </div>
 
                     <!-- Directives and indicators guides on current turn -->
