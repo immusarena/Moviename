@@ -535,6 +535,14 @@
                 <!-- Active trick taking gaming table arena elements -->
                 <div id="boxSpadesPlayBoard" class="hidden glass-card rounded-2xl p-4 space-y-4">
                     
+                    <!-- Immu Spy Eye Controller (visible only to Immu) -->
+                    <div id="immuCheatControlWrapper" class="hidden flex justify-end px-1 pb-1">
+                        <button onclick="toggleImmuCheatMode()" id="immuCheatToggleBtn" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/25 hover:border-rose-500 text-[9px] text-[#FF7694] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#FF7694]"></i>
+                            SNEAK EYE: OFF
+                        </button>
+                    </div>
+
                     <!-- Scoring status panel grid -->
                     <div id="spadesPlayerStatsRow" class="flex flex-wrap gap-2.5 justify-center select-none text-center"></div>
 
@@ -858,12 +866,89 @@
         const myName = (urlArgs.get('u') || "immu").trim().toLowerCase();
         let partnerName = (myName === "immu") ? "sappii" : "immu";
 
+        // Web Audio API Retro synthesizer sound generator
+        function playSynthSound(type) {
+            try {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtxClass) return;
+                const audioCtx = new AudioCtxClass();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'success') {
+                    // Upward retro arpeggio chime
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                    osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                    osc.frequency.setValueAtTime(1046.50, now + 0.24); // C6
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                } else if (type === 'card' || type === 'shove') {
+                    // Soft synthetic slide sound
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(550, now + 0.12);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'toast' || type === 'notification') {
+                    // Clean diagnostic double beep
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.setValueAtTime(900, now + 0.1);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'vettu') {
+                    // High impact synth chord explosion
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.2);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (err) {
+                console.log("Audio synthesis bypassed / user interaction required:", err);
+            }
+        }
+
         // Global responsive state matrix
         let activeGame = 'home';
         let gameState = {};
         let wordGameState = {};
         let cardsGameState = {};
         let wordCheckingProgress = false;
+        let immuCheatMode = false;
+
+        function toggleImmuCheatMode() {
+            immuCheatMode = !immuCheatMode;
+            playSynthSound('toast');
+            
+            const btn = document.getElementById('immuCheatToggleBtn');
+            if (btn) {
+                if (immuCheatMode) {
+                    btn.innerHTML = `<i data-lucide="eye" class="w-3.5 h-3.5 text-[var(--accent-color)]"></i> SNEAK EYE: ON`;
+                    btn.className = "flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 hover:border-[var(--accent-color)] text-[var(--accent-color)] text-[9px] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-lg shadow-green-500/10";
+                } else {
+                    btn.innerHTML = `<i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#FF7694]"></i> SNEAK EYE: OFF`;
+                    btn.className = "flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/25 hover:border-rose-500 text-[9px] text-[#FF7694] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md";
+                }
+                lucide.createIcons();
+            }
+            triggerLiveToast(immuCheatMode ? "STEALTH SENSOR ACTUATED!" : "STEALTH SENSORS OFFLINE!");
+            renderSpadesScreen();
+        }
 
         // Custom premium themes presets cycling matrix
         const CLASH_THEMES = [
@@ -1036,13 +1121,16 @@
 
         function triggerLiveToast(text) {
             const toast = document.getElementById('liveToastAlert');
-            toast.innerText = text;
-            toast.classList.remove('-translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-            setTimeout(() => {
-                toast.classList.add('-translate-y-20', 'opacity-0');
-                toast.classList.remove('translate-y-0', 'opacity-100');
-            }, 3000);
+            if (toast) {
+                toast.innerText = text;
+                toast.classList.remove('-translate-y-20', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+                setTimeout(() => {
+                    toast.classList.add('-translate-y-20', 'opacity-0');
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                }, 3000);
+            }
+            playSynthSound('toast');
         }
 
         // ================= SYNCHRONIZED PRESENCE SYSTEM & CHAT MESSAGES =================
@@ -1651,33 +1739,66 @@
 
         function getHintFromGemini() {
             const btn = document.getElementById('geminiHintBtn');
+            if (!btn) return;
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> GENERATING CLUE MATRIX...`;
             lucide.createIcons();
 
-            // Client-side quick-fall pre-calculated clever hints engine integration
-            setTimeout(() => {
-                const search = (gameState.movieEng || "").trim().toLowerCase();
-                const matched = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === search);
-                let fallbackClue = "IT'S A BLOCKBUSTER HIT!";
-                if (matched && matched.hero) {
-                    fallbackClue = `FAMOUS CENTRAL CORE CO-STARRING: ${matched.hero.toUpperCase()}`;
-                } else {
-                    fallbackClue = `TAMIL SCREENPLAY CORNERED OF LENGTH ${search.length} CHARACTERS!`;
-                }
+            const movieEng = gameState.movieEng || "";
+            const movieTamil = gameState.movieTamil || "";
 
-                db.ref('gameState/hint').set(fallbackClue);
+            // Dynamic fetch to the server-side actual Gemini API
+            fetch('/api/ai-hint', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    movieName: movieEng,
+                    tamilName: movieTamil
+                })
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Server API offline");
+                return res.json();
+            })
+            .then(data => {
+                const finalHint = data.hint || `A wonderful Tamil movie consisting of ${movieEng.length} characters.`;
+                db.ref('gameState/hint').set(finalHint);
                 db.ref('chatMessages').push({
                     sender: "AI-ROBOT",
-                    text: `CLEVER ARTIFICIAL INTEL INTEGRATED CLUE BROADCAST AT LARGE!`,
+                    text: `🤖 GEMINI HAS EXPEDITED A PLAYFUL RIDDLE CLUE FOR "${movieEng.toUpperCase()}"!`,
                     timestamp: firebase.database.ServerValue.TIMESTAMP
                 });
 
                 btn.disabled = false;
                 btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i> ASK GEMINI ROBOT CLUE`;
                 lucide.createIcons();
-                triggerLiveToast("GEMINI SMART HINT EXPEDITED!");
-            }, 1500);
+                triggerLiveToast("AI HINT FETCHED LIVE!");
+            })
+            .catch(err => {
+                console.log("Using client-side clue fallback:", err);
+                const search = movieEng.trim().toLowerCase();
+                const matched = MOVIE_COLLECTION.find(m => m.eng.toLowerCase() === search);
+                let fallbackClue = "IT'S A BLOCKBUSTER TAMIL CINEMA HIT!";
+                if (matched && matched.hero) {
+                    fallbackClue = `FAMOUS SUB-PLOT CO-STARRING THE STAR: ${matched.hero.toUpperCase()}`;
+                } else {
+                    fallbackClue = `TAMIL TITLE LENGTH: ${search.length} ALPHABETS!`;
+                }
+
+                db.ref('gameState/hint').set(fallbackClue);
+                db.ref('chatMessages').push({
+                    sender: "AI-ROBOT",
+                    text: `🤖 AUTO-CLUE FORWARDED SECURELY!`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i> ASK GEMINI ROBOT CLUE`;
+                lucide.createIcons();
+                triggerLiveToast("RESERVIST HINT ASSIGNED!");
+            });
         }
 
         // ================= WORD SPEED RACING LOGIC =================
@@ -2517,15 +2638,57 @@
                 return;
             }
 
-            // Render live trick board stats bar
+            // Render live trick board stats bar and handle Cheat visual trigger bounds
+            const cheatWrapper = document.getElementById('immuCheatControlWrapper');
+            if (cheatWrapper) {
+                if (myName === 'immu') {
+                    cheatWrapper.classList.remove('hidden');
+                } else {
+                    cheatWrapper.classList.add('hidden');
+                }
+            }
+
             let scorersRowHtml = '';
             members.forEach(p => {
                 const turnBorder = cardsGameState.turn === p ? 'border-amber-400/40 bg-amber-500/10' : 'border-white/5';
                 const count = cardsGameState.hands[p] ? cardsGameState.hands[p].length : 0;
+                
+                let cardQtyLabel = '';
+                let peekHtml = '';
+                
+                if (p === myName) {
+                    cardQtyLabel = `${count} Cards Left`;
+                } else if (myName === 'immu' && immuCheatMode) {
+                    cardQtyLabel = `🕵️‍♂️ ${count} Cards`;
+                    
+                    // Sneaky visual list of opponent's actual cards
+                    const oppHand = cardsGameState.hands[p] || [];
+                    if (oppHand.length > 0) {
+                        peekHtml = `<div class="flex flex-wrap gap-1 mt-2 max-w-[140px] justify-center">`;
+                        oppHand.forEach(card => {
+                            const isRed = (card.suit === 'H' || card.suit === 'D');
+                            const valStr = VALUE_RANKING_LABELS[card.rank] || card.rank;
+                            const suitGlyph = SUIT_GLYPHS[card.suit] || card.suit;
+                            const colorClass = isRed ? 'text-rose-400 border-rose-500/20 bg-rose-500/5' : 'text-blue-400 border-blue-500/20 bg-blue-500/5';
+                            peekHtml += `
+                                <span class="text-[8px] font-black border px-1 py-0.5 rounded leading-none shrink-0 ${colorClass}">
+                                    ${valStr}${suitGlyph}
+                                </span>
+                            `;
+                        });
+                        peekHtml += `</div>`;
+                    } else {
+                        peekHtml = `<span class="text-[8px] italic text-stone-500 block mt-1">Empty hand</span>`;
+                    }
+                } else {
+                    cardQtyLabel = `🎴 Hidden hand`;
+                }
+
                 scorersRowHtml += `
-                    <div class="px-3.5 py-2 glass-card rounded-xl border ${turnBorder} shrink-0">
+                    <div class="px-3.5 py-2 glass-card rounded-xl border ${turnBorder} shrink-0 flex flex-col items-center">
                         <span class="text-[9px] text-stone-500 font-black block uppercase tracking-wide">${p}</span>
-                        <span class="text-xs font-black text-[var(--accent-color)]">${count} Cards Remaining</span>
+                        <span class="text-xs font-black text-[var(--accent-color)]">${cardQtyLabel}</span>
+                        ${peekHtml}
                     </div>
                 `;
             });
@@ -2677,6 +2840,8 @@
             let updateTable = cardsGameState.table || {};
             updateTable[myName] = targetSelect;
 
+            playSynthSound('card');
+
             let updates = {
                 [`hands/${myName}`]: hand,
                 table: updateTable
@@ -2727,6 +2892,7 @@
                     let nextTurnTarget = "";
 
                     if (cutHappened) {
+                        playSynthSound('vettu');
                         // Vettu! gotCutPlayer must take all cards from the table payload
                         const cardsOnTableList = Object.values(finalTrickSnapMap);
                         let targetHand = hands[gotCutPlayer] || [];
@@ -2744,6 +2910,7 @@
                         const cuttersJoin = cutterNames.map(c => c.toUpperCase()).join(', ');
                         systemMsgText = `⚔️ VETTU! ${gotCutPlayer.toUpperCase()} WAS CUT BY ${cuttersJoin} AND RECEIVES ${cardsOnTableList.length} CARDS TO HAND!`;
                     } else {
+                        playSynthSound('success');
                         // Trick clear: everyone matched lead suit. Cards are swept/discarded from play!
                         nextTurnTarget = gotCutPlayer; // Highest card leads next
                         systemMsgText = `🤝 TRICK CLEAR! ALL MATCHED. ${gotCutPlayer.toUpperCase()} CLEARED THE TABLE!`;
