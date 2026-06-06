@@ -187,7 +187,7 @@
                     <div class="text-left">
                         <span class="text-[9px] text-amber-300 font-black tracking-widest block uppercase font-mono">TACTICAL SHUFFLE</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-amber-400 transition-colors uppercase font-display">
-                            SPADES CARDS GAME
+                            VETTU CARDS GAME
                         </span>
                     </div>
                     <i data-lucide="layers" class="w-5 h-5 text-stone-500 group-hover:text-amber-400 transition-colors shrink-0 ml-2"></i>
@@ -1634,15 +1634,17 @@
             let members = ['immu', 'sappii'];
             if (totalCompetitors === 3) {
                 members.push('tharkuri');
-                // De-register 2 of Clubs (C 2) so 51 cards perfectly divide among the 3 users
-                coreDeck = coreDeck.filter(c => !(c.suit === 'C' && c.rank === 2));
             }
 
             let allocationHands = {};
             members.forEach(p => allocationHands[p] = []);
 
-            members.forEach((p, index) => {
-                allocationHands[p] = coreDeck.filter((_, idx) => idx % totalCompetitors === index);
+            coreDeck.forEach((card, idx) => {
+                const targetPlayer = members[idx % members.length];
+                allocationHands[targetPlayer].push(card);
+            });
+
+            members.forEach((p) => {
                 // Sort hand neatly: Spades first, then decreasing values sequence
                 allocationHands[p].sort((a,b) => {
                     if (a.suit === b.suit) return b.rank - a.rank;
