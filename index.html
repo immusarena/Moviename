@@ -688,9 +688,9 @@
 
                     <!-- Custom inputs URL container for Audio -->
                     <div id="audioCustomInputSection" class="border-t border-white/5 pt-4 text-left space-y-2">
-                        <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PLAY CUSTOM AUDIO STREAM URL</span>
+                        <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PLAY CUSTOM VIDEO OR AUDIO STREAM URL</span>
                         <div class="space-y-2">
-                            <input type="text" id="musicCustomUrlInput" placeholder="PASTE DIRECT MP3 AUDIO LINK HERE..." class="w-full bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                            <input type="text" id="musicCustomUrlInput" placeholder="PASTE DIRECT INSTA REEL, MP4 OR MP3 LINK HERE..." class="w-full bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
                             <div class="flex gap-2">
                                 <button onclick="playCustomSongURL()" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 hover:scale-101 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer">
                                     <i data-lucide="play-circle" class="w-3.5 h-3.5"></i>PLAY NOW
@@ -2546,7 +2546,7 @@
                 trackUrl: track.url,
                 trackTitle: track.title,
                 trackAuthor: track.author,
-                mediaType: 'audio',
+                mediaType: 'video',
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
@@ -2573,7 +2573,7 @@
         function playCustomSongURL() {
             const inputField = document.getElementById('musicCustomUrlInput');
             let url = inputField.value.trim();
-            if (!url) return triggerLiveToast("ENTER A VALID AUDIO FILE LINK FIRST!");
+            if (!url) return triggerLiveToast("ENTER A VALID MOVIE OR SONG LINK FIRST!");
             
             let customTitle = "SOUNDTRACK STREAM";
             try {
@@ -2588,14 +2588,14 @@
                 trackUrl: url,
                 trackTitle: customTitle,
                 trackAuthor: "CUSTOM DIRECT INJECTION link",
-                mediaType: 'audio',
+                mediaType: 'video',
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
                 triggeredBy: myName
             });
             inputField.value = "";
-            triggerLiveToast("CUSTOM URL SYNCE_PLAY!");
+            triggerLiveToast("CUSTOM VIDEO / AUDIO SYNCE_PLAY!");
         }
 
         function playCustomVideoURL() {
@@ -2630,7 +2630,7 @@
         function addCustomSongToQueue() {
             const inputField = document.getElementById('musicCustomUrlInput');
             let url = inputField.value.trim();
-            if (!url) return triggerLiveToast("ENTER A VALID MP3 LINK TO ENQUEUE!");
+            if (!url) return triggerLiveToast("ENTER A VALID LINK TO ENQUEUE!");
             
             let customTitle = "SOUNDTRACK STREAM";
             try {
@@ -2644,18 +2644,18 @@
             db.ref('mediaQueue').push({
                 url: url,
                 title: customTitle,
-                mediaType: 'audio',
+                mediaType: 'video',
                 addedBy: myName,
                 timestamp: Date.now()
             });
 
             inputField.value = "";
             playSynthSound('success');
-            triggerLiveToast("ADDED TO AUDIO QUEUE!");
+            triggerLiveToast("ADDED TO CINEMA QUEUE!");
             
             db.ref('chatMessages').push({
                 sender: "AI-ROBOT",
-                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW AUDIO: "${customTitle.toUpperCase()}"`,
+                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW MOVIE/SONG: "${customTitle.toUpperCase()}"`,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
         }
