@@ -134,6 +134,15 @@
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px var(--glow-color);
             z-index: 30;
         }
+        
+        /* Rotating class animation */
+        @keyframes rotatingDisc {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .anim-rotate-disc {
+            animation: rotatingDisc 8s linear infinite;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-start p-4 select-none relative pb-12">
@@ -225,6 +234,18 @@
                     </div>
                     <i data-lucide="layers" class="w-5 h-5 text-stone-500 group-hover:text-amber-400 transition-colors shrink-0 ml-2 relative z-10"></i>
                 </button>
+
+                <button onclick="enterArena('songs')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-rose-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(244,63,94,0.25)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10">
+                        <span class="text-[9px] text-rose-400 font-black tracking-widest block uppercase font-mono">CO-OP MUSIC LOUNGE</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-rose-400 transition-colors uppercase font-display">
+                            SYNCHRONIZED TAMIL SONGS
+                        </span>
+                    </div>
+                    <i data-lucide="music" class="w-5 h-5 text-stone-500 group-hover:text-rose-400 transition-colors shrink-0 ml-2 relative z-10"></i>
+                </button>
             </div>
 
             <!-- Copier link widgets for quick player pairing -->
@@ -278,8 +299,8 @@
                 </div>
 
                 <div class="text-center">
-                    <span class="text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono">VS</span>
-                    <span class="text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1">CLASH</span>
+                    <span id="scoreboardMiddleLabelA" class="text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono">VS</span>
+                    <span id="scoreboardMiddleLabelB" class="text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1">CLASH</span>
                 </div>
 
                 <!-- Player B: Sappii score card container -->
@@ -544,6 +565,108 @@
 
             </div>
 
+            <!-- ================= CO-OP MUSIC LOUNGE ARENA ================= -->
+            <div id="songsArena" class="hidden space-y-4">
+                <div class="glass-card rounded-2xl p-6 shadow-2xl space-y-5 text-center relative overflow-hidden">
+                    <!-- Ambient Glow Line -->
+                    <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 opacity-80"></div>
+                    
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5 text-left">
+                        <div>
+                            <h3 class="text-xs font-black tracking-widest text-rose-400 uppercase flex items-center gap-1.5 animate-pulse">
+                                <i data-lucide="music" class="w-4 h-4 text-rose-400"></i>CO-OP MUSIC LOUNGE
+                            </h3>
+                        </div>
+                        <span id="musicPlaybackStatusBadge" class="text-[9px] bg-rose-500/20 text-rose-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">LIVE SYNCED</span>
+                    </div>
+
+                    <!-- Vinyl/Gramophone Record Visualized Element -->
+                    <div class="flex flex-col items-center justify-center py-4 relative">
+                        <div id="musicVinylDisc" class="w-28 h-28 rounded-full bg-gradient-to-br from-neutral-900 via-stone-900 to-black border-[6px] border-neutral-800 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative flex items-center justify-center transition-transform duration-1000 ease-linear">
+                            <!-- Grooves -->
+                            <div class="absolute inset-2 rounded-full border border-stone-800/60"></div>
+                            <div class="absolute inset-5 rounded-full border border-stone-800/40"></div>
+                            <div class="absolute inset-8 rounded-full border border-stone-800/20"></div>
+                            <!-- Center Label -->
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-500 to-rose-600 flex items-center justify-center shadow-inner">
+                                <div class="w-2.5 h-2.5 rounded-full bg-[#0b0512] border border-white/10"></div>
+                            </div>
+                        </div>
+
+                        <!-- Stylized Floating Tone Arm -->
+                        <div id="musicVinylArm" class="absolute top-1 right-1/3 w-10 h-16 origin-top pointer-events-none transition-transform duration-500 transform rotate-[-15deg]">
+                            <svg class="w-full h-full text-stone-400 fill-current" viewBox="0 0 24 48">
+                                <path d="M12 4 L14 4 L14 28 L10 32 L10 40 L6 42 L6 44 L14 42" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <circle cx="12" cy="4" r="3" class="text-stone-500"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Soundwave animation bars -->
+                        <div class="flex gap-1 h-6 items-end mt-4" id="audioEqualizerBars">
+                            <span class="w-1 bg-rose-500 rounded-full h-1 transition-all duration-150"></span>
+                            <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 20ms"></span>
+                            <span class="w-1 bg-rose-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 40ms"></span>
+                            <span class="w-1 bg-amber-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 60ms"></span>
+                            <span class="w-1 bg-emerald-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 80ms"></span>
+                            <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 100ms"></span>
+                        </div>
+                    </div>
+
+                    <!-- Song Playing Metadata -->
+                    <div class="space-y-1 select-none">
+                        <h4 id="musicTrackTitleText" class="text-sm font-black text-white uppercase tracking-wider">NO DIRECTORY TRACK ACTIVE</h4>
+                        <p id="musicTrackSubtitleText" class="text-[10px] text-stone-400 font-extrabold uppercase tracking-widest font-mono">CHOOSE A SONG MATCH FROM THE LIST</p>
+                        <p id="musicActivityLogMsg" class="text-[9px] text-emerald-400 font-black uppercase tracking-widest bg-emerald-500/5 border border-emerald-500/10 py-1.5 px-3 rounded-full inline-block mt-2 font-mono font-bold">READY TO JAM!</p>
+                    </div>
+
+                    <!-- Progress controls / slider -->
+                    <div class="space-y-1 select-none pt-2">
+                        <input type="range" id="musicPlaybackSeekBar" min="0" max="100" value="0" class="w-full h-1.5 rounded-lg bg-white/10 appearance-none cursor-pointer outline-none accent-rose-500 hover:accent-rose-400" oninput="onSeekSliderManualInput(this.value)">
+                        <div class="flex justify-between text-[9px] text-stone-500 font-black font-mono">
+                            <span id="musicTimePlayedLabel">0:00</span>
+                            <span id="musicTimeTotalLabel">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Player Core Trigger Buttons Row -->
+                    <div class="flex items-center justify-center gap-4 py-1.5">
+                        <button onclick="changeMusicTrackStep(-1)" class="p-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full hover:scale-110 active:scale-95 duration-200 transition-all text-stone-300 hover:text-white cursor-pointer relative group">
+                            <i data-lucide="skip-back" class="w-4 h-4 fill-current"></i>
+                        </button>
+                        <button onclick="toggleMusicPlaybackSync()" id="musicPlayToggleBtn" class="p-4 bg-gradient-to-br from-rose-500 to-pink-600 text-white rounded-full hover:scale-110 active:scale-95 duration-200 shadow-lg shadow-rose-600/30 transition-all cursor-pointer relative group">
+                            <i data-lucide="play" id="musicPlayToggleIcon" class="w-5 h-5 fill-current"></i>
+                        </button>
+                        <button onclick="changeMusicTrackStep(1)" class="p-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-full hover:scale-110 active:scale-95 duration-200 transition-all text-stone-300 hover:text-white cursor-pointer relative group">
+                            <i data-lucide="skip-forward" class="w-4 h-4 fill-current"></i>
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Volume controls (Local client-only) -->
+                    <div class="flex items-center gap-3 justify-center px-4 py-2 bg-black/40 border border-white/5 rounded-xl">
+                        <i data-lucide="volume-2" id="musicVolIndicatorIcon" class="w-4 h-4 text-stone-400 shrink-0"></i>
+                        <input type="range" id="musicPlaybackLocalVolume" min="0" max="100" value="80" class="w-full h-1 bg-white/15 rounded-lg appearance-none cursor-pointer outline-none accent-white/80 hover:accent-white" oninput="onLocalVolumeChange(this.value)">
+                        <span id="musicVolValueLabel" class="text-[9px] text-stone-400 font-black font-mono w-6 text-right">80%</span>
+                    </div>
+
+                    <!-- Dynamic Preset Playlist Section -->
+                    <div class="mt-4 text-left space-y-2 select-none">
+                        <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PRESET TAMIL PLAYLIST (SELECT SONG TO SYNC)</span>
+                        <div id="songsPresetGridList" class="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <!-- Custom inputs URL container -->
+                    <div class="border-t border-white/5 pt-4 text-left space-y-2">
+                        <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PLAY CUSTOM AUDIO STREAM URL</span>
+                        <div class="flex gap-2">
+                            <input type="text" id="musicCustomUrlInput" placeholder="PASTE DIRECT MP3 AUDIO LINK HERE..." class="w-full flex-1 bg-black/40 border border-white/5 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                            <button onclick="playCustomSongURL()" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 hover:scale-102 text-white font-black text-[10px] rounded-xl tracking-widest uppercase transition-all shadow-md shrink-0 flex items-center justify-center gap-1.5 cursor-pointer">
+                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>SYNC URL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ================= CO-OP MULTIPLAYER CHAT SECTION ================= -->
             <section class="glass-card rounded-2xl p-4 shadow-2xl relative overflow-hidden flex flex-col h-[380px] shrink-0 animate-popIn">
                 <div class="flex justify-between items-center pb-2.5 border-b border-white/5 select-none">
@@ -622,6 +745,8 @@
 
     <!-- Live Toast messages popups -->
     <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
+
+    <audio id="syncAudioPlayer" preload="auto"></audio>
 
     <!-- ==================== CONTROLLER SCRIPTS LOGICS ==================== -->
     <script>
@@ -797,28 +922,55 @@
 
             // Setup Badge headers labels
             const badge = document.getElementById('activeGameTitleBadge');
+            
+            // Hide all arenas first
+            document.getElementById('movieArena').classList.add('hidden');
+            document.getElementById('wordArena').classList.add('hidden');
+            document.getElementById('spadesArena').classList.add('hidden');
+            const songsNode = document.getElementById('songsArena');
+            if (songsNode) songsNode.classList.add('hidden');
+
+            // Reset labels Middle
+            const lblA = document.getElementById('scoreboardMiddleLabelA');
+            const lblB = document.getElementById('scoreboardMiddleLabelB');
+            if (lblA && lblB) {
+                lblA.innerText = "VS";
+                lblA.className = "text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono";
+                lblB.innerText = "CLASH";
+                lblB.className = "text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1";
+            }
+
             if (activeGame === 'movie') {
                 badge.innerText = "MOVIE GUESSING";
                 badge.style.color = "var(--primary-color)";
                 document.getElementById('movieArena').classList.remove('hidden');
-                document.getElementById('wordArena').classList.add('hidden');
-                document.getElementById('spadesArena').classList.add('hidden');
                 renderMovieScreen();
             } else if (activeGame === 'word') {
                 badge.innerText = "WORD RACE";
                 badge.style.color = "var(--accent-color)";
-                document.getElementById('movieArena').classList.add('hidden');
                 document.getElementById('wordArena').classList.remove('hidden');
-                document.getElementById('spadesArena').classList.add('hidden');
                 renderWordScreen();
-            } else {
+            } else if (activeGame === 'cards') {
                 badge.innerText = "VETTU Multiplayer";
                 badge.style.color = "amber-400";
-                document.getElementById('movieArena').classList.add('hidden');
-                document.getElementById('wordArena').classList.add('hidden');
                 document.getElementById('spadesArena').classList.remove('hidden');
+                if (lblA && lblB) {
+                    lblA.innerText = "DECK";
+                    lblB.innerText = "LEFT";
+                }
                 renderSpadesScreen();
+            } else if (activeGame === 'songs') {
+                badge.innerText = "MUSIC LOUNGE";
+                badge.style.color = "var(--primary-color)";
+                if (songsNode) songsNode.classList.remove('hidden');
+                if (lblA && lblB) {
+                    lblA.innerText = "🎵";
+                    lblA.className = "text-lg block tracking-normal";
+                    lblB.innerText = "JAMMING";
+                }
+                renderSongsPresets();
             }
+            refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
         }
 
@@ -1282,6 +1434,38 @@
             triggerLiveToast("CINEMA BROADCAST COMMENCED!");
         }
 
+        function refreshScoreboard() {
+            if (activeGame === 'movie') {
+                if (typeof gameState !== 'undefined') {
+                    document.getElementById('pScoreDigit_immu').innerText = gameState.score1 || 0;
+                    document.getElementById('pScoreDigit_sappii').innerText = gameState.score2 || 0;
+                    document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${gameState.turn === 'immu' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
+                    document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${gameState.turn === 'sappii' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
+                }
+            } else if (activeGame === 'word') {
+                if (typeof wordGameState !== 'undefined') {
+                    document.getElementById('pScoreDigit_immu').innerText = wordGameState.score1 || 0;
+                    document.getElementById('pScoreDigit_sappii').innerText = wordGameState.score2 || 0;
+                    document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${(!wordGameState.p1Letter && wordGameState.status === "letter_phase") ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] animate-pulse' : ''}`;
+                    document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${(!wordGameState.p2Letter && wordGameState.status === "letter_phase") ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] animate-pulse' : ''}`;
+                }
+            } else if (activeGame === 'cards') {
+                if (typeof cardsGameState !== 'undefined') {
+                    const immuCount = (cardsGameState.hands && cardsGameState.hands['immu']) ? cardsGameState.hands['immu'].length : 0;
+                    const sappiiCount = (cardsGameState.hands && cardsGameState.hands['sappii']) ? cardsGameState.hands['sappii'].length : 0;
+                    document.getElementById('pScoreDigit_immu').innerText = immuCount;
+                    document.getElementById('pScoreDigit_sappii').innerText = sappiiCount;
+                    document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'immu' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
+                    document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'sappii' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
+                }
+            } else if (activeGame === 'songs') {
+                document.getElementById('pScoreDigit_immu').innerText = "🎵";
+                document.getElementById('pScoreDigit_sappii').innerText = "🎵";
+                document.getElementById('pScoreCard_immu').className = "p-3 glass-card rounded-2xl relative transition-all duration-300";
+                document.getElementById('pScoreCard_sappii').className = "p-3 glass-card rounded-2xl relative transition-all duration-300";
+            }
+        }
+
         db.ref('gameState').on('value', (snap) => {
             const data = snap.val() || {};
             gameState = {
@@ -1294,13 +1478,7 @@
                 score2: data.score2 || 0
             };
 
-            // Sync scores dynamically to parent container
-            document.getElementById('pScoreDigit_immu').innerText = gameState.score1;
-            document.getElementById('pScoreDigit_sappii').innerText = gameState.score2;
-
-            // Focus active players cards
-            document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${gameState.turn === 'immu' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
-            document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${gameState.turn === 'sappii' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
+            refreshScoreboard();
 
             if (activeGame === 'movie') renderMovieScreen();
             scheduleBotMoves();
@@ -1487,14 +1665,8 @@
             };
 
             // Sync scores to top profile card dynamically
+            refreshScoreboard();
             if (activeGame === 'word') {
-                document.getElementById('pScoreDigit_immu').innerText = wordGameState.score1;
-                document.getElementById('pScoreDigit_sappii').innerText = wordGameState.score2;
-                
-                // Highlight turn indicator based on choice stages
-                document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${(!wordGameState.p1Letter && wordGameState.status === "letter_phase") ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] animate-pulse' : ''}`;
-                document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${(!wordGameState.p2Letter && wordGameState.status === "letter_phase") ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] animate-pulse' : ''}`;
-
                 if (!wordCheckingProgress) renderWordScreen();
             }
             scheduleBotMoves();
@@ -1722,20 +1894,273 @@
             cardsGameState = data;
 
             // Sync scores inside parent panel
+            refreshScoreboard();
             if (activeGame === 'cards') {
-                const immuCount = (cardsGameState.hands && cardsGameState.hands['immu']) ? cardsGameState.hands['immu'].length : 0;
-                const sappiiCount = (cardsGameState.hands && cardsGameState.hands['sappii']) ? cardsGameState.hands['sappii'].length : 0;
-                document.getElementById('pScoreDigit_immu').innerText = immuCount;
-                document.getElementById('pScoreDigit_sappii').innerText = sappiiCount;
-                
-                // Highlight corresponding turn indicator boxes
-                document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'immu' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
-                document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'sappii' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
-
                 renderSpadesScreen();
             }
             scheduleBotMoves();
         });
+
+        // ================= CO-OP MUSIC LOUNGE CONTROLLER ENGINE =================
+        const DYNAMIC_SONGS_PLAYLIST = [
+            { title: "LEO - BADASS THEME", author: "Anirudh Ravichander", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { title: "MAANJAVE - ROMANCE HIT", author: "A.R. Rahman Melody", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { title: "VAATHI COMING - DANCE KUTHU", author: "Master (Anirudh)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { title: "MANGALYAM - WEDDING CHILL", author: "Simbu / Eswaran (Thaman S)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+            { title: "ALAI PAYUTHEY - CLASSIC VIOLIN", author: "A.R. Rahman Special", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" }
+        ];
+
+        let musicState = {};
+        const audioNode = document.getElementById('syncAudioPlayer');
+
+        function renderSongsPresets() {
+            const listDiv = document.getElementById('songsPresetGridList');
+            if (!listDiv) return;
+            listDiv.innerHTML = "";
+
+            DYNAMIC_SONGS_PLAYLIST.forEach((song, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-2.5 bg-white/5 border border-white/5 hover:border-rose-500/45 text-left rounded-xl hover:-translate-y-0.5 transition-all text-xs text-white/90 font-bold tracking-wide cursor-pointer flex justify-between items-center group relative overflow-hidden";
+                btn.setAttribute('onclick', `selectPresetSong(${idx})`);
+                
+                btn.innerHTML = `
+                    <div class="flex items-center gap-2 relative z-10 select-none pointer-events-none">
+                        <div class="w-8 h-8 rounded bg-rose-500/10 text-rose-400 group-hover:bg-rose-500 group-hover:text-black flex items-center justify-center font-black transition-colors shrink-0">
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                        </div>
+                        <div>
+                            <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal">${song.title}</span>
+                            <span class="text-[9px] text-stone-400 uppercase tracking-widest font-mono mt-1.5 block">${song.author}</span>
+                        </div>
+                    </div>
+                    <span class="text-[9px] text-stone-500 group-hover:text-rose-400 transition-colors uppercase font-mono tracking-widest z-10 shrink-0 pointer-events-none pr-1">PLAY SYNC</span>
+                `;
+                listDiv.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        db.ref('musicState').on('value', (snap) => {
+            const data = snap.val();
+            if (!data) return;
+
+            // Save in client global ref
+            musicState = data;
+
+            // 1. If song URL changed, load the new source
+            if (audioNode.src !== data.trackUrl) {
+                audioNode.src = data.trackUrl;
+                audioNode.load();
+            }
+
+            // Update metadata displays in UI
+            document.getElementById('musicTrackTitleText').innerText = data.trackTitle || "NEUTRAL BEATS";
+            document.getElementById('musicTrackSubtitleText').innerText = data.trackAuthor || "CO-OP REALTIME BROADCAST";
+            
+            let actionUser = (data.triggeredBy || "SYSTEM").toUpperCase();
+            let actionType = (data.status === 'playing') ? "PLAYED LOUNGE" : "PAUSED PLAYBACK";
+            document.getElementById('musicActivityLogMsg').innerText = `⚡ ${actionUser} ${actionType}!`;
+
+            // Adjust arm & EQ visualizations based on status
+            const discNode = document.getElementById('musicVinylDisc');
+            const armNode = document.getElementById('musicVinylArm');
+            if (data.status === 'playing') {
+                if (discNode) discNode.classList.add('anim-rotate-disc');
+                if (armNode) armNode.style.transform = "rotate(10deg)";
+                
+                // Play audio, handling Autoplay rules
+                const deltaSeconds = (Date.now() - (data.sentTime || Date.now())) / 1000;
+                let targetSeek = Math.max(0, data.seekTime + deltaSeconds);
+                
+                if (audioNode.duration && targetSeek > audioNode.duration) {
+                    targetSeek = 0; // wrap around or stay
+                }
+
+                if (Math.abs(audioNode.currentTime - targetSeek) > 1.8) {
+                    audioNode.currentTime = targetSeek;
+                }
+
+                audioNode.play().then(() => {
+                    document.getElementById('musicPlaybackStatusBadge').innerText = "PLAYING";
+                    document.getElementById('musicPlaybackStatusBadge').className = "text-[9px] bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono";
+                    const btnIcon = document.getElementById('musicPlayToggleIcon');
+                    if (btnIcon) btnIcon.setAttribute('data-lucide', 'pause');
+                    lucide.createIcons();
+                }).catch((err) => {
+                    console.log("Autoplay blocked:", err);
+                    document.getElementById('musicPlaybackStatusBadge').innerText = "TAP TO LISTEN";
+                    document.getElementById('musicPlaybackStatusBadge').className = "text-[9px] bg-amber-500/20 text-amber-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono animate-pulse";
+                    const btnIcon = document.getElementById('musicPlayToggleIcon');
+                    if (btnIcon) btnIcon.setAttribute('data-lucide', 'play');
+                    lucide.createIcons();
+                    if (discNode) discNode.classList.remove('anim-rotate-disc');
+                    if (armNode) armNode.style.transform = "rotate(-15deg)";
+                });
+            } else {
+                audioNode.pause();
+                if (discNode) discNode.classList.remove('anim-rotate-disc');
+                if (armNode) armNode.style.transform = "rotate(-15deg)";
+                
+                // set current seek time
+                audioNode.currentTime = data.seekTime;
+                
+                document.getElementById('musicPlaybackStatusBadge').innerText = "PAUSED";
+                document.getElementById('musicPlaybackStatusBadge').className = "text-[9px] bg-rose-500/20 text-rose-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono";
+                const btnIcon = document.getElementById('musicPlayToggleIcon');
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+            }
+        });
+
+        // Sync Audio player timeline ticks
+        audioNode.addEventListener('timeupdate', () => {
+            const range = document.getElementById('musicPlaybackSeekBar');
+            if (range && audioNode.duration) {
+                const percentage = (audioNode.currentTime / audioNode.duration) * 100;
+                if (document.activeElement !== range) {
+                    range.value = percentage;
+                }
+                
+                document.getElementById('musicTimePlayedLabel').innerText = formatMusicTime(audioNode.currentTime);
+                document.getElementById('musicTimeTotalLabel').innerText = formatMusicTime(audioNode.duration);
+            }
+
+            // Live animating CSS equalizer bars when playing
+            if (!audioNode.paused) {
+                const bars = document.querySelectorAll('#audioEqualizerBars span');
+                bars.forEach(b => {
+                    let h = Math.floor(Math.random() * 20) + 4;
+                    b.style.height = `${h}px`;
+                });
+            } else {
+                const bars = document.querySelectorAll('#audioEqualizerBars span');
+                bars.forEach(b => {
+                    b.style.height = '4px';
+                });
+            }
+        });
+
+        function formatMusicTime(secs) {
+            if (isNaN(secs)) return "0:00";
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function onSeekSliderManualInput(val) {
+            if (audioNode.duration) {
+                const targetSecs = (val / 100) * audioNode.duration;
+                document.getElementById('musicTimePlayedLabel').innerText = formatMusicTime(targetSecs);
+            }
+        }
+
+        // Delay slider event triggers till drop-release
+        document.addEventListener('DOMContentLoaded', () => {
+            const seekBar = document.getElementById('musicPlaybackSeekBar');
+            if (seekBar) {
+                seekBar.addEventListener('change', (e) => {
+                    if (audioNode.duration) {
+                        const pct = parseFloat(e.target.value);
+                        const targetSecs = (pct / 100) * audioNode.duration;
+                        
+                        db.ref('musicState').update({
+                            seekTime: targetSecs,
+                            sentTime: Date.now(),
+                            triggeredBy: myName
+                        });
+                        triggerLiveToast("SEEK CHRONO SYNCED!");
+                    }
+                });
+            }
+        });
+
+        function toggleMusicPlaybackSync() {
+            const currentStatus = (musicState.status === 'playing') ? 'paused' : 'playing';
+            db.ref('musicState').update({
+                status: currentStatus,
+                seekTime: audioNode.currentTime || 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            triggerLiveToast(currentStatus === 'playing' ? "LOUNGE ENERGIZED!" : "LOUNGE PAUSED!");
+        }
+
+        function changeMusicTrackStep(direction) {
+            let currentIndex = DYNAMIC_SONGS_PLAYLIST.findIndex(s => s.url === musicState.trackUrl);
+            if (currentIndex === -1) currentIndex = 0;
+            
+            let nextIndex = (currentIndex + direction + DYNAMIC_SONGS_PLAYLIST.length) % DYNAMIC_SONGS_PLAYLIST.length;
+            const targetTrack = DYNAMIC_SONGS_PLAYLIST[nextIndex];
+            
+            db.ref('musicState').set({
+                trackUrl: targetTrack.url,
+                trackTitle: targetTrack.title,
+                trackAuthor: targetTrack.author,
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            triggerLiveToast(`PLAY TRACK: ${targetTrack.title}`);
+        }
+
+        function selectPresetSong(index) {
+            const track = DYNAMIC_SONGS_PLAYLIST[index];
+            db.ref('musicState').set({
+                trackUrl: track.url,
+                trackTitle: track.title,
+                trackAuthor: track.author,
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            triggerLiveToast(`PLAY PRESET: ${track.title}`);
+        }
+
+        function playCustomSongURL() {
+            const inputField = document.getElementById('musicCustomUrlInput');
+            let url = inputField.value.trim();
+            if (!url) return triggerLiveToast("ENTER A VALID AUDIO FILE LINK FIRST!");
+            
+            let customTitle = "SOUNDTRACK STREAM";
+            try {
+                const parts = url.split('/');
+                const fileName = parts[parts.length - 1].split('?')[0];
+                if (fileName.length > 4) {
+                    customTitle = decodeURIComponent(fileName).toUpperCase();
+                }
+            } catch (e) {}
+
+            db.ref('musicState').set({
+                trackUrl: url,
+                trackTitle: customTitle,
+                trackAuthor: "CUSTOM DIRECT INJECTION link",
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            inputField.value = "";
+            triggerLiveToast("CUSTOM URL SYNCE_PLAY!");
+        }
+
+        function onLocalVolumeChange(val) {
+            audioNode.volume = val / 100;
+            document.getElementById('musicVolValueLabel').innerText = `${val}%`;
+            
+            const iconNode = document.getElementById('musicVolIndicatorIcon');
+            if (iconNode) {
+                if (val == 0) {
+                    iconNode.setAttribute('data-lucide', 'volume-x');
+                } else if (val < 50) {
+                    iconNode.setAttribute('data-lucide', 'volume-1');
+                } else {
+                    iconNode.setAttribute('data-lucide', 'volume-2');
+                }
+            }
+            lucide.createIcons();
+        }
 
         function renderSpadesScreen() {
             const wrap = document.getElementById('boxSpadesPlayBoard');
@@ -2107,6 +2532,16 @@
                     score1: 0,
                     score2: 0,
                     usedWords: null
+                });
+            } else if (activeGame === 'songs') {
+                db.ref('musicState').set({
+                    trackUrl: DYNAMIC_SONGS_PLAYLIST[0].url,
+                    trackTitle: DYNAMIC_SONGS_PLAYLIST[0].title,
+                    trackAuthor: DYNAMIC_SONGS_PLAYLIST[0].author,
+                    status: 'paused',
+                    seekTime: 0,
+                    sentTime: Date.now(),
+                    triggeredBy: myName
                 });
             } else {
                 confirmResetSpades();
