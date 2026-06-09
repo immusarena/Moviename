@@ -146,7 +146,22 @@
             animation: rotatingDisc 8s linear infinite;
         }
 
-
+        /* Instagram Reels Snap Scroll & Custom Layout Styles */
+        .scrollbar-none {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        .scrollbar-none::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        
+        @keyframes marqueeScroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .animate-marquee {
+            animation: marqueeScroll 15s linear infinite;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-start p-4 select-none relative pb-12">
@@ -249,6 +264,21 @@
                         </span>
                     </div>
                     <i data-lucide="music" class="w-5 h-5 text-stone-500 group-hover:text-rose-400 transition-colors shrink-0 ml-2 relative z-10"></i>
+                </button>
+
+                <button onclick="openReelsViewer()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10">
+                        <span class="text-[9px] text-[#FF7694] font-black tracking-widest block uppercase font-mono">INSTAGRAM</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-pink-400 transition-colors uppercase font-display">
+                            REELS
+                        </span>
+                    </div>
+                    <div class="relative flex items-center justify-center shrink-0 z-10">
+                        <i data-lucide="clapperboard" class="w-5 h-5 text-stone-500 group-hover:text-pink-400 transition-colors shrink-0 ml-2"></i>
+                        <span id="reelsCountBadge" class="hidden absolute -top-3 -right-2 bg-gradient-to-tr from-pink-500 to-rose-600 text-[8.5px] font-mono font-black text-white px-1.5 py-0.5 rounded-full border border-black/50 min-w-[18px] text-center shadow animate-bounce">0</span>
+                    </div>
                 </button>
             </div>
 
@@ -929,6 +959,64 @@
     <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
 
     <audio id="syncAudioPlayer" preload="auto"></audio>
+
+    <!-- ================= INSTAGRAM REELS INTERACTIVE VIEWER OVERLAY ================= -->
+    <div id="instagramReelsModal" class="hidden fixed inset-0 z-55 bg-black/95 backdrop-blur-xl flex items-center justify-center p-0 md:p-4 select-none">
+        
+        <!-- Main immersive smartphone frame container -->
+        <div class="w-full h-full md:max-w-[430px] md:h-[90vh] md:max-h-[880px] bg-black md:rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(255,75,114,0.35)] border border-white/5 relative flex flex-col">
+            
+            <!-- Sleek Top Status Floating Bar controllers -->
+            <div class="absolute top-4 left-4 right-4 z-40 flex justify-between items-center bg-transparent pointer-events-auto">
+                <button onclick="closeReelsViewer()" class="w-10 h-10 rounded-full bg-black/45 hover:bg-black/80 backdrop-blur-md flex items-center justify-center border border-white/10 hover:border-rose-500 duration-200 transition-all text-white cursor-pointer active:scale-95 shadow-xl" title="Exit Reels Loop">
+                    <i data-lucide="chevron-left" class="w-5 h-5 text-stone-200"></i>
+                </button>
+                <div class="flex items-center gap-1.5 bg-black/45 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full select-none shadow-xl">
+                    <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                    <span class="text-[9px] text-[#FF7694] font-black tracking-widest uppercase font-mono">REELS MODE ACTIVATED</span>
+                </div>
+                <button onclick="cycleReelsSoundMode()" id="reelsSoundToggleBtn" class="w-10 h-10 rounded-full bg-black/45 hover:bg-black/80 backdrop-blur-md flex items-center justify-center border border-white/10 hover:border-[#FF7694] duration-200 transition-all text-white cursor-pointer active:scale-95 shadow-xl" title="Toggle Mute Volume">
+                    <i data-lucide="volume-2" id="reelsSoundIcon" class="w-4.5 h-4.5 text-stone-200"></i>
+                </button>
+            </div>
+
+            <!-- Scroll Snap Reels vertical slides stream container wrapper -->
+            <div id="reelsViewportsWrapper" class="flex-1 w-full overflow-y-scroll snap-y snap-mandatory scrollbar-none relative scroll-smooth bg-black">
+                <!-- Populated dynamically via JS mapping localMediaQueue items -->
+            </div>
+
+            <!-- Swipe/Scroll up helper overlay indication footer (Only shows when multiple slides exist) -->
+            <div id="reelsSwipeIndicator" class="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-none select-none z-30 animate-bounce duration-1000 hidden">
+                <i data-lucide="chevron-up" class="w-4 h-4 text-white/60"></i>
+                <span class="text-[8px] text-white/50 font-black tracking-widest font-mono uppercase">SCROLL FOR NEXT REEL</span>
+            </div>
+
+            <!-- Beautiful, high-end vertical bottom comments drawer inside smartphone view -->
+            <div id="reelCommentsDrawer" class="hidden absolute bottom-0 inset-x-0 bg-stone-950/95 backdrop-blur-2xl border-t border-white/10 rounded-t-3xl h-[60%] max-h-[480px] z-45 flex flex-col transition-all duration-300 transform translate-y-full select-none shadow-2xl">
+                <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto my-3 shrink-0 cursor-pointer" onclick="closeReelCommentsDrawer()"></div>
+                <div class="flex justify-between items-center px-4.5 pb-2.5 border-b border-white/5 shrink-0 text-left">
+                    <span class="text-[10px] text-[#FF7694] font-black tracking-widest uppercase font-mono flex items-center gap-1.5">
+                        <i data-lucide="message-square" class="w-3.5 h-3.5 text-[#FF7694]"></i>REEL LIVE OPINIONS
+                    </span>
+                    <button onclick="closeReelCommentsDrawer()" class="text-[9px] text-stone-500 hover:text-white font-black uppercase tracking-wider font-mono">CLOSE</button>
+                </div>
+                
+                <!-- Messages box inside drawer -->
+                <div id="reelCommentsScroller" class="flex-1 overflow-y-auto p-4.5 space-y-3.5 scrollbar-none text-left">
+                    <!-- Dynamic comments updated in real-time -->
+                </div>
+                
+                <!-- Input controls inside drawer -->
+                <div class="p-3.5 border-t border-white/5 bg-black/60 shrink-0 flex gap-2 items-center">
+                    <input type="text" id="reelCommentInput" placeholder="WRITE YOUR FEEDBACK..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold focus:border-[#FF7694] transition-all">
+                    <button onclick="sendReelComment()" class="p-3.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl transition-all cursor-pointer shadow-md active:scale-95">
+                        <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <!-- ==================== CONTROLLER SCRIPTS LOGICS ==================== -->
     <script>
@@ -2279,6 +2367,31 @@
                 localMediaQueue.sort((a, b) => a.timestamp - b.timestamp);
             }
             renderSharedQueueUI();
+
+            // Symmetrically update counts on active Reels overlay details live
+            const reelsModal = document.getElementById('instagramReelsModal');
+            if (reelsModal && !reelsModal.classList.contains('hidden')) {
+                localMediaQueue.forEach(item => {
+                    const likeLabel = document.getElementById(`reel_likes_count_${item.key}`);
+                    if (likeLabel) {
+                        likeLabel.innerText = item.likes || 0;
+                    }
+                    const commentsCount = item.comments ? Object.keys(item.comments).length : 0;
+                    const commentLabel = document.getElementById(`reel_comments_count_${item.key}`);
+                    if (commentLabel) {
+                        commentLabel.innerText = commentsCount;
+                    }
+                    const heart = document.getElementById(`reel_heart_icon_${item.key}`);
+                    if (heart) {
+                        const alreadyLiked = localStorage.getItem(`reel_liked_${myName}_${item.key}`) === 'true';
+                        if (alreadyLiked) {
+                            heart.className = "w-5 h-5 text-rose-500 fill-current animate-pulse";
+                        } else {
+                            heart.className = "w-5 h-5";
+                        }
+                    }
+                });
+            }
         });
 
         // URL parsing safety helper to prevent loop reloads
@@ -3418,10 +3531,22 @@
             const emptyState = document.getElementById('mediaQueueEmptyState');
             const activeList = document.getElementById('mediaQueueActiveList');
             const qtyBadge = document.getElementById('queueCountBadge');
+            const reelsCountBadge = document.getElementById('reelsCountBadge');
 
             if (!emptyState || !activeList || !qtyBadge) return;
 
             qtyBadge.innerText = `${localMediaQueue.length} ITEMS`;
+            
+            // Dynamic Reels Counter Badge updating live
+            if (reelsCountBadge) {
+                const reelsQuantity = localMediaQueue.length;
+                if (reelsQuantity > 0) {
+                    reelsCountBadge.innerText = reelsQuantity;
+                    reelsCountBadge.classList.remove('hidden');
+                } else {
+                    reelsCountBadge.classList.add('hidden');
+                }
+            }
 
             if (localMediaQueue.length === 0) {
                 emptyState.classList.remove('hidden');
@@ -3441,7 +3566,10 @@
                 if (upcoming.length > 0) {
                     htmlContent += `
                         <div class="space-y-2 mb-4">
-                            <span class="text-[8px] text-stone-400 font-black tracking-widest uppercase block pl-1">UPCOMING PLAYLIST (${upcoming.length})</span>
+                            <span class="text-[8px] text-stone-400 font-black tracking-widest uppercase block pl-1 flex items-center justify-between">
+                                <span>UPCOMING PLAYLIST (${upcoming.length})</span>
+                                <span class="text-[7px] text-rose-450 font-mono font-bold animate-pulse">⚡ TAP VIDEO CARD FOR REELS LOOP</span>
+                            </span>
                     `;
                     upcoming.forEach((item) => {
                         const isVideo = (item.mediaType === 'video');
@@ -3449,13 +3577,16 @@
                         const iconColor = isVideo ? 'text-amber-400' : 'text-rose-400';
                         const typeLabel = isVideo ? 'VIDEO' : 'AUDIO';
                         htmlContent += `
-                            <div class="flex items-center justify-between p-2.5 bg-white/5 border border-white/5 rounded-xl text-xs hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group">
-                                <div class="flex items-center gap-2 relative z-10 shrink min-w-0 pr-1 select-none pointer-events-none">
-                                    <div class="w-7 h-7 rounded bg-white/5 flex items-center justify-center shrink-0">
-                                        <i data-lucide="${iconName}" class="w-3.5 h-3.5 ${iconColor}"></i>
+                            <div class="flex items-center justify-between p-2.5 bg-white/5 border border-white/5 rounded-xl text-xs hover:-translate-y-0.5 hover:border-[var(--primary-color)]/30 hover:bg-white/10 transition-all duration-200 relative overflow-hidden group">
+                                <div onclick="openReelsViewer('${item.key}')" class="flex items-center gap-2 relative z-10 shrink min-w-0 pr-1 cursor-pointer select-none flex-1 animate-popIn">
+                                    <div class="w-7 h-7 rounded bg-white/5 group-hover:bg-rose-500/10 flex items-center justify-center shrink-0 transition-colors">
+                                        <i data-lucide="${iconName}" class="w-3.5 h-3.5 ${iconColor} group-hover:animate-pulse"></i>
                                     </div>
-                                    <div class="truncate text-left min-w-0">
-                                        <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal truncate text-white/90">${item.title}</span>
+                                    <div class="truncate text-left min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5 justify-start">
+                                            <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal truncate text-white/90 group-hover:text-rose-450 transition-colors">${item.title}</span>
+                                            <span class="hidden group-hover:inline-block bg-rose-500/10 border border-rose-500/20 text-[7px] text-[#FF7694] px-1 py-0.5 rounded font-black font-mono uppercase tracking-widest scale-90 shrink-0">REELS</span>
+                                        </div>
                                         <span class="text-[8px] text-stone-500 uppercase font-mono mt-1 block">
                                             [${typeLabel}] BY: <span class="text-rose-300 font-bold">${item.addedBy.toUpperCase()}</span>
                                         </span>
@@ -3489,13 +3620,16 @@
                         const iconColor = isVideo ? 'text-stone-500' : 'text-stone-500';
                         const typeLabel = isVideo ? 'VIDEO' : 'AUDIO';
                         htmlContent += `
-                            <div class="flex items-center justify-between p-2.5 bg-black/20 border border-white/5 rounded-xl text-xs hover:-translate-y-0.5 transition-all duration-200 relative overflow-hidden group opacity-70 hover:opacity-100">
-                                <div class="flex items-center gap-2 relative z-10 shrink min-w-0 pr-1 select-none pointer-events-none">
-                                    <div class="w-7 h-7 rounded bg-white/5 flex items-center justify-center shrink-0">
+                            <div class="flex items-center justify-between p-2.5 bg-black/20 border border-white/5 rounded-xl text-xs hover:-translate-y-0.5 hover:border-emerald-500/30 hover:bg-white/10 transition-all duration-200 relative overflow-hidden group opacity-70 hover:opacity-100">
+                                <div onclick="openReelsViewer('${item.key}')" class="flex items-center gap-2 relative z-10 shrink min-w-0 pr-1 cursor-pointer select-none flex-1">
+                                    <div class="w-7 h-7 rounded bg-white/5 group-hover:bg-emerald-500/10 flex items-center justify-center shrink-0 transition-colors">
                                         <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i>
                                     </div>
-                                    <div class="truncate text-left min-w-0">
-                                        <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal truncate text-stone-400">${item.title}</span>
+                                    <div class="truncate text-left min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5 justify-start">
+                                            <span class="block text-[11px] font-extrabold uppercase leading-none tracking-normal truncate text-stone-400 group-hover:text-emerald-400 transition-colors">${item.title}</span>
+                                            <span class="hidden group-hover:inline-block bg-emerald-500/10 border border-emerald-500/20 text-[7px] text-emerald-400 px-1 py-0.5 rounded font-black font-mono uppercase tracking-widest scale-90 shrink-0">REELS</span>
+                                        </div>
                                         <span class="text-[8px] text-stone-500 uppercase font-mono mt-1 block">
                                             [${typeLabel}] VIEWED ✓
                                         </span>
@@ -4142,6 +4276,530 @@
                 db.ref('cardsGameState').update(updates);
             }
             triggerLiveToast(`BOT ${botName.toUpperCase()} PLAYED CARDS!`);
+        }
+
+        // ================= INSTAGRAM REELS INTERACTIVE VIEWER CONTROLLER =================
+        let reelsVolumeMuted = false;
+        let reelsSlideObserver = null;
+        let reelsCommentsActiveListener = null;
+
+        function cycleReelsSoundMode() {
+            reelsVolumeMuted = !reelsVolumeMuted;
+            const icon = document.getElementById('reelsSoundIcon');
+            const btn = document.getElementById('reelsSoundToggleBtn');
+            if (icon && btn) {
+                if (reelsVolumeMuted) {
+                    icon.setAttribute('data-lucide', 'volume-x');
+                    btn.className = "w-10 h-10 rounded-full bg-black/45 hover:bg-black/80 backdrop-blur-md flex items-center justify-center border border-rose-500 duration-200 transition-all text-rose-500 cursor-pointer active:scale-95 shadow-xl";
+                } else {
+                    icon.setAttribute('data-lucide', 'volume-2');
+                    btn.className = "w-10 h-10 rounded-full bg-black/45 hover:bg-black/80 backdrop-blur-md flex items-center justify-center border border-white/10 hover:border-[#FF7694] duration-200 transition-all text-white cursor-pointer active:scale-95 shadow-xl";
+                }
+                lucide.createIcons();
+            }
+            
+            // Apply volume status live, mute/unmute
+            const videos = document.querySelectorAll('.reel-video-element');
+            videos.forEach(v => {
+                v.muted = reelsVolumeMuted;
+            });
+            triggerLiveToast(reelsVolumeMuted ? "REELS MUTED" : "REELS UNMUTED");
+        }
+
+        function openReelsViewer(selectedKey) {
+            const reelsModal = document.getElementById('instagramReelsModal');
+            const wrapper = document.getElementById('reelsViewportsWrapper');
+            const swipeIndicator = document.getElementById('reelsSwipeIndicator');
+            
+            if (!reelsModal || !wrapper) return;
+            
+            // Auto-seeds vertical high-quality Reels if queue is empty so user gets instantaneous Instagram mockups
+            if (localMediaQueue.length === 0) {
+                const initialSeeds = [
+                    {
+                        title: "[REEL] AR RAHMAN - NEE SINGAM THAAN (PATHU THALA)",
+                        url: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-listening-to-music-42289-large.mp4",
+                        addedBy: "System",
+                        mediaType: "video",
+                        likes: 124,
+                        timestamp: Date.now() - 3000
+                    },
+                    {
+                        title: "[REEL] ANIRUDH - HUKUM (JAILER)",
+                        url: "https://assets.mixkit.co/videos/preview/mixkit-man-dancing-happy-in-the-street-42587-large.mp4",
+                        addedBy: "System",
+                        mediaType: "video",
+                        likes: 256,
+                        timestamp: Date.now() - 2000
+                    },
+                    {
+                        title: "[REEL] ILAYARAJA - METTI OLI SINDHU",
+                        url: "https://assets.mixkit.co/videos/preview/mixkit-spinning-vinyl-record-player-close-up-1262-large.mp4",
+                        addedBy: "System",
+                        mediaType: "video",
+                        likes: 88,
+                        timestamp: Date.now() - 1000
+                    }
+                ];
+                
+                initialSeeds.forEach(item => {
+                    db.ref('mediaQueue').push(item);
+                });
+                
+                triggerLiveToast("SEEDED DYNAMIC TAMIL REELS MIX! RETRIEVING...");
+                setTimeout(() => {
+                    openReelsViewer(selectedKey);
+                }, 850);
+                return;
+            }
+
+            if (!selectedKey && localMediaQueue.length > 0) {
+                selectedKey = localMediaQueue[0].key;
+            }
+            
+            // Build slides HTML
+            let slidesHtml = "";
+            
+            localMediaQueue.forEach((item, idx) => {
+                const avatarChar = item.addedBy ? item.addedBy.charAt(0).toUpperCase() : '?';
+                const commentsCount = item.comments ? Object.keys(item.comments).length : 0;
+                const likesCount = item.likes || 0;
+                
+                // Get checked status for like heart icon
+                const alreadyLiked = localStorage.getItem(`reel_liked_${myName}_${item.key}`) === 'true';
+                const heartClass = alreadyLiked ? "w-5 h-5 text-rose-500 fill-current animate-pulse" : "w-5 h-5";
+                
+                slidesHtml += `
+                    <div class="h-full w-full snap-start relative flex items-center justify-center bg-black reel-slide text-left" id="reel_slide_${item.key}" data-index="${idx}" data-key="${item.key}">
+                        <!-- Video Player -->
+                        <video id="reel_video_${item.key}" data-src="${item.url}" class="w-full h-full object-contain reel-video-element" loop playsinline preload="none" style="background-color: #000;"></video>
+                        
+                        <!-- Beautiful glass overlay floating indicator for playing indicator -->
+                        <div id="reel_play_indicator_${item.key}" class="absolute inset-x-0 inset-y-0 m-auto w-16 h-16 bg-black/55 backdrop-blur-md flex items-center justify-center rounded-full pointer-events-none opacity-0 transition-all duration-300 transform scale-50 z-20">
+                            <i data-lucide="play" id="reel_play_icon_${item.key}" class="w-7 h-7 text-white fill-current"></i>
+                        </div>
+
+                        <!-- Double tap heart container animation overlay -->
+                        <div id="double_tap_heart_${item.key}" class="absolute inset-x-0 inset-y-0 m-auto w-24 h-24 flex items-center justify-center pointer-events-none opacity-0 transition-all duration-405 transform scale-50 z-20">
+                            <i data-lucide="heart" class="w-20 h-20 text-rose-500 fill-current filter drop-shadow-[0_0_15px_rgba(239,68,68,0.85)]"></i>
+                        </div>
+
+                        <!-- Right-Side Floating Interaction Menu Panel -->
+                        <div class="absolute right-3.5 bottom-24 flex flex-col items-center gap-5 z-20">
+                            <!-- Profile / Added By Badge -->
+                            <div class="relative flex flex-col items-center select-none" title="Uploader Card">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-rose-600 border-2 border-white flex items-center justify-center shadow-lg text-white font-black text-xs uppercase cursor-default">
+                                    ${avatarChar}
+                                </div>
+                                <span class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 bg-[#FF7694] text-[8px] text-white font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider scale-90 border border-black/50 select-none font-mono">
+                                    ${item.addedBy.toUpperCase()}
+                                </span>
+                            </div>
+
+                            <!-- Like Button (RealTime synced transactions) -->
+                            <button onclick="likeReelsVideoDirectly('${item.key}')" class="flex flex-col items-center text-white focus:outline-none focus:scale-125 hover:text-rose-450 group cursor-pointer active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-full bg-black/45 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-rose-500/10">
+                                    <i data-lucide="heart" id="reel_heart_icon_${item.key}" class="${heartClass}"></i>
+                                </div>
+                                <span id="reel_likes_count_${item.key}" class="text-[9px] font-black font-mono tracking-widest mt-1 text-stone-200 drop-shadow">${likesCount}</span>
+                            </button>
+
+                            <!-- Comments Action Button -->
+                            <button onclick="openReelCommentsDrawer('${item.key}')" class="flex flex-col items-center text-white focus:outline-none hover:text-cyan-400 group cursor-pointer active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-full bg-black/45 backdrop-blur-md flex items-center justify-center border border-white/10 group-hover:bg-cyan-500/10">
+                                    <i data-lucide="message-square" class="w-5 h-5 transition-transform duration-200"></i>
+                                </div>
+                                <span id="reel_comments_count_${item.key}" class="text-[9px] font-black font-mono tracking-widest mt-1 text-stone-200 drop-shadow">${commentsCount}</span>
+                            </button>
+
+                            <!-- CAST LIVE Lounge syncing -->
+                            <button onclick="castReelToLounge('${item.key}')" class="flex flex-col items-center text-white focus:outline-none hover:text-emerald-450 group cursor-pointer active:scale-95 transition-all" title="CAST LIVE CO-OP SYNC PLAY">
+                                <div class="w-10 h-10 rounded-full bg-black/45 border border-white/10 hover:border-emerald-500 hover:bg-emerald-500/10 backdrop-blur-md flex items-center justify-center text-emerald-450">
+                                    <i data-lucide="tv" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <span class="text-[8px] font-black tracking-widest mt-1 font-mono uppercase bg-emerald-500/10 text-emerald-300 px-1 py-0.5 rounded scale-90 border border-emerald-500/10 select-none">CAST CO-OP</span>
+                            </button>
+
+                            <!-- Delete Reel from listings -->
+                            <button onclick="deleteReelDirectlyFromUI('${item.key}', '${item.title}')" class="flex flex-col items-center text-stone-400 focus:outline-none hover:text-rose-500 group cursor-pointer active:scale-95 transition-all" title="Remove Reel from Queue">
+                                <div class="w-10 h-10 rounded-full bg-black/45 border border-white/10 hover:border-red-500 hover:bg-red-500/10 backdrop-blur-md flex items-center justify-center text-stone-400 group-hover:text-red-500">
+                                    <i data-lucide="trash-2" class="w-4.5 h-4.5"></i>
+                                </div>
+                                <span class="text-[7.5px] font-black tracking-widest mt-1 text-stone-500 uppercase select-none font-mono">DELETE</span>
+                            </button>
+                        </div>
+
+                        <!-- Bottom Left Layout Panel descriptors details -->
+                        <div class="absolute left-4 bottom-6 right-16 z-20 text-left space-y-2 pointer-events-none select-none">
+                            <div class="flex items-center gap-1.5 pointer-events-auto">
+                                <span class="text-xs font-black text-rose-450 tracking-wider font-display uppercase drop-shadow">@${item.addedBy.toLowerCase()}</span>
+                                <span class="bg-gradient-to-r from-pink-500 to-rose-600 text-[7px] text-white font-black px-2 py-0.5 rounded-full uppercase tracking-widest scale-90 shadow">REELS MEMBER</span>
+                            </div>
+
+                            <p class="text-[11px] font-black text-white leading-relaxed uppercase tracking-wider drop-shadow max-h-16 overflow-y-auto w-full select-all truncate pointer-events-auto hover:text-pink-300 transition-colors" title="${item.title}">${item.title}</p>
+                            
+                            <div class="flex items-center gap-2 bg-black/45 px-2.5 py-1 rounded-full w-fit max-w-[210px] overflow-hidden border border-white/5 drop-shadow">
+                                <i data-lucide="disc" class="w-3.5 h-3.5 text-rose-450 shrink-0 reel-disk-icon anim-rotate-disc"></i>
+                                <div class="text-[8px] font-black text-stone-300 font-mono tracking-widest uppercase overflow-hidden whitespace-nowrap w-28">
+                                    <span class="inline-block animate-marquee pl-0">${item.title}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Realtime Progress bar track overlay line at the bottom of slide -->
+                        <div class="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-pink-500 to-rose-600 transition-all duration-100 z-30 pointer-events-none shadow" id="reel_progress_line_${item.key}" style="width: 0%"></div>
+                    </div>
+                `;
+            });
+            
+            wrapper.innerHTML = slidesHtml;
+            reelsModal.classList.remove('hidden');
+            document.body.style.overflow = "hidden"; // Prevent home content scrolling
+            
+            // Toggle Swipe Indicator
+            if (localMediaQueue.length > 1) {
+                swipeIndicator.classList.remove('hidden');
+            } else {
+                swipeIndicator.classList.add('hidden');
+            }
+            
+            lucide.createIcons();
+            
+            // Attach play and touch events
+            localMediaQueue.forEach((item, idx) => {
+                const key = item.key;
+                const video = document.getElementById(`reel_video_${key}`);
+                const playIndicator = document.getElementById(`reel_play_indicator_${key}`);
+                const playIcon = document.getElementById(`reel_play_icon_${key}`);
+                const doubleHeart = document.getElementById(`double_tap_heart_${key}`);
+                
+                if (!video) return;
+                
+                // Track progress
+                video.addEventListener('timeupdate', () => {
+                    const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+                    const progressLine = document.getElementById(`reel_progress_line_${key}`);
+                    if (progressLine) progressLine.style.width = `${pct}%`;
+                });
+                
+                // Mouse/touch click action triggers (play/pause and double click to like)
+                let lastTap = 0;
+                video.addEventListener('click', (e) => {
+                    const now = Date.now();
+                    const delay = now - lastTap;
+                    if (delay < 300 && delay > 0) {
+                        // Double Tap gesture: Like Reel
+                        likeReelsVideoDirectly(key);
+                        
+                        // Heart feedback Animation
+                        if (doubleHeart) {
+                            doubleHeart.classList.remove('opacity-0', 'scale-50');
+                            doubleHeart.classList.add('opacity-100', 'scale-100', 'animate-pulse');
+                            setTimeout(() => {
+                                doubleHeart.classList.remove('opacity-100', 'scale-100', 'animate-pulse');
+                                doubleHeart.classList.add('opacity-0', 'scale-50');
+                            }, 800);
+                        }
+                    } else {
+                        // Single click: Toggle play/pause
+                        if (video.paused) {
+                            video.play();
+                            if (playIndicator && playIcon) {
+                                playIcon.setAttribute('data-lucide', 'play');
+                                lucide.createIcons();
+                                playIndicator.classList.remove('opacity-0', 'scale-50');
+                                playIndicator.classList.add('opacity-100', 'scale-100');
+                                setTimeout(() => {
+                                    playIndicator.classList.remove('opacity-100', 'scale-100');
+                                    playIndicator.classList.add('opacity-0', 'scale-50');
+                                }, 600);
+                            }
+                        } else {
+                            video.pause();
+                            if (playIndicator && playIcon) {
+                                playIcon.setAttribute('data-lucide', 'pause');
+                                lucide.createIcons();
+                                playIndicator.classList.remove('opacity-0', 'scale-50');
+                                playIndicator.classList.add('opacity-100', 'scale-100');
+                                setTimeout(() => {
+                                    playIndicator.classList.remove('opacity-100', 'scale-100');
+                                    playIndicator.classList.add('opacity-0', 'scale-50');
+                                }, 600);
+                            }
+                        }
+                    }
+                    lastTap = now;
+                });
+            });
+            
+            // Set up scroll snap IntersectionObserver
+            if (reelsSlideObserver) {
+                reelsSlideObserver.disconnect();
+            }
+            
+            const slides = document.querySelectorAll('.reel-slide');
+            reelsSlideObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = parseInt(entry.target.dataset.index);
+                        const key = entry.target.dataset.key;
+                        currentReelKey = key;
+                        playReelStep(index);
+                    }
+                });
+            }, { threshold: 0.65 });
+            
+            slides.forEach(s => reelsSlideObserver.observe(s));
+            
+            // Scroll to clicked target slide immediately
+            setTimeout(() => {
+                const targetSlide = document.getElementById(`reel_slide_${selectedKey}`);
+                if (targetSlide) {
+                    targetSlide.scrollIntoView({ behavior: 'auto', block: 'start' });
+                }
+            }, 60);
+        }
+
+        // Apply media source lazy load + play current index
+        function playReelStep(activeIndex) {
+            const slides = document.querySelectorAll('.reel-slide');
+            slides.forEach((slide, idx) => {
+                const video = slide.querySelector('video');
+                if (!video) return;
+                
+                const key = slide.dataset.key;
+                
+                if (idx === activeIndex) {
+                    // Activate and Play
+                    video.preload = "auto";
+                    video.muted = reelsVolumeMuted;
+                    
+                    const urlSrc = video.dataset.src;
+                    if (!video.src) {
+                        applyReelSrc(video, urlSrc);
+                    }
+                    
+                    video.play().catch(err => {
+                        console.log("Reel auto play security guard:", err);
+                    });
+                    
+                    // Spin uploader label label
+                    const disc = slide.querySelector('.reel-disk-icon');
+                    if (disc) disc.classList.add('anim-rotate-disc');
+                } else {
+                    // Pause/stop
+                    video.pause();
+                    const disc = slide.querySelector('.reel-disk-icon');
+                    if (disc) disc.classList.remove('anim-rotate-disc');
+                }
+            });
+        }
+
+        // Apply stream src supporting HLS/M3U8 inside reels!
+        let reelHlsInstances = {};
+        function clearReelHls(id) {
+            if (reelHlsInstances[id]) {
+                reelHlsInstances[id].destroy();
+                delete reelHlsInstances[id];
+            }
+        }
+        function applyReelSrc(videoNode, url) {
+            const isM3u8 = url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('m3u8');
+            const id = videoNode.id;
+            
+            if (isM3u8) {
+                if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                    clearReelHls(id);
+                    const hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+                    hls.loadSource(url);
+                    hls.attachMedia(videoNode);
+                    reelHlsInstances[id] = hls;
+                } else if (videoNode.canPlayType('application/vnd.apple.mpegurl')) {
+                    clearReelHls(id);
+                    videoNode.src = url;
+                } else {
+                    clearReelHls(id);
+                    videoNode.src = url;
+                }
+            } else {
+                clearReelHls(id);
+                videoNode.src = url;
+            }
+        }
+
+        function closeReelsViewer() {
+            const reelsModal = document.getElementById('instagramReelsModal');
+            if (reelsModal) reelsModal.classList.add('hidden');
+            
+            document.body.style.overflow = ""; // restore default scrolling
+            
+            // Connect and pause all videos
+            const videos = document.querySelectorAll('.reel-video-element');
+            videos.forEach(v => {
+                v.pause();
+                v.src = "";
+            });
+            
+            // Clean up Hls feeds
+            for (let id in reelHlsInstances) {
+                clearReelHls(id);
+            }
+            
+            // Clear comment observers
+            closeReelCommentsDrawer();
+        }
+
+        // Like / Unlike toggle action
+        function likeReelsVideoDirectly(key) {
+            const alreadyLiked = localStorage.getItem(`reel_liked_${myName}_${key}`) === 'true';
+            
+            if (!alreadyLiked) {
+                // Like action
+                localStorage.setItem(`reel_liked_${myName}_${key}`, 'true');
+                db.ref(`mediaQueue/${key}/likes`).transaction(likes => (likes || 0) + 1);
+                
+                const heart = document.getElementById(`reel_heart_icon_${key}`);
+                if (heart) {
+                    heart.className = "w-5 h-5 text-rose-500 fill-current animate-pulse";
+                }
+                playSynthSound('success');
+            } else {
+                // Unlike action
+                localStorage.setItem(`reel_liked_${myName}_${key}`, 'false');
+                db.ref(`mediaQueue/${key}/likes`).transaction(likes => Math.max(0, (likes || 1) - 1));
+                
+                const heart = document.getElementById(`reel_heart_icon_${key}`);
+                if (heart) {
+                    heart.className = "w-5 h-5";
+                }
+                playSynthSound('toast');
+            }
+        }
+
+        // Play active reel synchronized with whole chatroom lounge theater!
+        function castReelToLounge(key) {
+            const item = localMediaQueue.find(i => i.key === key);
+            if (!item) return;
+            
+            db.ref('musicState').set({
+                trackUrl: item.url,
+                trackTitle: item.title,
+                trackAuthor: `CAST BY ${item.addedBy.toUpperCase()}`,
+                mediaType: item.mediaType,
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            
+            triggerLiveToast(`CASTED REEL LIVE IN LOUNGE!`);
+            
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `📺 CASTED REEL LIVE: "${item.title.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        // Delete Reel from loops
+        function deleteReelDirectlyFromUI(key, title) {
+            removeQueueItem(key, title);
+            triggerLiveToast("REEL REMOVED.");
+            closeReelsViewer();
+        }
+
+        // Reels Real-time Comments System
+        function openReelCommentsDrawer(key) {
+            const drawer = document.getElementById('reelCommentsDrawer');
+            if (!drawer) return;
+            
+            drawer.classList.remove('hidden');
+            // Force Reflow
+            drawer.offsetHeight;
+            drawer.classList.remove('translate-y-full');
+            
+            currentReelKey = key;
+            
+            const commentsBox = document.getElementById('reelCommentsScroller');
+            commentsBox.innerHTML = `<div class="text-center py-6 text-xs text-stone-500 font-mono tracking-widest animate-pulse">SYNCHRONIZING FEEDBACKS...</div>`;
+            
+            if (reelsCommentsActiveListener) {
+                db.ref(`mediaQueue/${currentReelKey}/comments`).off('value', reelsCommentsActiveListener);
+            }
+            
+            reelsCommentsActiveListener = db.ref(`mediaQueue/${key}/comments`).on('value', (snap) => {
+                commentsBox.innerHTML = "";
+                const val = snap.val();
+                if (!val) {
+                    commentsBox.innerHTML = `
+                        <div class="text-center py-8 space-y-2">
+                            <i data-lucide="message-square" class="w-6 h-6 text-stone-700 mx-auto opacity-40"></i>
+                            <p class="text-[9px] text-stone-500 uppercase tracking-widest font-black font-mono">NO FEEDBACKS YET</p>
+                            <span class="text-[8px] text-stone-600 uppercase tracking-wide block">Write a reply below to spark reaction!</span>
+                        </div>
+                    `;
+                    lucide.createIcons();
+                    return;
+                }
+                
+                const commentsList = [];
+                for (let k in val) {
+                    commentsList.push(val[k]);
+                }
+                commentsList.sort((a,b) => a.timestamp - b.timestamp);
+                
+                commentsList.forEach(c => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = "p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs flex flex-col gap-1 text-left";
+                    
+                    const isSenderMe = c.sender.toLowerCase() === myName.toLowerCase();
+                    const tagCol = isSenderMe ? 'text-[#FF4B72]' : 'text-emerald-400';
+                    const timeLabel = new Date(c.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    itemDiv.innerHTML = `
+                        <div class="flex justify-between items-center bg-black/35 px-2 py-1 rounded-lg">
+                            <span class="text-[8.5px] font-black ${tagCol} uppercase tracking-wider">@${c.sender.toUpperCase()}</span>
+                            <span class="text-[7px] text-stone-500 font-mono font-bold">${timeLabel}</span>
+                        </div>
+                        <p class="text-[10px] font-bold text-stone-200 px-1 leading-normal uppercase break-words">${c.text}</p>
+                    `;
+                    commentsBox.appendChild(itemDiv);
+                });
+                
+                commentsBox.scrollTop = commentsBox.scrollHeight;
+            });
+        }
+
+        function closeReelCommentsDrawer() {
+            const drawer = document.getElementById('reelCommentsDrawer');
+            if (!drawer) return;
+            
+            drawer.classList.add('translate-y-full');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300);
+            
+            if (currentReelKey && reelsCommentsActiveListener) {
+                db.ref(`mediaQueue/${currentReelKey}/comments`).off('value', reelsCommentsActiveListener);
+                reelsCommentsActiveListener = null;
+            }
+        }
+
+        function sendReelComment() {
+            const input = document.getElementById('reelCommentInput');
+            const txt = input.value.trim();
+            if (!txt || !currentReelKey) return;
+            
+            db.ref(`mediaQueue/${currentReelKey}/comments`).push({
+                sender: myName.toUpperCase(),
+                text: txt,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                input.value = "";
+                playSynthSound('success');
+            }).catch(err => {
+                triggerLiveToast("ERROR POSTING COMMENT!");
+            });
         }
 
         // Set dynamic role badge
