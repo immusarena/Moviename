@@ -4293,6 +4293,34 @@
         let reelsSlideObserver = null;
         let reelsCommentsActiveListener = null;
 
+        // Dynamic seeking helper inside Reels Mode supporting click & drag
+        function handleReelsSeeking(e, key) {
+            e.stopPropagation(); // Avoid triggering video play/pause toggle when seeking!
+            const container = document.getElementById(`reel_progress_container_${key}`);
+            const video = document.getElementById(`reel_video_${key}`);
+            if (!container || !video) return;
+            
+            const rect = container.getBoundingClientRect();
+            let clickX = 0;
+            if (e.touches && e.touches.length > 0) {
+                clickX = e.touches[0].clientX - rect.left;
+            } else {
+                clickX = e.clientX - rect.left;
+            }
+            
+            const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+            
+            if (video.duration) {
+                video.currentTime = percentage * video.duration;
+                const progressLine = document.getElementById(`reel_progress_line_${key}`);
+                if (progressLine) {
+                    progressLine.style.width = `${percentage * 100}%`;
+                }
+                const seekVal = Math.round(percentage * 100);
+                triggerLiveToast(`SEEKED TO ${seekVal}%`);
+            }
+        }
+
         function cycleReelsSoundMode() {
             reelsVolumeMuted = !reelsVolumeMuted;
             const icon = document.getElementById('reelsSoundIcon');
@@ -4451,8 +4479,10 @@
                             </div>
                         </div>
                         
-                        <!-- Realtime Progress bar track overlay line at the bottom of slide -->
-                        <div class="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-pink-500 to-rose-600 transition-all duration-100 z-30 pointer-events-none shadow" id="reel_progress_line_${item.key}" style="width: 0%"></div>
+                        <!-- Realtime Progress bar track overlay line at the bottom of slide with clickable seek support -->
+                        <div class="absolute bottom-0 left-0 w-full h-3 bg-white/5 hover:bg-white/25 z-40 cursor-pointer transition-all duration-200 group/progress flex items-end" id="reel_progress_container_${item.key}" onclick="handleReelsSeeking(event, '${item.key}')">
+                            <div class="h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 shadow pointer-events-none group-hover/progress:h-2" id="reel_progress_line_${item.key}" style="width: 0%; transition: width 0.1s linear;"></div>
+                        </div>
                     </div>
                 `;
             });
