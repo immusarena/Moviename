@@ -35,12 +35,12 @@
         /* Modern customizable theme variables with smooth CSS Transitions */
         :root {
             --bg-color: #0b0512;
-            --card-bg: rgba(22, 11, 36, 0.75);
+            --card-bg: rgba(22, 11, 36, 0.78);
             --primary-color: #FF4B72;
             --secondary-color: #FF7694;
             --accent-color: #4ade80;
             --border-color: rgba(255, 255, 255, 0.08);
-            --glow-color: rgba(255, 75, 114, 0.3);
+            --glow-color: rgba(255, 75, 114, 0.35);
         }
 
         body {
@@ -50,20 +50,39 @@
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Premium ambient background dot grid pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 24px 24px, 100% 120px;
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Glassmorphism visual structures with premium backdrop filters */
         .glass-card {
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.65), 
+                inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.08),
+                0 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
         }
 
+        /* Subtle neon borders for interactive elements */
         .neon-border {
             border-color: var(--primary-color);
-            box-shadow: 0 0 18px var(--glow-color);
+            box-shadow: 0 0 25px var(--glow-color), inset 0 1px 2px rgba(255, 255, 255, 0.15);
         }
 
         /* Ambient glowing circles animation */
@@ -217,64 +236,101 @@
             </div>
 
             <!-- List of game portals -->
-            <div class="space-y-3">
-                <button onclick="showGamesHub()" class="w-full flex items-center justify-between p-5 bg-gradient-to-r from-indigo-600/60 to-purple-600/60 hover:from-indigo-600/80 hover:to-purple-600/80 border-l-4 border-l-indigo-400 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(129,140,248,0.35)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+            <div class="space-y-4 font-sans">
+                <!-- Play Games Launcher -->
+                <button onclick="showGamesHub()" class="w-full flex items-center justify-between p-5 bg-gradient-to-r from-indigo-600/50 via-purple-600/50 to-indigo-700/50 hover:from-indigo-600/70 hover:to-purple-700/75 border-l-4 border-l-indigo-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(129,140,248,0.3)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
                     <!-- Glass sheen reflection on hover -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    <div class="text-left relative z-10 font-sans">
-                        <span class="text-[9px] text-indigo-300 font-extrabold tracking-widest block uppercase font-mono">MULTIPLAYER ARENA</span>
+                    <div class="text-left relative z-10 space-y-1 pr-2">
+                        <span class="text-[9px] text-indigo-300 font-extrabold tracking-widest block uppercase font-mono">CHALLENGE ARENAS</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-indigo-200 transition-colors uppercase font-display">
-                            PLAY GAMES
+                            PLAY WORKSPACE GAMES
                         </span>
+                        <p class="text-[9px] text-indigo-200/60 font-medium tracking-wide uppercase">
+                            Movie Guessing, Speed Race, and Card Battles
+                        </p>
                     </div>
-                    <i data-lucide="gamepad-2" class="w-5 h-5 text-indigo-300 group-hover:text-white transition-colors shrink-0 ml-2 relative z-10 animate-pulse"></i>
+                    <div class="p-2.5 bg-indigo-500/15 rounded-xl border border-indigo-400/20 group-hover:scale-105 transition-all text-indigo-300 group-hover:text-white shrink-0">
+                        <i data-lucide="gamepad-2" class="w-5 h-5 animate-pulse"></i>
+                    </div>
                 </button>
 
-                <button onclick="enterArena('songs')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-rose-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(244,63,94,0.25)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                <!-- Co-op music lounge Launcher -->
+                <button onclick="enterArena('songs')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-rose-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(244,63,94,0.2)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
                     <!-- Glass sheen reflection on hover -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    <div class="text-left relative z-10">
+                    <div class="text-left relative z-10 space-y-0.5 pr-2">
                         <span class="text-[9px] text-rose-400 font-black tracking-widest block uppercase font-mono">CO-OP MUSIC LOUNGE</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-rose-400 transition-colors uppercase font-display">
-                            SYNCHRONIZED TAMIL SONGS
+                            CO-OP TAMIL SOUNDS
                         </span>
+                        <p class="text-[9px] text-stone-400 font-medium tracking-wide uppercase">
+                            YouTube playlists & synced live player lounge stream
+                        </p>
                     </div>
-                    <i data-lucide="music" class="w-5 h-5 text-stone-500 group-hover:text-rose-400 transition-colors shrink-0 ml-2 relative z-10"></i>
+                    <div class="p-2.5 bg-rose-500/10 rounded-xl border border-rose-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-rose-400 shrink-0">
+                        <i data-lucide="music" class="w-5 h-5"></i>
+                    </div>
                 </button>
 
-                <button onclick="openReelsViewer()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden">
+                <!-- Instagram Reels Launcher -->
+                <button onclick="openReelsViewer()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(236,72,153,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
                     <!-- Glass sheen reflection on hover -->
                     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    <div class="text-left relative z-10">
-                        <span class="text-[9px] text-[#FF7694] font-black tracking-widest block uppercase font-mono">INSTAGRAM</span>
+                    <div class="text-left relative z-10 space-y-0.5 pr-2">
+                        <span class="text-[9px] text-pink-400 font-black tracking-widest block uppercase font-mono">INSTAGRAM INTERACTION</span>
                         <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-pink-400 transition-colors uppercase font-display">
-                            REELS
+                            SOCIAL VIDEOS REELS
                         </span>
+                        <p class="text-[9px] text-stone-400 font-medium tracking-wide uppercase">
+                            Vertical swipe loop player with live likes and comments
+                        </p>
                     </div>
-                    <div class="relative flex items-center justify-center shrink-0 z-10">
-                        <i data-lucide="clapperboard" class="w-5 h-5 text-stone-500 group-hover:text-pink-400 transition-colors shrink-0 ml-2"></i>
-                        <span id="reelsCountBadge" class="hidden absolute -top-3 -right-2 bg-gradient-to-tr from-pink-500 to-rose-600 text-[8.5px] font-mono font-black text-white px-1.5 py-0.5 rounded-full border border-black/50 min-w-[18px] text-center shadow animate-bounce">0</span>
+                    <div class="relative flex items-center justify-center shrink-0">
+                        <div class="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-pink-400">
+                            <i data-lucide="clapperboard" class="w-5 h-5"></i>
+                        </div>
+                        <span id="reelsCountBadge" class="hidden absolute -top-2.5 -right-1.5 bg-gradient-to-tr from-pink-500 to-rose-600 text-[8.5px] font-mono font-black text-white px-1.5 py-0.5 rounded-full border border-black/50 min-w-[18px] text-center shadow-lg animate-bounce">0</span>
                     </div>
                 </button>
             </div>
 
             <!-- Copier link widgets for quick player pairing -->
-            <div class="glass-card rounded-2xl p-5 shadow-xl space-y-4">
-                <span class="text-[9px] text-stone-400 font-extrabold tracking-widest block uppercase text-center font-display">
+            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-4 font-sans relative overflow-hidden">
+                <!-- Top neon ambient accent banner -->
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-[var(--accent-color)] via-[var(--primary-color)] to-amber-500 opacity-60"></div>
+                <span class="text-[9px] text-stone-400 font-extrabold tracking-widest block uppercase text-center font-mono">
                     SHARE YOUR UNIQUE LOBBY REFS
                 </span>
-                <div class="grid grid-cols-1 gap-2">
-                    <button onclick="copyPairingRef('immu')" id="ref_immu" class="flex justify-between items-center p-3 bg-black/40 hover:bg-black/60 rounded-xl border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer">
-                        <span>IMMU KEY: ?u=immu</span>
-                        <span class="text-[9px] text-[var(--accent-color)] uppercase font-mono font-bold">COPY URL</span>
+                <div class="grid grid-cols-1 gap-2.5">
+                    <button onclick="copyPairingRef('immu')" id="ref_immu" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-[var(--accent-color)] border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield" class="w-3.5 h-3.5 text-[var(--accent-color)] animate-pulse"></i>
+                            <span class="uppercase tracking-wide">IMMU KEY: ?u=immu</span>
+                        </div>
+                        <span class="text-[8.5px] text-[var(--accent-color)] group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-[var(--accent-color)]/5 border border-[var(--accent-color)]/10 rounded px-1.5 py-0.5">
+                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                        </span>
                     </button>
-                    <button onclick="copyPairingRef('sappii')" id="ref_sappii" class="flex justify-between items-center p-3 bg-black/40 hover:bg-black/60 rounded-xl border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer">
-                        <span>SAPPII KEY: ?u=sappii</span>
-                        <span class="text-[9px] text-[var(--accent-color)] uppercase font-mono font-bold">COPY URL</span>
+                    
+                    <button onclick="copyPairingRef('sappii')" id="ref_sappii" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-[var(--primary-color)] border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="heart" class="w-3.5 h-3.5 text-[var(--primary-color)] animate-ping-slow"></i>
+                            <span class="uppercase tracking-wide">SAPPII KEY: ?u=sappii</span>
+                        </div>
+                        <span class="text-[8.5px] text-[var(--primary-color)] group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-[var(--primary-color)]/5 border border-[var(--primary-color)]/10 rounded px-1.5 py-0.5">
+                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                        </span>
                     </button>
-                    <button onclick="copyPairingRef('tharkuri')" id="ref_tharkuri" class="flex justify-between items-center p-3 bg-black/40 hover:bg-black/60 rounded-xl border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer">
-                        <span>THARKURI KEY: ?u=tharkuri</span>
-                        <span class="text-[9px] text-[var(--accent-color)] uppercase font-mono font-bold">COPY URL</span>
+                    
+                    <button onclick="copyPairingRef('tharkuri')" id="ref_tharkuri" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-amber-500 border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="user" class="w-3.5 h-3.5 text-amber-500"></i>
+                            <span class="uppercase tracking-wide">THARKURI KEY: ?u=tharkuri</span>
+                        </div>
+                        <span class="text-[8.5px] text-amber-500 group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-amber-500/5 border border-amber-500/10 rounded px-1.5 py-0.5">
+                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
+                        </span>
                     </button>
                 </div>
             </div>
@@ -309,47 +365,62 @@
             <input type="file" id="gamingBannerFileInput" class="hidden" accept="image/*">
 
             <!-- The THREE Interactive Game Boxes -->
-            <div class="grid grid-cols-1 gap-3.5">
+            <div class="grid grid-cols-1 gap-4 font-sans">
                 <!-- Movie Guessing Game Box -->
-                <div onclick="enterArena('movie')" class="p-5 glass-card border-t-4 border-t-pink-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(255,100,140,0.3)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[80px]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div onclick="enterArena('movie')" class="p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(236,72,153,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[105px]">
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-pink-500/5 to-transparent pointer-events-none"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
-                        <div>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-pink-400 transition-colors">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-pink-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></span>
                                 MOVIE GUESSING ROUND
                             </h3>
+                            <p class="text-[9.5px] text-stone-400 font-extrabold tracking-wide leading-relaxed uppercase">
+                                Decode transliterated cinema titles & compete in real-time
+                            </p>
                         </div>
-                        <div class="p-2 bg-pink-500/10 rounded-xl">
+                        <div class="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20 group-hover:border-pink-400/40 group-hover:scale-105 transition-all">
                             <i data-lucide="film" class="w-5 h-5 text-pink-500 transition-transform duration-300 group-hover:rotate-12"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Word Speed Race Box -->
-                <div onclick="enterArena('word')" class="p-5 glass-card border-t-4 border-t-emerald-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(74,222,128,0.3)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[80px]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div onclick="enterArena('word')" class="p-5 glass-card border-l-4 border-l-emerald-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(74,222,128,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[105px]">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-emerald-500/5 to-transparent pointer-events-none"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
-                        <div>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-emerald-400 transition-colors">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                 WORD SPEED RACE
                             </h3>
+                            <p class="text-[9.5px] text-stone-400 font-extrabold tracking-wide leading-relaxed uppercase">
+                                Spell dictionary words instantly matching random start & end alphabets
+                            </p>
                         </div>
-                        <div class="p-2 bg-emerald-500/10 rounded-xl">
+                        <div class="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 group-hover:border-emerald-400/40 group-hover:scale-105 transition-all">
                             <i data-lucide="zap" class="w-5 h-5 text-emerald-400 transition-transform duration-300 group-hover:scale-110"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card Game Box -->
-                <div onclick="enterArena('cards')" class="p-5 glass-card border-t-4 border-t-amber-400 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] rounded-2xl transition-all duration-300 shadow-md cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[80px]">
-                    <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div onclick="enterArena('cards')" class="p-5 glass-card border-l-4 border-l-amber-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(251,191,36,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between min-h-[105px]">
+                    <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-amber-500/5 to-transparent pointer-events-none"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
-                        <div>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-amber-400 transition-colors">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                                 CARD GAME
                             </h3>
+                            <p class="text-[9.5px] text-stone-400 font-extrabold tracking-wide leading-relaxed uppercase">
+                                Real human shuffled deck dealing & trick taking co-op Spades
+                            </p>
                         </div>
-                        <div class="p-2 bg-amber-500/10 rounded-xl">
+                        <div class="p-2.5 bg-amber-500/10 rounded-xl border border-amber-500/20 group-hover:border-amber-400/40 group-hover:scale-105 transition-all">
                             <i data-lucide="layers" class="w-5 h-5 text-amber-400 transition-transform duration-300 group-hover:translate-y-[-2px]"></i>
                         </div>
                     </div>
@@ -789,7 +860,7 @@
 
                     <!-- Video Cinema Lounge View -->
                     <div id="mediaLoungeVideoWrapper" class="hidden py-1 relative group">
-                        <video id="syncVideoPlayer" class="w-full rounded-xl border border-white/10 bg-black max-h-[520px] object-contain shadow-2xl cursor-pointer hover:border-rose-500/50 transition-all" preload="auto" playsinline onclick="toggleMusicPlaybackSync()"></video>
+                        <video id="syncVideoPlayer" class="w-full rounded-xl border border-white/10 bg-black max-h-[520px] object-contain shadow-2xl cursor-pointer hover:border-rose-500/50 transition-all" preload="none" playsinline onclick="toggleMusicPlaybackSync()"></video>
                         <!-- Fullscreen option relative to video stream -->
                         <button id="videoFullscreenBtn" onclick="toggleVideoFullscreen()" class="absolute bottom-4 right-4 bg-black/80 hover:bg-rose-600 bg-opacity-70 hover:bg-opacity-100 text-slate-100 p-2 rounded-xl border border-white/15 hover:border-rose-500/40 transition-all duration-250 cursor-pointer shadow-xl flex items-center justify-center active:scale-90" title="Full Screen Cinema Mode">
                             <i data-lucide="maximize" class="w-4 h-4 text-white"></i>
@@ -1078,7 +1149,7 @@
     <!-- Live Toast messages popups -->
     <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
 
-    <audio id="syncAudioPlayer" preload="auto"></audio>
+    <audio id="syncAudioPlayer" preload="none"></audio>
 
     <!-- ================= INSTAGRAM REELS INTERACTIVE VIEWER OVERLAY ================= -->
     <div id="instagramReelsModal" class="hidden fixed inset-0 z-55 bg-black/95 backdrop-blur-xl flex items-center justify-center p-0 md:p-4 select-none">
@@ -2718,26 +2789,36 @@
             // Symmetrically update counts on active Reels overlay details live
             const reelsModal = document.getElementById('instagramReelsModal');
             if (reelsModal && !reelsModal.classList.contains('hidden')) {
-                localMediaQueue.forEach(item => {
-                    const likeLabel = document.getElementById(`reel_likes_count_${item.key}`);
-                    if (likeLabel) {
-                        likeLabel.innerText = item.likes || 0;
-                    }
-                    const commentsCount = item.comments ? Object.keys(item.comments).length : 0;
-                    const commentLabel = document.getElementById(`reel_comments_count_${item.key}`);
-                    if (commentLabel) {
-                        commentLabel.innerText = commentsCount;
-                    }
-                    const heart = document.getElementById(`reel_heart_icon_${item.key}`);
-                    if (heart) {
-                        const alreadyLiked = localStorage.getItem(`reel_liked_${myName}_${item.key}`) === 'true';
-                        if (alreadyLiked) {
-                            heart.className = "w-5 h-5 text-rose-500 fill-current animate-pulse";
-                        } else {
-                            heart.className = "w-5 h-5";
+                const renderedSlides = document.querySelectorAll('.reel-slide');
+                const renderedKeys = Array.from(renderedSlides).map(s => s.dataset.key);
+                const currentKeys = localMediaQueue.map(item => item.key);
+                
+                const hasChanged = renderedKeys.length !== currentKeys.length || renderedKeys.some(k => !currentKeys.includes(k));
+                
+                if (hasChanged) {
+                    openReelsViewer(currentReelKey);
+                } else {
+                    localMediaQueue.forEach(item => {
+                        const likeLabel = document.getElementById(`reel_likes_count_${item.key}`);
+                        if (likeLabel) {
+                            likeLabel.innerText = item.likes || 0;
                         }
-                    }
-                });
+                        const commentsCount = item.comments ? Object.keys(item.comments).length : 0;
+                        const commentLabel = document.getElementById(`reel_comments_count_${item.key}`);
+                        if (commentLabel) {
+                            commentLabel.innerText = commentsCount;
+                        }
+                        const heart = document.getElementById(`reel_heart_icon_${item.key}`);
+                        if (heart) {
+                            const alreadyLiked = localStorage.getItem(`reel_liked_${myName}_${item.key}`) === 'true';
+                            if (alreadyLiked) {
+                                heart.className = "w-5 h-5 text-rose-500 fill-current animate-pulse";
+                            } else {
+                                heart.className = "w-5 h-5";
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -2800,11 +2881,23 @@
             }
         }
 
-        if (audioNode) audioNode.addEventListener('ended', handleMediaEnded);
+        if (audioNode) {
+            audioNode.addEventListener('ended', handleMediaEnded);
+            audioNode.addEventListener('error', (e) => {
+                console.log("Audio node quiet media error: ", audioNode.error);
+                e.preventDefault();
+                e.stopPropagation();
+            }, true);
+        }
         if (videoNode) {
             videoNode.addEventListener('ended', handleMediaEnded);
             videoNode.addEventListener('loadedmetadata', updateVideoAudioTracksList);
             videoNode.addEventListener('emptied', updateVideoAudioTracksList);
+            videoNode.addEventListener('error', (e) => {
+                console.log("Video node quiet media error: ", videoNode.error);
+                e.preventDefault();
+                e.stopPropagation();
+            }, true);
         }
 
         // Click manually on live badge to trigger instantaneous catch-up realignment
@@ -2813,7 +2906,7 @@
             const activeNode = (musicState.mediaType === 'video') ? videoNode : audioNode;
             
             // Ensure correct source is loaded
-            if (!isSameUrl(activeNode.src, musicState.trackUrl)) {
+            if (musicState.trackUrl && !isSameUrl(activeNode.src, musicState.trackUrl)) {
                 activeNode.src = musicState.trackUrl;
                 activeNode.load();
             }
@@ -2878,11 +2971,9 @@
             if (!url) {
                 destroyHlsPlayer();
                 if (node) {
-                    node.src = "";
+                    node.pause();
                     node.removeAttribute('src');
-                    try {
-                        node.load();
-                    } catch (e) {}
+                    // Avoid calling node.load() on an empty/unset resource to prevent "no supported sources" browser error
                 }
                 return;
             }
@@ -3390,7 +3481,7 @@
             const isLocalBlockedOrPaused = (musicState.status === 'playing' && activeNode.paused);
             if (isLocalBlockedOrPaused) {
                 // Ensure correct source loaded
-                if (!isSameUrl(activeNode.src, musicState.trackUrl)) {
+                if (musicState.trackUrl && !isSameUrl(activeNode.src, musicState.trackUrl)) {
                     activeNode.src = musicState.trackUrl;
                     activeNode.load();
                 }
@@ -4747,6 +4838,7 @@
         let reelsVolumeMuted = false;
         let reelsSlideObserver = null;
         let reelsCommentsActiveListener = null;
+        let currentReelKey = null;
 
         // Dynamic seeking helper inside Reels Mode supporting click & drag
         function handleReelsSeeking(e, key) {
@@ -4841,8 +4933,8 @@
                 return;
             }
 
-            // Sort reels dynamically: put already viewed reels first (so user can scroll up to view them),
-            // and unviewed reels next so the viewer can start immediately on the first unviewed one.
+            // Sort reels dynamically: put unviewed reels first (so the viewer of new videos starts immediately), 
+            // and viewed reels next so the user can scroll down to view older files.
             const viewedReels = [];
             const unviewedReels = [];
             localMediaQueue.forEach(item => {
@@ -4853,7 +4945,7 @@
                     unviewedReels.push(item);
                 }
             });
-            const sortedReelsList = [...viewedReels, ...unviewedReels];
+            const sortedReelsList = [...unviewedReels, ...viewedReels];
 
             if (!selectedKey && sortedReelsList.length > 0) {
                 if (unviewedReels.length > 0) {
@@ -4982,6 +5074,12 @@
                 const doubleHeart = document.getElementById(`double_tap_heart_${key}`);
                 
                 if (!video) return;
+
+                video.addEventListener('error', (e) => {
+                    console.log(`Reel video ${key} quiet media error: `, video.error);
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, true);
                 
                 // Track progress
                 video.addEventListener('timeupdate', () => {
@@ -5011,7 +5109,9 @@
                     } else {
                         // Single click: Toggle play/pause
                         if (video.paused) {
-                            video.play();
+                            video.play().catch(err => {
+                                console.log("Reel manual play blocked:", err);
+                            });
                             if (playIndicator && playIcon) {
                                 playIcon.setAttribute('data-lucide', 'play');
                                 lucide.createIcons();
@@ -5118,6 +5218,11 @@
             }
         }
         function applyReelSrc(videoNode, url) {
+            if (!url) {
+                clearReelHls(videoNode.id);
+                videoNode.removeAttribute('src');
+                return;
+            }
             const isM3u8 = url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('m3u8');
             const id = videoNode.id;
             
@@ -5151,7 +5256,8 @@
             const videos = document.querySelectorAll('.reel-video-element');
             videos.forEach(v => {
                 v.pause();
-                v.src = "";
+                v.removeAttribute('src');
+                // Avoid calling v.load() on an empty resource to prevent "no supported sources" error
             });
             
             // Clean up Hls feeds
