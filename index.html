@@ -294,14 +294,19 @@
             </div>
 
             <!-- Header banner with stylized grid background and icon overlay -->
-            <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-purple-950/70 to-indigo-900/40 mix-blend-multiply"></div>
-                <img src="input_file_0.png" onerror="this.onerror=null; this.src='gaming_banner.png'; this.onerror=function(){ this.onerror=null; this.src='https://images.unsplash.com/photo-1612287230202-1bf1d85d1bdf?auto=format&fit=crop&w=600&q=80'; };" class="w-full h-full object-cover brightness-75 duration-700 hover:scale-105 transform transition" alt="Gaming Banner">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5">
+            <div onclick="document.getElementById('gamingBannerFileInput').click()" class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group cursor-pointer" title="Click to upload custom gaming banner">
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-purple-950/70 to-indigo-900/40 mix-blend-multiply z-10"></div>
+                <img id="gamingBannerImageNode" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80" referrerPolicy="no-referrer" class="w-full h-full object-cover brightness-75 duration-700 hover:scale-105 transform transition" alt="Gaming Banner">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
+                    <div class="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-[8px] font-black tracking-widest text-pink-400 border border-white/10 rounded-lg px-2.5 py-1 flex items-center gap-1 uppercase transition-all duration-200">
+                        <i data-lucide="camera" class="w-3.5 h-3.5 text-pink-400"></i>
+                        CHANGE BANNER
+                    </div>
                     <span class="text-[9px] text-pink-400 font-black tracking-widest block uppercase font-mono mb-1">CO-OP BATTLES</span>
                     <h2 class="text-base font-black text-white uppercase tracking-wider font-display">SELECT WORKSPACE ARENA</h2>
                 </div>
             </div>
+            <input type="file" id="gamingBannerFileInput" class="hidden" accept="image/*">
 
             <!-- The THREE Interactive Game Boxes -->
             <div class="grid grid-cols-1 gap-3.5">
@@ -310,8 +315,7 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
                         <div>
-                            <span class="text-[10px] text-pink-400 font-extrabold tracking-widest block uppercase font-mono">TAMIL CINEMA</span>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display mt-1 group-hover:text-pink-400 transition-colors">
+                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-pink-400 transition-colors">
                                 MOVIE GUESSING ROUND
                             </h3>
                         </div>
@@ -326,8 +330,7 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
                         <div>
-                            <span class="text-[10px] text-emerald-400 font-extrabold tracking-widest block uppercase font-mono font-bold">VOCABULARY HYPER</span>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display mt-1 group-hover:text-emerald-400 transition-colors">
+                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-emerald-400 transition-colors">
                                 WORD SPEED RACE
                             </h3>
                         </div>
@@ -342,8 +345,7 @@
                     <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="flex justify-between items-start relative z-10 w-full">
                         <div>
-                            <span class="text-[10px] text-amber-300 font-extrabold tracking-widest block uppercase font-mono">TACTICAL SHUFFLE</span>
-                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display mt-1 group-hover:text-amber-400 transition-colors">
+                            <h3 class="text-sm font-black text-white tracking-wide uppercase font-display group-hover:text-amber-400 transition-colors">
                                 CARD GAME
                             </h3>
                         </div>
@@ -596,9 +598,6 @@
                     <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
                         CARD GAME
                     </h2>
-                    <p class="text-[10px] text-stone-300 leading-relaxed uppercase tracking-widest max-w-sm mx-auto">
-                        A tactical cutting challenge! Match the lead suit. If you don't have it, perform a cut discarding any card! The player with the highest lead card takes the table payload. First to reach 0 cards wins!
-                    </p>
 
                     <div class="flex gap-3 max-w-xs mx-auto">
                         <button onclick="startMultiplayerSpades(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
@@ -623,6 +622,68 @@
                     <button onclick="confirmResetSpades()" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-xs rounded-xl tracking-widest uppercase cursor-pointer">
                         RESET CARDS BOARD
                     </button>
+                </div>
+
+                <!-- Shuffling state view -->
+                <div id="boxSpadesShuffling" class="hidden glass-card rounded-2xl p-6 text-center space-y-6 animate-popIn border border-dashed border-amber-500/20 max-w-sm mx-auto">
+                    <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+                        <div class="absolute inset-0 rounded-full border border-amber-400/30 animate-spin" style="animation-duration: 4s;"></div>
+                        <div class="absolute inset-2 rounded-full border border-dashed border-rose-500/20 animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
+                        
+                        <div class="relative w-12 h-16 bg-gradient-to-br from-amber-500 to-rose-600 rounded-xl shadow-2xl flex items-center justify-center transform -rotate-6 animate-pulse">
+                            <i data-lucide="shuffle" class="w-5 h-5 text-white animate-bounce"></i>
+                            <div class="absolute -right-2 top-1 w-12 h-16 bg-neutral-900 border border-white/10 rounded-xl shadow-lg transform rotate-12 -z-10 flex items-center justify-center">
+                                <span class="text-[10px] text-rose-500">♠️</span>
+                            </div>
+                            <div class="absolute -left-2 top-2 w-12 h-16 bg-neutral-900 border border-white/10 rounded-xl shadow-lg transform -rotate-12 -z-20 flex items-center justify-center">
+                                <span class="text-[10px] text-amber-500">♥️</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <h2 class="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-rose-400 to-amber-300 tracking-widest uppercase font-display">
+                            HUMAN SHUFFLE ENGINE
+                        </h2>
+                        <p class="text-[9px] text-stone-400 font-extrabold uppercase tracking-widest font-mono">
+                            Riffling, overhanding & stripping the cards
+                        </p>
+                    </div>
+
+                    <!-- Step checklist mimicking physical human feel -->
+                    <div class="bg-black/60 border border-white/5 rounded-xl p-3.5 text-left font-mono text-[8px] leading-relaxed space-y-2.5 text-stone-300">
+                        <div id="shuffleStep1" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep1Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">1. Human Cut & Half Split...</span>
+                        </div>
+                        <div id="shuffleStep2" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep2Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">2. Thumbs riffle-merge cards...</span>
+                        </div>
+                        <div id="shuffleStep3" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep3Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">3. Overhand clumps strip-mixing...</span>
+                        </div>
+                        <div id="shuffleStep4" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep4Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">4. Sift & Riffle interlace round #2...</span>
+                        </div>
+                        <div id="shuffleStep5" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep5Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">5. Pure randomized dealer deal...</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between items-center text-[9px] font-bold font-mono tracking-wider text-amber-400/80">
+                            <span>SHUFFLING CARDS Thoroughly...</span>
+                            <span id="shufflePercentText">0%</span>
+                        </div>
+                        <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-white/5">
+                            <div id="shuffleProgressBar" class="bg-gradient-to-r from-amber-500 via-rose-500 to-amber-400 h-full w-0 transition-all duration-250"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Active trick taking gaming table arena elements -->
@@ -2403,6 +2464,118 @@
         const SUIT_GLYPHS = { 'S': '♠️', 'H': '♥️', 'D': '♦️', 'C': '♣️' };
         const VALUE_RANKING_LABELS = { 14: 'A', 13: 'K', 12: 'Q', 11: 'J', 10: '10', 9: '9', 8: '8', 7: '7', 6: '6', 5: '5', 4: '4', 3: '3', 2: '2' };
 
+        // Human physical shuffling helpers mimicking physical dealer logic
+        function animateLocalShuffleProgress(p) {
+            const bar = document.getElementById('shuffleProgressBar');
+            const text = document.getElementById('shufflePercentText');
+            if (bar) bar.style.width = `${p}%`;
+            if (text) text.innerText = `${p}%`;
+
+            function setStepState(stepId, state) {
+                const row = document.getElementById(`shuffleStep${stepId}`);
+                const icon = document.getElementById(`shuffleStep${stepId}Icon`);
+                if (!row || !icon) return;
+                
+                if (state === 'done') {
+                    row.className = "flex items-center gap-2 text-emerald-400 font-extrabold transition-all duration-305 scale-105";
+                    icon.setAttribute('data-lucide', 'check-circle-2');
+                    icon.className = "w-3.5 h-3.5 text-emerald-400 shrink-0";
+                } else if (state === 'active') {
+                    row.className = "flex items-center gap-2 text-amber-400 font-bold tracking-wide animate-pulse transition-all duration-305";
+                    icon.setAttribute('data-lucide', 'loader-2');
+                    icon.className = "w-3.5 h-3.5 text-amber-400 animate-spin shrink-0";
+                } else {
+                    row.className = "flex items-center gap-2 text-stone-600 transition-all duration-305";
+                    icon.setAttribute('data-lucide', 'circle');
+                    icon.className = "w-3.5 h-3.5 text-stone-600 shrink-0";
+                }
+            }
+
+            setStepState(1, p >= 20 ? 'done' : (p > 0 ? 'active' : 'pending'));
+            setStepState(2, p >= 40 ? 'done' : (p >= 20 ? 'active' : 'pending'));
+            setStepState(3, p >= 60 ? 'done' : (p >= 40 ? 'active' : 'pending'));
+            setStepState(4, p >= 80 ? 'done' : (p >= 60 ? 'active' : 'pending'));
+            setStepState(5, p >= 100 ? 'done' : (p >= 80 ? 'active' : 'pending'));
+
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+
+        function humanRiffleShuffle(deck) {
+            const splitPoint = Math.floor(deck.length / 2) + (Math.random() < 0.5 ? 1 : -1) * Math.floor(Math.random() * 4);
+            const left = deck.slice(0, splitPoint);
+            const right = deck.slice(splitPoint);
+            const shuffled = [];
+            let i = 0, j = 0;
+            while (i < left.length || j < right.length) {
+                if (i < left.length && (Math.random() < 0.52 || j >= right.length)) {
+                    const dropCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 card slips
+                    for (let k = 0; k < dropCount && i < left.length; k++) {
+                        shuffled.push(left[i++]);
+                    }
+                }
+                if (j < right.length && (Math.random() < 0.52 || i >= left.length)) {
+                    const dropCount = Math.floor(Math.random() * 3) + 1;
+                    for (let k = 0; k < dropCount && j < right.length; k++) {
+                        shuffled.push(right[j++]);
+                    }
+                }
+            }
+            return shuffled;
+        }
+
+        function humanOverhandShuffle(deck) {
+            let tempDeck = [...deck];
+            const shuffled = [];
+            while (tempDeck.length > 0) {
+                const clumpSize = Math.min(tempDeck.length, Math.floor(Math.random() * 6) + 5); // 5-10 card clumps
+                const clump = tempDeck.splice(tempDeck.length - clumpSize, clumpSize);
+                shuffled.push(...clump);
+            }
+            return shuffled;
+        }
+
+        function humanStripShuffle(deck) {
+            const tempDeck = [...deck];
+            const shuffled = [];
+            const slabCount = Math.floor(Math.random() * 3) + 2;
+            for (let s = 0; s < slabCount; s++) {
+                if (tempDeck.length > 8) {
+                    const size = Math.floor(Math.random() * 6) + 4;
+                    const startIdx = Math.floor(Math.random() * (tempDeck.length - size));
+                    const slab = tempDeck.splice(startIdx, size);
+                    if (Math.random() < 0.5) {
+                        shuffled.unshift(...slab);
+                    } else {
+                        shuffled.push(...slab);
+                    }
+                }
+            }
+            shuffled.push(...tempDeck);
+            return shuffled;
+        }
+
+        function humanCutDeck(deck) {
+            const cutPos = Math.floor(deck.length * 0.25) + Math.floor(Math.random() * (deck.length * 0.5));
+            const top = deck.slice(0, cutPos);
+            const bottom = deck.slice(cutPos);
+            return [...bottom, ...top];
+        }
+
+        function humanThoroughShuffle(deck) {
+            let d = [...deck];
+            // Simulate 7 realistic human physical moves to nalla card kolampi mix
+            d = humanCutDeck(d);
+            d = humanRiffleShuffle(d);
+            d = humanStripShuffle(d);
+            d = humanRiffleShuffle(d);
+            d = humanOverhandShuffle(d);
+            d = humanRiffleShuffle(d);
+            d = humanCutDeck(d);
+            return d;
+        }
+
         function startMultiplayerSpades(totalCompetitors) {
             let coreDeck = [];
             for (let suit in SUIT_GLYPHS) {
@@ -2411,11 +2584,8 @@
                 }
             }
 
-            // Fisher-Yates premium card shuffling implementation
-            for (let i = coreDeck.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [coreDeck[i], coreDeck[j]] = [coreDeck[j], coreDeck[i]];
-            }
+            // Real physical multi-phase human shuffle!
+            coreDeck = humanThoroughShuffle(coreDeck);
 
             let members = ['immu', 'sappii'];
             if (totalCompetitors === 3) {
@@ -2450,18 +2620,37 @@
             let scoringBase = {};
             members.forEach(p => scoringBase[p] = 0);
 
+            // Trigger beautiful real-time human shuffling simulation screen synchronized for all players over Firebase RTDB!
             db.ref('cardsGameState').set({
-                status: 'playing',
+                status: 'shuffling',
+                shufflePercentage: 0,
+                shuffledBy: myName,
                 playerCount: totalCompetitors,
-                playerNames: members,
-                turn: trickInitiator,
-                ledSuit: '',
-                table: {},
-                hands: allocationHands,
-                scores: scoringBase
+                playerNames: members
             });
 
-            triggerLiveToast("CARDS DECK DISPATCHED!");
+            let shufflePercent = 0;
+            const shuffleInterval = setInterval(() => {
+                shufflePercent += 20;
+                if (shufflePercent <= 100) {
+                    playSynthSound('card');
+                    db.ref('cardsGameState/shufflePercentage').set(shufflePercent);
+                } else {
+                    clearInterval(shuffleInterval);
+                    // Commit final high-quality human shuffled deck with status 'playing'
+                    db.ref('cardsGameState').set({
+                        status: 'playing',
+                        playerCount: totalCompetitors,
+                        playerNames: members,
+                        turn: trickInitiator,
+                        ledSuit: '',
+                        table: {},
+                        hands: allocationHands,
+                        scores: scoringBase
+                    });
+                    triggerLiveToast("HUMAN SHUFFLING SUCCESS - ALL CARDS DEALT!");
+                }
+            }, 600);
         }
 
         db.ref('cardsGameState').on('value', (snap) => {
@@ -2686,6 +2875,17 @@
         }
 
         function applyMediaSrc(node, url) {
+            if (!url) {
+                destroyHlsPlayer();
+                if (node) {
+                    node.src = "";
+                    node.removeAttribute('src');
+                    try {
+                        node.load();
+                    } catch (e) {}
+                }
+                return;
+            }
             if (node === videoNode) {
                 const isHlsUrl = url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('m3u8');
                 if (isHlsUrl) {
@@ -2852,6 +3052,35 @@
             const activeNode = isVideo ? videoNode : audioNode;
             const originalVol = parseFloat(document.getElementById('musicPlaybackLocalVolume')?.value || 80) / 100;
 
+            // If trackUrl is empty/blank (requested default blank for cinema), do not play
+            if (!data.trackUrl || data.trackUrl.trim() === "") {
+                if (audioNode && !audioNode.paused) audioNode.pause();
+                if (videoNode && !videoNode.paused) videoNode.pause();
+                applyMediaSrc(audioNode, "");
+                applyMediaSrc(videoNode, "");
+
+                document.getElementById('musicTrackTitleText').innerText = isVideo ? "NO CINEMA ACTIVE" : "NO MUSIC ACTIVE";
+                document.getElementById('musicTrackSubtitleText').innerText = isVideo ? "PASTE A DIRECT MOVIE OR MP4 LINK BELOW" : "CHOOSE A TRACK FROM THE LIST BELOW";
+                document.getElementById('musicActivityLogMsg').innerText = "READY TO INJECT!";
+
+                document.getElementById('musicPlaybackStatusBadge').innerText = "BLANK";
+                document.getElementById('musicPlaybackStatusBadge').className = "text-[9px] bg-stone-500/20 text-stone-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono";
+
+                const btnIcon = document.getElementById('musicPlayToggleIcon');
+                if (btnIcon) btnIcon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+
+                const discNode = document.getElementById('musicVinylDisc');
+                const armNode = document.getElementById('musicVinylArm');
+                if (discNode) discNode.classList.remove('anim-rotate-disc');
+                if (armNode) armNode.style.transform = "rotate(-15deg)";
+
+                document.getElementById('musicTimePlayedLabel').innerText = "0:00";
+                document.getElementById('musicTimeTotalLabel').innerText = "0:00";
+                document.getElementById('musicPlaybackSeekBar').value = 0;
+                return;
+            }
+
             if (isVideo && videoNode) {
                 syncActiveAudioTrack();
                 updateVideoAudioTracksList();
@@ -2995,6 +3224,36 @@
 
         // Delay slider event triggers till drop-release
         document.addEventListener('DOMContentLoaded', () => {
+            // Setup custom gaming banner image load-on-start
+            const gBannerImgNode = document.getElementById('gamingBannerImageNode');
+            if (gBannerImgNode) {
+                const savedBanner = localStorage.getItem('customGamingBanner');
+                if (savedBanner) {
+                    gBannerImgNode.src = savedBanner;
+                } else {
+                    gBannerImgNode.src = 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80';
+                }
+            }
+
+            const bannerUploader = document.getElementById('gamingBannerFileInput');
+            if (bannerUploader) {
+                bannerUploader.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            const base64 = evt.target.result;
+                            localStorage.setItem('customGamingBanner', base64);
+                            if (gBannerImgNode) {
+                                gBannerImgNode.src = base64;
+                            }
+                            triggerLiveToast('GAMING BANNER SET SUCCESSFULLY!');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
             const seekBar = document.getElementById('musicPlaybackSeekBar');
             if (seekBar) {
                 seekBar.addEventListener('change', (e) => {
@@ -3163,6 +3422,9 @@
 
         function changeMusicTrackStep(direction) {
             const isVideo = (musicState.mediaType === 'video');
+            if (isVideo) {
+                return triggerLiveToast("DIRECT INJECTION ACTIVE! PASTE A DIRECT MP4 LINK BELOW TO PLAY.");
+            }
             const playlist = isVideo ? DYNAMIC_MOVIES_PLAYLIST : DYNAMIC_SONGS_PLAYLIST;
             
             let currentIndex = playlist.findIndex(s => s.url === musicState.trackUrl);
@@ -3815,12 +4077,11 @@
 
         function setMediaLoungeMode(mode) {
             const isVideo = (mode === 'video');
-            const defaultTrack = isVideo ? DYNAMIC_MOVIES_PLAYLIST[0] : DYNAMIC_SONGS_PLAYLIST[0];
             
             db.ref('musicState').set({
-                trackUrl: defaultTrack.url,
-                trackTitle: defaultTrack.title,
-                trackAuthor: defaultTrack.author,
+                trackUrl: isVideo ? "" : DYNAMIC_SONGS_PLAYLIST[0].url,
+                trackTitle: isVideo ? "NO VIDEO ACTIVE" : DYNAMIC_SONGS_PLAYLIST[0].title,
+                trackAuthor: isVideo ? "PASTE A LINK BELOW TO PLAY VIDEO" : DYNAMIC_SONGS_PLAYLIST[0].author,
                 mediaType: mode,
                 status: 'paused',
                 seekTime: 0,
@@ -3853,12 +4114,25 @@
             const wrap = document.getElementById('boxSpadesPlayBoard');
             const finishedPanel = document.getElementById('boxSpadesFinished');
             const setupPanel = document.getElementById('boxSpadesSetup');
+            const shufflingPanel = document.getElementById('boxSpadesShuffling');
 
             if (cardsGameState.status === 'setup') {
+                if (shufflingPanel) shufflingPanel.classList.add('hidden');
                 setupPanel.classList.remove('hidden');
                 finishedPanel.classList.add('hidden');
                 wrap.classList.add('hidden');
                 return;
+            }
+
+            if (cardsGameState.status === 'shuffling') {
+                if (shufflingPanel) shufflingPanel.classList.remove('hidden');
+                setupPanel.classList.add('hidden');
+                finishedPanel.classList.add('hidden');
+                wrap.classList.add('hidden');
+                animateLocalShuffleProgress(cardsGameState.shufflePercentage || 0);
+                return;
+            } else {
+                if (shufflingPanel) shufflingPanel.classList.add('hidden');
             }
 
             if (cardsGameState.status === 'finished') {
@@ -5042,10 +5316,17 @@
             });
         }
 
-        // Set dynamic role badge
+        // Set dynamic role badge with Arabic translations for IMMU and SAPPI
         const hBadge = document.getElementById('hdrRoleBadgeText');
         if (hBadge) {
-            hBadge.innerText = myName.toUpperCase();
+            const ARABIC_NAMES = {
+                'immu': 'إيمو',
+                'sappi': 'سابي',
+                'sappii': 'سابي',
+                'tharkuri': 'ثوركوري'
+            };
+            const lowerName = myName.toLowerCase();
+            hBadge.innerText = ARABIC_NAMES[lowerName] || myName.toUpperCase();
         }
 
         // Initialize Lucide Vectors layout icons
