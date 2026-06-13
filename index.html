@@ -760,13 +760,36 @@
             <!-- ================= MOVIE SCREEN BOARD GAME ================= -->
             <div id="movieArena" class="hidden space-y-4">
                 
+                <!-- Lobby choices trigger panel for Movie Guessing -->
+                <div id="boxMovieSetup" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
+                        MOVIE GUESSING ROUND
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider">CHOOSE PLAYER COUNT TO ACTIVATE THE LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startMovieGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startMovieGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+                
                 <!-- Game Setter phase visual wrapper -->
                 <div id="boxMovieSetter" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-4">
                     <div class="flex justify-between items-center pb-2.5 border-b border-white/5">
                         <div>
                             <h3 class="text-xs font-black tracking-widest text-[#FF7694] uppercase">CHOOSE THE CINEMA</h3>
                         </div>
-                        <span class="text-[9px] bg-[var(--primary-color)]/20 text-[var(--primary-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">SETTER</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] bg-[var(--primary-color)]/20 text-[var(--primary-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">SETTER</span>
+                            <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>
+                                QUIT
+                            </button>
+                        </div>
                     </div>
 
                     <div class="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
@@ -791,18 +814,30 @@
                 </div>
 
                 <!-- Setter waiting visual placeholder -->
-                <div id="boxMovieWaitingSetter" class="hidden glass-card rounded-2xl p-8 text-center space-y-3">
+                <div id="boxMovieWaitingSetter" class="hidden glass-card rounded-2xl p-8 text-center space-y-4">
                     <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto animate-bounce">
                         <i data-lucide="loader" class="w-6 h-6 text-[var(--accent-color)] animate-spin"></i>
                     </div>
-                    <p class="text-xs text-stone-400 uppercase tracking-widest font-black">PARTNER RUNNING DECISION MATRIX...</p>
+                    <p id="movieWaitingSetterMessage" class="text-xs text-stone-400 uppercase tracking-widest font-black">PARTNER RUNNING DECISION MATRIX...</p>
+                    <div class="pt-2 border-t border-white/5 flex justify-center">
+                        <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Movie Guessing Active layout view -->
                 <div id="boxMovieGuesser" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-5">
                     <div class="flex justify-between items-center pb-2 border-b border-white/5">
                         <h3 class="text-xs font-black tracking-widest text-[var(--accent-color)] uppercase">GUESS THE CINEMA</h3>
-                        <span id="movieGuesserTurnBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">GUESSING</span>
+                        <div class="flex items-center gap-2">
+                            <span id="movieGuesserTurnBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">GUESSING</span>
+                            <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>
+                                QUIT
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Syllable letter panels containing gaps -->
@@ -853,6 +888,23 @@
             <!-- ================= WORD SPEED RACE GAME ================= -->
             <div id="wordArena" class="hidden space-y-4">
                 
+                <!-- Lobby choices trigger panel for Word speed race -->
+                <div id="boxWordLobbyChoices" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
+                        WORD SPEED RACE
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider">CHOOSE PLAYER COUNT TO ACTIVATE THE LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startWordGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startWordGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+                
                 <!-- choose setup criteria visual boards -->
                 <div id="boxWordSetup" class="glass-card rounded-2xl p-6 shadow-2xl space-y-4 text-center">
                     <div class="flex justify-between items-center pb-2.5 border-b border-white/5 text-left">
@@ -861,7 +913,12 @@
                                 <i data-lucide="zap" class="w-4 h-4 text-[var(--accent-color)]"></i>WORD RACE SETUP
                             </h3>
                         </div>
-                        <span id="wordRoundStageBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-black tracking-wider uppercase">LOCKED</span>
+                        <div class="flex items-center gap-2">
+                            <span id="wordRoundStageBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-black tracking-wider uppercase">LOCKED</span>
+                            <button onclick="confirmResetWord()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2 py-0.5 rounded-lg uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>QUIT
+                            </button>
+                        </div>
                     </div>
 
                     <!-- lock letter selector inputs panel -->
@@ -906,6 +963,10 @@
                         <h3 class="text-xs font-black tracking-widest text-[var(--accent-color)] uppercase flex items-center gap-1">
                             <i data-lucide="zap" class="w-4 h-4 text-[var(--accent-color)] animate-bounce"></i>FAST DICTIONARY SPELLING RACE
                         </h3>
+                        <button onclick="confirmResetWord()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
+                        </button>
                     </div>
 
                     <div class="py-4 bg-black/40 rounded-xl border border-white/5 flex justify-center items-center gap-4 text-center">
@@ -1035,12 +1096,20 @@
                 <!-- Active trick taking gaming table arena elements -->
                 <div id="boxSpadesPlayBoard" class="hidden glass-card rounded-2xl p-4 space-y-4">
                     
-                    <!-- Immu Spy Eye Controller (visible only to Immu) -->
-                    <div id="immuCheatControlWrapper" class="hidden flex justify-end px-1 pb-1">
-                        <button onclick="toggleImmuCheatMode()" id="immuCheatToggleBtn" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/25 hover:border-rose-500 text-[9px] text-[#FF7694] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
-                            <i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#FF7694]"></i>
-                            SNEAK EYE: OFF
+                    <!-- Shared Action Controls bar (available to everyone) -->
+                    <div class="flex justify-between items-center gap-2 px-1 pb-1">
+                        <button onclick="confirmResetSpades()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
                         </button>
+                        
+                        <!-- Immu Spy Eye Controller (visible only to Immu) -->
+                        <div id="immuCheatControlWrapper" class="hidden">
+                            <button onclick="toggleImmuCheatMode()" id="immuCheatToggleBtn" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/25 hover:border-rose-500 text-[9px] text-[#FF7694] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#FF7694]"></i>
+                                SNEAK EYE: OFF
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Scoring status panel grid -->
@@ -1808,7 +1877,9 @@
                     lblB.innerText = "LEFT";
                 }
                 
-                db.ref('cardsGameState').set({ status: 'setup' });
+                if (!cardsGameState || !cardsGameState.status || cardsGameState.status === 'setup') {
+                    db.ref('cardsGameState').set({ status: 'setup' });
+                }
                 renderSpadesScreen();
             } else if (activeGame === 'songs') {
                 badge.innerText = "MUSIC LOUNGE";
@@ -1826,9 +1897,6 @@
         }
 
         function quitToLobby() {
-            if (activeGame === 'cards') {
-                db.ref('cardsGameState').set({ status: 'setup' });
-            }
             const isFromGamesHub = ['movie', 'word', 'cards'].includes(activeGame);
             activeGame = 'home';
             document.getElementById('gameplayScreen').classList.add('hidden');
@@ -2380,17 +2448,33 @@
             // Handle Middle column layout dynamically (supporting Tharkuri 3P slot)
             const middleCol = document.getElementById('scoreboardMiddleCol');
             if (middleCol) {
+                let renderTharkuri = false;
+                let tharkuriScore = 0;
+                let isTharkuriTurn = false;
+
                 if (activeGame === 'cards' && typeof cardsGameState !== 'undefined' && cardsGameState.playerNames && cardsGameState.playerNames.includes('tharkuri')) {
-                    const tharkuriCount = (cardsGameState.hands && cardsGameState.hands['tharkuri']) ? cardsGameState.hands['tharkuri'].length : 0;
-                    const isTharkuriTurn = cardsGameState.turn === 'tharkuri';
+                    renderTharkuri = true;
+                    tharkuriScore = (cardsGameState.hands && cardsGameState.hands['tharkuri']) ? cardsGameState.hands['tharkuri'].length : 0;
+                    isTharkuriTurn = cardsGameState.turn === 'tharkuri';
+                } else if (activeGame === 'movie' && typeof gameState !== 'undefined' && gameState.playerCount === 3) {
+                    renderTharkuri = true;
+                    tharkuriScore = gameState.score3 || 0;
+                    isTharkuriTurn = gameState.turn === 'tharkuri';
+                } else if (activeGame === 'word' && typeof wordGameState !== 'undefined' && wordGameState.playerCount === 3) {
+                    renderTharkuri = true;
+                    tharkuriScore = wordGameState.score3 || 0;
+                    isTharkuriTurn = false;
+                }
+
+                if (renderTharkuri) {
                     middleCol.innerHTML = `
                         <div id="pScoreCard_tharkuri" class="p-3 bg-white/5 border ${isTharkuriTurn ? 'border-amber-400 shadow-lg shadow-amber-500/20 z-10 scale-105' : 'border-white/5'} rounded-2xl relative transition-all duration-300">
                             <div class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md">
-                                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Tharkuri" alt="Tharkuri" class="w-full h-full object-cover">
+                                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Tharkuri" alt="Tharkuri" class="w-full h-full object-cover animate-pulse">
                                 <span id="pOnlineDot_tharkuri" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 ${playersOnlineMap['tharkuri'] ? 'bg-green-500 animate-pulse' : 'bg-stone-600'} transition-all"></span>
                             </div>
                             <span class="text-[10px] font-black text-stone-300 tracking-wider">THARKURI</span>
-                            <span id="pScoreDigit_tharkuri" class="block text-xl font-black text-amber-400 font-display mt-0.5">${tharkuriCount}</span>
+                            <span id="pScoreDigit_tharkuri" class="block text-xl font-black text-amber-400 font-display mt-0.5">${tharkuriScore}</span>
                         </div>
                     `;
                 } else {
@@ -2438,13 +2522,15 @@
             }
 
             gameState = {
-                status: data.status || "set",
+                status: data.status || "setup",
                 turn: data.turn || "immu",
                 movieEng: data.movieEng || "",
                 movieTamil: data.movieTamil || "",
                 hint: data.hint || "",
                 score1: fbS1,
-                score2: fbS2
+                score2: fbS2,
+                score3: data.score3 || 0,
+                playerCount: data.playerCount || 2
             };
 
             refreshScoreboard();
@@ -2453,7 +2539,36 @@
             scheduleBotMoves();
         });
 
+        function startMovieGameSetup(totalCompetitors) {
+            db.ref('gameState').set({
+                status: 'set',
+                playerCount: totalCompetitors,
+                turn: 'immu',
+                score1: 0,
+                score2: 0,
+                score3: 0,
+                movieEng: "",
+                movieTamil: "",
+                hint: ""
+            });
+            triggerLiveToast(`MOVIE GAME INITIALIZED WITH ${totalCompetitors} PLAYERS!`);
+        }
+
+        function confirmResetMovie() {
+            db.ref('gameState').set({ status: 'setup' });
+            triggerLiveToast("MOVIE GAME RESET TO LOBBY!");
+        }
+
         function renderMovieScreen() {
+            if (!gameState || gameState.status === "setup") {
+                document.getElementById('boxMovieSetup').classList.remove('hidden');
+                document.getElementById('boxMovieSetter').classList.add('hidden');
+                document.getElementById('boxMovieWaitingSetter').classList.add('hidden');
+                document.getElementById('boxMovieGuesser').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('boxMovieSetup').classList.add('hidden');
             const isMyTurn = gameState.turn === myName;
             
             if (gameState.status === "set") {
@@ -2464,6 +2579,10 @@
                     document.getElementById('boxMovieSetter').classList.remove('hidden');
                 } else {
                     document.getElementById('boxMovieSetter').classList.add('hidden');
+                    const waitMsgNode = document.getElementById('movieWaitingSetterMessage');
+                    if (waitMsgNode) {
+                        waitMsgNode.innerText = `${(gameState.turn || "PARTNER").toUpperCase()} IS CHOOSING THE MOVIE...`;
+                    }
                     document.getElementById('boxMovieWaitingSetter').classList.remove('hidden');
                 }
             } else if (gameState.status === "guessing") {
@@ -2482,7 +2601,8 @@
                     document.getElementById('movieClueBoard').classList.add('hidden');
                 }
 
-                if (isMyTurn) {
+                // If I am NOT the setter: I can guess!
+                if (!isMyTurn) {
                     // This means I am the GUESSER
                     document.getElementById('movieGuesserTurnBadge').innerText = "GUESSER";
                     document.getElementById('movieGuesserTurnBadge').className = "bg-[var(--accent-color)]/20 text-[var(--accent-color)] text-[9px] font-black px-3 py-1 rounded-full uppercase font-mono tracking-wider animate-pulse";
@@ -2496,6 +2616,29 @@
                     
                     document.getElementById('movieSecretAnswerText').innerText = (gameState.movieEng || "").toUpperCase();
                     document.getElementById('movieSettersFeedbackRow').classList.remove('hidden');
+
+                    const setterBtnContainer = document.getElementById('movieSetterButtonsContainer') || document.getElementById('movieSettersFeedbackRow').querySelector('div.flex');
+                    if (setterBtnContainer) {
+                        const playersList = (gameState.playerCount === 3) ? ['immu', 'sappii', 'tharkuri'] : ['immu', 'sappii'];
+                        const guesserList = playersList.filter(p => p !== myName);
+                        
+                        let buttonsHtml = `
+                            <button onclick="getHintFromGemini()" id="geminiHintBtn" class="px-4 py-2.5 bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/25 text-[var(--accent-color)] border border-[var(--accent-color)]/20 hover:border-[var(--accent-color)]/50 rounded-xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-1.5 transition-all cursor-pointer">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i>ASK GEMINI ROBOT CLUE
+                            </button>
+                        `;
+                        
+                        guesserList.forEach(p => {
+                            buttonsHtml += `
+                                <button onclick="movieAwardManualPoint('${p}')" class="px-3 py-2 bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white border border-white/10 rounded-xl font-black text-[10px] tracking-widest uppercase transition-all cursor-pointer">
+                                    AWARD ${p.toUpperCase()} POINT
+                                </button>
+                            `;
+                        });
+                        
+                        setterBtnContainer.innerHTML = buttonsHtml;
+                        setTimeout(() => { if (typeof lucide !== 'undefined') lucide.createIcons(); }, 30);
+                    }
                 }
             }
         }
@@ -2507,8 +2650,8 @@
             if (!guess) return triggerLiveToast("WRITE DOWN YOUR BEST CINEMA SPECULATION!");
 
             if (guess === actual) {
-                // Award points cleanly based on turn parameters
-                const scoreRefKey = (myName === 'immu') ? 'score1' : 'score2';
+                // Award points cleanly based on myName
+                const scoreRefKey = (myName === 'immu') ? 'score1' : (myName === 'sappii' ? 'score2' : 'score3');
                 db.ref(`gameState/${scoreRefKey}`).transaction(s => (s || 0) + 1);
                 
                 db.ref('chatMessages').push({
@@ -2535,8 +2678,9 @@
         }
 
         function giveUpMovieRound() {
-            const setterNameKey = (myName === 'immu') ? 'score2' : 'score1';
-            db.ref(`gameState/${setterNameKey}`).transaction(s => (s || 0) + 1);
+            const currentSetter = gameState.turn || 'immu';
+            const setterScoreKey = (currentSetter === 'immu') ? 'score1' : (currentSetter === 'sappii' ? 'score2' : 'score3');
+            db.ref(`gameState/${setterScoreKey}`).transaction(s => (s || 0) + 1);
 
             db.ref('chatMessages').push({
                 sender: "SYSTEM",
@@ -2544,9 +2688,18 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 
+            let nextSetter = 'immu';
+            if (gameState.playerCount === 3) {
+                if (currentSetter === 'immu') nextSetter = 'sappii';
+                else if (currentSetter === 'sappii') nextSetter = 'tharkuri';
+                else nextSetter = 'immu';
+            } else {
+                nextSetter = (currentSetter === 'immu') ? 'sappii' : 'immu';
+            }
+
             db.ref('gameState').update({
                 status: "set",
-                turn: partnerName,
+                turn: nextSetter,
                 movieEng: "",
                 movieTamil: "",
                 hint: ""
@@ -2555,19 +2708,20 @@
             triggerLiveToast("SURRENDER RECOGNIZED!");
         }
 
-        function movieAwardManualPoint() {
-            const key = (myName === 'immu') ? 'score2' : 'score1';
-            db.ref(`gameState/${key}`).transaction(s => (s || 0) + 1);
+        function movieAwardManualPoint(receiver) {
+            const rx = receiver || partnerName;
+            const scoreRefKey = (rx === 'immu') ? 'score1' : (rx === 'sappii' ? 'score2' : 'score3');
+            db.ref(`gameState/${scoreRefKey}`).transaction(s => (s || 0) + 1);
 
             db.ref('chatMessages').push({
                 sender: "SYSTEM",
-                text: `🤝 ${myName.toUpperCase()} GRANTED A COMPASSION CREDIT BACKING ${partnerName.toUpperCase()}`,
+                text: `🤝 ${myName.toUpperCase()} GRANTED A COMPASSION CREDIT BACKING ${rx.toUpperCase()}`,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 
             db.ref('gameState').update({
                 status: "set",
-                turn: partnerName,
+                turn: rx,
                 movieEng: "",
                 movieTamil: "",
                 hint: ""
@@ -2640,13 +2794,35 @@
         }
 
         // ================= WORD SPEED RACING LOGIC =================
+        function startWordGameSetup(totalCompetitors) {
+            db.ref('wordGameState').set({
+                status: 'letter_phase',
+                playerCount: totalCompetitors,
+                score1: 0,
+                score2: 0,
+                score3: 0,
+                p1Letter: "",
+                p2Letter: "",
+                p3Letter: "",
+                startLetter: "",
+                endLetter: "",
+                usedWords: null
+            });
+            triggerLiveToast(`WORD RACE COMMENCED WITH ${totalCompetitors} PLAYERS!`);
+        }
+
+        function confirmResetWord() {
+            db.ref('wordGameState').set({ status: 'setup' });
+            triggerLiveToast("WORD RACE RESET TO LOBBY!");
+        }
+
         function sumbitWordSetupLetter() {
             let inputChar = document.getElementById('wordSetupLockInput').value.trim().toLowerCase();
             if (!inputChar || inputChar.length > 1 || !/[a-z]/.test(inputChar)) {
                 return triggerLiveToast("SELECT A SINGLE LEGAL CHARACTER (A-Z)!");
             }
 
-            const senderRefFieldKey = (myName === 'immu') ? 'p1Letter' : 'p2Letter';
+            const senderRefFieldKey = (myName === 'immu') ? 'p1Letter' : (myName === 'sappii' ? 'p2Letter' : 'p3Letter');
             db.ref('wordGameState').update({
                 [senderRefFieldKey]: inputChar
             });
@@ -2689,13 +2865,16 @@
             }
 
             wordGameState = {
-                status: data.status || "letter_phase",
+                status: data.status || "setup",
                 p1Letter: data.p1Letter || "",
                 p2Letter: data.p2Letter || "",
+                p3Letter: data.p3Letter || "",
                 startLetter: data.startLetter || "",
                 endLetter: data.endLetter || "",
                 score1: fbS1,
                 score2: fbS2,
+                score3: data.score3 || 0,
+                playerCount: data.playerCount || 2,
                 usedWords: data.usedWords || {}
             };
 
@@ -2708,12 +2887,25 @@
         });
 
         function renderWordScreen() {
+            if (!wordGameState || wordGameState.status === "setup") {
+                document.getElementById('boxWordLobbyChoices').classList.remove('hidden');
+                document.getElementById('boxWordSetup').classList.add('hidden');
+                document.getElementById('boxWordActiveRace').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('boxWordLobbyChoices').classList.add('hidden');
+
+            const is3P = wordGameState.playerCount === 3;
+            const p1 = wordGameState.p1Letter;
+            const p2 = wordGameState.p2Letter;
+            const p3 = wordGameState.p3Letter;
+
             if (wordGameState.status === "letter_phase") {
                 document.getElementById('boxWordActiveRace').classList.add('hidden');
                 document.getElementById('boxWordSetup').classList.remove('hidden');
 
-                const mySavedLetter = (myName === 'immu') ? wordGameState.p1Letter : wordGameState.p2Letter;
-                const partnerSavedLetter = (myName === 'immu') ? wordGameState.p2Letter : wordGameState.p1Letter;
+                const mySavedLetter = (myName === 'immu') ? p1 : (myName === 'sappii' ? p2 : p3);
 
                 if (!mySavedLetter) {
                     document.getElementById('wordRoundStageBadge').innerText = "PREPARATION";
@@ -2721,11 +2913,18 @@
                     document.getElementById('wordLockForm').classList.remove('hidden');
                     document.getElementById('wordWaitingLock').classList.add('hidden');
                     document.getElementById('wordSequenceSelection').classList.add('hidden');
-                } else if (!partnerSavedLetter) {
+                } else if ((!is3P && (!p1 || !p2)) || (is3P && (!p1 || !p2 || !p3))) {
                     document.getElementById('wordRoundStageBadge').innerText = "WAITING";
                     document.getElementById('wordRoundStageBadge').className = "text-[9px] bg-white/5 text-stone-400 px-2.5 py-1 rounded font-black tracking-wider uppercase animate-pulse";
                     document.getElementById('wordLockForm').classList.add('hidden');
                     document.getElementById('wordSetupLockDisplay').innerText = mySavedLetter.toUpperCase();
+
+                    let traceArr = [];
+                    if (!p1) traceArr.push("IMMU");
+                    if (!p2) traceArr.push("SAPPII");
+                    if (is3P && !p3) traceArr.push("THARKURI");
+                    document.getElementById('wordWaitingLock').querySelector('p').innerText = `WAITING FOR ${traceArr.join(" & ")} RESPONSE...`;
+
                     document.getElementById('wordWaitingLock').classList.remove('hidden');
                     document.getElementById('wordSequenceSelection').classList.add('hidden');
                 } else {
@@ -2735,8 +2934,39 @@
                     document.getElementById('wordLockForm').classList.add('hidden');
                     document.getElementById('wordWaitingLock').classList.add('hidden');
 
-                    document.getElementById('wordDirLabelA').innerText = `${wordGameState.p1Letter.toUpperCase()} → ${wordGameState.p2Letter.toUpperCase()}`;
-                    document.getElementById('wordDirLabelB').innerText = `${wordGameState.p2Letter.toUpperCase()} → ${wordGameState.p1Letter.toUpperCase()}`;
+                    const selectRow = document.getElementById('wordSequenceSelection').querySelector('div.grid');
+                    if (selectRow) {
+                        if (is3P) {
+                            selectRow.className = "grid grid-cols-3 gap-2 pt-2";
+                            selectRow.innerHTML = `
+                                <button onclick="setWordRaceArrangement('3p_1')" class="p-3 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center cursor-pointer">
+                                    <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider">OPTION 1</span>
+                                    <span class="text-xs font-black text-[var(--accent-color)] uppercase tracking-normal">${p1.toUpperCase()} → ${p2.toUpperCase()}</span>
+                                </button>
+                                <button onclick="setWordRaceArrangement('3p_2')" class="p-3 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center cursor-pointer">
+                                    <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider">OPTION 2</span>
+                                    <span class="text-xs font-black text-[var(--primary-color)] uppercase tracking-normal">${p2.toUpperCase()} → ${p3.toUpperCase()}</span>
+                                </button>
+                                <button onclick="setWordRaceArrangement('3p_3')" class="p-3 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center cursor-pointer">
+                                    <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider">OPTION 3</span>
+                                    <span class="text-xs font-black text-amber-500 uppercase tracking-normal">${p3.toUpperCase()} → ${p1.toUpperCase()}</span>
+                                </button>
+                            `;
+                        } else {
+                            selectRow.className = "grid grid-cols-2 gap-3 pt-2";
+                            selectRow.innerHTML = `
+                                <button onclick="setWordRaceArrangement('forward')" class="p-4 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center cursor-pointer">
+                                    <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider font-mono">FORWARD ALIGN</span>
+                                    <span id="wordDirLabelA" class="text-xl font-black text-[var(--accent-color)] uppercase tracking-normal">${p1.toUpperCase()} → ${p2.toUpperCase()}</span>
+                                </button>
+                                <button onclick="setWordRaceArrangement('reverse')" class="p-4 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center cursor-pointer">
+                                    <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider font-mono">REVERSE ALIGN</span>
+                                    <span id="wordDirLabelB" class="text-xl font-black text-[var(--primary-color)] uppercase tracking-normal">${p2.toUpperCase()} → ${p1.toUpperCase()}</span>
+                                </button>
+                            `;
+                        }
+                    }
+
                     document.getElementById('wordSequenceSelection').classList.remove('hidden');
                 }
             } else if (wordGameState.status === "race_phase") {
@@ -2754,6 +2984,15 @@
             if (type === 'reverse') {
                 start = wordGameState.p2Letter;
                 end = wordGameState.p1Letter;
+            } else if (type === '3p_1') {
+                start = wordGameState.p1Letter;
+                end = wordGameState.p2Letter;
+            } else if (type === '3p_2') {
+                start = wordGameState.p2Letter;
+                end = wordGameState.p3Letter;
+            } else if (type === '3p_3') {
+                start = wordGameState.p3Letter;
+                end = wordGameState.p1Letter;
             }
 
             db.ref('wordGameState').update({
@@ -2765,11 +3004,7 @@
         }
 
         function setWordRaceArrangement(alignment) {
-            if (alignment === 'reverse') {
-                wordConfigureDirection('reverse');
-            } else {
-                wordConfigureDirection('forward');
-            }
+            wordConfigureDirection(alignment);
         }
 
         async function submitWordRaceAnswer() {
@@ -2820,7 +3055,7 @@
                 inputField.disabled = false;
 
                 if (committed) {
-                    const myWinningRefKey = (myName === 'immu') ? 'score1' : 'score2';
+                    const myWinningRefKey = (myName === 'immu') ? 'score1' : (myName === 'sappii' ? 'score2' : 'score3');
                     db.ref(`wordGameState/${myWinningRefKey}`).transaction(s => (s || 0) + 1);
 
                     db.ref('chatMessages').push({
@@ -2833,6 +3068,7 @@
                         status: "letter_phase",
                         p1Letter: "",
                         p2Letter: "",
+                        p3Letter: "",
                         startLetter: "",
                         endLetter: "",
                         usedWords: null
@@ -2852,6 +3088,7 @@
                 status: "letter_phase",
                 p1Letter: "",
                 p2Letter: "",
+                p3Letter: "",
                 startLetter: "",
                 endLetter: "",
                 usedWords: null
@@ -4851,17 +5088,48 @@
                 finishedPanel.classList.remove('hidden');
                 wrap.classList.add('hidden');
 
-                const champion = cardsGameState.winner || 'immu';
-                document.getElementById('spadesWinnersRank').innerText = `🏆 ${champion.toUpperCase()} EMPTIED THEIR HAND HANDS FIRST AND CONQUERED THE ARENA!`;
+                const order = cardsGameState.finishedOrder || [];
+                const loser = cardsGameState.loser || '';
+                
+                let rankMsg = "";
+                if (order.length > 0) {
+                    const first = order[0] || 'immu';
+                    const second = order[1];
+                    if (second) {
+                        rankMsg = `🏆 1st: ${first.toUpperCase()} | 🥈 2nd: ${second.toUpperCase()}`;
+                    } else {
+                        rankMsg = `🏆 WINNER: ${first.toUpperCase()}`;
+                    }
+                    if (loser) {
+                        rankMsg += ` | ❌ LOSE: ${loser.toUpperCase()}`;
+                    }
+                } else {
+                    const champion = cardsGameState.winner || 'immu';
+                    rankMsg = `🏆 ${champion.toUpperCase()} EMPTIED THEIR HAND FIRST!`;
+                }
+                
+                document.getElementById('spadesWinnersRank').innerText = rankMsg;
                 
                 let scoresGridHtml = '';
                 const players = cardsGameState.playerNames || ['immu', 'sappii'];
                 players.forEach(p => {
                     const count = (cardsGameState.hands && cardsGameState.hands[p]) ? cardsGameState.hands[p].length : 0;
+                    let placeLabel = '';
+                    if (order.includes(p)) {
+                        const rankIdx = order.indexOf(p);
+                        if (rankIdx === 0) placeLabel = '🥇 1st PLACE (WIN)';
+                        else if (rankIdx === 1) placeLabel = '🥈 2nd PLACE';
+                    } else if (p === loser) {
+                        placeLabel = '❌ DISCARD FAIL (LOSE)';
+                    } else {
+                        placeLabel = 'SPECTATOR';
+                    }
+                    
                     scoresGridHtml += `
-                        <div class="p-3 bg-white/5 rounded-xl border border-white/5 text-center">
-                            <span class="text-[9px] text-stone-500 font-black block uppercase">${p}</span>
-                            <span class="text-xl font-black text-[var(--accent-color)]">${count} CARDS LEFT</span>
+                        <div class="p-3 bg-white/5 rounded-xl border border-white/5 text-center space-y-1 shadow-md">
+                            <span class="text-[9px] text-stone-500 font-black block uppercase tracking-wider">${p}</span>
+                            <span class="text-xs font-black text-[var(--accent-color)] block">${placeLabel}</span>
+                            <span class="text-[10px] font-mono text-stone-400 block">${count} CARDS LEFT</span>
                         </div>
                     `;
                 });
@@ -4878,7 +5146,8 @@
             const cardsOnTable = cardsGameState.table || {};
 
             // Safeguard non-active observer users
-            if (!cardsGameState.hands || !cardsGameState.hands[myName]) {
+            const isParticipant = cardsGameState.playerNames && cardsGameState.playerNames.includes(myName);
+            if (!isParticipant) {
                 wrap.innerHTML = `
                     <div class="p-6 text-center space-y-3">
                         <i data-lucide="eye" class="w-8 h-8 text-stone-500 mx-auto"></i>
@@ -5018,7 +5287,52 @@
             const deckHandRow = document.getElementById('spadesPlayerDeckHand');
             deckHandRow.innerHTML = "";
 
-            myDeck.forEach((card, index) => {
+            if (myDeck.length === 0) {
+                deckHandRow.innerHTML = `
+                    <div class="w-full p-5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-center space-y-1.5 animate-pulse">
+                        <div class="flex items-center justify-center gap-2 text-emerald-400 font-extrabold text-[11px] uppercase tracking-widest font-display">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i>
+                            FINISHED & SURVIVED!
+                        </div>
+                        <p class="text-[8.5px] text-stone-400 uppercase font-mono tracking-wider">
+                            You emptied your deck. Spectating remaining players...
+                        </p>
+                    </div>
+                `;
+                setTimeout(() => lucide.createIcons(), 50);
+            }
+
+            const mappedDeck = myDeck.map((card, originalIdx) => ({ card, originalIdx }));
+            mappedDeck.sort((a, b) => {
+                const leadSuit = cardsGameState.ledSuit;
+                
+                if (leadSuit) {
+                    const aIsLead = a.card.suit === leadSuit;
+                    const bIsLead = b.card.suit === leadSuit;
+                    if (aIsLead !== bIsLead) {
+                        return aIsLead ? -1 : 1;
+                    }
+                    if (aIsLead && bIsLead) {
+                        return b.card.rank - a.card.rank;
+                    }
+                }
+                
+                const aIsSpade = a.card.suit === 'S';
+                const bIsSpade = b.card.suit === 'S';
+                if (aIsSpade !== bIsSpade) {
+                    return aIsSpade ? -1 : 1;
+                }
+                if (aIsSpade && bIsSpade) {
+                    return b.card.rank - a.card.rank;
+                }
+                
+                if (a.card.suit !== b.card.suit) {
+                    return a.card.suit.localeCompare(b.card.suit);
+                }
+                return b.card.rank - a.card.rank;
+            });
+
+            mappedDeck.forEach(({ card, originalIdx }) => {
                 const suitSym = SUIT_GLYPHS[card.suit];
                 const displayVal = VALUE_RANKING_LABELS[card.rank];
                 const isSuitRed = (card.suit === 'H' || card.suit === 'D');
@@ -5045,7 +5359,7 @@
                 const cardBoxNode = document.createElement('div');
                 cardBoxNode.className = `w-16 h-24 rounded-2xl border-2 ${interactiveBorder} ${cardBgGradient} ${cardTxtColor} ${accessibilityOpacity} flex flex-col justify-between p-2.5 shadow-xl relative shrink-0 cursor-pointer spades-card select-none overflow-hidden transition-all duration-300 group`;
                 if (isAllowedToPlay) {
-                    cardBoxNode.setAttribute('onclick', `dischargeSpadesCardIndex(${index})`);
+                    cardBoxNode.setAttribute('onclick', `dischargeSpadesCardIndex(${originalIdx})`);
                     cardBoxNode.classList.add('hover:-translate-y-4', 'hover:shadow-2xl', 'hover:shadow-[var(--glow-color)]');
                 }
 
@@ -5104,9 +5418,15 @@
             // Shift active turn indices or resolve trick rounds
             const participants = cardsGameState.playerNames;
             
+            // Check active participants taking part in this trick
+            const activeParticipants = participants.filter(p => {
+                const pHand = (p === myName) ? hand : (cardsGameState.hands[p] || []);
+                return pHand.length > 0 || (updateTable && updateTable[p]);
+            });
+
             // Evaluated if the card played on this turn constitutes a 'Vettu' (cut) on the leading suit constraint
             const isCutPlay = checkConstraintLedSuit && (targetSelect.suit !== checkConstraintLedSuit);
-            const isRoundComplete = isCutPlay || (Object.keys(updateTable).length === participants.length);
+            const isRoundComplete = isCutPlay || (Object.keys(updateTable).length === activeParticipants.length);
 
             if (isRoundComplete) {
                 updates.turn = 'resolving';
@@ -5179,31 +5499,52 @@
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     });
 
-                    // Check if any player's hand became empty
-                    let winner = '';
+                    // Track finished order of players (emptied their hands)
+                    let currentFinished = cardsGameState.finishedOrder || [];
                     for (let p of participants) {
-                        if (hands[p] && hands[p].length === 0) {
-                            winner = p;
-                            break;
+                        if (p && hands[p] && hands[p].length === 0) {
+                            if (!currentFinished.includes(p)) {
+                                currentFinished.push(p);
+                            }
                         }
                     }
 
-                    if (winner) {
+                    const playersWithCards = participants.filter(p => hands[p] && hands[p].length > 0);
+                    const isGameOver = (playersWithCards.length <= 1);
+
+                    if (isGameOver) {
+                        const loserName = playersWithCards[0] || '';
                         db.ref('cardsGameState').update({
                             hands: hands,
                             table: null,
                             ledSuit: '',
                             turn: 'game_over',
                             status: 'finished',
-                            winner: winner
+                            winner: currentFinished[0] || 'immu',
+                            loser: loserName,
+                            finishedOrder: currentFinished
                         });
-                        triggerLiveToast(`CONGRATULATIONS! ${winner.toUpperCase()} IS OUT OF CARDS AND WON!`);
+                        triggerLiveToast(`GAME OVER! LOSE: ${loserName.toUpperCase()}`);
                     } else {
+                        // Game continues with the active remaining players
+                        // Auto skip/adjust nextTurnTarget if they have no cards left (finished)
+                        if (hands[nextTurnTarget] && hands[nextTurnTarget].length === 0) {
+                            let nextIdx = participants.indexOf(nextTurnTarget);
+                            for (let i = 1; i <= participants.length; i++) {
+                                let candidate = participants[(nextIdx + i) % participants.length];
+                                if (hands[candidate] && hands[candidate].length > 0) {
+                                    nextTurnTarget = candidate;
+                                    break;
+                                }
+                            }
+                        }
+
                         db.ref('cardsGameState').update({
                             hands: hands,
                             table: {},
                             ledSuit: '',
-                            turn: nextTurnTarget
+                            turn: nextTurnTarget,
+                            finishedOrder: currentFinished
                         });
                         triggerLiveToast("VETTU ROUND RESOLVED!");
                     }
@@ -5211,9 +5552,16 @@
                 }, 2000);
 
             } else {
-                let myIndex = participants.indexOf(myName);
-                let successor = participants[(myIndex + 1) % participants.length];
-                updates.turn = successor;
+                let currIdx = participants.indexOf(myName);
+                let successor = '';
+                for (let i = 1; i <= participants.length; i++) {
+                    let candidate = participants[(currIdx + i) % participants.length];
+                    if (cardsGameState.hands[candidate] && cardsGameState.hands[candidate].length > 0) {
+                        successor = candidate;
+                        break;
+                    }
+                }
+                updates.turn = successor || myName;
                 db.ref('cardsGameState').update(updates);
             }
             triggerLiveToast("CARD PLAYED!");
