@@ -903,10 +903,13 @@
                         <span id="musicVolValueLabel" class="text-[9px] text-stone-400 font-black font-mono w-6 text-right">80%</span>
                     </div>
 
-                    <!-- Dynamic Preset Playlist Section for Audio -->
+                    <!-- Dynamic Preset Playlist Section for Audio - Replaced with Recently Played List -->
                     <div id="audioPlaylistSection" class="mt-4 text-left space-y-2 select-none">
-                        <span class="text-[9px] text-stone-500 font-black tracking-widest uppercase block pl-1">PRESET TAMIL PLAYLIST (SELECT SONG TO SYNC)</span>
-                        <div id="songsPresetGridList" class="grid grid-cols-1 gap-2 max-h-[120px] overflow-y-auto pr-1"></div>
+                        <div class="flex justify-between items-center pl-1 pr-1">
+                            <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block">RECENTLY PLAYED SOUNDTRACKS</span>
+                            <button onclick="clearRecentlyPlayedHistory()" class="text-[8px] text-stone-500 hover:text-rose-400 font-extrabold uppercase tracking-wider cursor-pointer transition-colors">CLEAR HISTORY</button>
+                        </div>
+                        <div id="recentlyPlayedGridList" class="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1"></div>
                     </div>
 
                     <!-- Co-op Synchronized Audio Stream Mode Selector - MX Player & VLC Style Audio Track Swapper -->
@@ -1529,7 +1532,7 @@
                     lblA.className = "text-lg block tracking-normal";
                     lblB.innerText = "JAMMING";
                 }
-                renderSongsPresets();
+                renderRecentlyPlayedUI();
             }
             refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
@@ -1711,15 +1714,27 @@
             const key = snap.key;
             if(!data) return;
 
-            const box = document.getElementById('chatMessagesScroller');
+            // Automatically mark non-system messages from other people as seen by me
             const isMine = data.sender === myName.toUpperCase();
             const isSystem = data.sender === "SYSTEM" || data.sender === "AI-ROBOT";
+            if (!isMine && !isSystem) {
+                db.ref(`chatMessages/${key}/seenBy/${myName.toUpperCase()}`).set(true);
+            }
+
+            const box = document.getElementById('chatMessagesScroller');
 
             const messageRow = document.createElement('div');
             messageRow.id = `chatMsg_${key}`;
             messageRow.className = "flex flex-col w-full animate-slideIn";
 
             const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const seenUsers = Object.keys(data.seenBy || {}).filter(u => u !== data.sender);
+            const seenHtml = seenUsers.length > 0 
+                ? `<div class="text-[8px] text-stone-500 font-bold px-1 mt-1 flex items-center gap-1 ${isMine ? 'justify-end text-right' : 'justify-start text-left'}">
+                      <i data-lucide="check-check" class="w-3.5 h-3.5 text-pink-400 shrink-0"></i> Seen by ${seenUsers.join(', ')}
+                   </div>`
+                : '';
 
             if (isSystem) {
                 messageRow.className += " items-center text-center py-1";
@@ -1740,6 +1755,7 @@
                     messageRow.innerHTML = `
                         <div class="text-[9px] text-stone-500 font-bold mb-0.5 px-1">${isMine ? 'YOU' : data.sender} • ${time}</div>
                         <div class="text-[44px] leading-none animate-emoji" title="Click to Copy">${data.text}</div>
+                        <div id="seen_container_${key}">${seenHtml}</div>
                     `;
                 } else {
                     messageRow.className += ` ${alignClass}`;
@@ -1755,6 +1771,7 @@
                                 </div>
                             ` : ''}
                         </div>
+                        <div id="seen_container_${key}" class="w-full">${seenHtml}</div>
                     `;
                 }
             }
@@ -1771,6 +1788,27 @@
 
             if (isFirstBatchChatLoaded && !isMine && !isSystem) {
                 triggerLiveToast(`NEW MESSAGE: ${data.sender}`);
+            }
+        });
+
+        db.ref('chatMessages').on('child_changed', (snap) => {
+            const data = snap.val();
+            const key = snap.key;
+            if(!data) return;
+
+            const isMine = data.sender === myName.toUpperCase();
+            const isSystem = data.sender === "SYSTEM" || data.sender === "AI-ROBOT";
+            const seenUsers = Object.keys(data.seenBy || {}).filter(u => u !== data.sender);
+            const seenHtml = seenUsers.length > 0 
+                ? `<div class="text-[8px] text-stone-500 font-bold px-1 mt-1 flex items-center gap-1 ${isMine ? 'justify-end text-right' : 'justify-start text-left'}">
+                      <i data-lucide="check-check" class="w-3.5 h-3.5 text-pink-400 shrink-0"></i> Seen by ${seenUsers.join(', ')}
+                   </div>`
+                : '';
+
+            const container = document.getElementById(`seen_container_${key}`);
+            if (container) {
+                container.innerHTML = seenHtml;
+                lucide.createIcons();
             }
         });
 
@@ -2742,9 +2780,11 @@
         });
 
         // ================= CO-OP MEDIA LOUNGE CONTROLLER ENGINE =================
-        function detectMediaType(url) {
-            if (!url) return 'video';
+        function detectMediaType(url, defaultType = 'video') {
+            if (!url) return defaultType;
             const cleanUrl = url.toLowerCase().split('?')[0];
+            
+            // Check explicit audio signatures
             if (cleanUrl.endsWith('.mp3') || 
                 cleanUrl.endsWith('.wav') || 
                 cleanUrl.endsWith('.ogg') || 
@@ -2756,7 +2796,25 @@
             ) {
                 return 'audio';
             }
-            return 'video';
+
+            // Check explicit video signatures
+            if (cleanUrl.endsWith('.mp4') ||
+                cleanUrl.endsWith('.webm') ||
+                cleanUrl.endsWith('.mov') ||
+                cleanUrl.endsWith('.avi') ||
+                cleanUrl.endsWith('.m3u8') ||
+                cleanUrl.endsWith('.mkv') ||
+                cleanUrl.endsWith('.flv') ||
+                cleanUrl.endsWith('.ts') ||
+                cleanUrl.endsWith('.3gp') ||
+                /instagram\.com|instagr\.am/i.test(url) ||
+                /youtube\.com|youtu\.be/i.test(url) ||
+                /vimeo\.com/i.test(url)
+            ) {
+                return 'video';
+            }
+
+            return defaultType;
         }
 
         async function resolveUrlAndExtractIfNeeded(url, originalTitle = "") {
@@ -2826,6 +2884,8 @@
         let musicState = {};
 
         let localMediaQueue = [];
+        let localRecentlyPlayed = [];
+        let lastPlayedTrackUrl = null;
         let hlsInstance = null; // Global Hls.js instance for multi-audio streaming
         const audioNode = document.getElementById('syncAudioPlayer');
         const videoNode = document.getElementById('syncVideoPlayer');
@@ -2890,6 +2950,150 @@
             }
         });
 
+        // Listen for recently played soundtrack history
+        db.ref('recentlyPlayed').on('value', (snap) => {
+            const val = snap.val();
+            localRecentlyPlayed = [];
+            if (val) {
+                for (let k in val) {
+                    localRecentlyPlayed.push({
+                        key: k,
+                        ...val[k]
+                    });
+                }
+                localRecentlyPlayed.sort((a, b) => b.playedAt - a.playedAt);
+            }
+            renderRecentlyPlayedUI();
+        });
+
+        function renderRecentlyPlayedUI() {
+            const listDiv = document.getElementById('recentlyPlayedGridList');
+            if (!listDiv) return;
+            listDiv.innerHTML = "";
+
+            if (localRecentlyPlayed.length === 0) {
+                listDiv.innerHTML = `
+                    <div class="py-6 text-center text-[10px] text-stone-500 font-bold uppercase tracking-widest bg-white/2 rounded-xl border border-dashed border-white/5">
+                        NO TRACKS PLAYED YET
+                    </div>
+                `;
+                return;
+            }
+
+            localRecentlyPlayed.forEach((song) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "w-full p-2.5 bg-white/5 border border-white/5 hover:border-[var(--accent-color)]/50 text-left rounded-xl transition-all text-xs text-white/90 font-bold tracking-wide flex justify-between items-center group relative overflow-hidden";
+                
+                const playTime = new Date(song.playedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                itemDiv.innerHTML = `
+                    <div class="flex items-center gap-2 relative z-10 select-none pl-1">
+                        <button onclick="playRecentTrackImmediately('${song.key}')" class="w-7 h-7 rounded bg-[var(--accent-color)]/10 text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:text-black flex items-center justify-center font-black transition-all shrink-0 cursor-pointer animate-none" title="Play Track Now">
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                        </button>
+                        <div class="min-w-0 flex-1 leading-normal pl-1.5 text-left">
+                            <span class="block text-[10.5px] font-extrabold uppercase leading-none truncate max-w-[150px] md:max-w-[200px] text-white" title="${song.title}">${song.title}</span>
+                            <span class="text-[8px] text-stone-400 uppercase tracking-widest font-mono mt-1.5 block truncate max-w-[150px] md:max-w-[200px]" title="${song.author}">${song.author}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-right relative z-10 select-none pr-1">
+                        <div class="text-[7.5px] font-mono tracking-widest uppercase leading-none text-stone-500 md:block hidden">
+                            <div>${song.playedBy.toUpperCase()}</div>
+                            <div class="text-[7px] text-stone-600 mt-1">${playTime}</div>
+                        </div>
+                        <button onclick="addRecentTrackToQueue('${song.key}')" class="w-6 h-6 rounded bg-white/5 text-stone-400 hover:bg-white/15 hover:text-white flex items-center justify-center transition-all cursor-pointer" title="Add to Shared Queue">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                listDiv.appendChild(itemDiv);
+            });
+            lucide.createIcons();
+        }
+
+        function playRecentTrackImmediately(key) {
+            const item = localRecentlyPlayed.find(i => i.key === key);
+            if (!item) return;
+
+            db.ref('musicState').set({
+                trackUrl: item.url,
+                trackTitle: item.title,
+                trackAuthor: item.author,
+                mediaType: item.mediaType || 'audio',
+                status: 'playing',
+                seekTime: 0,
+                sentTime: Date.now(),
+                triggeredBy: myName
+            });
+            triggerLiveToast(`PLAY HISTORY TRACK: ${item.title}`);
+        }
+
+        function addRecentTrackToQueue(key) {
+            const item = localRecentlyPlayed.find(i => i.key === key);
+            if (!item) return;
+
+            db.ref('mediaQueue').push({
+                url: item.url,
+                title: item.title,
+                mediaType: item.mediaType || 'audio',
+                addedBy: myName,
+                timestamp: Date.now()
+            });
+
+            triggerLiveToast(`ADDED ${item.title} TO QUEUE`);
+            playSynthSound('success');
+            
+            db.ref('chatMessages').push({
+                sender: "AI-ROBOT",
+                text: `➕ ${myName.toUpperCase()} ENQUEUED FROM HISTORY: "${item.title.toUpperCase()}"`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+
+        function clearRecentlyPlayedHistory() {
+            db.ref('recentlyPlayed').remove().then(() => {
+                triggerLiveToast("RECENTLY PLAYED HISTORY CLEARED!");
+                playSynthSound('toast');
+            });
+        }
+
+        function recordTrackPlayback(trackTitle, trackAuthor, trackUrl, mediaType) {
+            if (!trackUrl) return;
+            const historyRef = db.ref('recentlyPlayed');
+            historyRef.once('value', (snap) => {
+                let history = [];
+                snap.forEach((child) => {
+                    history.push({ key: child.key, ...child.val() });
+                });
+                
+                // Remove existing items with duplicate URLs to bubble it to top
+                const dupes = history.filter(item => item.url === trackUrl);
+                dupes.forEach(item => {
+                    db.ref(`recentlyPlayed/${item.key}`).remove();
+                });
+
+                // Add new entry
+                db.ref('recentlyPlayed').push({
+                    title: trackTitle || "UNKNOWN SONG",
+                    author: trackAuthor || "STREAM LINK",
+                    url: trackUrl,
+                    mediaType: mediaType || 'audio',
+                    playedAt: Date.now(),
+                    playedBy: myName
+                });
+
+                // Limit size of history list to say 15
+                const remaining = history.filter(item => !dupes.find(d => d.key === item.key));
+                if (remaining.length >= 15) {
+                    remaining.sort((a,b) => a.playedAt - b.playedAt);
+                    const toDeleteCount = remaining.length - 14;
+                    for (let i = 0; i < toDeleteCount; i++) {
+                        db.ref(`recentlyPlayed/${remaining[i].key}`).remove();
+                    }
+                }
+            });
+        }
+
         // URL parsing safety helper to prevent loop reloads
         function isSameUrl(srcA, srcB) {
             if (!srcA || !srcB) return false;
@@ -2915,7 +3119,7 @@
                     try {
                         const resolved = await resolveUrlAndExtractIfNeeded(nextItem.url, nextItem.title);
                         targetUrl = resolved.url;
-                        mType = detectMediaType(resolved.url);
+                        mType = detectMediaType(resolved.url, nextItem.mediaType || 'audio');
                     } catch (e) {
                         console.error("Dynamic extraction error on next play:", e);
                     }
@@ -3178,6 +3382,12 @@
 
             // Save in client global ref
             musicState = data;
+            
+            // Record to recently played history if playing and triggered by me to prevent duplication
+            if (data.status === 'playing' && data.trackUrl && data.triggeredBy === myName && data.trackUrl !== lastPlayedTrackUrl) {
+                lastPlayedTrackUrl = data.trackUrl;
+                recordTrackPlayback(data.trackTitle, data.trackAuthor, data.trackUrl, data.mediaType);
+            }
             
             const isVideo = (data.mediaType === 'video');
 
@@ -3765,7 +3975,7 @@
 
         async function playPlaylistItemImmediately(songUrl, title, addedBy) {
             let targetUrl = songUrl;
-            let mType = detectMediaType(songUrl);
+            let mType = detectMediaType(songUrl, 'audio');
             
             const isInstaPage = /instagram\.com|instagr\.am/i.test(songUrl) && !songUrl.includes('proxy-mp4');
             if (isInstaPage) {
@@ -3773,7 +3983,7 @@
                 try {
                     const resolved = await resolveUrlAndExtractIfNeeded(songUrl, title);
                     targetUrl = resolved.url;
-                    mType = detectMediaType(resolved.url);
+                    mType = detectMediaType(resolved.url, 'audio');
                 } catch (e) {
                     console.error("Dynamic extraction error on play:", e);
                 }
@@ -3812,7 +4022,7 @@
 
             const playlist = firebasePlaylists[activePlaylistId];
             songs.forEach((song, idx) => {
-                const songType = detectMediaType(song.url);
+                const songType = detectMediaType(song.url, 'audio');
                 db.ref('mediaQueue').push({
                     url: song.url,
                     title: song.title,
@@ -3838,7 +4048,7 @@
 
             const playlist = firebasePlaylists[activePlaylistId];
             const first = songs[0];
-            const firstType = detectMediaType(first.url);
+            const firstType = detectMediaType(first.url, 'audio');
 
             // Clean active queue first so playlist tracks sequence beautifully
             db.ref('mediaQueue').remove().then(async () => {
@@ -3851,7 +4061,7 @@
                     try {
                         const resolved = await resolveUrlAndExtractIfNeeded(first.url, first.title);
                         targetUrl = resolved.url;
-                        resolvedType = detectMediaType(resolved.url);
+                        resolvedType = detectMediaType(resolved.url, 'audio');
                     } catch (e) {
                         console.error(e);
                     }
@@ -3871,7 +4081,7 @@
                 if (songs.length > 1) {
                     for (let i = 1; i < songs.length; i++) {
                         const song = songs[i];
-                        const songType = detectMediaType(song.url);
+                        const songType = detectMediaType(song.url, 'audio');
                         db.ref('mediaQueue').push({
                             url: song.url,
                             title: song.title,
@@ -3992,7 +4202,7 @@
             if (!url) return triggerLiveToast("ENTER A VALID MOVIE OR SONG LINK FIRST!");
             
             const resolved = await resolveUrlAndExtractIfNeeded(url);
-            const mType = detectMediaType(resolved.url);
+            const mType = detectMediaType(resolved.url, 'audio');
 
             db.ref('musicState').set({
                 trackUrl: resolved.url,
@@ -4014,7 +4224,7 @@
             if (!url) return triggerLiveToast("ENTER A VALID DIRECT MOVIE LINK FIRST!");
             
             const resolved = await resolveUrlAndExtractIfNeeded(url);
-            const mType = detectMediaType(resolved.url);
+            const mType = detectMediaType(resolved.url, 'video');
 
             db.ref('musicState').set({
                 trackUrl: resolved.url,
@@ -4037,7 +4247,7 @@
             if (!url) return triggerLiveToast("ENTER A VALID LINK TO ENQUEUE!");
             
             const resolved = await resolveUrlAndExtractIfNeeded(url);
-            const mType = detectMediaType(resolved.url);
+            const mType = detectMediaType(resolved.url, 'audio');
 
             db.ref('mediaQueue').push({
                 url: resolved.url,
@@ -4064,7 +4274,7 @@
             if (!url) return triggerLiveToast("ENTER A VALID MP4 LINK TO ENQUEUE!");
 
             const resolved = await resolveUrlAndExtractIfNeeded(url);
-            const mType = detectMediaType(resolved.url);
+            const mType = detectMediaType(resolved.url, 'video');
 
             db.ref('mediaQueue').push({
                 url: resolved.url,
