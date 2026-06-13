@@ -630,8 +630,9 @@
                             <div class="absolute -right-1.5 top-0 w-3.5 h-3.5 bg-[#005c4b] shadow-md rounded-bl-3xl" style="clip-path: polygon(0 0, 100% 0, 0 100%);"></div>
                             
                             <!-- Sticker canvas actual wrapper -->
-                            <div class="p-1 flex items-center justify-center">
-                                <canvas id="stickerRenderTargetCanvas" class="w-32 h-32 md:w-36 md:h-36 object-contain"></canvas>
+                            <div class="p-1 flex items-center justify-center relative w-32 h-32 md:w-36 md:h-36">
+                                <canvas id="stickerRenderTargetCanvas" class="w-full h-full object-contain"></canvas>
+                                <video id="stickerRenderTargetVideo" class="w-full h-full object-contain absolute inset-0 hidden" autoplay loop muted playsinline webkit-playsinline></video>
                             </div>
                             
                             <!-- status time label -->
@@ -6057,6 +6058,7 @@
         // ================= TECH & STICKERS CONVERTER CORE SCRIPT ENGINE =================
         let activeStickersQueue = [];
         let currentStickerIndex = 0;
+        let isBackendAvailable = true;
 
         const PRESET_STICKER_PACKS = {
             pepe: [
@@ -6220,6 +6222,13 @@
                 return staticFileCache[file_id];
             }
             
+            // If backend is available, leverage our local proxy endpoint for solid same-origin / perfect CORS support
+            if (isBackendAvailable) {
+                const proxyPath = `/api/telegram-file?token=${encodeURIComponent(token)}&file_id=${encodeURIComponent(file_id)}`;
+                staticFileCache[file_id] = proxyPath;
+                return proxyPath;
+            }
+            
             try {
                 const getFileUrl = `https://api.telegram.org/bot${token}/getFile?file_id=${file_id}`;
                 const res = await fetch(getFileUrl);
@@ -6232,10 +6241,17 @@
                 const filePath = data.result.file_path;
                 const directFileUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;
                 
-                // Use weserv.nl as highly reliable, zero-auth, and fast CORS image proxy
-                const proxiedUrl = `https://images.weserv.nl/?url=${encodeURIComponent(directFileUrl)}`;
-                staticFileCache[file_id] = proxiedUrl;
-                return proxiedUrl;
+                const extension = (filePath.split('.').pop() || '').toLowerCase();
+                if (extension === 'webm' || extension === 'mp4') {
+                    // Bypass image proxy since weserv only handles standard image formats
+                    staticFileCache[file_id] = directFileUrl;
+                    return directFileUrl;
+                } else {
+                    // Use weserv.nl as highly reliable, zero-auth, and fast CORS image proxy
+                    const proxiedUrl = `https://images.weserv.nl/?url=${encodeURIComponent(directFileUrl)}`;
+                    staticFileCache[file_id] = proxiedUrl;
+                    return proxiedUrl;
+                }
             } catch (err) {
                 console.error("Failed to resolve asset client-side:", err);
                 return '';
@@ -6296,6 +6312,7 @@
                 .then(res => {
                     if (res.status === 404) {
                         console.log("Static client mode context detected (404 backend link). Executing direct client fetch.");
+                        isBackendAvailable = false;
                         return loadTelegramPackClientOnlyDirect(term, customToken);
                     }
                     if (!res.ok) {
@@ -6324,6 +6341,7 @@
                 })
                 .catch(err => {
                     console.warn("Express backend route absent or offline, trying direct client-side fetch fallback...", err);
+                    isBackendAvailable = false;
                     
                     // Fallback directly to client-only fetch
                     loadTelegramPackClientOnlyDirect(term, customToken)
@@ -6384,32 +6402,9 @@
                     regenerateActiveStickerCanvas();
                 };
 
-                const childImage = document.createElement('img');
-                childImage.className = "w-full h-full object-contain pointer-events-none drop-shadow-md";
-                childImage.onerror = () => {
-                    // Fallback to high-contrast cute text/emoji
-                    childImage.style.display = 'none';
-                    const fallbackNode = document.createElement('div');
-                    fallbackNode.className = "text-xl font-bold uppercase font-mono text-center";
-                    fallbackNode.innerText = item.emoji || "✨";
-                    card.appendChild(fallbackNode);
-                };
-                
-                resolveStickerAssetUrl(item.url).then(resolvedUrl => {
-                    if (resolvedUrl) {
-                        childImage.src = resolvedUrl;
-                    } else {
-                        childImage.onerror();
-                    }
-                }).catch(() => {
-                    childImage.onerror();
-                });
-                
-                card.appendChild(childImage);
-
                 // Add delete button on hover
                 const delBtn = document.createElement('button');
-                delBtn.className = "absolute -top-1 -right-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none cursor-pointer";
+                delBtn.className = "absolute -top-1 -right-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none cursor-pointer z-20";
                 delBtn.innerHTML = "×";
                 delBtn.onclick = (e) => {
                     e.stopPropagation();
@@ -6421,6 +6416,55 @@
                     regenerateActiveStickerCanvas();
                     triggerLiveToast("REMOVED FROM QUEUE");
                 };
+
+                // Fallback function
+                let isFallbackAdded = false;
+                function triggerFallback() {
+                    if (isFallbackAdded) return;
+                    isFallbackAdded = true;
+                    card.innerHTML = ''; // clear card
+                    
+                    const fallbackNode = document.createElement('div');
+                    fallbackNode.className = "text-xl font-bold uppercase font-mono text-center";
+                    fallbackNode.innerText = item.emoji || "✨";
+                    card.appendChild(fallbackNode);
+                    
+                    // Re-append delete button
+                    card.appendChild(delBtn);
+                }
+
+                resolveStickerAssetUrl(item.url).then(resolvedUrl => {
+                    if (!resolvedUrl) {
+                        return triggerFallback();
+                    }
+
+                    const isVid = item.isVideo || 
+                                  resolvedUrl.toLowerCase().includes('.webm') || 
+                                  resolvedUrl.toLowerCase().includes('.mp4') || 
+                                  resolvedUrl.toLowerCase().includes('video');
+
+                    if (isVid) {
+                        const childVideo = document.createElement('video');
+                        childVideo.className = "w-full h-full object-contain pointer-events-none drop-shadow-md";
+                        childVideo.autoplay = true;
+                        childVideo.loop = true;
+                        childVideo.muted = true;
+                        childVideo.playsInline = true;
+                        childVideo.setAttribute('webkit-playsinline', 'true');
+                        childVideo.src = resolvedUrl;
+                        childVideo.onerror = triggerFallback;
+                        card.appendChild(childVideo);
+                    } else {
+                        const childImage = document.createElement('img');
+                        childImage.className = "w-full h-full object-contain pointer-events-none drop-shadow-md";
+                        childImage.src = resolvedUrl;
+                        childImage.onerror = triggerFallback;
+                        card.appendChild(childImage);
+                    }
+                }).catch(() => {
+                    triggerFallback();
+                });
+
                 card.appendChild(delBtn);
 
                 grid.appendChild(card);
@@ -6558,6 +6602,7 @@
 
         function regenerateActiveStickerCanvas() {
             const canvas = document.getElementById('stickerRenderTargetCanvas');
+            const videoElem = document.getElementById('stickerRenderTargetVideo');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             if (!ctx) return;
@@ -6565,6 +6610,10 @@
             const activeSticker = activeStickersQueue[currentStickerIndex];
             if (!activeSticker) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (videoElem) {
+                    videoElem.classList.add('hidden');
+                    videoElem.src = '';
+                }
                 return;
             }
 
@@ -6573,6 +6622,34 @@
             
             const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
             const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+
+            resolveStickerAssetUrl(activeSticker.url).then(resolvedUrl => {
+                const isVid = activeSticker.isVideo || 
+                              (resolvedUrl && (resolvedUrl.toLowerCase().includes('.webm') || 
+                                               resolvedUrl.toLowerCase().includes('.mp4') || 
+                                               resolvedUrl.toLowerCase().includes('video')));
+                
+                if (isVid && videoElem && resolvedUrl) {
+                    videoElem.src = resolvedUrl;
+                    videoElem.classList.remove('hidden');
+                    canvas.classList.add('hidden');
+                    videoElem.play().catch(err => {
+                        console.log("Video auto play prevented:", err);
+                    });
+                } else {
+                    if (videoElem) {
+                        videoElem.classList.add('hidden');
+                        videoElem.src = '';
+                    }
+                    canvas.classList.remove('hidden');
+                }
+            }).catch(() => {
+                if (videoElem) {
+                    videoElem.classList.add('hidden');
+                    videoElem.src = '';
+                }
+                canvas.classList.remove('hidden');
+            });
 
             drawStickerAssetToCanvas(activeSticker, canvas, hasPadding, forceSquare);
         }
