@@ -444,7 +444,7 @@
             <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
                 <!-- Ambient Dark Tech Background Gradient overlay -->
                 <div class="absolute inset-0 bg-gradient-to-tr from-cyan-950/80 via-purple-950/70 to-blue-900/40 mix-blend-multiply z-10"></div>
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" referrerPolicy="no-referrer" class="w-full h-full object-cover brightness-75 transform" alt="Tech Banner">
+                <img src="kali_banner.svg" class="w-full h-full object-cover brightness-75 transform transition-transform duration-700 hover:scale-105" alt="Tech Banner" onerror="this.src='https://images.wallpapersden.com/image/download/kali-linux-red-logo_bWlpZ2uUmZqaraWkpJRmbmdlrWZlbWY.jpg'">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
                     <span class="text-[9px] text-cyan-400 font-black tracking-widest block uppercase font-mono mb-1">UTILITY BOX</span>
                     <h2 class="text-base font-black text-white uppercase tracking-wider font-display">TECH CORE TOOLS</h2>
@@ -584,8 +584,8 @@
                 </div>
 
                 <!-- Configs Controls Parameter Panel -->
-                <div class="p-3.5 bg-white/5 border border-white/5 rounded-xl space-y-3 font-sans">
-                    <span class="text-[8.5px] text-stone-400 font-black tracking-widest block uppercase">PACK FORMAT PROPERTIES</span>
+                <div class="p-3.5 bg-white/5 border border-white/5 rounded-xl space-y-3.5 font-sans">
+                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest block uppercase">PACK FORMAT PROPERTIES</span>
                     
                     <div class="space-y-2.5">
                         <label class="flex items-center justify-between cursor-pointer select-none">
@@ -596,6 +596,22 @@
                             <span class="text-[9px] text-stone-300 font-extrabold uppercase">FORCE SQUARE (512x512 SCALE)</span>
                             <input type="checkbox" id="stickerForceSquareCheckbox" checked onchange="regenerateActiveStickerCanvas()" class="rounded bg-black/60 border-white/10 text-cyan-500 focus:ring-0 w-3.5 h-3.5 cursor-pointer accent-cyan-500">
                         </label>
+                    </div>
+
+                    <div class="border-t border-white/5 pt-3.5 space-y-3">
+                        <span class="text-[8.5px] text-emerald-400 font-black tracking-widest block uppercase flex items-center gap-1">
+                            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-400"></i> WHATSAPP STICKER PACK SETTINGS
+                        </span>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="text-[7.5px] text-stone-400 font-bold block uppercase mb-1 font-mono">WA PACK CUSTOM NAME</label>
+                                <input type="text" id="whatsappPackNameInput" value="TEAM HUB PRO STICKERS" placeholder="E.G. PEPE THE FROG..." class="w-full bg-black/50 border border-emerald-500/15 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-[9px] text-emerald-300 uppercase font-semibold outline-none tracking-wide transition-all">
+                            </div>
+                            <div>
+                                <label class="text-[7.5px] text-stone-400 font-bold block uppercase mb-1 font-mono">PACK PUBLISHER / CREATOR</label>
+                                <input type="text" id="whatsappPackPublisherInput" value="MOHAMED IMRAN" placeholder="YOUR NAME..." class="w-full bg-black/50 border border-emerald-500/15 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-[9px] text-stone-200 uppercase font-semibold outline-none tracking-wide transition-all">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -625,11 +641,16 @@
                         </div>
                     </div>
 
-                    <!-- Individual export download action trigger -->
+                    <!-- Individual and pack export/sharing action triggers -->
                     <div class="space-y-2.5">
-                        <button onclick="shareActiveStickerWebpAction()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-slate-950 font-black text-[10px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
-                            <i data-lucide="share-2" class="w-4 h-4 text-slate-950"></i> DIRECT SHARE TO WHATSAPP
-                        </button>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="shareActiveStickerWebpAction()" class="py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1 cursor-pointer" title="Share current active sticker directly">
+                                <i data-lucide="share-2" class="w-3.5 h-3.5 text-slate-950"></i> SHARE SINGLE
+                            </button>
+                            <button onclick="shareCompleteWastickersPackAction()" class="py-3 bg-gradient-to-r from-[#ef4444] to-[#f43f5e] hover:brightness-110 text-white font-black text-[9px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1 cursor-pointer" title="Share entire sticker pack (.wastickers) to WhatsApp">
+                                <i data-lucide="send" class="w-3.5 h-3.5 text-white"></i> SHARE FULL PACK
+                            </button>
+                        </div>
                         
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="copyStickerToClipboard()" class="py-2.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-extrabold text-[9px] tracking-widest uppercase border border-cyan-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
@@ -640,8 +661,17 @@
                             </button>
                         </div>
 
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="downloadAllStickersAsZipAction()" class="py-2.5 bg-cyan-500 hover:bg-cyan-600 hover:text-white text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i data-lucide="archive" class="w-3.5 h-3.5"></i> DOWNLOAD `.ZIP`
+                            </button>
+                            <button onclick="downloadAllStickersAsWastickersAction()" class="py-2.5 bg-emerald-500 hover:bg-emerald-600 hover:text-white text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1" title="Import perfectly formatted custom sticker pack on Android & iOS instantly">
+                                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> DOWNLOAD `.WASTICKERS`
+                            </button>
+                        </div>
+
                         <button onclick="downloadAllStickersSequentially()" class="w-full py-2 bg-stone-900 hover:bg-stone-850 text-stone-400 hover:text-stone-300 font-bold text-[8.5px] tracking-wider uppercase border border-white/5 rounded-lg transition-all cursor-pointer">
-                            DOWNLOAD COMPLETE SET AS `.WEBP`
+                            DOWNLOAD COMPLETE SET AS SINGLE `.WEBP` FILES
                         </button>
                     </div>
                 </div>
@@ -6113,6 +6143,11 @@
             activeStickersQueue = JSON.parse(JSON.stringify(pack)); // deep copy
             currentStickerIndex = 0;
             
+            const nameInput = document.getElementById('whatsappPackNameInput');
+            if (nameInput) {
+                nameInput.value = `${categoryKey.toUpperCase()} PACK STICKERS`;
+            }
+            
             renderStickerPackGallery();
             regenerateActiveStickerCanvas();
             playSynthSound('success');
@@ -6157,11 +6192,87 @@
             activeStickersQueue = customGeneratedPack;
             currentStickerIndex = 0;
             
+            const nameInput = document.getElementById('whatsappPackNameInput');
+            if (nameInput) {
+                nameInput.value = `${term.toUpperCase()} PROCEDURAL STICKERS`;
+            }
+            
             renderStickerPackGallery();
             regenerateActiveStickerCanvas();
             const inp = document.getElementById('stickerPackLinkInput');
             if (inp) inp.value = "";
             triggerLiveToast(`GENERATED TEAM STICKER PACK: ${term.toUpperCase()}`);
+        }
+
+        const staticFileCache = {};
+
+        async function resolveStickerAssetUrl(itemUrl) {
+            if (!itemUrl) return '';
+            if (!itemUrl.startsWith('RESOLVE_LAZY:')) {
+                return itemUrl;
+            }
+            
+            const parts = itemUrl.split(':');
+            const token = parts[1];
+            const file_id = parts.slice(2).join(':');
+            
+            if (staticFileCache[file_id]) {
+                return staticFileCache[file_id];
+            }
+            
+            try {
+                const getFileUrl = `https://api.telegram.org/bot${token}/getFile?file_id=${file_id}`;
+                const res = await fetch(getFileUrl);
+                const data = await res.json();
+                
+                if (!data.ok || !data.result?.file_path) {
+                    throw new Error("Failed resolving file path");
+                }
+                
+                const filePath = data.result.file_path;
+                const directFileUrl = `https://api.telegram.org/file/bot${token}/${filePath}`;
+                
+                // Use weserv.nl as highly reliable, zero-auth, and fast CORS image proxy
+                const proxiedUrl = `https://images.weserv.nl/?url=${encodeURIComponent(directFileUrl)}`;
+                staticFileCache[file_id] = proxiedUrl;
+                return proxiedUrl;
+            } catch (err) {
+                console.error("Failed to resolve asset client-side:", err);
+                return '';
+            }
+        }
+
+        async function loadTelegramPackClientOnlyDirect(term, customToken) {
+            const botToken = customToken || '7845347201:AAGy4F_WlPlIeR7fXn_Vv0gA9FmD_pQ6R8A';
+            const directUrl = `https://api.telegram.org/bot${botToken}/getStickerSet?name=${encodeURIComponent(term)}`;
+            
+            const res = await fetch(directUrl);
+            const data = await res.json();
+            
+            if (!data.ok) {
+                throw new Error(data.description || 'Sticker set not found on direct client search');
+            }
+            
+            const title = data.result.title || data.result.name;
+            const stickers = data.result.stickers.map((stk, idx) => {
+                return {
+                    name: `${title} #${idx + 1}`,
+                    url: `RESOLVE_LAZY:${botToken}:${stk.file_id}`,
+                    emoji: stk.emoji || '✨',
+                    width: stk.width,
+                    height: stk.height,
+                    isVideo: stk.is_video || false,
+                    isAnimated: stk.is_animated || false
+                };
+            });
+            
+            return {
+                success: true,
+                title: title,
+                name: data.result.name,
+                stickersCount: stickers.length,
+                stickers: stickers
+            };
         }
 
         function loadTelegramPackAction() {
@@ -6183,6 +6294,10 @@
             
             fetch(apiUrl)
                 .then(res => {
+                    if (res.status === 404) {
+                        console.log("Static client mode context detected (404 backend link). Executing direct client fetch.");
+                        return loadTelegramPackClientOnlyDirect(term, customToken);
+                    }
                     if (!res.ok) {
                         return res.json().then(err => { throw new Error(err.error || 'Server rejected request'); });
                     }
@@ -6192,6 +6307,11 @@
                     if (data.success && data.stickers && data.stickers.length > 0) {
                         activeStickersQueue = data.stickers;
                         currentStickerIndex = 0;
+                        
+                        const nameInput = document.getElementById('whatsappPackNameInput');
+                        if (nameInput && data.title) {
+                            nameInput.value = `${data.title.toUpperCase()} STICKERS`;
+                        }
                         
                         renderStickerPackGallery();
                         regenerateActiveStickerCanvas();
@@ -6203,12 +6323,35 @@
                     }
                 })
                 .catch(err => {
-                    console.error("Telegram load error:", err);
-                    triggerLiveToast(`API DOWN OR VERIFICATION FAILED: FALLING BACK...`);
-                    playSynthSound('error');
+                    console.warn("Express backend route absent or offline, trying direct client-side fetch fallback...", err);
                     
-                    // Fallback to procedurally generated pack so the app never blocks
-                    generateProceduralFallbackPack(term);
+                    // Fallback directly to client-only fetch
+                    loadTelegramPackClientOnlyDirect(term, customToken)
+                        .then(data => {
+                            if (data.success && data.stickers && data.stickers.length > 0) {
+                                activeStickersQueue = data.stickers;
+                                currentStickerIndex = 0;
+                                
+                                const nameInput = document.getElementById('whatsappPackNameInput');
+                                if (nameInput && data.title) {
+                                    nameInput.value = `${data.title.toUpperCase()} STICKERS`;
+                                }
+                                
+                                renderStickerPackGallery();
+                                regenerateActiveStickerCanvas();
+                                triggerLiveToast(`IMPORTED ${data.stickersCount} STICKERS DIRECTLY (CLIENT-SIDE MODALITY)!`);
+                                playSynthSound('success');
+                                inp.value = "";
+                            } else {
+                                throw new Error("No direct stickers found");
+                            }
+                        })
+                        .catch(err2 => {
+                            console.error("Direct browser fallback failed, resorting to procedurals:", err2);
+                            triggerLiveToast(`FAILED REMOTE OR ACCESS CHANNELS. PROCEDURAL PACK LAUNCHED!`);
+                            playSynthSound('error');
+                            generateProceduralFallbackPack(term);
+                        });
                 });
         }
 
@@ -6242,7 +6385,6 @@
                 };
 
                 const childImage = document.createElement('img');
-                childImage.src = item.url;
                 childImage.className = "w-full h-full object-contain pointer-events-none drop-shadow-md";
                 childImage.onerror = () => {
                     // Fallback to high-contrast cute text/emoji
@@ -6252,6 +6394,17 @@
                     fallbackNode.innerText = item.emoji || "✨";
                     card.appendChild(fallbackNode);
                 };
+                
+                resolveStickerAssetUrl(item.url).then(resolvedUrl => {
+                    if (resolvedUrl) {
+                        childImage.src = resolvedUrl;
+                    } else {
+                        childImage.onerror();
+                    }
+                }).catch(() => {
+                    childImage.onerror();
+                });
+                
                 card.appendChild(childImage);
 
                 // Add delete button on hover
@@ -6282,6 +6435,127 @@
             triggerLiveToast("STICKER QUEUE CLEARED");
         }
 
+        function drawStickerAssetToCanvas(item, targetCanvas, hasPadding, forceSquare) {
+            return new Promise((resolve) => {
+                resolveStickerAssetUrl(item.url).then(resolvedUrl => {
+                    if (!resolvedUrl) {
+                        return drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                    }
+                    
+                    const isVid = item.isVideo || 
+                                  resolvedUrl.toLowerCase().includes('.webm') || 
+                                  resolvedUrl.toLowerCase().includes('.mp4') || 
+                                  resolvedUrl.toLowerCase().includes('video');
+                                  
+                    if (isVid) {
+                        const video = document.createElement('video');
+                        video.crossOrigin = "anonymous";
+                        video.muted = true;
+                        video.playsInline = true;
+                        video.setAttribute('webkit-playsinline', 'true');
+                        video.src = resolvedUrl;
+                        
+                        video.onloadeddata = function() {
+                            video.currentTime = 0.1; // seek to 0.1s to avoid black frames
+                        };
+                        
+                        video.onseeked = function() {
+                            try {
+                                const tCtx = targetCanvas.getContext('2d');
+                                const margin = hasPadding ? 32 : 0;
+                                const targetWidth = 512 - (margin * 2);
+                                const targetHeight = 512 - (margin * 2);
+                                
+                                let renderW = targetWidth;
+                                let renderH = targetHeight;
+                                let renderX = margin;
+                                let renderY = margin;
+
+                                if (!forceSquare && video.videoWidth && video.videoHeight) {
+                                    const aspect = video.videoWidth / video.videoHeight;
+                                    if (aspect > 1) {
+                                        renderH = targetWidth / aspect;
+                                        renderY = margin + (targetHeight - renderH) / 2;
+                                    } else {
+                                        renderW = targetHeight * aspect;
+                                        renderX = margin + (targetWidth - renderW) / 2;
+                                    }
+                                }
+                                
+                                tCtx.clearRect(0, 0, 512, 512);
+                                tCtx.imageSmoothingEnabled = true;
+                                tCtx.imageSmoothingQuality = 'high';
+                                tCtx.drawImage(video, renderX, renderY, renderW, renderH);
+                                resolve(true);
+                            } catch (e) {
+                                console.error("Error drawing video:", e);
+                                drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                            }
+                        };
+                        
+                        video.onerror = function() {
+                            drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                        };
+                        
+                        video.load();
+                    } else {
+                        const img = new Image();
+                        img.crossOrigin = "anonymous";
+                        img.onload = function() {
+                            try {
+                                const tCtx = targetCanvas.getContext('2d');
+                                const margin = hasPadding ? 32 : 0;
+                                const targetWidth = 512 - (margin * 2);
+                                const targetHeight = 512 - (margin * 2);
+                                
+                                let renderW = targetWidth;
+                                let renderH = targetHeight;
+                                let renderX = margin;
+                                let renderY = margin;
+
+                                if (!forceSquare) {
+                                    const aspect = img.width / img.height;
+                                    if (aspect > 1) {
+                                        renderH = targetWidth / aspect;
+                                        renderY = margin + (targetHeight - renderH) / 2;
+                                    } else {
+                                        renderW = targetHeight * aspect;
+                                        renderX = margin + (targetWidth - renderW) / 2;
+                                    }
+                                }
+                                
+                                tCtx.clearRect(0, 0, 512, 512);
+                                tCtx.imageSmoothingEnabled = true;
+                                tCtx.imageSmoothingQuality = 'high';
+                                tCtx.drawImage(img, renderX, renderY, renderW, renderH);
+                                resolve(true);
+                            } catch (e) {
+                                console.error("Error drawing image:", e);
+                                drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                            }
+                        };
+                        img.onerror = function() {
+                            drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                        };
+                        img.src = resolvedUrl;
+                    }
+                }).catch(() => {
+                    drawEmojiFallback(item.emoji, targetCanvas, resolve);
+                });
+            });
+        }
+
+        function drawEmojiFallback(emojiText, targetCanvas, resolve) {
+            const tCtx = targetCanvas.getContext('2d');
+            tCtx.clearRect(0, 0, 512, 512);
+            tCtx.fillStyle = "#ffffff";
+            tCtx.font = "bold 210px sans-serif";
+            tCtx.textAlign = "center";
+            tCtx.textBaseline = "middle";
+            tCtx.fillText(emojiText || "✨", 256, 256);
+            resolve(false);
+        }
+
         function regenerateActiveStickerCanvas() {
             const canvas = document.getElementById('stickerRenderTargetCanvas');
             if (!canvas) return;
@@ -6296,48 +6570,11 @@
 
             canvas.width = 512;
             canvas.height = 512;
-            ctx.clearRect(0, 0, 512, 512);
+            
+            const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+            const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
 
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = function() {
-                const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
-                const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
-                
-                const margin = hasPadding ? 32 : 0;
-                const targetWidth = 512 - (margin * 2);
-                const targetHeight = 512 - (margin * 2);
-                
-                let renderW = targetWidth;
-                let renderH = targetHeight;
-                let renderX = margin;
-                let renderY = margin;
-
-                if (!forceSquare) {
-                    const aspect = img.width / img.height;
-                    if (aspect > 1) {
-                        renderH = targetWidth / aspect;
-                        renderY = margin + (targetHeight - renderH) / 2;
-                    } else {
-                        renderW = targetHeight * aspect;
-                        renderX = margin + (targetWidth - renderW) / 2;
-                    }
-                }
-
-                ctx.imageSmoothingEnabled = true;
-                ctx.imageSmoothingQuality = 'high';
-                ctx.drawImage(img, renderX, renderY, renderW, renderH);
-            };
-            img.onerror = function() {
-                ctx.clearRect(0, 0, 512, 512);
-                ctx.fillStyle = "#ffffff";
-                // Render beautiful custom visual elements matching emoji type
-                ctx.font = "bold 210px sans-serif";
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-                ctx.fillText(activeSticker.emoji || "✨", 256, 256);
-            };
-            img.src = activeSticker.url;
+            drawStickerAssetToCanvas(activeSticker, canvas, hasPadding, forceSquare);
         }
 
         function downloadActiveStickerWebpAction() {
@@ -6568,50 +6805,21 @@
             playSynthSound('success');
             
             const zip = new JSZip();
-            const canvas = document.getElementById('stickerRenderTargetCanvas');
-            if (!canvas) return;
-            
             let completed = 0;
             
-            // Loop through each sticker, draw to isolated canvas to preserve sizing, push blob to JSZip
+            const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+            const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+
             for (let i = 0; i < activeStickersQueue.length; i++) {
                 const item = activeStickersQueue[i];
                 const cleanName = `${i + 1}_${item.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}.webp`;
                 
                 await new Promise((resolve) => {
-                    const img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.onload = function() {
-                        const tempCanvas = document.createElement('canvas');
-                        tempCanvas.width = 512;
-                        tempCanvas.height = 512;
-                        const tCtx = tempCanvas.getContext('2d');
-                        
-                        const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
-                        const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
-                        const margin = hasPadding ? 32 : 0;
-                        const targetWidth = 512 - (margin * 2);
-                        const targetHeight = 512 - (margin * 2);
-                        
-                        let renderW = targetWidth;
-                        let renderH = targetHeight;
-                        let renderX = margin;
-                        let renderY = margin;
-
-                        if (!forceSquare) {
-                            const aspect = img.width / img.height;
-                            if (aspect > 1) {
-                                renderH = targetWidth / aspect;
-                                renderY = margin + (targetHeight - renderH) / 2;
-                            } else {
-                                renderW = targetHeight * aspect;
-                                renderX = margin + (targetWidth - renderW) / 2;
-                            }
-                        }
-                        
-                        tCtx.clearRect(0, 0, 512, 512);
-                        tCtx.drawImage(img, renderX, renderY, renderW, renderH);
-                        
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 512;
+                    tempCanvas.height = 512;
+                    
+                    drawStickerAssetToCanvas(item, tempCanvas, hasPadding, forceSquare).then(() => {
                         tempCanvas.toBlob((blob) => {
                             if (blob) {
                                 zip.file(cleanName, blob);
@@ -6619,29 +6827,7 @@
                             completed++;
                             resolve();
                         }, 'image/webp', 0.9);
-                    };
-                    img.onerror = function() {
-                        // Emoji/fallback text case if image fails or requires custom seed
-                        const tempCanvas = document.createElement('canvas');
-                        tempCanvas.width = 512;
-                        tempCanvas.height = 512;
-                        const tCtx = tempCanvas.getContext('2d');
-                        tCtx.clearRect(0, 0, 512, 512);
-                        tCtx.fillStyle = "#ffffff";
-                        tCtx.font = "bold 210px sans-serif";
-                        tCtx.textAlign = "center";
-                        tCtx.textBaseline = "middle";
-                        tCtx.fillText(item.emoji || "✨", 256, 256);
-                        
-                        tempCanvas.toBlob((blob) => {
-                            if (blob) {
-                                zip.file(cleanName, blob);
-                            }
-                            completed++;
-                            resolve();
-                        }, 'image/webp', 0.9);
-                    };
-                    img.src = item.url;
+                    });
                 });
             }
             
@@ -6661,6 +6847,181 @@
                 console.error(err);
                 triggerLiveToast("ZIP ZIP ERROR. EXPORTING SEQUENTIALLY...");
                 downloadAllStickersSequentially();
+            }
+        }
+
+        async function downloadAllStickersAsWastickersAction() {
+            if (activeStickersQueue.length === 0) {
+                return triggerLiveToast("NO STICKERS IN QUEUE TO EXPORT!");
+            }
+            
+            triggerLiveToast("COMPILING OFFICIAL WHATSAPP .WASTICKERS FILE...");
+            playSynthSound('success');
+            
+            const zip = new JSZip();
+            let completed = 0;
+            const size = activeStickersQueue.length;
+            const stickerFilesMeta = [];
+
+            const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+            const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+
+            for (let i = 0; i < size; i++) {
+                const item = activeStickersQueue[i];
+                const cleanName = `${(i + 1).toString().padStart(2, '0')}.webp`;
+                
+                stickerFilesMeta.push({
+                    "image_file": cleanName,
+                    "emojis": [item.emoji || "✨"]
+                });
+
+                await new Promise((resolve) => {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 512;
+                    tempCanvas.height = 512;
+                    
+                    drawStickerAssetToCanvas(item, tempCanvas, hasPadding, forceSquare).then(() => {
+                        tempCanvas.toBlob((blob) => {
+                            if (blob) {
+                                zip.file(cleanName, blob);
+                            }
+                            completed++;
+                            resolve();
+                        }, 'image/webp', 0.9);
+                    });
+                });
+            }
+
+            const whatsappPackName = document.getElementById('whatsappPackNameInput')?.value.trim() || "Team Hub Pro Stickers";
+            const whatsappPackPublisher = document.getElementById('whatsappPackPublisherInput')?.value.trim() || "Mohamed Imran";
+
+            // Create compliant WhatsApp content.json metadata package
+            const contentJson = {
+                "android_play_store_link": "https://play.google.com/store/apps/details?id=com.marsvard.stickermakerforwhatsapp",
+                "ios_app_store_link": "https://apps.apple.com/app/id1443326173",
+                "sticker_packs": [
+                    {
+                        "identifier": `procedural_sticker_pack_${Date.now()}`,
+                        "name": whatsappPackName,
+                        "publisher": whatsappPackPublisher,
+                        "tray_image_file": "01.webp",
+                        "image_data_version": "1",
+                        "avoid_cache": false,
+                        "stickers": stickerFilesMeta
+                    }
+                ]
+            };
+
+            // Inject the content.json into the wastickers zip folder
+            zip.file("content.json", JSON.stringify(contentJson, null, 2));
+            
+            try {
+                zip.generateAsync({ type: "blob" }).then((content) => {
+                    const link = document.createElement('a');
+                    const cleanFileName = whatsappPackName.toLowerCase().replace(/[^a-z0-9]+/g, '_') || "whatsapp_pack";
+                    link.download = `${cleanFileName}_${Date.now()}.wastickers`;
+                    link.href = URL.createObjectURL(content);
+                    link.click();
+                    triggerLiveToast(`STUNNING .WASTICKERS CHAT PACK READY FOR WHATSAPP IMPORT!`);
+                }).catch(err => {
+                    console.error(err);
+                    triggerLiveToast("ERROR CREATING .WASTICKERS PACK.");
+                });
+            } catch (err) {
+                console.error(err);
+                triggerLiveToast("COMPILATION REJECTED.");
+            }
+        }
+
+        async function shareCompleteWastickersPackAction() {
+            if (activeStickersQueue.length === 0) {
+                return triggerLiveToast("NO STICKERS IN QUEUE TO SHARE!");
+            }
+            
+            triggerLiveToast("COMPILING ENTIRE PACK FOR SHARING...");
+            playSynthSound('success');
+            
+            const zip = new JSZip();
+            let completed = 0;
+            const size = activeStickersQueue.length;
+            const stickerFilesMeta = [];
+
+            const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+            const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+
+            for (let i = 0; i < size; i++) {
+                const item = activeStickersQueue[i];
+                const cleanName = `${(i + 1).toString().padStart(2, '0')}.webp`;
+                
+                stickerFilesMeta.push({
+                    "image_file": cleanName,
+                    "emojis": [item.emoji || "✨"]
+                });
+
+                await new Promise((resolve) => {
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 512;
+                    tempCanvas.height = 512;
+                    
+                    drawStickerAssetToCanvas(item, tempCanvas, hasPadding, forceSquare).then(() => {
+                        tempCanvas.toBlob((blob) => {
+                            if (blob) {
+                                zip.file(cleanName, blob);
+                            }
+                            completed++;
+                            resolve();
+                        }, 'image/webp', 0.9);
+                    });
+                });
+            }
+
+            const whatsappPackName = document.getElementById('whatsappPackNameInput')?.value.trim() || "Team Hub Pro Stickers";
+            const whatsappPackPublisher = document.getElementById('whatsappPackPublisherInput')?.value.trim() || "Mohamed Imran";
+
+            const contentJson = {
+                "android_play_store_link": "https://play.google.com/store/apps/details?id=com.marsvard.stickermakerforwhatsapp",
+                "ios_app_store_link": "https://apps.apple.com/app/id1443326173",
+                "sticker_packs": [
+                    {
+                        "identifier": `procedural_sticker_pack_${Date.now()}`,
+                        "name": whatsappPackName,
+                        "publisher": whatsappPackPublisher,
+                        "tray_image_file": "01.webp",
+                        "image_data_version": "1",
+                        "avoid_cache": false,
+                        "stickers": stickerFilesMeta
+                    }
+                ]
+            };
+
+            zip.file("content.json", JSON.stringify(contentJson, null, 2));
+            
+            try {
+                zip.generateAsync({ type: "blob" }).then(async (content) => {
+                    const cleanFileName = whatsappPackName.toLowerCase().replace(/[^a-z0-9]+/g, '_') || "whatsapp_pack";
+                    const file = new File([content], `${cleanFileName}_pack.wastickers`, { type: "application/octet-stream" });
+                    
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: `${whatsappPackName.toUpperCase()} PACK`,
+                            text: `Import this complete sticker pack by ${whatsappPackPublisher} into WhatsApp!`
+                        });
+                        triggerLiveToast("COMPLETE STICKER PACK SHARING INITIATED!");
+                    } else {
+                        const link = document.createElement('a');
+                        link.download = `${cleanFileName}_${Date.now()}.wastickers`;
+                        link.href = URL.createObjectURL(content);
+                        link.click();
+                        triggerLiveToast("SHARE NOT SUPPORTED - DOWNLOADED .WASTICKERS FILE INSTEAD!");
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    triggerLiveToast("ERROR SHARING WASTICKERS PACK.");
+                });
+            } catch (err) {
+                console.error(err);
+                triggerLiveToast("SHARE REJECTED.");
             }
         }
 
