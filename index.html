@@ -1029,7 +1029,7 @@
                             <!-- List of songs inside the playlist -->
                             <div class="space-y-2 text-left">
                                 <span class="text-[8px] text-stone-500 font-black tracking-widest uppercase block pl-1">TRACKS IN PLAYLIST</span>
-                                <div id="activePlaylistSongsContainer" class="space-y-1.5 max-h-[150px] overflow-y-auto pr-1">
+                                <div id="activePlaylistSongsContainer" class="space-y-1.5 max-h-[320px] overflow-y-auto pr-1">
                                     <!-- Playlist songs populated here -->
                                 </div>
                             </div>
@@ -1054,7 +1054,12 @@
                         <span class="text-[10px] text-stone-200 font-black tracking-widest uppercase flex items-center gap-1.5">
                             <i data-lucide="list-video" class="w-4 h-4 text-[var(--accent-color)] animate-bounce"></i>SHARED UPCOMING QUEUE
                         </span>
-                        <span id="queueCountBadge" class="text-[8px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded-full font-mono font-black">0 ITEMS</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="clearEntireQueueAction()" class="text-[8.5px] text-rose-500 hover:text-rose-450 uppercase font-black cursor-pointer transition-colors" title="Clear entire queue">
+                                CLEAR QUEUE
+                            </button>
+                            <span id="queueCountBadge" class="text-[8px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded-full font-mono font-black">0 ITEMS</span>
+                        </div>
                     </div>
                     
                     <!-- Empty queue placeholder -->
@@ -2737,6 +2742,69 @@
         });
 
         // ================= CO-OP MEDIA LOUNGE CONTROLLER ENGINE =================
+        function detectMediaType(url) {
+            if (!url) return 'video';
+            const cleanUrl = url.toLowerCase().split('?')[0];
+            if (cleanUrl.endsWith('.mp3') || 
+                cleanUrl.endsWith('.wav') || 
+                cleanUrl.endsWith('.ogg') || 
+                cleanUrl.endsWith('.aac') || 
+                cleanUrl.endsWith('.m4a') ||
+                url.includes('soundhelix.com') ||
+                cleanUrl.includes('/mp3') ||
+                cleanUrl.includes('audiopayload')
+            ) {
+                return 'audio';
+            }
+            return 'video';
+        }
+
+        async function resolveUrlAndExtractIfNeeded(url, originalTitle = "") {
+            const trimmed = url.trim();
+            const isInstagram = /instagram\.com|instagr\.am/i.test(trimmed);
+            
+            if (isInstagram) {
+                try {
+                    triggerLiveToast("EXTRACTING SYSTEM MEDIA LOOP...");
+                    const res = await fetch('/api/extract-video', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: trimmed })
+                    });
+                    const data = await res.json();
+                    if (data && data.success && data.url) {
+                        return {
+                            url: data.url,
+                            title: (data.title || "INSTAGRAM REEL LOOP").toUpperCase(),
+                            extracted: true
+                        };
+                    } else {
+                        triggerLiveToast("FAILOVER: SAVING RAW LINK (RETRY IF BLOCKED)");
+                    }
+                } catch (e) {
+                    console.error("Extraction error:", e);
+                }
+            }
+            
+            // Standard URLs - extract filename as title if none provided
+            let customTitle = originalTitle || "SOUNDTRACK STREAM";
+            if (!originalTitle) {
+                try {
+                    const parts = trimmed.split('/');
+                    const fileName = parts[parts.length - 1].split('?')[0];
+                    if (fileName.length > 4) {
+                        customTitle = decodeURIComponent(fileName).toUpperCase();
+                    }
+                } catch (e) {}
+            }
+            
+            return {
+                url: trimmed,
+                title: customTitle,
+                extracted: false
+            };
+        }
+
         const DYNAMIC_SONGS_PLAYLIST = [
             { title: "LEO - BADASS THEME", author: "Anirudh Ravichander", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { title: "MAANJAVE - ROMANCE HIT", author: "A.R. Rahman Melody", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -2835,15 +2903,29 @@
         }
 
         // Play the next link in the Shared Queue automatically
-        function playNextFromQueue() {
+        async function playNextFromQueue() {
             const upcomingQueue = localMediaQueue.filter(item => !item.viewed);
             if (upcomingQueue && upcomingQueue.length > 0) {
                 const nextItem = upcomingQueue[0];
+                let targetUrl = nextItem.url;
+                let mType = nextItem.mediaType;
+
+                const isInstaPage = /instagram\.com|instagr\.am/i.test(nextItem.url) && !nextItem.url.includes('proxy-mp4');
+                if (isInstaPage) {
+                    try {
+                        const resolved = await resolveUrlAndExtractIfNeeded(nextItem.url, nextItem.title);
+                        targetUrl = resolved.url;
+                        mType = detectMediaType(resolved.url);
+                    } catch (e) {
+                        console.error("Dynamic extraction error on next play:", e);
+                    }
+                }
+
                 db.ref('musicState').set({
-                    trackUrl: nextItem.url,
+                    trackUrl: targetUrl,
                     trackTitle: nextItem.title,
                     trackAuthor: `Enqueued by ${nextItem.addedBy.toUpperCase()}`,
-                    mediaType: nextItem.mediaType,
+                    mediaType: mType,
                     status: 'playing',
                     seekTime: 0,
                     sentTime: Date.now(),
@@ -3543,7 +3625,7 @@
                 trackUrl: track.url,
                 trackTitle: track.title,
                 trackAuthor: track.author,
-                mediaType: 'video',
+                mediaType: 'audio',
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
@@ -3631,26 +3713,18 @@
             });
         }
 
-        function addTrackToActivePlaylistAction() {
+        async function addTrackToActivePlaylistAction() {
             if (!activePlaylistId) return triggerLiveToast("SELECT A PLAYLIST FIRST!");
             const inputField = document.getElementById('playlistSongUrlInput');
             let url = inputField.value.trim();
             if (!url) return triggerLiveToast("PASTE A DIRECT TRACK URL!");
 
-            let customTitle = "SOUNDTRACK STREAM";
-            try {
-                const parts = url.split('/');
-                const fileName = parts[parts.length - 1].split('?')[0];
-                if (fileName.length > 4) {
-                    customTitle = decodeURIComponent(fileName).toUpperCase();
-                }
-            } catch (e) {}
-
+            const resolved = await resolveUrlAndExtractIfNeeded(url);
             const playlistSongRef = db.ref(`customPlaylists/${activePlaylistId}/songs`).push();
             playlistSongRef.set({
                 id: playlistSongRef.key,
-                url: url,
-                title: customTitle,
+                url: url, // Always store the permanent original entered URL so it never expires!
+                title: resolved.title,
                 addedBy: myName,
                 timestamp: Date.now()
             }).then(() => {
@@ -3661,7 +3735,7 @@
                 const playlist = firebasePlaylists[activePlaylistId];
                 db.ref('chatMessages').push({
                     sender: "AI-ROBOT",
-                    text: `🎵 ${myName.toUpperCase()} ADDED "${customTitle}" TO PLAYLIST "${playlist.name}"`,
+                    text: `🎵 ${myName.toUpperCase()} ADDED "${resolved.title}" TO PLAYLIST "${playlist.name}"`,
                     timestamp: firebase.database.ServerValue.TIMESTAMP
                 });
             });
@@ -3689,12 +3763,27 @@
             });
         }
 
-        function playPlaylistItemImmediately(songUrl, title, addedBy) {
+        async function playPlaylistItemImmediately(songUrl, title, addedBy) {
+            let targetUrl = songUrl;
+            let mType = detectMediaType(songUrl);
+            
+            const isInstaPage = /instagram\.com|instagr\.am/i.test(songUrl) && !songUrl.includes('proxy-mp4');
+            if (isInstaPage) {
+                triggerLiveToast("RE-RESOLVING SYSTEM STREAM...");
+                try {
+                    const resolved = await resolveUrlAndExtractIfNeeded(songUrl, title);
+                    targetUrl = resolved.url;
+                    mType = detectMediaType(resolved.url);
+                } catch (e) {
+                    console.error("Dynamic extraction error on play:", e);
+                }
+            }
+
             db.ref('musicState').set({
-                trackUrl: songUrl,
+                trackUrl: targetUrl,
                 trackTitle: title,
                 trackAuthor: `Playlist Track added by ${addedBy.toUpperCase()}`,
-                mediaType: 'video', 
+                mediaType: mType, 
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
@@ -3723,10 +3812,11 @@
 
             const playlist = firebasePlaylists[activePlaylistId];
             songs.forEach((song, idx) => {
+                const songType = detectMediaType(song.url);
                 db.ref('mediaQueue').push({
                     url: song.url,
                     title: song.title,
-                    mediaType: 'video',
+                    mediaType: songType,
                     addedBy: myName,
                     timestamp: Date.now() + idx 
                 });
@@ -3748,38 +3838,58 @@
 
             const playlist = firebasePlaylists[activePlaylistId];
             const first = songs[0];
+            const firstType = detectMediaType(first.url);
 
-            db.ref('musicState').set({
-                trackUrl: first.url,
-                trackTitle: first.title,
-                trackAuthor: `Playlist: ${playlist.name} (by ${playlist.createdBy.toUpperCase()})`,
-                mediaType: 'video',
-                status: 'playing',
-                seekTime: 0,
-                sentTime: Date.now(),
-                triggeredBy: myName
-            });
+            // Clean active queue first so playlist tracks sequence beautifully
+            db.ref('mediaQueue').remove().then(async () => {
+                let targetUrl = first.url;
+                let resolvedType = firstType;
 
-            if (songs.length > 1) {
-                for (let i = 1; i < songs.length; i++) {
-                    const song = songs[i];
-                    db.ref('mediaQueue').push({
-                        url: song.url,
-                        title: song.title,
-                        mediaType: 'video',
-                        addedBy: myName,
-                        timestamp: Date.now() + i
-                    });
+                const isInstaPage = /instagram\.com|instagr\.am/i.test(first.url) && !first.url.includes('proxy-mp4');
+                if (isInstaPage) {
+                    triggerLiveToast("RE-RESOLVING FIRST STREAM...");
+                    try {
+                        const resolved = await resolveUrlAndExtractIfNeeded(first.url, first.title);
+                        targetUrl = resolved.url;
+                        resolvedType = detectMediaType(resolved.url);
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
-            }
 
-            triggerLiveToast(`PLAYING PLAYLIST "${playlist.name}"!`);
-            playSynthSound('success');
+                db.ref('musicState').set({
+                    trackUrl: targetUrl,
+                    trackTitle: first.title,
+                    trackAuthor: `Playlist: ${playlist.name} (by ${playlist.createdBy.toUpperCase()})`,
+                    mediaType: resolvedType,
+                    status: 'playing',
+                    seekTime: 0,
+                    sentTime: Date.now(),
+                    triggeredBy: myName
+                });
 
-            db.ref('chatMessages').push({
-                sender: "AI-ROBOT",
-                text: `▶️ ${myName.toUpperCase()} STARTED PLAYING PLAYLIST: "${playlist.name}"`,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                if (songs.length > 1) {
+                    for (let i = 1; i < songs.length; i++) {
+                        const song = songs[i];
+                        const songType = detectMediaType(song.url);
+                        db.ref('mediaQueue').push({
+                            url: song.url,
+                            title: song.title,
+                            mediaType: songType,
+                            addedBy: myName,
+                            timestamp: Date.now() + i
+                        });
+                    }
+                }
+
+                triggerLiveToast(`PLAYING PLAYLIST "${playlist.name}"!`);
+                playSynthSound('success');
+
+                db.ref('chatMessages').push({
+                    sender: "AI-ROBOT",
+                    text: `▶️ ${myName.toUpperCase()} STARTED PLAYING PLAYLIST: "${playlist.name}"`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
             });
         }
 
@@ -3876,25 +3986,19 @@
             lucide.createIcons();
         }
 
-        function playCustomSongURL() {
+        async function playCustomSongURL() {
             const inputField = document.getElementById('musicCustomUrlInput');
             let url = inputField.value.trim();
             if (!url) return triggerLiveToast("ENTER A VALID MOVIE OR SONG LINK FIRST!");
             
-            let customTitle = "SOUNDTRACK STREAM";
-            try {
-                const parts = url.split('/');
-                const fileName = parts[parts.length - 1].split('?')[0];
-                if (fileName.length > 4) {
-                    customTitle = decodeURIComponent(fileName).toUpperCase();
-                }
-            } catch (e) {}
+            const resolved = await resolveUrlAndExtractIfNeeded(url);
+            const mType = detectMediaType(resolved.url);
 
             db.ref('musicState').set({
-                trackUrl: url,
-                trackTitle: customTitle,
+                trackUrl: resolved.url,
+                trackTitle: resolved.title,
                 trackAuthor: "CUSTOM DIRECT INJECTION link",
-                mediaType: 'video',
+                mediaType: mType,
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
@@ -3904,25 +4008,19 @@
             triggerLiveToast("CUSTOM VIDEO / AUDIO SYNCE_PLAY!");
         }
 
-        function playCustomVideoURL() {
+        async function playCustomVideoURL() {
             const inputField = document.getElementById('videoCustomUrlInput');
             let url = inputField.value.trim();
             if (!url) return triggerLiveToast("ENTER A VALID DIRECT MOVIE LINK FIRST!");
             
-            let customTitle = "CINEMA MOVIE STREAM";
-            try {
-                const parts = url.split('/');
-                const fileName = parts[parts.length - 1].split('?')[0];
-                if (fileName.length > 4) {
-                    customTitle = decodeURIComponent(fileName).toUpperCase();
-                }
-            } catch (e) {}
+            const resolved = await resolveUrlAndExtractIfNeeded(url);
+            const mType = detectMediaType(resolved.url);
 
             db.ref('musicState').set({
-                trackUrl: url,
-                trackTitle: customTitle,
+                trackUrl: resolved.url,
+                trackTitle: resolved.title,
                 trackAuthor: "CUSTOM DIRECT CINEMA link",
-                mediaType: 'video',
+                mediaType: mType,
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
@@ -3933,24 +4031,18 @@
         }
 
         // --- Shared Realtime Queue Logic ---
-        function addCustomSongToQueue() {
+        async function addCustomSongToQueue() {
             const inputField = document.getElementById('musicCustomUrlInput');
             let url = inputField.value.trim();
             if (!url) return triggerLiveToast("ENTER A VALID LINK TO ENQUEUE!");
             
-            let customTitle = "SOUNDTRACK STREAM";
-            try {
-                const parts = url.split('/');
-                const fileName = parts[parts.length - 1].split('?')[0];
-                if (fileName.length > 4) {
-                    customTitle = decodeURIComponent(fileName).toUpperCase();
-                }
-            } catch (e) {}
+            const resolved = await resolveUrlAndExtractIfNeeded(url);
+            const mType = detectMediaType(resolved.url);
 
             db.ref('mediaQueue').push({
-                url: url,
-                title: customTitle,
-                mediaType: 'video',
+                url: resolved.url,
+                title: resolved.title,
+                mediaType: mType,
                 addedBy: myName,
                 timestamp: Date.now()
             });
@@ -3961,29 +4053,23 @@
             
             db.ref('chatMessages').push({
                 sender: "AI-ROBOT",
-                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW MOVIE/SONG: "${customTitle.toUpperCase()}"`,
+                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW MOVIE/SONG: "${resolved.title.toUpperCase()}"`,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
         }
 
-        function addCustomVideoToQueue() {
+        async function addCustomVideoToQueue() {
             const inputField = document.getElementById('videoCustomUrlInput');
             let url = inputField.value.trim();
             if (!url) return triggerLiveToast("ENTER A VALID MP4 LINK TO ENQUEUE!");
 
-            let customTitle = "CINEMA MOVIE STREAM";
-            try {
-                const parts = url.split('/');
-                const fileName = parts[parts.length - 1].split('?')[0];
-                if (fileName.length > 4) {
-                    customTitle = decodeURIComponent(fileName).toUpperCase();
-                }
-            } catch (e) {}
+            const resolved = await resolveUrlAndExtractIfNeeded(url);
+            const mType = detectMediaType(resolved.url);
 
             db.ref('mediaQueue').push({
-                url: url,
-                title: customTitle,
-                mediaType: 'video',
+                url: resolved.url,
+                title: resolved.title,
+                mediaType: mType,
                 addedBy: myName,
                 timestamp: Date.now()
             });
@@ -3994,7 +4080,7 @@
 
             db.ref('chatMessages').push({
                 sender: "AI-ROBOT",
-                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW VIDEO: "${customTitle.toUpperCase()}"`,
+                text: `➕ ${myName.toUpperCase()} ENQUEUED NEW VIDEO: "${resolved.title.toUpperCase()}"`,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
         }
@@ -4011,15 +4097,44 @@
             });
         }
 
-        function playQueueItemImmediately(key) {
+        function clearEntireQueueAction() {
+            db.ref('mediaQueue').remove().then(() => {
+                triggerLiveToast("SHARED MEDIA QUEUE CLEARED!");
+                playSynthSound('success');
+                db.ref('chatMessages').push({
+                    sender: "AI-ROBOT",
+                    text: `🧹 ${myName.toUpperCase()} CLEARED THE SHARED MEDIA QUEUE!`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            }).catch(err => {
+                triggerLiveToast("FAILED TO CLEAR QUEUE!");
+            });
+        }
+
+        async function playQueueItemImmediately(key) {
             const item = localMediaQueue.find(i => i.key === key);
             if (!item) return;
 
+            let targetUrl = item.url;
+            let mType = item.mediaType;
+
+            const isInstaPage = /instagram\.com|instagr\.am/i.test(item.url) && !item.url.includes('proxy-mp4');
+            if (isInstaPage) {
+                triggerLiveToast("RE-RESOLVING QUEUED STREAM...");
+                try {
+                    const resolved = await resolveUrlAndExtractIfNeeded(item.url, item.title);
+                    targetUrl = resolved.url;
+                    mType = detectMediaType(resolved.url);
+                } catch (e) {
+                    console.error("Dynamic extraction error in queue play:", e);
+                }
+            }
+
             db.ref('musicState').set({
-                trackUrl: item.url,
+                trackUrl: targetUrl,
                 trackTitle: item.title,
                 trackAuthor: `Enqueued by ${item.addedBy.toUpperCase()}`,
-                mediaType: item.mediaType,
+                mediaType: mType,
                 status: 'playing',
                 seekTime: 0,
                 sentTime: Date.now(),
