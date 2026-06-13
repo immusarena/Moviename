@@ -5104,7 +5104,11 @@
             // Shift active turn indices or resolve trick rounds
             const participants = cardsGameState.playerNames;
             
-            if (Object.keys(updateTable).length === participants.length) {
+            // Evaluated if the card played on this turn constitutes a 'Vettu' (cut) on the leading suit constraint
+            const isCutPlay = checkConstraintLedSuit && (targetSelect.suit !== checkConstraintLedSuit);
+            const isRoundComplete = isCutPlay || (Object.keys(updateTable).length === participants.length);
+
+            if (isRoundComplete) {
                 updates.turn = 'resolving';
                 db.ref('cardsGameState').update(updates);
 
@@ -5113,7 +5117,7 @@
                     const finalTrickSnapMap = cardsGameState.table || updateTable;
                     const constraintBaseSuitRef = cardsGameState.ledSuit || updates.ledSuit || checkConstraintLedSuit;
 
-                    // Evaluate if a "vettu" (cut) occurred
+                    // Evaluate if a "vettu" (cut) occurred on the table
                     let cutHappened = false;
                     let cutterNames = [];
                     for (let p in finalTrickSnapMap) {
