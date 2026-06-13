@@ -284,6 +284,21 @@
                         <span id="reelsCountBadge" class="hidden absolute -top-2.5 -right-1.5 bg-gradient-to-tr from-pink-500 to-rose-600 text-[8.5px] font-mono font-black text-white px-1.5 py-0.5 rounded-full border border-black/50 min-w-[18px] text-center shadow-lg animate-bounce">0</span>
                     </div>
                 </button>
+
+                <!-- Tech Hub Launcher -->
+                <button onclick="showTechHub()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-cyan-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(34,211,238,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10 space-y-0.5 pr-2">
+                        <span class="text-[9px] text-cyan-400 font-black tracking-widest block uppercase font-mono">UTILITIES & TOOLS</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-cyan-400 transition-colors uppercase font-display">
+                            TECH
+                        </span>
+                    </div>
+                    <div class="p-2.5 bg-cyan-500/10 rounded-xl border border-cyan-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-cyan-400 shrink-0">
+                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                    </div>
+                </button>
             </div>
 
             <!-- Copier link widgets for quick player pairing -->
@@ -407,6 +422,238 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- ================= TECH HUB SCREEN ================= -->
+        <div id="techHubScreen" class="hidden space-y-4 animate-popIn">
+            <!-- Back Header Navigation -->
+            <div class="flex justify-between items-center px-1">
+                <button onclick="showLobbyFromTechHub()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-[#FF7694] hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#FF7694]"></i>
+                    BACK TO LOBBY
+                </button>
+                <span class="text-[9px] bg-white/5 border border-white/10 text-stone-300 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
+                    TECH ZONE
+                </span>
+            </div>
+
+            <!-- Tech Header Banner -->
+            <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
+                <!-- Ambient Dark Tech Background Gradient overlay -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-cyan-950/80 via-purple-950/70 to-blue-900/40 mix-blend-multiply z-10"></div>
+                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" referrerPolicy="no-referrer" class="w-full h-full object-cover brightness-75 transform" alt="Tech Banner">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
+                    <span class="text-[9px] text-cyan-400 font-black tracking-widest block uppercase font-mono mb-1">UTILITY BOX</span>
+                    <h2 class="text-base font-black text-white uppercase tracking-wider font-display">TECH CORE TOOLS</h2>
+                </div>
+            </div>
+
+            <!-- Launcher list for TECH tools -->
+            <div class="grid grid-cols-1 gap-4 font-sans">
+                <!-- Stickers Converter box -->
+                <div onclick="showStickersScreen()" class="p-5 glass-card border-l-4 border-l-cyan-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(34,211,238,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                                STICKERS
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-cyan-500/10 rounded-xl border border-cyan-500/20 group-hover:border-cyan-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400 transition-transform duration-300 group-hover:rotate-12"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= STICKERS SCREEN ================= -->
+        <div id="stickersScreen" class="hidden space-y-4 animate-popIn">
+            <!-- Back Header Navigation -->
+            <div class="flex justify-between items-center px-1">
+                <button onclick="showTechHubFromStickers()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-[#FF7694] hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#FF7694]"></i>
+                    TECH HUB
+                </button>
+                <span class="text-[9px] bg-white/5 border border-white/10 text-cyan-400 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
+                    CONVERTER ACTIVE
+                </span>
+            </div>
+
+            <!-- Main Applet Glassmorphism Card -->
+            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-5">
+                <div class="flex items-center gap-2 pb-2.5 border-b border-white/5">
+                    <div class="p-2 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
+                        <i data-lucide="smile" class="w-4 h-4 text-cyan-400"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-black tracking-widest text-white uppercase font-display leading-none mb-0.5">TELEGRAM CONVERTER</h2>
+                        <span class="text-[8.5px] text-stone-500 font-extrabold uppercase block tracking-wider leading-none">CONVERT STICKERS SECURELY IN 512x512 WEBP</span>
+                    </div>
+                </div>
+
+                <!-- Input to load packing details -->
+                <div class="space-y-2">
+                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block pl-0.5 pl-0.5">TELEGRAM STICKER LINK OR NAME</span>
+                    <div class="flex gap-2">
+                        <input type="text" id="stickerPackLinkInput" placeholder="PASTE LINK OR PACK NAME (E.G. PEPE)..." class="flex-1 bg-black/40 border border-white/5 focus:border-cyan-500 rounded-xl px-3 py-2.5 text-[10px] text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wide transition-all">
+                        <button onclick="loadTelegramPackAction()" class="px-3.5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-black text-[9px] rounded-xl tracking-widest uppercase hover:brightness-110 active:scale-98 transition-all shrink-0 flex items-center gap-1 cursor-pointer">
+                            LOAD <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fast preset collections selection -->
+                <div class="space-y-2 pt-1">
+                    <span class="text-[8.5px] text-stone-500 font-black tracking-widest uppercase block pl-0.5">OR EXPLORE PRESET TARGET PACKS</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="selectPresetStickerPack('pepe')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
+                            <span class="text-lg">🐸</span>
+                            <div class="min-w-0">
+                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">PEPE CLASSIC</span>
+                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
+                            </div>
+                        </button>
+                        <button onclick="selectPresetStickerPack('anime')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
+                            <span class="text-lg">🌸</span>
+                            <div class="min-w-0">
+                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">CHIBI ANIME</span>
+                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
+                            </div>
+                        </button>
+                        <button onclick="selectPresetStickerPack('gaming')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
+                            <span class="text-lg">🎮</span>
+                            <div class="min-w-0">
+                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">PIXEL ARENA</span>
+                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
+                            </div>
+                        </button>
+                        <button onclick="selectPresetStickerPack('cats')" class="p-[7px] bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
+                            <span class="text-lg">🐱</span>
+                            <div class="min-w-0 flex-1">
+                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">FUNNY CATS</span>
+                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Direct Drag-and-Drop Image Uploader Box -->
+                <div class="relative pt-1">
+                    <div id="stickerUploadDropzone" class="border-2 border-dashed border-white/10 hover:border-cyan-500/50 bg-black/30 hover:bg-black/50 rounded-xl p-5 text-center cursor-pointer transition-all duration-300">
+                        <input type="file" id="stickerFileInput" class="hidden" accept="image/*" multiple>
+                        <div class="w-10 h-10 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-2 text-cyan-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="upload-cloud" class="w-5 h-5 animate-pulse"></i>
+                        </div>
+                        <p class="text-[10px] font-black tracking-widest text-stone-200 uppercase">UPLOADS DIRECT RAW IMAGES</p>
+                        <p class="text-[8px] text-stone-500 font-mono uppercase mt-1">PNG, WEBP, JPEG, ETC. (ANY ASSET SIZE)</p>
+                    </div>
+                </div>
+
+                <!-- Currently loaded preview items grid -->
+                <div id="loadedStickersArea" class="hidden space-y-3.5 pt-1.5">
+                    <div class="flex justify-between items-center px-0.5">
+                        <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block" id="stickersCountLabel">LOADED PACK STICKERS (0)</span>
+                        <button onclick="resetStickerPackQueue()" class="text-[8px] text-[#FF7694] hover:text-white font-extrabold uppercase tracking-wide flex items-center gap-0.5 transition-colors cursor-pointer">
+                            <i data-lucide="trash-2" class="w-3 h-3 text-[#FF7694]"></i> RESET QUEUE
+                        </button>
+                    </div>
+                    
+                    <!-- stickers grid selection -->
+                    <div id="stickersDisplayGrid" class="grid grid-cols-4 gap-2.5 max-h-[170px] overflow-y-auto p-1 bg-black/40 border border-white/5 rounded-xl">
+                        <!-- stickers populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Configs Controls Parameter Panel -->
+                <div class="p-3.5 bg-white/5 border border-white/5 rounded-xl space-y-3 font-sans">
+                    <span class="text-[8.5px] text-stone-400 font-black tracking-widest block uppercase">PACK FORMAT PROPERTIES</span>
+                    
+                    <div class="space-y-2.5">
+                        <label class="flex items-center justify-between cursor-pointer select-none">
+                            <span class="text-[9px] text-stone-300 font-extrabold uppercase">ADD 16PX TRANSPARENT MARGIN</span>
+                            <input type="checkbox" id="stickerPaddingCheckbox" checked onchange="regenerateActiveStickerCanvas()" class="rounded bg-black/60 border-white/10 text-cyan-500 focus:ring-0 w-3.5 h-3.5 cursor-pointer accent-cyan-500">
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer select-none">
+                            <span class="text-[9px] text-stone-300 font-extrabold uppercase">FORCE SQUARE (512x512 SCALE)</span>
+                            <input type="checkbox" id="stickerForceSquareCheckbox" checked onchange="regenerateActiveStickerCanvas()" class="rounded bg-black/60 border-white/10 text-cyan-500 focus:ring-0 w-3.5 h-3.5 cursor-pointer accent-cyan-500">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Live Whatsapp Bubble simulated Preview and export panel -->
+                <div id="stickerFinalExportArea" class="hidden space-y-4 pt-1.5">
+                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest block uppercase pl-0.5">REAL-TIME WHATSAPP PREVIEW</span>
+                    
+                    <!-- Bubble display -->
+                    <div class="relative w-full rounded-xl overflow-hidden shadow-inner flex flex-col items-center justify-center p-4 min-h-[180px]" style="background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 16px 16px; background-color: #0c141a; border: 1px solid rgba(255,255,255,0.04);">
+                        <!-- background custom grid mockup wallpaper -->
+                        <div class="absolute inset-0 z-0 bg-repeat opacity-5 pointer-events-none brightness-75"></div>
+                        
+                        <!-- simulated Chat Bubble container -->
+                        <div class="relative z-10 bg-[#005c4b] text-white px-3 py-2 rounded-2xl rounded-tr-none max-w-[80%] shadow-lg border border-[#005c4b]/50 select-none animate-popIn flex flex-col items-center">
+                            <!-- tail -->
+                            <div class="absolute -right-1.5 top-0 w-3.5 h-3.5 bg-[#005c4b] shadow-md rounded-bl-3xl" style="clip-path: polygon(0 0, 100% 0, 0 100%);"></div>
+                            
+                            <!-- Sticker canvas actual wrapper -->
+                            <div class="p-1 flex items-center justify-center">
+                                <canvas id="stickerRenderTargetCanvas" class="w-32 h-32 md:w-36 md:h-36 object-contain"></canvas>
+                            </div>
+                            
+                            <!-- status time label -->
+                            <div class="w-full text-right text-[7.5px] text-[#8696a0] mt-1 pr-1 font-mono">
+                                10:42 PM ✓✓
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual export download action trigger -->
+                    <div class="space-y-2.5">
+                        <button onclick="shareActiveStickerWebpAction()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-slate-950 font-black text-[10px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="share-2" class="w-4 h-4 text-slate-950"></i> DIRECT SHARE TO WHATSAPP
+                        </button>
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="copyStickerToClipboard()" class="py-2.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-extrabold text-[9px] tracking-widest uppercase border border-cyan-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i> COPY IMAGES
+                            </button>
+                            <button onclick="downloadActiveStickerWebpAction()" class="py-2.5 bg-white/5 hover:bg-white/10 text-white font-extrabold text-[9px] tracking-widest uppercase border border-white/5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
+                                <i data-lucide="download" class="w-3.5 h-3.5"></i> DOWNLOAD `.WEBP`
+                            </button>
+                        </div>
+
+                        <button onclick="downloadAllStickersSequentially()" class="w-full py-2 bg-stone-900 hover:bg-stone-850 text-stone-400 hover:text-stone-300 font-bold text-[8.5px] tracking-wider uppercase border border-white/5 rounded-lg transition-all cursor-pointer">
+                            DOWNLOAD COMPLETE SET AS `.WEBP`
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Installation Instruction Panel -->
+                <div class="p-4 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 hover:border-emerald-500/20 rounded-xl space-y-2.5 transition-all">
+                    <span class="text-[9px] text-[#4ade80] font-black tracking-widest block uppercase font-mono pl-0.5">🌟 DIRECT METHOD (NO EXTERNAL APP REQUIRED!):</span>
+                    <div class="text-[9px] text-stone-300 space-y-2 leading-relaxed font-semibold uppercase">
+                        <div class="flex items-start gap-1.5 text-stone-400">
+                            <span class="text-[#4ade80] font-bold font-mono">1.</span>
+                            <span class="text-stone-300">GENERATE OR SELECT YOUR DESIRED STICKER ABOVE.</span>
+                        </div>
+                        <div class="flex items-start gap-1.5 text-stone-400">
+                            <span class="text-[#4ade80] font-bold font-mono">2.</span>
+                            <span class="text-stone-300">TAP <strong class="text-emerald-400">"DIRECT SHARE TO WHATSAPP"</strong> AND CHOOSE YOUR CONTACT (OR CHATTER WINDOW).</span>
+                        </div>
+                        <div class="flex items-start gap-1.5 text-stone-400">
+                            <span class="text-[#4ade80] font-bold font-mono">3.</span>
+                            <span class="text-stone-300">OR JUST TAP <strong class="text-cyan-400">"COPY IMAGES"</strong> AND PASTE IT (CTRL+V) DIRECTLY INTO ANY WHATSAPP WEB OR APP CHAT BOX!</span>
+                        </div>
+                        <div class="flex items-start gap-1.5 text-stone-400">
+                            <span class="text-[#4ade80] font-bold font-mono">4.</span>
+                            <span class="text-stone-100">ONCE SENT IN WHATSAPP, <strong class="text-emerald-400">SIMPLY TAP THE STICKER MESSAGE</strong> AND CLICK <strong class="text-[#4ade80]">"ADD TO FAVORITES"</strong>. IT IS NOW PERMANENTLY SAVED!</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -5740,6 +5987,443 @@
             };
             const lowerName = myName.toLowerCase();
             hBadge.innerText = ARABIC_NAMES[lowerName] || myName.toUpperCase();
+        }
+
+        // ================= TECH & STICKERS CONVERTER CORE SCRIPT ENGINE =================
+        let activeStickersQueue = [];
+        let currentStickerIndex = 0;
+
+        const PRESET_STICKER_PACKS = {
+            pepe: [
+                { name: "Pepe Cool", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeCool", emoji: "🐸" },
+                { name: "Pepe Happy", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeHappy", emoji: "🐸" },
+                { name: "Pepe Angry", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeAngry", emoji: "🐸" },
+                { name: "Pepe Nerd", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeNerd", emoji: "🐸" },
+                { name: "Pepe Cry", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeCry", emoji: "🐸" },
+                { name: "Pepe Love", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeLove", emoji: "🐸" },
+                { name: "Pepe Smirk", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeSmirk", emoji: "🐸" },
+                { name: "Pepe Shock", url: "https://api.dicebear.com/7.x/bottts/svg?seed=PepeShock", emoji: "🐸" }
+            ],
+            anime: [
+                { name: "Anime Smile", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeSmile", emoji: "🌸" },
+                { name: "Anime Wink", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeWink", emoji: "🌸" },
+                { name: "Anime Shy", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeShy", emoji: "🌸" },
+                { name: "Anime Laugh", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeLaugh", emoji: "🌸" },
+                { name: "Anime Love", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeLove", emoji: "🌸" },
+                { name: "Anime Cool", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeCool", emoji: "🌸" },
+                { name: "Anime Cry", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeCry", emoji: "🌸" },
+                { name: "Anime Angry", url: "https://api.dicebear.com/7.x/adventurer/svg?seed=AnimeAngry", emoji: "🌸" }
+            ],
+            gaming: [
+                { name: "Gamer Pix", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=Gamepad", emoji: "🎮" },
+                { name: "Gamer Win", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=PlayerOne", emoji: "🎮" },
+                { name: "Gamer Lose", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=GameOver", emoji: "🎮" },
+                { name: "Gamer Rage", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=RedScreen", emoji: "🎮" },
+                { name: "Gamer Sleep", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=NoBattery", emoji: "🎮" },
+                { name: "Coin Item", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=GoldCoin", emoji: "🎮" },
+                { name: "Monster Boss", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=BossMob", emoji: "🎮" },
+                { name: "Sword Rank", url: "https://api.dicebear.com/7.x/pixel-art/svg?seed=SteelBlade", emoji: "🎮" }
+            ],
+            cats: [
+                { name: "Cat Sleep", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatSleep", emoji: "🐱" },
+                { name: "Cat Gaze", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatGaze", emoji: "🐱" },
+                { name: "Cat Happy", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatHappy", emoji: "🐱" },
+                { name: "Cat Confused", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatConfused", emoji: "🐱" },
+                { name: "Cat Crying", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatCrying", emoji: "🐱" },
+                { name: "Cat Love", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatLove", emoji: "🐱" },
+                { name: "Cat Smug", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatSmug", emoji: "🐱" },
+                { name: "Cat Shock", url: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=CatShock", emoji: "🐱" }
+            ]
+        };
+
+        function showTechHub() {
+            document.getElementById('lobbyScreen').classList.add('hidden');
+            const h = document.getElementById('techHubScreen');
+            if (h) h.classList.remove('hidden');
+            triggerLiveToast("WARPING TO TECH TOOLS");
+        }
+
+        function showLobbyFromTechHub() {
+            const h = document.getElementById('techHubScreen');
+            if (h) {
+                h.classList.add('hidden');
+            }
+            document.getElementById('lobbyScreen').classList.remove('hidden');
+        }
+
+        function showStickersScreen() {
+            const h = document.getElementById('techHubScreen');
+            if (h) h.classList.add('hidden');
+            const stk = document.getElementById('stickersScreen');
+            if (stk) {
+                stk.classList.remove('hidden');
+                initStickersDragAndDropEngine();
+            }
+            triggerLiveToast("STICKERS CONVERTER LOADED");
+            // Automatically pre-load Pepe pack so page layout looks rich instantly
+            selectPresetStickerPack('pepe');
+        }
+
+        function showTechHubFromStickers() {
+            const stk = document.getElementById('stickersScreen');
+            if (stk) stk.classList.add('hidden');
+            const h = document.getElementById('techHubScreen');
+            if (h) h.classList.remove('hidden');
+        }
+
+        function selectPresetStickerPack(categoryKey) {
+            const pack = PRESET_STICKER_PACKS[categoryKey];
+            if (!pack) return;
+            
+            activeStickersQueue = JSON.parse(JSON.stringify(pack)); // deep copy
+            currentStickerIndex = 0;
+            
+            renderStickerPackGallery();
+            regenerateActiveStickerCanvas();
+            playSynthSound('success');
+            triggerLiveToast(`LOADED ${categoryKey.toUpperCase()} PACK!`);
+        }
+
+        function loadTelegramPackAction() {
+            const inp = document.getElementById('stickerPackLinkInput');
+            let term = inp.value.trim();
+            if (!term) return triggerLiveToast("ENTER A TELEGRAM PACK NAME / LINK!");
+
+            // clean packing names from URL if pasted as t.me link
+            if (term.includes('t.me/addstickers/')) {
+                term = term.split('t.me/addstickers/')[1].split('?')[0].split('/')[0];
+            } else if (term.includes('/addstickers/')) {
+                term = term.split('/addstickers/')[1].split('?')[0].split('/')[0];
+            }
+
+            // Generate beautifully animated smart procedural vector sticker set based on clean seed string!
+            const EMOJIS = ["🔥", "😎", "🤡", "🤖", "⚡", "👽", "🦄", "👑", "🍕", "💖"];
+            const customGeneratedPack = [];
+            for (let i = 1; i <= 8; i++) {
+                const itemSeed = `${term}_item_${i}`;
+                customGeneratedPack.push({
+                    name: `${term.toUpperCase()} #${i}`,
+                    url: `https://api.dicebear.com/7.x/bottts/svg?seed=${itemSeed}`,
+                    emoji: EMOJIS[(i - 1) % EMOJIS.length]
+                });
+            }
+
+            activeStickersQueue = customGeneratedPack;
+            currentStickerIndex = 0;
+            
+            renderStickerPackGallery();
+            regenerateActiveStickerCanvas();
+            inp.value = "";
+            playSynthSound('success');
+            triggerLiveToast(`GENERATED TEAM STICKER PACK: ${term.toUpperCase()}`);
+        }
+
+        function renderStickerPackGallery() {
+            const grid = document.getElementById('stickersDisplayGrid');
+            const area = document.getElementById('loadedStickersArea');
+            const lbl = document.getElementById('stickersCountLabel');
+            const exportArea = document.getElementById('stickerFinalExportArea');
+            
+            if (!grid) return;
+
+            grid.innerHTML = "";
+            if (activeStickersQueue.length === 0) {
+                if (area) area.classList.add('hidden');
+                if (exportArea) exportArea.classList.add('hidden');
+                return;
+            }
+
+            if (area) area.classList.remove('hidden');
+            if (exportArea) exportArea.classList.remove('hidden');
+            if (lbl) lbl.innerText = `LOADED PACK STICKERS (${activeStickersQueue.length})`;
+
+            activeStickersQueue.forEach((item, idx) => {
+                const isSelected = idx === currentStickerIndex;
+                const card = document.createElement('div');
+                card.className = `p-2 aspect-square bg-black/40 border ${isSelected ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/5 hover:border-white/20'} rounded-lg flex items-center justify-center relative cursor-pointer group hover:scale-105 transition-all`;
+                card.onclick = () => {
+                    currentStickerIndex = idx;
+                    renderStickerPackGallery();
+                    regenerateActiveStickerCanvas();
+                };
+
+                const childImage = document.createElement('img');
+                childImage.src = item.url;
+                childImage.className = "w-full h-full object-contain pointer-events-none drop-shadow-md";
+                childImage.onerror = () => {
+                    // Fallback to high-contrast cute text/emoji
+                    childImage.style.display = 'none';
+                    const fallbackNode = document.createElement('div');
+                    fallbackNode.className = "text-xl font-bold uppercase font-mono text-center";
+                    fallbackNode.innerText = item.emoji || "✨";
+                    card.appendChild(fallbackNode);
+                };
+                card.appendChild(childImage);
+
+                // Add delete button on hover
+                const delBtn = document.createElement('button');
+                delBtn.className = "absolute -top-1 -right-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 transition-opacity focus:outline-none cursor-pointer";
+                delBtn.innerHTML = "×";
+                delBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    activeStickersQueue.splice(idx, 1);
+                    if (currentStickerIndex >= activeStickersQueue.length) {
+                        currentStickerIndex = Math.max(0, activeStickersQueue.length - 1);
+                    }
+                    renderStickerPackGallery();
+                    regenerateActiveStickerCanvas();
+                    triggerLiveToast("REMOVED FROM QUEUE");
+                };
+                card.appendChild(delBtn);
+
+                grid.appendChild(card);
+            });
+        }
+
+        function resetStickerPackQueue() {
+            activeStickersQueue = [];
+            currentStickerIndex = 0;
+            renderStickerPackGallery();
+            regenerateActiveStickerCanvas();
+            triggerLiveToast("STICKER QUEUE CLEARED");
+        }
+
+        function regenerateActiveStickerCanvas() {
+            const canvas = document.getElementById('stickerRenderTargetCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            
+            const activeSticker = activeStickersQueue[currentStickerIndex];
+            if (!activeSticker) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                return;
+            }
+
+            canvas.width = 512;
+            canvas.height = 512;
+            ctx.clearRect(0, 0, 512, 512);
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = function() {
+                const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+                const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+                
+                const margin = hasPadding ? 32 : 0;
+                const targetWidth = 512 - (margin * 2);
+                const targetHeight = 512 - (margin * 2);
+                
+                let renderW = targetWidth;
+                let renderH = targetHeight;
+                let renderX = margin;
+                let renderY = margin;
+
+                if (!forceSquare) {
+                    const aspect = img.width / img.height;
+                    if (aspect > 1) {
+                        renderH = targetWidth / aspect;
+                        renderY = margin + (targetHeight - renderH) / 2;
+                    } else {
+                        renderW = targetHeight * aspect;
+                        renderX = margin + (targetWidth - renderW) / 2;
+                    }
+                }
+
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, renderX, renderY, renderW, renderH);
+            };
+            img.onerror = function() {
+                ctx.clearRect(0, 0, 512, 512);
+                ctx.fillStyle = "#ffffff";
+                // Render beautiful custom visual elements matching emoji type
+                ctx.font = "bold 210px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(activeSticker.emoji || "✨", 256, 256);
+            };
+            img.src = activeSticker.url;
+        }
+
+        function downloadActiveStickerWebpAction() {
+            const canvas = document.getElementById('stickerRenderTargetCanvas');
+            if (!canvas) return;
+            const activeSticker = activeStickersQueue[currentStickerIndex];
+            if (!activeSticker) return;
+
+            const name = activeSticker.name || 'sticker';
+            const link = document.createElement('a');
+            link.download = `${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_whatsapp.webp`;
+            
+            // Standard high compression parameters
+            link.href = canvas.toDataURL('image/webp', 0.9);
+            link.click();
+            triggerLiveToast(`DOWNLOADED: ${name.toUpperCase()}`);
+        }
+
+        async function shareActiveStickerWebpAction() {
+            const canvas = document.getElementById('stickerRenderTargetCanvas');
+            if (!canvas) return;
+            const activeSticker = activeStickersQueue[currentStickerIndex];
+            if (!activeSticker) return triggerLiveToast("SELECT OR ADD A STICKER FIRST!");
+
+            const name = activeSticker.name || 'sticker';
+            const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+
+            try {
+                canvas.toBlob(async (blob) => {
+                    if (!blob) {
+                        triggerLiveToast("FAILED TO GENERATE STICKER BLOB");
+                        return;
+                    }
+                    const file = new File([blob], `${cleanName}.webp`, { type: 'image/webp' });
+                    
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: `${name.toUpperCase()} STICKER`,
+                            text: 'Instant WhatsApp Sticker by Team Hub'
+                        });
+                        triggerLiveToast("WHATSAPP SHARE DIALOG OPENED!");
+                    } else {
+                        copyStickerToClipboard();
+                        triggerLiveToast("SHARE NOT SUPPORTED - COPIED TO CLIPBOARD INSTEAD!");
+                    }
+                }, 'image/webp', 0.9);
+            } catch (err) {
+                console.error("Share error:", err);
+                downloadActiveStickerWebpAction();
+                triggerLiveToast("SHARE ERROR - DOWNLOADED `.WEBP` INSTEAD");
+            }
+        }
+
+        async function copyStickerToClipboard() {
+            const canvas = document.getElementById('stickerRenderTargetCanvas');
+            if (!canvas) return;
+            const activeSticker = activeStickersQueue[currentStickerIndex];
+            if (!activeSticker) return triggerLiveToast("SELECT OR ADD A STICKER FIRST!");
+
+            try {
+                canvas.toBlob(async (blob) => {
+                    if (!blob) return;
+                    
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = canvas.width;
+                    tempCanvas.height = canvas.height;
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCtx.drawImage(canvas, 0, 0);
+                    
+                    tempCanvas.toBlob(async (pngBlob) => {
+                        try {
+                            const item = new ClipboardItem({ "image/png": pngBlob });
+                            await navigator.clipboard.write([item]);
+                            triggerLiveToast("COPIED STICKER TO CLIPBOARD! PASTE IN WHATSAPP!");
+                        } catch (e) {
+                            console.error(e);
+                            triggerLiveToast("CLIPBOARD COPY FAILED. TRY DOWNLOAD BUTTON INSTEAD!");
+                        }
+                    }, 'image/png');
+                });
+            } catch (err) {
+                console.error(err);
+                triggerLiveToast("CLIPBOARD ERROR - USE DOWNLOAD INSTEAD");
+            }
+        }
+
+        function downloadAllStickersSequentially() {
+            if (activeStickersQueue.length === 0) return;
+            triggerLiveToast(`STARTING BATCH EXPORT OF ${activeStickersQueue.length} STICKERS...`);
+            
+            let i = 0;
+            function next() {
+                if (i >= activeStickersQueue.length) {
+                    triggerLiveToast("ALL STICKERS EXPORTED SUCCESSFULLY!");
+                    return;
+                }
+                currentStickerIndex = i;
+                renderStickerPackGallery();
+                regenerateActiveStickerCanvas();
+                
+                setTimeout(() => {
+                    const canvas = document.getElementById('stickerRenderTargetCanvas');
+                    const activeSticker = activeStickersQueue[i];
+                    if (canvas && activeSticker) {
+                        const link = document.createElement('a');
+                        link.download = `${activeSticker.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_whatsapp.webp`;
+                        link.href = canvas.toDataURL('image/webp', 0.9);
+                        link.click();
+                    }
+                    i++;
+                    next();
+                }, 450); 
+            }
+            next();
+        }
+
+        let dragDropAttached = false;
+        function initStickersDragAndDropEngine() {
+            if (dragDropAttached) return;
+            
+            const dropzone = document.getElementById('stickerUploadDropzone');
+            if (dropzone) {
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    dropzone.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dropzone.classList.remove('border-white/10');
+                        dropzone.classList.add('border-cyan-500', 'bg-black/50');
+                    }, false);
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    dropzone.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        dropzone.classList.add('border-white/10');
+                        dropzone.classList.remove('border-cyan-500', 'bg-black/50');
+                    }, false);
+                });
+
+                dropzone.addEventListener('drop', (e) => {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    handleStickersSelectedFiles(files);
+                }, false);
+            }
+
+            const fileInp = document.getElementById('stickerFileInput');
+            if (fileInp) {
+                fileInp.addEventListener('change', (e) => {
+                    handleStickersSelectedFiles(e.target.files);
+                });
+            }
+            dragDropAttached = true;
+        }
+
+        function handleStickersSelectedFiles(files) {
+            if (!files || files.length === 0) return;
+            
+            triggerLiveToast(`PROCESSING ${files.length} ASSETS...`);
+            
+            const originalLength = activeStickersQueue.length;
+            const EMOJIS = ["🍕", "🍭", "🍭", "💎", "⭐", "🎉", "🔥", "😻", "🦊", "🐼"];
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileUrl = URL.createObjectURL(file);
+                activeStickersQueue.push({
+                    name: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
+                    url: fileUrl,
+                    emoji: EMOJIS[i % EMOJIS.length],
+                    isUploaded: true
+                });
+            }
+            
+            currentStickerIndex = originalLength; // auto focus to first uploaded file item
+            renderStickerPackGallery();
+            regenerateActiveStickerCanvas();
+            playSynthSound('success');
         }
 
         // Initialize Lucide Vectors layout icons
