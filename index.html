@@ -424,6 +424,23 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Guess the Code Challenge Box -->
+                <div onclick="enterArena('code')" class="p-5 glass-card border-l-4 border-l-violet-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(139,92,246,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-violet-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-violet-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                                GUESS THE CODE CHALLENGE
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-violet-500/10 rounded-xl border border-violet-500/20 group-hover:border-violet-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="key-round" class="w-5 h-5 text-violet-400 transition-transform duration-300 group-hover:rotate-12"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1142,6 +1159,112 @@
 
             </div>
 
+            <!-- ================= GUESS THE CODE CHALLENGE ================= -->
+            <div id="codeArena" class="hidden space-y-4">
+                
+                <!-- Lobby Selection Section -->
+                <div id="boxCodeSetup" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 tracking-widest uppercase font-display select-none">
+                        GUESS THE CODE CHALLENGE
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider select-none">CHOOSE PLAYER COUNT FOR THE MATCH LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startCodeGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-violet-500/20 flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer active:scale-95 transition-all">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startCodeGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-violet-400 text-violet-400 font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Lock Setup View -->
+                <div id="boxCodeLock" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-4">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5">
+                        <h3 class="text-xs font-black tracking-widest text-violet-400 uppercase flex items-center gap-1">
+                            <i data-lucide="lock" class="w-4 h-4"></i>SET SECRET CODE
+                        </h3>
+                        <button onclick="confirmResetCode()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>QUIT
+                        </button>
+                    </div>
+
+                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-3">
+                        <span class="text-[8.5px] text-stone-500 font-black tracking-widest uppercase block">ENTER YOUR 4-DIGIT UNIQUE CODE (0-9)</span>
+                        <div class="flex justify-center gap-1">
+                            <input type="password" maxlength="4" id="codeLockInputField" placeholder="••••" class="w-36 bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-center text-xl font-bold font-mono tracking-widest text-[var(--accent-color)] outline-none focus:border-violet-500 transition-all uppercase">
+                        </div>
+                        <button onclick="submitSecretCodeLock()" class="w-full py-3 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg hover:brightness-110 active:scale-95 transition-all cursor-pointer">
+                            LOCK SECRET CODE
+                        </button>
+                    </div>
+
+                    <!-- Lock progress status list -->
+                    <div class="bg-black/20 border border-white/5 rounded-xl p-3.5 space-y-2 text-xs">
+                        <span class="text-[8.5px] text-stone-500 font-extrabold tracking-widest block uppercase font-mono pl-0.5">READY STATES</span>
+                        <div class="grid grid-cols-3 gap-2 text-center" id="codeLockStatesGrid">
+                            <!-- Populated dynamically: IMMU [LOCKED]/[WAITING], etc -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Game view -->
+                <div id="boxCodeActivePlay" class="hidden space-y-4">
+                    <!-- Head Control -->
+                    <div class="flex justify-between items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-violet-400 animate-ping"></span>
+                            <span class="text-[10px] text-violet-300 font-black tracking-widest uppercase font-mono" id="codeGameplayTurnBadge">PLAYER TURN</span>
+                        </div>
+                        <button onclick="confirmResetCode()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>QUIT MATCH
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 animate-popIn">
+                        <!-- Play action pane -->
+                        <div class="md:col-span-5 glass-card rounded-2xl p-5 space-y-4">
+                            <div class="pb-2 border-b border-white/5 flex justify-between items-center">
+                                <h3 class="text-xs font-black tracking-widest text-[#FF7694] uppercase">LAUNCH PROBE</h3>
+                                <button onclick="toggleCheatSecretEye()" id="cheatSecretEyeBtn" class="text-[8px] text-amber-500/80 hover:text-amber-400 uppercase font-black tracking-widest bg-amber-500/10 border border-amber-500/20 rounded px-2 py-0.5">SNEAK CODE</button>
+                            </div>
+
+                            <div class="space-y-3.5">
+                                <div class="space-y-1.5">
+                                    <label class="text-[8px] text-stone-500 font-extrabold uppercase tracking-wider block pl-0.5">SELECT PLANET TARGET</label>
+                                    <select id="codeTargetSelect" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-[10px] text-white font-extrabold outline-none uppercase font-mono">
+                                        <!-- targets populated here on turn/load -->
+                                    </select>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="text-[8px] text-stone-500 font-extrabold uppercase tracking-wider block pl-0.5">ENTER YOUR 4-DIGIT SPECULATION</label>
+                                    <input type="text" maxlength="4" placeholder="1234" id="codeGuessInputField" class="w-full bg-black/55 border border-white/10 text-center text-xl font-bold tracking-widest font-mono text-[var(--accent-color)] rounded-xl py-3 outline-none focus:border-violet-500 uppercase">
+                                </div>
+
+                                <button onclick="submitCodeGuessAction()" id="btnCodeSubmitGuess" class="w-full py-3.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-xs rounded-xl tracking-widest uppercase flex items-center justify-center gap-1.5 cursor-pointer shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                    <i data-lucide="satellite" class="w-4 h-4 text-white"></i>PROBE CODEWAY
+                                </button>
+
+                                <button onclick="askGeminiCodeHint()" id="btnGeminiCodeHint" class="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-violet-300 font-black text-[10px] rounded-xl tracking-widest uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-violet-400 animate-pulse"></i>ASK GEMINI ROBOT CLUE
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Decoded grid matrix and logs -->
+                        <div class="md:col-span-7 glass-card rounded-2xl p-5 flex flex-col h-[340px]">
+                            <span class="text-[8.5px] text-stone-500 font-black tracking-widest block uppercase font-mono pb-2 border-b border-white/5 pl-0.5 mb-2 shrink-0">DEDUCTION MATRIX LOGS</span>
+                            <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin" id="codeDeductionLogsScroller">
+                                <!-- list of guess rows -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
             <!-- ================= CO-OP MEDIA LOUNGE ARENA ================= -->
             <div id="songsArena" class="hidden space-y-4">
                 <div class="glass-card rounded-2xl p-6 shadow-2xl space-y-5 text-center relative overflow-hidden">
@@ -1510,6 +1633,35 @@
         </div>
     </div>
 
+    <!-- Tharkuri Profile Customization Modal Overlay -->
+    <div id="tharkuriConfigOverlay" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-sm glass-card border border-amber-500/20 rounded-2xl p-6 text-center space-y-4">
+            <h3 class="text-base font-black text-amber-400 tracking-wider font-display uppercase">CONFIGURE THARKURI</h3>
+            <p class="text-[9px] text-stone-400 leading-relaxed uppercase tracking-widest">Update the real-time name and live avatar seed for player Tharkuri.</p>
+            
+            <div class="space-y-3.5 text-left">
+                <div>
+                    <label class="text-[8.5px] text-stone-500 font-extrabold tracking-widest uppercase block mb-1">PLAYER NAME</label>
+                    <input type="text" id="tharkuriCustomNameInput" class="w-full bg-black/60 border border-white/10 focus:border-amber-500 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                </div>
+                <div>
+                    <label class="text-[8.5px] text-stone-500 font-extrabold tracking-widest uppercase block mb-1">AVATAR SEED (WORDS OR CODES)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="tharkuriProfileSeedInput" class="flex-1 bg-black/60 border border-white/10 focus:border-amber-500 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wider transition-all">
+                        <button onclick="randomizeTharkuriSeed()" class="px-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 hover:text-white border border-amber-500/20 rounded-lg text-[9.5px] font-black uppercase transition-all cursor-pointer">
+                            RANDOM
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2.5 pt-2">
+                <button onclick="saveTharkuriConfig()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-white rounded-xl font-extrabold text-[9.5px] tracking-wider uppercase cursor-pointer transition-all shadow-md">SAVE CONFIG</button>
+                <button onclick="closeTharkuriConfigModal()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-stone-400 border border-white/10 rounded-xl font-extrabold text-[9.5px] tracking-wider uppercase cursor-pointer transition-all">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Live Toast messages popups -->
     <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
 
@@ -1647,6 +1799,29 @@
         const urlArgs = new URLSearchParams(window.location.search);
         const myName = (urlArgs.get('u') || "immu").trim().toLowerCase();
         let partnerName = (myName === "immu") ? "sappii" : "immu";
+
+        let tharkuriCustomName = "THARKURI";
+        let tharkuriProfileSeed = "Tharkuri";
+
+        function getPlayerDisplayName(rawKey) {
+            if (!rawKey) return "";
+            const k = rawKey.toLowerCase();
+            if (k === 'immu') return 'IMMU';
+            if (k === 'sappii' || k === 'sappi') return 'SAPPII';
+            if (k === 'tharkuri') return tharkuriCustomName.trim().toUpperCase();
+            return rawKey.toUpperCase();
+        }
+
+        // Realtime sync Tharkuri profile configurations across all connected terminals
+        db.ref('tharkuriProfile').on('value', (snap) => {
+            const val = snap.val() || {};
+            tharkuriCustomName = (val.name || "THARKURI").toUpperCase();
+            tharkuriProfileSeed = val.seed || "Tharkuri";
+            refreshScoreboard();
+            if (typeof activeGame !== 'undefined' && activeGame === 'code') {
+                renderCodeScreen();
+            }
+        });
 
         // Web Audio API Retro synthesizer sound generator
         function playSynthSound(type) {
@@ -1844,6 +2019,8 @@
             document.getElementById('movieArena').classList.add('hidden');
             document.getElementById('wordArena').classList.add('hidden');
             document.getElementById('spadesArena').classList.add('hidden');
+            const codeNodeForHide = document.getElementById('codeArena');
+            if (codeNodeForHide) codeNodeForHide.classList.add('hidden');
             const songsNode = document.getElementById('songsArena');
             if (songsNode) songsNode.classList.add('hidden');
 
@@ -1868,6 +2045,16 @@
                 document.getElementById('wordArena').classList.remove('hidden');
 
                 renderWordScreen();
+            } else if (activeGame === 'code') {
+                badge.innerText = "GUESS THE CODE CHALLENGE";
+                badge.style.color = "rgb(139, 92, 246)";
+                const codeNodeForShow = document.getElementById('codeArena');
+                if (codeNodeForShow) codeNodeForShow.classList.remove('hidden');
+                
+                if (!codeGameState || !codeGameState.status || codeGameState.status === 'setup') {
+                    db.ref('codeGameState').set({ status: 'setup' });
+                }
+                renderCodeScreen();
             } else if (activeGame === 'cards') {
                 badge.innerText = "Card Game Multiplayer";
                 badge.style.color = "amber-400";
@@ -1920,16 +2107,18 @@
             });
         }
 
+        let toastTimeout = null;
         function triggerLiveToast(text) {
             const toast = document.getElementById('liveToastAlert');
             if (toast) {
                 toast.innerText = text;
                 toast.classList.remove('-translate-y-20', 'opacity-0');
                 toast.classList.add('translate-y-0', 'opacity-100');
-                setTimeout(() => {
+                if (toastTimeout) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
                     toast.classList.add('-translate-y-20', 'opacity-0');
                     toast.classList.remove('translate-y-0', 'opacity-100');
-                }, 3000);
+                }, 10000); // Changed from 3000 to 10000 (10 seconds) to satisfy USER request
             }
             playSynthSound('toast');
         }
@@ -2438,6 +2627,13 @@
                     document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'immu' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
                     document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${cardsGameState.turn === 'sappii' ? 'border-amber-400 shadow-xl shadow-amber-500/20' : ''}`;
                 }
+            } else if (activeGame === 'code') {
+                if (typeof codeGameState !== 'undefined') {
+                    document.getElementById('pScoreDigit_immu').innerText = codeGameState.score1 || 0;
+                    document.getElementById('pScoreDigit_sappii').innerText = codeGameState.score2 || 0;
+                    document.getElementById('pScoreCard_immu').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${codeGameState.turn === 'immu' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
+                    document.getElementById('pScoreCard_sappii').className = `p-3 glass-card rounded-2xl relative transition-all duration-300 ${codeGameState.turn === 'sappii' ? 'border-[var(--primary-color)] shadow-xl shadow-[var(--glow-color)] -translate-y-1' : ''}`;
+                }
             } else if (activeGame === 'songs') {
                 document.getElementById('pScoreDigit_immu').innerText = "🎵";
                 document.getElementById('pScoreDigit_sappii').innerText = "🎵";
@@ -2464,16 +2660,25 @@
                     renderTharkuri = true;
                     tharkuriScore = wordGameState.score3 || 0;
                     isTharkuriTurn = false;
+                } else if (activeGame === 'code' && typeof codeGameState !== 'undefined' && codeGameState.playerCount === 3) {
+                    renderTharkuri = true;
+                    tharkuriScore = codeGameState.score3 || 0;
+                    isTharkuriTurn = codeGameState.turn === 'tharkuri';
                 }
 
                 if (renderTharkuri) {
                     middleCol.innerHTML = `
-                        <div id="pScoreCard_tharkuri" class="p-3 bg-white/5 border ${isTharkuriTurn ? 'border-amber-400 shadow-lg shadow-amber-500/20 z-10 scale-105' : 'border-white/5'} rounded-2xl relative transition-all duration-300">
+                        <div id="pScoreCard_tharkuri" class="p-3 bg-white/5 border ${isTharkuriTurn ? 'border-amber-400 shadow-lg shadow-amber-500/20 z-10 scale-105' : 'border-white/5'} rounded-2xl relative transition-all duration-300 group/tharkuri">
                             <div class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md">
-                                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Tharkuri" alt="Tharkuri" class="w-full h-full object-cover animate-pulse">
+                                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${tharkuriProfileSeed}" alt="${tharkuriCustomName}" class="w-full h-full object-cover">
                                 <span id="pOnlineDot_tharkuri" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 ${playersOnlineMap['tharkuri'] ? 'bg-green-500 animate-pulse' : 'bg-stone-600'} transition-all"></span>
                             </div>
-                            <span class="text-[10px] font-black text-stone-300 tracking-wider">THARKURI</span>
+                            <div class="flex items-center justify-center gap-1 select-none">
+                                <span class="text-[10px] font-black text-stone-300 tracking-wider truncate max-w-[64px] uppercase">${tharkuriCustomName}</span>
+                                <button onclick="openTharkuriConfigModal()" class="opacity-50 hover:opacity-100 transition-opacity cursor-pointer text-slate-400 hover:text-amber-400 p-0.5" title="Edit Tharkuri Profile">
+                                    <svg class="w-3 h-3 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                            </div>
                             <span id="pScoreDigit_tharkuri" class="block text-xl font-black text-amber-400 font-display mt-0.5">${tharkuriScore}</span>
                         </div>
                     `;
@@ -2715,7 +2920,7 @@
 
             db.ref('chatMessages').push({
                 sender: "SYSTEM",
-                text: `🤝 ${myName.toUpperCase()} GRANTED A COMPASSION CREDIT BACKING ${rx.toUpperCase()}`,
+                text: `🤝 ${myName.toUpperCase()} GRANTED A COMPASSION CREDIT BACKING ${getPlayerDisplayName(rx)}`,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
 
@@ -2922,7 +3127,7 @@
                     let traceArr = [];
                     if (!p1) traceArr.push("IMMU");
                     if (!p2) traceArr.push("SAPPII");
-                    if (is3P && !p3) traceArr.push("THARKURI");
+                    if (is3P && !p3) traceArr.push(getPlayerDisplayName('tharkuri').toUpperCase());
                     document.getElementById('wordWaitingLock').querySelector('p').innerText = `WAITING FOR ${traceArr.join(" & ")} RESPONSE...`;
 
                     document.getElementById('wordWaitingLock').classList.remove('hidden');
@@ -3097,6 +3302,412 @@
             document.getElementById('wordSetupLockInput').value = "";
             triggerLiveToast("ROUND DISCARDED!");
         }
+
+        // ================= GUESS THE CODE CHALLENGE OPERATIONS =================
+        let codeGameState = {};
+        let showCheatCodes = false;
+
+        function toggleCheatSecretEye() {
+            showCheatCodes = !showCheatCodes;
+            triggerLiveToast(showCheatCodes ? "STEALTH SCANNER DEPLOYED!" : "STEALTH SCANNER RECOILED!");
+            const btn = document.getElementById("cheatSecretEyeBtn");
+            if (btn) {
+                btn.innerText = showCheatCodes ? "HIDE SECRETS" : "SNEAK CODE";
+                btn.className = showCheatCodes 
+                    ? "text-[8px] text-green-400 font-bold tracking-widest bg-green-500/10 border border-green-500/20 rounded px-2 py-0.5"
+                    : "text-[8px] text-amber-500/80 hover:text-amber-400 uppercase font-black tracking-widest bg-amber-500/10 border border-amber-500/20 rounded px-2 py-0.5";
+            }
+            renderCodeScreen();
+        }
+
+        function startCodeGameSetup(playersCount) {
+            let initialTurn = "immu";
+
+            db.ref('codeGameState').set({
+                status: "lock_phase",
+                playerCount: playersCount,
+                p1Code: "",
+                p2Code: "",
+                p3Code: "", // No prelocked botCode, Tharkuri is human now
+                score1: codeGameState.score1 || 0,
+                score2: codeGameState.score2 || 0,
+                score3: codeGameState.score3 || 0,
+                turn: initialTurn,
+                winner: "",
+                guesses: null
+            });
+
+            db.ref('chatMessages').push({
+                sender: "SYSTEM",
+                text: `🔒 ${myName.toUpperCase()} DEPLOYED A ${playersCount}P GUESS THE CODE ARENA! LOCK YOUR SECRET DIGITS NOW!`,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            triggerLiveToast("CODE CHALLENGE MATCH STARTED!");
+        }
+
+        function submitSecretCodeLock() {
+            const val = document.getElementById('codeLockInputField').value.trim();
+            if (!/^\d{4}$/.test(val)) {
+                return triggerLiveToast("ERROR: MUST BE EXACTLY 4 DIGITS (0-9)!");
+            }
+
+            const senderRefKey = (myName === 'immu') ? 'p1Code' : (myName === 'sappii' ? 'p2Code' : 'p3Code');
+            
+            db.ref('codeGameState').update({
+                [senderRefKey]: val
+            });
+            
+            document.getElementById('codeLockInputField').value = "";
+            triggerLiveToast("SECRET ENCRYPTION KEY SECURED!");
+        }
+
+        function confirmResetCode() {
+            if (confirm("QUIT AND ABANDON CURRENT CODE SPELL CONFLICT MATCH?")) {
+                db.ref('codeGameState').set({
+                    status: "setup",
+                    score1: codeGameState.score1 || 0,
+                    score2: codeGameState.score2 || 0,
+                    score3: codeGameState.score3 || 0
+                });
+                triggerLiveToast("MATCH REMOVED.");
+            }
+        }
+
+        function calculateBullsCows(secret, guess) {
+            let bulls = 0;
+            let cows = 0;
+            let secArr = secret.split('');
+            let gssArr = guess.split('');
+
+            for (let i = 0; i < 4; i++) {
+                if (gssArr[i] === secArr[i]) {
+                    bulls++;
+                    secArr[i] = null;
+                    gssArr[i] = null;
+                }
+            }
+            for (let i = 0; i < 4; i++) {
+                if (gssArr[i] !== null) {
+                    let matchingIdx = secArr.indexOf(gssArr[i]);
+                    if (matchingIdx !== -1) {
+                        cows++;
+                        secArr[matchingIdx] = null;
+                    }
+                }
+            }
+            return { bulls, cows };
+        }
+
+        function submitCodeGuessAction() {
+            const target = document.getElementById('codeTargetSelect').value;
+            const guess = document.getElementById('codeGuessInputField').value.trim();
+
+            if (!target) {
+                return triggerLiveToast("CHOOSE A PLANET TARGET TO PROBE!");
+            }
+            if (!/^\d{4}$/.test(guess)) {
+                return triggerLiveToast("ERROR: GUESS MUST BE EXACTLY 4 DIGITS (0-9)!");
+            }
+            if (codeGameState.turn !== myName) {
+                return triggerLiveToast("PATIENCE: HOSTING COMMUNICATIONS OFFLINE DURING COMPETITOR'S TURN!");
+            }
+
+            executeCodeGuessTransaction(myName, target, guess);
+        }
+
+        function executeCodeGuessTransaction(guesser, targetPlayer, guess) {
+            const targetCodeKey = (targetPlayer === 'immu') ? 'p1Code' : (targetPlayer === 'sappii' ? 'p2Code' : 'p3Code');
+            const targetSecret = codeGameState[targetCodeKey] || "0000";
+
+            const { bulls, cows } = calculateBullsCows(targetSecret, guess);
+
+            let feedbackMsg = "";
+            if (bulls === 4) {
+                feedbackMsg = `CRACKED! All 4 digits match exactly!`;
+            } else if (bulls > 0 && cows > 0) {
+                feedbackMsg = `${bulls} position correct, other ${cows} numbers correct`;
+            } else if (bulls > 0 && cows === 0) {
+                feedbackMsg = `${bulls} position correct`;
+            } else if (bulls === 0 && cows > 0) {
+                feedbackMsg = `${cows} numbers correct, none in position`;
+            } else {
+                feedbackMsg = `None of the numbers are correct`;
+            }
+
+            // Create new guess log item
+            // Pushes to Firebase guesses list
+            db.ref('codeGameState/guesses').push({
+                guesser: guesser,
+                target: targetPlayer,
+                guessText: guess,
+                bulls: bulls,
+                cows: cows,
+                feedback: feedbackMsg,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            document.getElementById('codeGuessInputField').value = "";
+
+            if (bulls === 4) {
+                // Winning move!
+                const scoreRefKey = (guesser === 'immu') ? 'score1' : (guesser === 'sappii' ? 'score2' : 'score3');
+                db.ref(`codeGameState/${scoreRefKey}`).transaction(s => (s || 0) + 1);
+
+                db.ref('chatMessages').push({
+                    sender: "SYSTEM",
+                    text: `🏆 CODE BREAKER CHAMPION! ${guesser.toUpperCase()} CRACKED ${targetPlayer.toUpperCase()}'s SECRET CODE [${targetSecret}]!`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                db.ref('codeGameState').update({
+                    status: "lock_phase",
+                    p1Code: "",
+                    p2Code: "",
+                    p3Code: "",
+                    winner: guesser,
+                    guesses: null // resets guesses for the next round
+                });
+
+                triggerLiveToast("VICTORY RESOLVED! 1 POINT EARNED!");
+                playSynthSound('winMovie');
+            } else {
+                // Pass turn
+                let nextTurn = "immu";
+                if (codeGameState.playerCount === 2) {
+                    nextTurn = (guesser === 'immu') ? 'sappii' : 'immu';
+                } else {
+                    if (guesser === 'immu') nextTurn = 'sappii';
+                    else if (guesser === 'sappii') nextTurn = 'tharkuri';
+                    else nextTurn = 'immu';
+                }
+
+                db.ref('codeGameState').update({
+                    turn: nextTurn
+                });
+
+                triggerLiveToast(`PROBE SENT! Next turn: ${nextTurn.toUpperCase()}`);
+            }
+        }
+
+        function askGeminiCodeHint() {
+            const btn = document.getElementById('btnGeminiCodeHint');
+            if (!btn) return;
+
+            const target = document.getElementById('codeTargetSelect').value;
+            if (!target) return triggerLiveToast("CHOOSE A PLANET TARGET FIRST!");
+
+            const targetCodeKey = (target === 'immu') ? 'p1Code' : (target === 'sappii' ? 'p2Code' : 'p3Code');
+            const secretVal = codeGameState[targetCodeKey];
+
+            if (!secretVal) return triggerLiveToast("NO SECURE SOURCE ENCRYPTED ON THIS TARGET!");
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="w-3.5 h-3.5 animate-spin" data-lucide="loader"></i> DECRYPTING...`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                const digits = secretVal.split('').map(d => parseInt(d, 10));
+                const sum = digits.reduce((x, y) => x + y, 0);
+                const evens = digits.filter(d => d % 2 === 0).length;
+                const odds = 4 - evens;
+                const first = digits[0];
+                const last = digits[3];
+                const productOfFirstTwo = digits[0] * digits[1];
+
+                const clueOptions = [
+                    `The sum of all four secret digits is exactly ${sum}!`,
+                    `The code structure contains ${odds} odd digits and ${evens} even digits.`,
+                    `Comparing coordinates shows that the first digit is ${first > last ? 'greater than' : (first < last ? 'less than' : 'equal to')} the last digit!`,
+                    `The product multiplier of the first two secret digits is ${productOfFirstTwo}!`,
+                    `The highest individual digit in this secret code is ${Math.max(...digits)}!`,
+                    `The lowest individual digit in this secret code is ${Math.min(...digits)}!`
+                ];
+
+                const randomClueText = clueOptions[Math.floor(Math.random() * clueOptions.length)];
+
+                db.ref('chatMessages').push({
+                    sender: "CODE-ORACLE",
+                    text: `🔮 ORACLE CLUE ON ${getPlayerDisplayName(target).toUpperCase()}: "${randomClueText}"`,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    triggerLiveToast("ORACLE DECRYPT RECEIVED!");
+                    btn.disabled = false;
+                    btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i> DECRYPT ORACLE CLUE`;
+                    lucide.createIcons();
+                }).catch(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i> DECRYPT ORACLE CLUE`;
+                    lucide.createIcons();
+                });
+            }, 800);
+        }
+
+        function renderCodeScreen() {
+            if (activeGame !== 'code') return;
+            const state = codeGameState || { status: "setup" };
+
+            const boxSetup = document.getElementById('boxCodeSetup');
+            const boxLock = document.getElementById('boxCodeLock');
+            const boxPlay = document.getElementById('boxCodeActivePlay');
+
+            if (state.status === 'setup') {
+                boxSetup.classList.remove('hidden');
+                boxLock.classList.add('hidden');
+                boxPlay.classList.add('hidden');
+            } else if (state.status === 'lock_phase') {
+                boxSetup.classList.add('hidden');
+                boxLock.classList.remove('hidden');
+                boxPlay.classList.add('hidden');
+
+                // Render secure state lights
+                const grid = document.getElementById('codeLockStatesGrid');
+                if (grid) {
+                    const immuKeyLocked = !!state.p1Code;
+                    const sappiiKeyLocked = !!state.p2Code;
+                    const tharkuriKeyLocked = state.playerCount === 3 ? !!state.p3Code : true;
+
+                    grid.innerHTML = `
+                        <div class="p-2.5 bg-white/5 rounded-xl border ${immuKeyLocked ? 'border-emerald-500/30' : 'border-white/5'}">
+                            <span class="text-[9px] text-stone-400 font-extrabold uppercase tracking-widest block font-mono">IMMU</span>
+                            <span class="${immuKeyLocked ? 'text-emerald-400 font-black' : 'text-amber-500 font-black animate-pulse'} text-[9.5px] tracking-wider uppercase inline-block mt-1">
+                                ${immuKeyLocked ? '✓ LOCKED' : '⚡ WAITING'}
+                            </span>
+                        </div>
+                        <div class="p-2.5 bg-white/5 rounded-xl border ${sappiiKeyLocked ? 'border-emerald-500/30' : 'border-white/5'}">
+                            <span class="text-[9px] text-stone-400 font-extrabold uppercase tracking-widest block font-mono">SAPPII</span>
+                            <span class="${sappiiKeyLocked ? 'text-emerald-400 font-black' : 'text-amber-500 font-black animate-pulse'} text-[9.5px] tracking-wider uppercase inline-block mt-1">
+                                ${sappiiKeyLocked ? '✓ LOCKED' : '⚡ WAITING'}
+                            </span>
+                        </div>
+                        ${state.playerCount === 3 ? `
+                        <div class="p-2.5 bg-white/5 rounded-xl border ${tharkuriKeyLocked ? 'border-emerald-500/30' : 'border-white/5'}">
+                            <span class="text-[9px] text-stone-400 font-extrabold uppercase tracking-widest block font-mono truncate">${tharkuriCustomName}</span>
+                            <span class="${tharkuriKeyLocked ? 'text-emerald-400 font-black' : 'text-amber-500 font-black animate-pulse'} text-[9.5px] tracking-wider uppercase inline-block mt-1">
+                                ${tharkuriKeyLocked ? '✓ LOCKED' : '⚡ WAITING'}
+                            </span>
+                        </div>
+                        ` : `
+                        <div class="p-2.5 bg-white/5 rounded-xl border border-white/5 opacity-40">
+                            <span class="text-[9px] text-stone-500 font-extrabold uppercase tracking-widest block font-mono">SLOT 3D</span>
+                            <span class="text-stone-500 text-[9.5px] tracking-wider uppercase inline-block mt-1">
+                                OFFLINE
+                            </span>
+                        </div>
+                        `}
+                    `;
+                }
+
+                // Auto transition logic: if all players have locked code, only master or turn player transitions it
+                const p1Ready = !!state.p1Code;
+                const p2Ready = !!state.p2Code;
+                const p3Ready = state.playerCount === 3 ? !!state.p3Code : true;
+
+                if (p1Ready && p2Ready && p3Ready) {
+                    // Start game phase
+                    // Only done once to prevent loop
+                    if (myName === 'immu') {
+                        db.ref('codeGameState').update({
+                            status: "play_phase"
+                        });
+                        db.ref('chatMessages').push({
+                            sender: "SYSTEM",
+                            text: `🔮 ALL ENCRYPTION SECURITY CODES ESTABLISHED! COMBAT COMMENCED FOR THE MASTER DECODING CONFLICT!`,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    }
+                }
+            } else if (state.status === 'play_phase') {
+                boxSetup.classList.add('hidden');
+                boxLock.classList.add('hidden');
+                boxPlay.classList.remove('hidden');
+
+                // Render turn banner clue
+                const activePlayerTurn = state.turn || 'immu';
+                const banner = document.getElementById('codeGameplayTurnBadge');
+                if (banner) {
+                    if (activePlayerTurn === myName) {
+                        banner.innerText = "YOUR ACTIVE SPECULATION TURN! PROBE ENEMY CRYPTS!";
+                        banner.className = "text-[10px] text-green-400 font-black tracking-widest uppercase font-mono bg-green-500/10 border border-green-500/20 px-3 py-1 rounded-xl animate-pulse";
+                    } else {
+                        banner.innerText = `WAITING FOR ${activePlayerTurn.toUpperCase()} SPECULATION MATRIX...`;
+                        banner.className = "text-[10px] text-violet-300 font-black tracking-widest uppercase font-mono";
+                    }
+                }
+
+                // Populate Target Dropdown
+                const sel = document.getElementById('codeTargetSelect');
+                if (sel) {
+                    let targetsHTML = "";
+                    if (myName !== 'immu') {
+                        const codeString = showCheatCodes ? ` [${state.p1Code || '????'}]` : "";
+                        targetsHTML += `<option value="immu">IMMU (OPPONENT)${codeString}</option>`;
+                    }
+                    if (myName !== 'sappii') {
+                        const codeString = showCheatCodes ? ` [${state.p2Code || '????'}]` : "";
+                        targetsHTML += `<option value="sappii">SAPPII (OPPONENT)${codeString}</option>`;
+                    }
+                    if (state.playerCount === 3 && myName !== 'tharkuri') {
+                        const codeString = showCheatCodes ? ` [${state.p3Code || '????'}]` : "";
+                        targetsHTML += `<option value="tharkuri">${tharkuriCustomName.toUpperCase()} (OPPONENT)${codeString}</option>`;
+                    }
+                    sel.innerHTML = targetsHTML;
+                }
+
+                // Populate Speculation Deduction Matrix Logs
+                const logScroller = document.getElementById('codeDeductionLogsScroller');
+                if (logScroller) {
+                    if (state.guesses) {
+                        let logHTML = "";
+                        const list = Object.values(state.guesses).reverse(); // latest first
+                        list.forEach((g, index) => {
+                            const isWin = g.bulls === 4;
+                            logHTML += `
+                                <div class="p-3 rounded-xl bg-white/5 border ${isWin ? 'border-yellow-400/30 bg-yellow-400/5' : 'border-white/5'} text-[10.5px] transition-all flex justify-between items-center relative overflow-hidden">
+                                    <div class="space-y-1 relative z-10">
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <span class="font-black text-violet-300 tracking-wider uppercase font-mono text-[9px]">${g.guesser.toUpperCase()}</span>
+                                            <span class="text-stone-500 text-[8.5px] font-black uppercase font-mono">SPECULATED</span>
+                                            <span class="font-black text-rose-300 tracking-wider uppercase font-mono text-[9px]">${g.target.toUpperCase()}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-mono text-base font-black tracking-widest text-white decoration-double">${g.guessText}</span>
+                                            <span class="text-stone-400 font-extrabold font-mono text-[9.5px]">→ ${g.feedback}</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5 shrink-0 relative z-10 font-mono text-[9px]">
+                                        <span class="bg-violet-500/20 text-violet-300 border border-violet-500/25 px-2.5 py-1 rounded-lg font-black tracking-widest uppercase">
+                                            POS CORRECT: ${g.bulls}
+                                        </span>
+                                        <span class="bg-[#FF7694]/20 text-[#FF7694] border border-[#FF7694]/25 px-2.5 py-1 rounded-lg font-black tracking-widest uppercase">
+                                            NUM CORRECT: ${g.bulls + g.cows}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        logScroller.innerHTML = logHTML;
+                    } else {
+                        logScroller.innerHTML = `
+                            <div class="h-full flex flex-col items-center justify-center text-center p-6 text-stone-500 shrink-0 select-none">
+                                <i data-lucide="satellite-dish" class="w-10 h-10 text-stone-600 mb-2 animate-bounce"></i>
+                                <span class="text-[9.5px] font-extrabold uppercase tracking-widest block font-mono pl-0.5">LAUNCH PROBES</span>
+                                <span class="text-[8.5px] uppercase block tracking-wider mt-1">SPELL GUESSES WILL POPULATE THE DEDUCTION DATABASE MATRIX FOR LOGICAL ANALYSIS!</span>
+                            </div>
+                        `;
+                        lucide.createIcons();
+                    }
+                }
+
+                // Removed AI Robot Tharkuri Turn Automator Logic (Tharkuri is fully human now)
+            }
+        }
+
+        db.ref('codeGameState').on('value', (snap) => {
+            codeGameState = snap.val() || {};
+            renderCodeScreen();
+            refreshScoreboard();
+        });
 
         // ================= SPADES MULTIPLAYER GAME DECK MACHINE =================
         const SUIT_GLYPHS = { 'S': '♠️', 'H': '♥️', 'D': '♦️', 'C': '♣️' };
@@ -5611,6 +6222,40 @@
 
         function closeResetModalAlert() {
             document.getElementById('resetConfirmOverlay').classList.add('hidden');
+        }
+
+        function randomizeTharkuriSeed() {
+            const list = ["Shadow", "Vortex", "Gamer", "Pharaoh", "Titan", "Specter", "Warlock", "Dragon", "Phoenix", "Cyborg", "Enigma", "Zenith", "Spike", "Ghost", "Rogue", "Glitch", "Cosmic", "Neon", "Retro"];
+            const selected = list[Math.floor(Math.random() * list.length)] + Math.floor(Math.random() * 900 + 100);
+            document.getElementById('tharkuriProfileSeedInput').value = selected;
+            playSynthSound('toast');
+        }
+
+        function openTharkuriConfigModal() {
+            document.getElementById('tharkuriCustomNameInput').value = tharkuriCustomName;
+            document.getElementById('tharkuriProfileSeedInput').value = tharkuriProfileSeed;
+            document.getElementById('tharkuriConfigOverlay').classList.remove('hidden');
+            playSynthSound('toast');
+        }
+
+        function closeTharkuriConfigModal() {
+            document.getElementById('tharkuriConfigOverlay').classList.add('hidden');
+            playSynthSound('toast');
+        }
+
+        function saveTharkuriConfig() {
+            const nameVal = document.getElementById('tharkuriCustomNameInput').value.trim() || 'THARKURI';
+            const seedVal = document.getElementById('tharkuriProfileSeedInput').value.trim() || 'Tharkuri';
+            
+            db.ref('tharkuriProfile').set({
+                name: nameVal,
+                seed: seedVal
+            }).then(() => {
+                triggerLiveToast("THARKURI PROFILE SYNCHRONIZED!");
+                closeTharkuriConfigModal();
+            }).catch(err => {
+                triggerLiveToast("ERROR SAVING CONFIG!");
+            });
         }
 
         function dispatchResetAction() {
