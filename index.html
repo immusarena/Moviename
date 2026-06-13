@@ -15,6 +15,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <!-- Hls.js for HLS Streaming & Multilingual Audio Track Support -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- JSZip for instant, download-of-all-stickers-as-pack-in-one-click -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <script>
         // Configure Tailwind to support custom fonts
@@ -497,12 +499,25 @@
 
                 <!-- Input to load packing details -->
                 <div class="space-y-2">
-                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block pl-0.5 pl-0.5">TELEGRAM STICKER LINK OR NAME</span>
+                    <div class="flex justify-between items-center pl-0.5">
+                        <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block">TELEGRAM STICKER LINK OR NAME</span>
+                        <button onclick="toggleTelegramTokenField()" class="text-[8px] text-cyan-400/75 hover:text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer">
+                            <i data-lucide="key" class="w-2.5 h-2.5"></i> CONFIG TOKEN
+                        </button>
+                    </div>
                     <div class="flex gap-2">
                         <input type="text" id="stickerPackLinkInput" placeholder="PASTE LINK OR PACK NAME (E.G. PEPE)..." class="flex-1 bg-black/40 border border-white/5 focus:border-cyan-500 rounded-xl px-3 py-2.5 text-[10px] text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wide transition-all">
                         <button onclick="loadTelegramPackAction()" class="px-3.5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-black text-[9px] rounded-xl tracking-widest uppercase hover:brightness-110 active:scale-98 transition-all shrink-0 flex items-center gap-1 cursor-pointer">
                             LOAD <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                         </button>
+                    </div>
+                    <!-- Telegram custom token input (initially hidden or collapsed nicely) -->
+                    <div id="telegramTokenSettingsDiv" class="hidden p-3 bg-black/50 border border-white/5 rounded-xl space-y-1.5 animate-fadeIn">
+                        <span class="text-[8px] text-stone-400 font-bold uppercase tracking-wider block">ENTER TELEGRAM BOT TOKEN (FROM @BOTFATHER):</span>
+                        <input type="password" id="telegramCustomBotTokenInput" placeholder="PASTE BOT_TOKEN HERE..." class="w-full bg-black/65 border border-white/5 focus:border-cyan-500 rounded-xl px-3 py-2 text-[9px] text-stone-300 placeholder-stone-700 outline-none font-mono tracking-wide transition-all" value="" onchange="saveTelegramCustomToken()">
+                        <p class="text-[7.5px] text-stone-500 font-mono leading-relaxed uppercase">
+                            * LEAVE BLANK TO USE BUILT-IN FALLBACK TOKEN. ANY FREE TELEGRAM BOT TOKEN CONNECTS SECURELY TO THE OFFICIAL TELEGRAM STICKERS CDN.
+                        </p>
                     </div>
                 </div>
 
@@ -1056,14 +1071,18 @@
                     <div id="mediaLoungeAudioWrapper" class="space-y-4">
                         <!-- Vinyl/Gramophone Record Visualized Element -->
                         <div class="flex flex-col items-center justify-center py-4 relative">
-                            <div id="musicVinylDisc" class="w-28 h-28 rounded-full bg-gradient-to-br from-neutral-900 via-stone-900 to-black border-[6px] border-neutral-800 shadow-[0_10px_30px_rgba(0,0,0,0.8)] relative flex items-center justify-center transition-transform duration-1000 ease-linear">
+                            <div id="musicVinylDisc" class="w-32 h-32 rounded-full bg-gradient-to-br from-neutral-950 via-stone-900 to-black border-[7px] border-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.9)] relative flex items-center justify-center transition-transform duration-1000 ease-linear overflow-hidden">
+                                <!-- Subtle glowing outline -->
+                                <div class="absolute inset-0.5 rounded-full border border-white/5 pointer-events-none"></div>
                                 <!-- Grooves -->
-                                <div class="absolute inset-2 rounded-full border border-stone-800/60"></div>
-                                <div class="absolute inset-5 rounded-full border border-stone-800/40"></div>
-                                <div class="absolute inset-8 rounded-full border border-stone-800/20"></div>
-                                <!-- Center Label -->
-                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-pink-500 to-rose-600 flex items-center justify-center shadow-inner">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-[#0b0512] border border-white/10"></div>
+                                <div class="absolute inset-2.5 rounded-full border border-stone-800/60"></div>
+                                <div class="absolute inset-6 rounded-full border border-stone-800/40"></div>
+                                <div class="absolute inset-10 rounded-full border border-stone-800/20"></div>
+                                <!-- Center Video Label -->
+                                <div class="w-14 h-14 rounded-full bg-black/85 overflow-hidden relative flex items-center justify-center border-2 border-stone-700 shadow-inner z-10">
+                                    <video id="vinylCenterVideoPlayer" class="w-full h-full object-cover rounded-full" loop muted playsinline autoplay src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-background-blur-924-large.mp4"></video>
+                                    <!-- A small center spindle pin hole -->
+                                    <div class="absolute w-2.5 h-2.5 rounded-full bg-[#0a0512] border border-white/20 shadow-md pointer-events-none z-20"></div>
                                 </div>
                             </div>
 
@@ -1076,13 +1095,21 @@
                             </div>
                             
                             <!-- Soundwave animation bars -->
-                            <div class="flex gap-1 h-6 items-end mt-4" id="audioEqualizerBars">
+                            <div class="flex gap-1 h-6 items-end mt-4 animate-fadeIn" id="audioEqualizerBars">
                                 <span class="w-1 bg-rose-500 rounded-full h-1 transition-all duration-150"></span>
                                 <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 20ms"></span>
                                 <span class="w-1 bg-rose-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 40ms"></span>
                                 <span class="w-1 bg-amber-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 60ms"></span>
                                 <span class="w-1 bg-emerald-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 80ms"></span>
                                 <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 100ms"></span>
+                            </div>
+
+                            <!-- Clickable Video Uploader Button for Your Name video clip -->
+                            <div class="mt-4 text-center">
+                                <button onclick="document.getElementById('vinylCenterVideoFileInput').click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ec4899]/10 hover:bg-[#ec4899]/20 border border-[#ec4899]/25 hover:border-[#ec4899]/40 rounded-xl text-[9px] font-bold uppercase tracking-widest text-[#f472b6] transition-all cursor-pointer shadow-sm">
+                                    <i data-lucide="video" class="w-3.5 h-3.5 text-pink-400 shrink-0"></i> LOAD "YOUR NAME" / CUSTOM CENTRE VIDEO
+                                </button>
+                                <input type="file" id="vinylCenterVideoFileInput" accept="video/*" class="hidden" onchange="handleVinylCenterVideoUpload(event)">
                             </div>
                         </div>
                     </div>
@@ -3776,6 +3803,9 @@
                 if (btnIcon) btnIcon.setAttribute('data-lucide', 'play');
                 lucide.createIcons();
             }
+            if (typeof syncVinylCenterVideoState === 'function') {
+                syncVinylCenterVideoState();
+            }
         });
 
         // Time Updates helper
@@ -3882,6 +3912,11 @@
                         triggerLiveToast("SEEK CHRONO SYNCED!");
                     }
                 });
+            }
+
+            // Load saved custom Telegram Bot Token if any
+            if (typeof loadTelegramCustomToken === 'function') {
+                loadTelegramCustomToken();
             }
         });
 
@@ -6084,19 +6119,30 @@
             triggerLiveToast(`LOADED ${categoryKey.toUpperCase()} PACK!`);
         }
 
-        function loadTelegramPackAction() {
-            const inp = document.getElementById('stickerPackLinkInput');
-            let term = inp.value.trim();
-            if (!term) return triggerLiveToast("ENTER A TELEGRAM PACK NAME / LINK!");
-
-            // clean packing names from URL if pasted as t.me link
-            if (term.includes('t.me/addstickers/')) {
-                term = term.split('t.me/addstickers/')[1].split('?')[0].split('/')[0];
-            } else if (term.includes('/addstickers/')) {
-                term = term.split('/addstickers/')[1].split('?')[0].split('/')[0];
+        function toggleTelegramTokenField() {
+            const div = document.getElementById('telegramTokenSettingsDiv');
+            if (div) {
+                div.classList.toggle('hidden');
             }
+        }
 
-            // Generate beautifully animated smart procedural vector sticker set based on clean seed string!
+        function saveTelegramCustomToken() {
+            const inp = document.getElementById('telegramCustomBotTokenInput');
+            if (inp) {
+                const val = inp.value.trim();
+                localStorage.setItem('tg_custom_bot_token', val);
+                triggerLiveToast("CUSTOM TELEGRAM TOKEN UPDATED!");
+            }
+        }
+
+        function loadTelegramCustomToken() {
+            const inp = document.getElementById('telegramCustomBotTokenInput');
+            if (inp) {
+                inp.value = localStorage.getItem('tg_custom_bot_token') || '';
+            }
+        }
+
+        function generateProceduralFallbackPack(term) {
             const EMOJIS = ["🔥", "😎", "🤡", "🤖", "⚡", "👽", "🦄", "👑", "🍕", "💖"];
             const customGeneratedPack = [];
             for (let i = 1; i <= 8; i++) {
@@ -6113,9 +6159,57 @@
             
             renderStickerPackGallery();
             regenerateActiveStickerCanvas();
-            inp.value = "";
-            playSynthSound('success');
+            const inp = document.getElementById('stickerPackLinkInput');
+            if (inp) inp.value = "";
             triggerLiveToast(`GENERATED TEAM STICKER PACK: ${term.toUpperCase()}`);
+        }
+
+        function loadTelegramPackAction() {
+            const inp = document.getElementById('stickerPackLinkInput');
+            let term = inp.value.trim();
+            if (!term) return triggerLiveToast("ENTER A TELEGRAM PACK NAME / LINK!");
+
+            // clean packing names from URL if pasted as t.me link
+            if (term.includes('t.me/addstickers/')) {
+                term = term.split('t.me/addstickers/')[1].split('?')[0].split('/')[0];
+            } else if (term.includes('/addstickers/')) {
+                term = term.split('/addstickers/')[1].split('?')[0].split('/')[0];
+            }
+
+            triggerLiveToast(`FETCHING "${term.toUpperCase()}" FROM TELEGRAM...`);
+            
+            const customToken = localStorage.getItem('tg_custom_bot_token') || '';
+            const apiUrl = `/api/telegram-stickers?pack=${encodeURIComponent(term)}&token=${encodeURIComponent(customToken)}`;
+            
+            fetch(apiUrl)
+                .then(res => {
+                    if (!res.ok) {
+                        return res.json().then(err => { throw new Error(err.error || 'Server rejected request'); });
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.success && data.stickers && data.stickers.length > 0) {
+                        activeStickersQueue = data.stickers;
+                        currentStickerIndex = 0;
+                        
+                        renderStickerPackGallery();
+                        regenerateActiveStickerCanvas();
+                        triggerLiveToast(`IMPORTED ${data.stickersCount} STICKERS FROM "${data.title.toUpperCase()}"!`);
+                        playSynthSound('success');
+                        inp.value = "";
+                    } else {
+                        throw new Error("No stickers found in pack");
+                    }
+                })
+                .catch(err => {
+                    console.error("Telegram load error:", err);
+                    triggerLiveToast(`API DOWN OR VERIFICATION FAILED: FALLING BACK...`);
+                    playSynthSound('error');
+                    
+                    // Fallback to procedurally generated pack so the app never blocks
+                    generateProceduralFallbackPack(term);
+                });
         }
 
         function renderStickerPackGallery() {
@@ -6424,6 +6518,150 @@
             renderStickerPackGallery();
             regenerateActiveStickerCanvas();
             playSynthSound('success');
+        }
+
+        // ================= VINYL ROTATIVE CENTER VIDEO LOOPER =================
+        function handleVinylCenterVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            const player = document.getElementById('vinylCenterVideoPlayer');
+            if (player) {
+                player.src = url;
+                player.load();
+                // Play immediately if music stream is currently playing, otherwise let sync system handle it
+                if (musicState && musicState.status === 'playing') {
+                    player.play().catch(e => console.log("Vinyl video play blocked:", e));
+                } else {
+                    player.pause();
+                }
+                triggerLiveToast("LP VINYL CENTER CLIP DEPLOYED!");
+                playSynthSound('success');
+            }
+        }
+
+        function syncVinylCenterVideoState() {
+            const vinylVideo = document.getElementById('vinylCenterVideoPlayer');
+            if (!vinylVideo) return;
+            
+            const isAudioActive = (document.getElementById('mediaLoungeAudioWrapper') && !document.getElementById('mediaLoungeAudioWrapper').classList.contains('hidden'));
+            const isPlaying = (musicState && musicState.status === 'playing');
+
+            if (isAudioActive && isPlaying) {
+                if (vinylVideo.paused) {
+                    vinylVideo.play().catch(e => console.log("Vinyl video play pending user interaction:", e));
+                }
+            } else {
+                if (!vinylVideo.paused) {
+                    vinylVideo.pause();
+                }
+            }
+        }
+
+        // ================= JSZIP INSTANT WHATSAPP STICKER PACK EXPORT =================
+        async function downloadAllStickersAsZipAction() {
+            if (activeStickersQueue.length === 0) {
+                return triggerLiveToast("NO STICKERS IN QUEUE TO EXPORT!");
+            }
+            
+            triggerLiveToast("COMPILING WHATSAPP ZIP PACK...");
+            playSynthSound('success');
+            
+            const zip = new JSZip();
+            const canvas = document.getElementById('stickerRenderTargetCanvas');
+            if (!canvas) return;
+            
+            let completed = 0;
+            
+            // Loop through each sticker, draw to isolated canvas to preserve sizing, push blob to JSZip
+            for (let i = 0; i < activeStickersQueue.length; i++) {
+                const item = activeStickersQueue[i];
+                const cleanName = `${i + 1}_${item.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}.webp`;
+                
+                await new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.onload = function() {
+                        const tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = 512;
+                        tempCanvas.height = 512;
+                        const tCtx = tempCanvas.getContext('2d');
+                        
+                        const hasPadding = document.getElementById('stickerPaddingCheckbox').checked;
+                        const forceSquare = document.getElementById('stickerForceSquareCheckbox').checked;
+                        const margin = hasPadding ? 32 : 0;
+                        const targetWidth = 512 - (margin * 2);
+                        const targetHeight = 512 - (margin * 2);
+                        
+                        let renderW = targetWidth;
+                        let renderH = targetHeight;
+                        let renderX = margin;
+                        let renderY = margin;
+
+                        if (!forceSquare) {
+                            const aspect = img.width / img.height;
+                            if (aspect > 1) {
+                                renderH = targetWidth / aspect;
+                                renderY = margin + (targetHeight - renderH) / 2;
+                            } else {
+                                renderW = targetHeight * aspect;
+                                renderX = margin + (targetWidth - renderW) / 2;
+                            }
+                        }
+                        
+                        tCtx.clearRect(0, 0, 512, 512);
+                        tCtx.drawImage(img, renderX, renderY, renderW, renderH);
+                        
+                        tempCanvas.toBlob((blob) => {
+                            if (blob) {
+                                zip.file(cleanName, blob);
+                            }
+                            completed++;
+                            resolve();
+                        }, 'image/webp', 0.9);
+                    };
+                    img.onerror = function() {
+                        // Emoji/fallback text case if image fails or requires custom seed
+                        const tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = 512;
+                        tempCanvas.height = 512;
+                        const tCtx = tempCanvas.getContext('2d');
+                        tCtx.clearRect(0, 0, 512, 512);
+                        tCtx.fillStyle = "#ffffff";
+                        tCtx.font = "bold 210px sans-serif";
+                        tCtx.textAlign = "center";
+                        tCtx.textBaseline = "middle";
+                        tCtx.fillText(item.emoji || "✨", 256, 256);
+                        
+                        tempCanvas.toBlob((blob) => {
+                            if (blob) {
+                                zip.file(cleanName, blob);
+                            }
+                            completed++;
+                            resolve();
+                        }, 'image/webp', 0.9);
+                    };
+                    img.src = item.url;
+                });
+            }
+            
+            try {
+                zip.generateAsync({ type: "blob" }).then((content) => {
+                    const link = document.createElement('a');
+                    link.download = `whatsapp_sticker_pack_${Date.now()}.zip`;
+                    link.href = URL.createObjectURL(content);
+                    link.click();
+                    triggerLiveToast(`STUNNING ZIP PACK OF ${completed} STICKERS READY FOR EXPORT!`);
+                }).catch(err => {
+                    console.error(err);
+                    triggerLiveToast("ZIP COMPILATION REFUSED. DOWNLOADING INDIVIDUALLY...");
+                    downloadAllStickersSequentially();
+                });
+            } catch (err) {
+                console.error(err);
+                triggerLiveToast("ZIP ZIP ERROR. EXPORTING SEQUENTIALLY...");
+                downloadAllStickersSequentially();
+            }
         }
 
         // Initialize Lucide Vectors layout icons
