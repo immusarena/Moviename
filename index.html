@@ -130,6 +130,13 @@
         .animate-slideIn { animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-emoji { animation: emojiBlast 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, emojiFloat 2.5s ease-in-out infinite alternate 0.5s; }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+
         /* Premium scrollbar integration */
         ::-webkit-scrollbar {
             width: 6px;
@@ -339,6 +346,31 @@
                         <span class="text-[8.5px] text-amber-500 group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-amber-500/5 border border-amber-500/10 rounded px-1.5 py-0.5">
                             COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
                         </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PASSCODE / PIN SECURED ACCESS GATE CONFIGURATION CARD -->
+            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-3 font-sans relative overflow-hidden">
+                <!-- Sleek bottom border highlight -->
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 opacity-60"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[9px] text-stone-300 font-extrabold tracking-widest uppercase font-mono">
+                        LINK PIN SECURITY
+                    </span>
+                    <span id="pinStatusText" class="text-[8px] bg-red-500/10 border border-red-500/20 text-red-500 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                        UNLOCKED / PUBLIC
+                    </span>
+                </div>
+                <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-0.5">
+                    Prevent unauthorized users from entering this interface by locking your custom profile link under a secure 4-digit PIN lock.
+                </p>
+                <div class="flex gap-2.5 pt-1">
+                    <button onclick="openChangePinModal()" class="flex-1 py-2.5 bg-white/5 hover:bg-pink-500/10 border border-white/5 hover:border-pink-500/30 rounded-xl text-[9px] text-stone-300 hover:text-white font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                        <i data-lucide="key" class="w-3.5 h-3.5 text-pink-400"></i> EDIT SECURITY PIN
+                    </button>
+                    <button id="btnTogglePinLock" onclick="togglePinLockState()" class="flex-1 py-2.5 bg-white/5 hover:bg-emerald-500/10 border border-white/5 hover:border-emerald-500/30 rounded-xl text-[9px] text-stone-300 hover:text-white font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400"></i> SECURE THIS LINK
                     </button>
                 </div>
             </div>
@@ -1562,9 +1594,15 @@
         <!-- ================= CO-OP MULTIPLAYER CHAT SECTION ================= -->
         <section class="glass-card rounded-2xl p-4 shadow-2xl relative overflow-hidden flex flex-col h-[380px] shrink-0 animate-popIn">
             <div class="flex justify-between items-center pb-2.5 border-b border-white/5 select-none">
-                <h3 class="text-[10px] font-black tracking-widest text-[#FF7694] uppercase flex items-center gap-1.5">
-                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>LOBBY INTERACTIVE CHAT
-                </h3>
+                <div class="flex items-center gap-1.5 min-w-0">
+                    <h3 class="text-[10px] font-black tracking-widest text-[#FF7694] uppercase flex items-center gap-1.5 shrink-0">
+                        <i data-lucide="message-square" class="w-3.5 h-3.5"></i>LOBBY INTERACTIVE CHAT
+                    </h3>
+                    <div id="chatDbConnBadge" class="flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest text-green-400 transition-all duration-300 shrink-0">
+                        <span class="w-1.2 h-1.2 rounded-full bg-green-500 animate-pulse shrink-0"></span>
+                        <span>CONNECTED</span>
+                    </div>
+                </div>
                 <span id="adminKeyTag" class="hidden text-[8px] bg-red-500/15 border border-red-500/30 text-rose-400 font-extrabold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1 font-mono">
                     ADMIN
                 </span>
@@ -1658,6 +1696,88 @@
             <div class="flex gap-2.5 pt-2">
                 <button onclick="saveTharkuriConfig()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-600 hover:brightness-110 text-white rounded-xl font-extrabold text-[9.5px] tracking-wider uppercase cursor-pointer transition-all shadow-md">SAVE CONFIG</button>
                 <button onclick="closeTharkuriConfigModal()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-stone-400 border border-white/10 rounded-xl font-extrabold text-[9.5px] tracking-wider uppercase cursor-pointer transition-all">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passcode/PIN gate to lock the public link securely -->
+    <div id="passcodeGateOverlay" class="hidden fixed inset-0 z-[100] bg-[#0b0512] flex flex-col items-center justify-center p-4">
+        <!-- Floating Backdrop Ambient Glow circles inside overlay for aesthetics -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[240px] h-[240px] rounded-full bg-pink-500 opacity-25 filter blur-[60px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full bg-emerald-500 opacity-15 filter blur-[60px] pointer-events-none"></div>
+
+        <div class="w-full max-w-xs glass-card border border-white/5 rounded-2xl p-6 text-center space-y-6 relative overflow-hidden animate-popIn">
+            <div class="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-pink-500 via-emerald-400 to-amber-500 opacity-80"></div>
+            
+            <div class="space-y-2">
+                <span class="w-2 h-2 rounded-full bg-red-500 inline-block animate-pulse mb-1" id="passcodeLockDot"></span>
+                <h2 class="text-sm font-black font-display tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] uppercase" id="passcodeGateTitle">
+                    PORTAL IS SECURED
+                </h2>
+                <p class="text-[8.5px] text-stone-450 font-mono tracking-widest uppercase leading-normal" id="passcodeGateSubtitle">
+                    PLEASE ENTER PIN TO UNLOCK
+                </p>
+            </div>
+
+            <!-- PIN dot bubbles -->
+            <div class="flex justify-center gap-4.5 py-2">
+                <span id="pin_dot_0" class="w-3.5 h-3.5 rounded-full bg-white/10 border border-white/5 transition-all duration-150"></span>
+                <span id="pin_dot_1" class="w-3.5 h-3.5 rounded-full bg-white/10 border border-white/5 transition-all duration-150"></span>
+                <span id="pin_dot_2" class="w-3.5 h-3.5 rounded-full bg-white/10 border border-white/5 transition-all duration-150"></span>
+                <span id="pin_dot_3" class="w-3.5 h-3.5 rounded-full bg-white/10 border border-white/5 transition-all duration-150"></span>
+            </div>
+
+            <!-- Dial pad buttons -->
+            <div class="grid grid-cols-3 gap-3 max-w-[200px] mx-auto select-none">
+                <button onclick="pressPasscodeKey(1)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">1</button>
+                <button onclick="pressPasscodeKey(2)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">2</button>
+                <button onclick="pressPasscodeKey(3)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">3</button>
+                <button onclick="pressPasscodeKey(4)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">4</button>
+                <button onclick="pressPasscodeKey(5)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">5</button>
+                <button onclick="pressPasscodeKey(6)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">6</button>
+                <button onclick="pressPasscodeKey(7)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">7</button>
+                <button onclick="pressPasscodeKey(8)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">8</button>
+                <button onclick="pressPasscodeKey(9)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">9</button>
+                <button onclick="clearPasscodeKey()" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-red-500/40 text-stone-400 hover:text-red-400 text-[10px] font-black uppercase flex items-center justify-center transition-all cursor-pointer">CLR</button>
+                <button onclick="pressPasscodeKey(0)" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-pink-500/40 text-stone-200 hover:text-white text-sm font-black font-mono flex items-center justify-center transition-all cursor-pointer">0</button>
+                <button onclick="deletePasscodeLastKey()" class="w-12 h-12 rounded-full bg-white/5 border border-white/5 hover:border-stone-400/40 text-stone-400 hover:text-white text-[10px] font-black uppercase flex items-center justify-center transition-all cursor-pointer">DEL</button>
+            </div>
+
+            <!-- Helpful notice / locked banner -->
+            <p id="passcodeGateLockoutNotice" class="text-[7.5px] text-stone-500 font-mono tracking-wider uppercase leading-snug">
+                ANY UNAUTHORIZED VISITORS WILL BE REFUSED ON-GATE.
+            </p>
+        </div>
+    </div>
+
+    <!-- Change Pin Modal Overlay -->
+    <div id="changePinOverlay" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-sm glass-card border border-pink-550/20 rounded-2xl p-6 text-center space-y-4">
+            <h3 class="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400 tracking-wider font-display uppercase flex items-center justify-center gap-1.5 leading-none">
+                <i data-lucide="key-round" class="w-4 h-4 text-pink-400"></i> EDIT PIN SECURITY
+            </h3>
+            <p class="text-[8px] text-stone-400 leading-relaxed uppercase tracking-widest pl-0.5" id="changePinModalSubtitle">Update security pin for player profile.</p>
+            
+            <div class="space-y-3.5 text-left">
+                <div id="divOldPinInputContainer">
+                    <label class="text-[8px] text-stone-500 font-extrabold tracking-widest uppercase block mb-1">CURRENT PIN (LEAVE BLANK IF NOT ACTIVE)</label>
+                    <input type="password" maxlength="4" pattern="[0-9]*" inputmode="numeric" id="oldPinInputField" placeholder="ENTER CURRENT PIN..." class="w-full bg-black/60 border border-white/10 focus:border-pink-500 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-700 outline-none uppercase font-semibold tracking-wider transition-all">
+                </div>
+                <div>
+                    <label class="text-[8px] text-stone-500 font-extrabold tracking-widest uppercase block mb-1 font-mono">NEW 4-DIGIT PIN</label>
+                    <input type="password" maxlength="4" pattern="[0-9]*" inputmode="numeric" id="newPinInputField" placeholder="ENTER NEW 4-DIGIT PIN..." class="w-full bg-black/60 border border-white/10 focus:border-emerald-500 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-700 outline-none uppercase font-semibold tracking-wider transition-all">
+                </div>
+                <div>
+                    <label class="text-[8px] text-stone-500 font-extrabold tracking-widest uppercase block mb-1 font-mono">CONFIRM NEW PIN</label>
+                    <input type="password" maxlength="4" pattern="[0-9]*" inputmode="numeric" id="confirmNewPinInputField" placeholder="CONFIRM NEW 4-DIGIT PIN..." class="w-full bg-black/60 border border-white/10 focus:border-emerald-500 rounded-lg px-3 py-2 text-xs text-white placeholder-stone-700 outline-none uppercase font-semibold tracking-wider transition-all">
+                </div>
+            </div>
+
+            <div class="flex gap-2.5 pt-2">
+                <button onclick="saveNewPinAction()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-rose-600 hover:brightness-110 text-white rounded-xl font-extrabold text-[9px] tracking-wider uppercase cursor-pointer transition-all shadow-md flex items-center justify-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> ACTIVATE PIN
+                </button>
+                <button onclick="closeChangePinModal()" class="w-full py-3 bg-white/5 hover:bg-white/10 text-stone-400 border border-white/10 rounded-xl font-extrabold text-[9px] tracking-wider uppercase cursor-pointer transition-all">CANCEL</button>
             </div>
         </div>
     </div>
@@ -1812,16 +1932,10 @@
             return rawKey.toUpperCase();
         }
 
-        // Realtime sync Tharkuri profile configurations across all connected terminals
-        db.ref('tharkuriProfile').on('value', (snap) => {
-            const val = snap.val() || {};
-            tharkuriCustomName = (val.name || "THARKURI").toUpperCase();
-            tharkuriProfileSeed = val.seed || "Tharkuri";
-            refreshScoreboard();
-            if (typeof activeGame !== 'undefined' && activeGame === 'code') {
-                renderCodeScreen();
-            }
-        });
+        // Passcode configuration and activation core state
+        let enteredPinDigits = "";
+        let serverLoadedPin = null;
+        let pinBypassed = false;
 
         // Web Audio API Retro synthesizer sound generator
         function playSynthSound(type) {
@@ -2126,18 +2240,24 @@
         // ================= SYNCHRONIZED PRESENCE SYSTEM & CHAT MESSAGES =================
         let playersOnlineMap = { immu: false, sappii: false, tharkuri: false };
 
-        db.ref('.info/connected').on('value', (snap) => {
-            if (snap.val() === true) {
-                const presenceRef = db.ref(`presence/${myName}`);
-                presenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-                presenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
-                
-                const dot = document.getElementById(`pOnlineDot_${myName}`);
-                if (dot) {
-                    dot.className = "absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-green-500 animate-pulse";
+        let presenceInitialized = false;
+        function activatePresenceConnection() {
+            if (presenceInitialized) return;
+            presenceInitialized = true;
+            
+            db.ref('.info/connected').on('value', (snap) => {
+                if (snap.val() === true) {
+                    const presenceRef = db.ref(`presence/${myName}`);
+                    presenceRef.onDisconnect().set({ online: false, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+                    presenceRef.set({ online: true, lastSeen: firebase.database.ServerValue.TIMESTAMP });
+                    
+                    const dot = document.getElementById(`pOnlineDot_${myName}`);
+                    if (dot) {
+                        dot.className = "absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-green-500 animate-pulse";
+                    }
                 }
-            }
-        });
+            });
+        }
 
         function registerPresenceListener(player) {
             db.ref(`presence/${player}`).on('value', (snap) => {
@@ -2283,10 +2403,34 @@
             if (isSystem) {
                 messageRow.className += " items-center text-center py-1";
                 messageRow.innerHTML = `
-                    <div class="px-3.5 py-1.5 rounded-xl border border-white/5 bg-white/5 max-w-[85%] text-[10px] text-[var(--accent-color)] font-extrabold uppercase tracking-widest leading-relaxed">
+                    <div class="px-3.5 py-1.5 rounded-xl border border-white/5 bg-white/5 max-w-[85%] text-[10px] text-[var(--accent-color)] font-extrabold uppercase tracking-widest leading-relaxed relative overflow-hidden group">
                         🤖 SYSTEM: ${data.text}
+                        <div class="absolute bottom-0 left-0 h-[2px] bg-[var(--accent-color)] opacity-40 transition-all duration-1000" id="sys-timer-${key}" style="width: 100%"></div>
                     </div>
                 `;
+
+                // Handle synchronized auto-deletion after 10 seconds
+                const createdTime = typeof data.timestamp === 'number' ? data.timestamp : Date.now();
+                const ageMs = Date.now() - createdTime;
+                const totalLifetime = 10000; // 10 seconds
+                const remainingMs = Math.max(0, totalLifetime - ageMs);
+
+                const timerBar = messageRow.querySelector(`#sys-timer-${key}`);
+                if (timerBar && remainingMs > 0) {
+                    const startPercent = (remainingMs / totalLifetime) * 100;
+                    timerBar.style.width = `${startPercent}%`;
+                    setTimeout(() => {
+                        const elem = document.getElementById(`sys-timer-${key}`);
+                        if (elem) {
+                            elem.style.transition = `width ${remainingMs}ms linear`;
+                            elem.style.width = "0%";
+                        }
+                    }, 50);
+                }
+
+                setTimeout(() => {
+                    db.ref(`chatMessages/${key}`).remove().catch(() => {});
+                }, remainingMs);
             } else {
                 const isEmojiMsg = isCharacterEmojiOnly(data.text);
                 const alignClass = isMine ? 'items-end' : 'items-start';
@@ -6258,6 +6402,194 @@
             });
         }
 
+        // ================= PASSCODE / PIN CORE CONTROLLERS =================
+        function showPasscodeLockGate() {
+            const gate = document.getElementById('passcodeGateOverlay');
+            if (gate) {
+                gate.classList.remove('hidden');
+                gate.classList.add('flex');
+            }
+            // Update title and prompt details dynamically
+            const titleNode = document.getElementById('passcodeGateTitle');
+            const subTitleNode = document.getElementById('passcodeGateSubtitle');
+            if (titleNode) {
+                titleNode.innerText = `${getPlayerDisplayName(myName)}'S PORTAL SECURED`;
+            }
+            if (subTitleNode) {
+                subTitleNode.innerText = "PLEASE ENTER PIN TO UNLOCK";
+            }
+            enteredPinDigits = "";
+            renderPinDots();
+        }
+
+        function hidePasscodeLockGate() {
+            const gate = document.getElementById('passcodeGateOverlay');
+            if (gate) {
+                gate.classList.add('hidden');
+                gate.classList.remove('flex');
+            }
+        }
+
+        function renderPinDots() {
+            for (let i = 0; i < 4; i++) {
+                const dot = document.getElementById(`pin_dot_${i}`);
+                if (dot) {
+                    if (i < enteredPinDigits.length) {
+                        dot.className = "w-3.5 h-3.5 rounded-full bg-pink-500 border border-pink-400 shadow-[0_0_10px_rgba(255,75,114,0.6)] scale-110 transition-all duration-150";
+                    } else {
+                        dot.className = "w-3.5 h-3.5 rounded-full bg-white/10 border border-white/5 transition-all duration-150";
+                    }
+                }
+            }
+        }
+
+        function pressPasscodeKey(num) {
+            if (enteredPinDigits.length < 4) {
+                enteredPinDigits += num;
+                playSynthSound('toast');
+                renderPinDots();
+                
+                if (enteredPinDigits.length === 4) {
+                    setTimeout(() => {
+                        if (enteredPinDigits === serverLoadedPin) {
+                            playSynthSound('success');
+                            pinBypassed = true;
+                            hidePasscodeLockGate();
+                            activatePresenceConnection();
+                            triggerLiveToast(`ACCESS GRANTED. WELCOME ${getPlayerDisplayName(myName).toUpperCase()}!`);
+                        } else {
+                            playSynthSound('shove');
+                            enteredPinDigits = "";
+                            renderPinDots();
+                            triggerLiveToast("INCORRECT PIN! ACCESS DENIED.");
+                            
+                            // Visual shake feedback
+                            const gateCard = document.querySelector('#passcodeGateOverlay .glass-card');
+                            if (gateCard) {
+                                gateCard.classList.add('animate-shake');
+                                setTimeout(() => {
+                                    gateCard.classList.remove('animate-shake');
+                                }, 300);
+                            }
+                        }
+                    }, 220);
+                }
+            }
+        }
+
+        function clearPasscodeKey() {
+            enteredPinDigits = "";
+            playSynthSound('toast');
+            renderPinDots();
+        }
+
+        function deletePasscodeLastKey() {
+            if (enteredPinDigits.length > 0) {
+                enteredPinDigits = enteredPinDigits.slice(0, -1);
+                playSynthSound('toast');
+                renderPinDots();
+            }
+        }
+
+        function openChangePinModal() {
+            document.getElementById('oldPinInputField').value = "";
+            document.getElementById('newPinInputField').value = "";
+            document.getElementById('confirmNewPinInputField').value = "";
+            
+            const oldPinInputContainer = document.getElementById('divOldPinInputContainer');
+            if (serverLoadedPin) {
+                if (oldPinInputContainer) oldPinInputContainer.classList.remove('hidden');
+                document.getElementById('changePinModalSubtitle').innerText = `ENTER CURRENT PIN TO CONFIGURE NEW SECURITY KEY FOR ${getPlayerDisplayName(myName).toUpperCase()}`;
+            } else {
+                if (oldPinInputContainer) oldPinInputContainer.classList.add('hidden');
+                document.getElementById('changePinModalSubtitle').innerText = `SET A SECURE 4-DIGIT PASSWORD PIN TO LOCK YOUR PUBLIC ACCESS LINK`;
+            }
+
+            document.getElementById('changePinOverlay').classList.remove('hidden');
+            playSynthSound('toast');
+        }
+
+        // Global keyboard input listener for lock gate
+        document.addEventListener('keydown', (e) => {
+            const gate = document.getElementById('passcodeGateOverlay');
+            if (gate && !gate.classList.contains('hidden')) {
+                if (e.key >= '0' && e.key <= '9') {
+                    pressPasscodeKey(parseInt(e.key, 10));
+                } else if (e.key === 'Backspace') {
+                    deletePasscodeLastKey();
+                } else if (e.key === 'Escape' || e.key === 'Delete') {
+                    clearPasscodeKey();
+                }
+            }
+        });
+
+        function closeChangePinModal() {
+            document.getElementById('changePinOverlay').classList.add('hidden');
+            playSynthSound('toast');
+        }
+
+        function saveNewPinAction() {
+            const oldPinVal = document.getElementById('oldPinInputField').value.trim();
+            const newPinVal = document.getElementById('newPinInputField').value.trim();
+            const confirmPinVal = document.getElementById('confirmNewPinInputField').value.trim();
+
+            if (serverLoadedPin && oldPinVal !== serverLoadedPin) {
+                triggerLiveToast("INCORRECT CURRENT PIN! VERIFICATION REJECTED.");
+                playSynthSound('shove');
+                return;
+            }
+
+            if (!/^\d{4}$/.test(newPinVal)) {
+                triggerLiveToast("ERROR: PIN MUST BE EXACTLY 4 DIGIT NUMBERS!");
+                playSynthSound('shove');
+                return;
+            }
+
+            if (newPinVal !== confirmPinVal) {
+                triggerLiveToast("CONFIRM PASSWORD DOES NOT MATCH NEW PIN!");
+                playSynthSound('shove');
+                return;
+            }
+
+            // Write new passcode value to firebase RTDB
+            db.ref(`userPasscodes/${myName}`).set(newPinVal)
+                .then(() => {
+                    triggerLiveToast(`ACCESS GATE LOCKED AND SYNCED FOR ${getPlayerDisplayName(myName).toUpperCase()}!`);
+                    playSynthSound('success');
+                    pinBypassed = true; // Stay authenticated for current session
+                    closeChangePinModal();
+                })
+                .catch(err => {
+                    console.error("Save passcode error:", err);
+                    triggerLiveToast("DATABASE SYNC FAILURE SAVING PASSCODE.");
+                });
+        }
+
+        function togglePinLockState() {
+            if (serverLoadedPin) {
+                // To disable, verify current passcode
+                const promptVal = prompt("PLEASE ENTER YOUR CURRENT 4-DIGIT PIN TO MAKE THIS LINK PUBLIC:");
+                if (promptVal === null) return; // Cancelled
+                
+                if (promptVal.trim() === serverLoadedPin) {
+                    db.ref(`userPasscodes/${myName}`).remove()
+                        .then(() => {
+                            triggerLiveToast("SECURE GATE REMOVED. THE LOBBY ACCESSIBILITY IS NOW PUBLIC!");
+                            playSynthSound('success');
+                        })
+                        .catch(err => {
+                            console.error("Remove passcode error:", err);
+                            triggerLiveToast("DATABASE SYNC ERROR DELETING PASSCODE.");
+                        });
+                } else {
+                    triggerLiveToast("VERIFICATION FAILURE! UNLOCK REJECTED.");
+                    playSynthSound('shove');
+                }
+            } else {
+                openChangePinModal();
+            }
+        }
+
         function dispatchResetAction() {
             if (activeGame === 'movie') {
                 db.ref('gameState').set({
@@ -8098,6 +8430,81 @@
                 triggerLiveToast("SHARE REJECTED.");
             }
         }
+
+        // ================= REGISTER SECURED WEB LOBBY PERSISTENCE LISTENERS =================
+
+        // Real-time connection feedback indicator listener for Firebase Realtime Database
+        db.ref('.info/connected').on('value', (snap) => {
+            const isConnected = snap.val() === true;
+            const badge = document.getElementById('chatDbConnBadge');
+            if (badge) {
+                if (isConnected) {
+                    badge.className = "flex items-center gap-1 bg-green-500/10 border border-green-500/20 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest text-green-400 transition-all duration-300 shrink-0";
+                    badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shrink-0"></span><span>CONNECTED</span>`;
+                } else {
+                    badge.className = "flex items-center gap-1 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest text-red-500 transition-all duration-300 shrink-0 animate-shake";
+                    badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping shrink-0"></span><span>DISCONNECTED</span>`;
+                    triggerLiveToast("WARNING: DATABASE CONNECTION INTERRUPTED!");
+                }
+            }
+        });
+
+        // Realtime sync Tharkuri profile configurations across all connected terminals
+        db.ref('tharkuriProfile').on('value', (snap) => {
+            const val = snap.val() || {};
+            tharkuriCustomName = (val.name || "THARKURI").toUpperCase();
+            tharkuriProfileSeed = val.seed || "Tharkuri";
+            refreshScoreboard();
+            if (typeof activeGame !== 'undefined' && activeGame === 'code') {
+                renderCodeScreen();
+            }
+        });
+
+        // Realtime check lock passcode PIN status for the player profile link
+        db.ref(`userPasscodes/${myName}`).on('value', (snap) => {
+            const pinVal = snap.val();
+            if (pinVal) {
+                serverLoadedPin = String(pinVal).trim();
+                
+                // Update lobby PIN status interactive UI elements
+                const statusBadge = document.getElementById('pinStatusText');
+                if (statusBadge) {
+                    statusBadge.innerText = "LOCKED / SECURED";
+                    statusBadge.className = "text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider";
+                }
+                const btnToggle = document.getElementById('btnTogglePinLock');
+                if (btnToggle) {
+                    btnToggle.innerHTML = `<i data-lucide="unlock-keyhole" class="w-3.5 h-3.5 text-rose-450"></i> REMOVE SECURE LOCK`;
+                }
+
+                // If not already unlocked, trigger passcode entry gate modal overlay open
+                if (!pinBypassed) {
+                    showPasscodeLockGate();
+                } else {
+                    activatePresenceConnection();
+                }
+            } else {
+                serverLoadedPin = null;
+                
+                // Update lobby PIN status interactive UI elements
+                const statusBadge = document.getElementById('pinStatusText');
+                if (statusBadge) {
+                    statusBadge.innerText = "UNLOCKED / PUBLIC";
+                    statusBadge.className = "text-[8px] bg-red-500/10 border border-red-500/20 text-red-500 px-2 py-0.5 rounded-full font-black uppercase tracking-wider";
+                }
+                const btnToggle = document.getElementById('btnTogglePinLock');
+                if (btnToggle) {
+                    btnToggle.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-450"></i> SECURE THIS LINK`;
+                }
+
+                // Empty passcode: reveal portal & announce presence automatically!
+                hidePasscodeLockGate();
+                activatePresenceConnection();
+            }
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        });
 
         // Initialize Lucide Vectors layout icons
         lucide.createIcons();
