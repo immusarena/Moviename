@@ -197,6 +197,30 @@
     <!-- Active floating particles canvas in background -->
     <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
 
+    <!-- Floating Real-time Game Invitation Banner -->
+    <div id="floatingInviteNotification" class="hidden fixed top-4 inset-x-4 max-w-[340px] mx-auto z-50 glass-card rounded-2xl border-2 border-[var(--primary-color)] shadow-2xl p-4 space-y-3 bg-[#0c0514]/95 backdrop-blur-xl animate-bounce-slow">
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full border border-pink-500/30 overflow-hidden shrink-0 shadow-md relative">
+                <img id="inviteSenderAvatar" src="" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sender'">
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse border border-slate-900"></span>
+            </div>
+            <div class="flex-1 min-w-0">
+                <span class="text-[8px] text-[var(--primary-color)] font-extrabold tracking-widest block uppercase font-mono">LIVE GAME INVITATION</span>
+                <p id="inviteBannerDescription" class="text-[10px] text-stone-200 leading-normal uppercase tracking-wide font-black mt-0.5">
+                    IMMU IS WAITING FOR YOU TO JOIN!
+                </p>
+            </div>
+        </div>
+        <div class="flex gap-2 pt-0.5">
+            <button onclick="rejectRealtimeGameInvite()" class="flex-1 py-2 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-stone-500/30 rounded-xl text-[8px] text-stone-400 hover:text-white font-extrabold uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-1">
+                <i data-lucide="x" class="w-3 h-3 text-stone-400"></i> IGNORE
+            </button>
+            <button onclick="acceptRealtimeGameInvite()" class="flex-1 py-2 bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] text-white font-extrabold text-[8px] rounded-xl tracking-widest uppercase transition-all hover:scale-105 duration-200 cursor-pointer flex items-center justify-center gap-1 shadow-lg glow-primary">
+                <i data-lucide="play" class="w-3 h-3 text-white animate-pulse"></i> JOIN NOW
+            </button>
+        </div>
+    </div>
+
     <!-- Dynamic Premium Backdrop Ambient Glow circles -->
     <div class="fixed top-1/4 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full bg-[var(--primary-color)] opacity-20 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
     <div class="fixed bottom-1/4 translate-y-1/2 left-1/2 -translate-x-1/2 w-[285px] h-[285px] rounded-full bg-[var(--accent-color)] opacity-10 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
@@ -806,6 +830,22 @@
 
             </div>
 
+            <!-- Inter-gameplay real-time notification invitation bar -->
+            <div id="gameplayInviteBanner" class="glass-card rounded-2xl p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 border border-dashed border-[var(--primary-color)]/30 bg-gradient-to-r from-[var(--primary-color)]/5 via-transparent to-transparent">
+                <div class="flex items-center gap-2.5 text-left w-full md:w-auto">
+                    <div class="p-2 bg-[var(--primary-color)]/10 rounded-xl text-[var(--primary-color)] shrink-0">
+                        <i data-lucide="bell-ring" class="w-4 h-4 animate-pulse"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <span class="text-[8px] text-[var(--primary-color)] font-extrabold tracking-widest block uppercase font-mono">MULTIPLAYER INVITE</span>
+                        <span id="gameplayInviteBannerText" class="text-[9px] text-stone-300 font-extrabold uppercase tracking-widest block truncate">WASTING TIME WAITING FOR SAPPII? SEND INVITATION!</span>
+                    </div>
+                </div>
+                <button onclick="sendRealtimeGameInvite()" class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[9px] rounded-xl tracking-widest uppercase hover:brightness-110 hover:scale-102 active:scale-98 transition-all shrink-0 flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-[var(--glow-color)]">
+                    <i data-lucide="send" class="w-3.5 h-3.5 text-white"></i> SEND LIVE INVITE
+                </button>
+            </div>
+
             <!-- ================= MOVIE SCREEN BOARD GAME ================= -->
             <div id="movieArena" class="hidden space-y-4">
                 
@@ -1178,8 +1218,14 @@
                     </div>
 
                     <!-- Directives and indicators guides on current turn -->
-                    <div class="text-center font-display select-none">
+                    <div class="text-center font-display select-none space-y-2">
                         <span id="spadesTurnDirectionsText" class="text-[11px] font-black tracking-wide uppercase animate-pulse">MATCH LEAD SUIT IF YOU HAVE IT</span>
+                        <div id="vettuKuduBtnContainer" class="hidden flex justify-center pb-1">
+                            <button onclick="concedeSpadesVettu()" class="flex items-center gap-1.5 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 text-rose-400 font-extrabold text-[9.5px] px-3.5 py-2 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-lg">
+                                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400 animate-pulse"></i>
+                                ⚔️ VETTU KUDU (GIVE CUT)
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Deck visual wrapper visual columns scroll bar -->
@@ -2195,6 +2241,7 @@
             }
             refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
+            updateGameplayInviteBannerState();
         }
 
         function quitToLobby() {
@@ -2208,6 +2255,7 @@
             } else {
                 document.getElementById('lobbyScreen').classList.remove('hidden');
             }
+            updateGameplayInviteBannerState();
         }
 
         // ================= PAIRING COPIER UTILITY =================
@@ -2274,6 +2322,7 @@
                     }
                 }
                 scheduleBotMoves();
+                updateGameplayInviteBannerState();
             });
         }
 
@@ -2401,6 +2450,17 @@
                 : '';
 
             if (isSystem) {
+                const createdTime = typeof data.timestamp === 'number' ? data.timestamp : Date.now();
+                const ageMs = Date.now() - createdTime;
+                const totalLifetime = 10000; // 10 seconds
+                const remainingMs = Math.max(0, totalLifetime - ageMs);
+
+                if (remainingMs <= 0) {
+                    // Already expired, delete from database quietly and do not show on screen
+                    db.ref(`chatMessages/${key}`).remove().catch(() => {});
+                    return; // Skip adding to DOM entirely
+                }
+
                 messageRow.className += " items-center text-center py-1";
                 messageRow.innerHTML = `
                     <div class="px-3.5 py-1.5 rounded-xl border border-white/5 bg-white/5 max-w-[85%] text-[10px] text-[var(--accent-color)] font-extrabold uppercase tracking-widest leading-relaxed relative overflow-hidden group">
@@ -2409,14 +2469,8 @@
                     </div>
                 `;
 
-                // Handle synchronized auto-deletion after 10 seconds
-                const createdTime = typeof data.timestamp === 'number' ? data.timestamp : Date.now();
-                const ageMs = Date.now() - createdTime;
-                const totalLifetime = 10000; // 10 seconds
-                const remainingMs = Math.max(0, totalLifetime - ageMs);
-
                 const timerBar = messageRow.querySelector(`#sys-timer-${key}`);
-                if (timerBar && remainingMs > 0) {
+                if (timerBar) {
                     const startPercent = (remainingMs / totalLifetime) * 100;
                     timerBar.style.width = `${startPercent}%`;
                     setTimeout(() => {
@@ -6038,6 +6092,18 @@
                 stepDirective.className = "text-[10px] font-black text-stone-500 tracking-wider uppercase";
             }
 
+            // Show/hide Vettu Kudu button
+            const vettuBtnContainer = document.getElementById('vettuKuduBtnContainer');
+            if (vettuBtnContainer) {
+                const hasCardsOnTable = cardsOnTable && Object.keys(cardsOnTable).length > 0;
+                const isMyTurn = cardsGameState.turn === myName;
+                if (isMyTurn && hasCardsOnTable) {
+                    vettuBtnContainer.classList.remove('hidden');
+                } else {
+                    vettuBtnContainer.classList.add('hidden');
+                }
+            }
+
             // Render player options card deck palette hand
             const deckHandRow = document.getElementById('spadesPlayerDeckHand');
             deckHandRow.innerHTML = "";
@@ -6320,6 +6386,48 @@
                 db.ref('cardsGameState').update(updates);
             }
             triggerLiveToast("CARD PLAYED!");
+        }
+
+        function concedeSpadesVettu() {
+            if (cardsGameState.turn !== myName) return triggerLiveToast("NOT YOUR MATURE TURN TRICK!");
+
+            const tableCards = cardsGameState.table || {};
+            const cardsOnTableList = Object.values(tableCards);
+            if (cardsOnTableList.length === 0) {
+                return triggerLiveToast("TABLE IS EMPTY, CANNOT GIVE VETTU!");
+            }
+
+            // Collect all cards from the table
+            const hands = cardsGameState.hands || {};
+            let myHand = hands[myName] || [];
+            myHand = myHand.concat(cardsOnTableList);
+
+            // Sort hand neatly
+            myHand.sort((a, b) => {
+                if (a.suit === b.suit) return b.rank - a.rank;
+                return a.suit.localeCompare(b.suit);
+            });
+
+            hands[myName] = myHand;
+
+            // Play sound and trigger updates
+            playSynthSound('vettu');
+
+            const systemMsgText = `⚔️ ${myName.toUpperCase()} DELIBERATELY SURRENDERED & TOOK THE CUT (VETTU KUDU) OF ${cardsOnTableList.length} CARDS!`;
+            db.ref('chatMessages').push({
+                sender: "SYSTEM",
+                text: systemMsgText,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            db.ref('cardsGameState').update({
+                hands: hands,
+                table: {},
+                ledSuit: '',
+                turn: myName // Keep turn as myName since I got cut/took cards
+            });
+
+            triggerLiveToast("VETTU DELIBERATELY CONCEDED!");
         }
 
         function incrementPlayerScore(player) {
@@ -8504,6 +8612,131 @@
             if (typeof lucide !== 'undefined' && lucide.createIcons) {
                 lucide.createIcons();
             }
+        });
+
+        // ================= CLIENT-SIDE REALTIME GAME INVITATION SYSTEM =================
+        let activeInviteData = null;
+
+        function updateGameplayInviteBannerState() {
+            const banner = document.getElementById('gameplayInviteBanner');
+            const bannerText = document.getElementById('gameplayInviteBannerText');
+            if (!banner) return;
+
+            if (typeof activeGame === 'undefined' || activeGame === 'home' || activeGame === '') {
+                banner.classList.add('hidden');
+                return;
+            }
+
+            banner.classList.remove('hidden');
+
+            const isPartnerOnline = playersOnlineMap && playersOnlineMap[partnerName];
+            const pNameLabel = partnerName.toUpperCase();
+
+            if (isPartnerOnline) {
+                if (bannerText) {
+                    bannerText.innerHTML = `${pNameLabel} IS <span class="text-green-400 font-extrabold animate-pulse">● ONLINE</span>! SEND AN INSTANT INVITATION PIN TO ALERT THEM.`;
+                }
+            } else {
+                if (bannerText) {
+                    bannerText.innerHTML = `${pNameLabel} IS <span class="text-stone-500 font-extrabold">○ OFFLINE</span>? SEND AN INSTANT NOTIFICATION BANNER NOW!`;
+                }
+            }
+        }
+
+        function sendRealtimeGameInvite() {
+            if (typeof activeGame === 'undefined' || activeGame === 'home' || activeGame === '') {
+                return triggerLiveToast("GO INTO A GAME TO SEND AN INVITATION!");
+            }
+            db.ref('activeInvite').set({
+                sender: myName,
+                target: partnerName,
+                game: activeGame,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                triggerLiveToast("📩 INVITE SENT TO " + partnerName.toUpperCase() + "!");
+                playSynthSound('toast');
+            }).catch(() => {
+                triggerLiveToast("ERROR TRANSMITTING INVITATION.");
+            });
+        }
+
+        function showFloatingInvite(invite) {
+            activeInviteData = invite;
+            const banner = document.getElementById('floatingInviteNotification');
+            const senderText = invite.sender.toUpperCase();
+            const gameText = invite.game ? invite.game.toUpperCase() : "GAME";
+
+            let readableGame = gameText;
+            if (invite.game === 'movie') readableGame = "MOVIE GUESSING ROUND";
+            else if (invite.game === 'word') readableGame = "WORD SPEED RACE";
+            else if (invite.game === 'cards') readableGame = "CARD GAME ARENA";
+            else if (invite.game === 'code') readableGame = "GUESS THE CODE CHALLENGE";
+            else if (invite.game === 'songs') readableGame = "MUSIC LOUNGE & SONGS";
+
+            const desc = document.getElementById('inviteBannerDescription');
+            if (desc) {
+                desc.innerHTML = `${senderText} IS INVITING YOU TO JOIN THE <span class="text-[var(--primary-color)] font-extrabold">${readableGame}</span> NOW!`;
+            }
+
+            const avatar = document.getElementById('inviteSenderAvatar');
+            if (avatar) {
+                if (invite.sender === 'immu') {
+                    avatar.src = "1000242624.jpg";
+                } else if (invite.sender === 'sappii') {
+                    avatar.src = "1000242625.jpg";
+                } else {
+                    avatar.src = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${invite.sender}`;
+                }
+            }
+
+            if (banner) {
+                banner.classList.remove('hidden');
+                playSynthSound('notification');
+            }
+
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+        }
+
+        function hideFloatingInvite() {
+            const banner = document.getElementById('floatingInviteNotification');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
+            activeInviteData = null;
+        }
+
+        function rejectRealtimeGameInvite() {
+            if (activeInviteData) {
+                db.ref('activeInvite').remove().catch(() => {});
+            }
+            hideFloatingInvite();
+            triggerLiveToast("INVITATION DISMISSED.");
+        }
+
+        function acceptRealtimeGameInvite() {
+            if (activeInviteData) {
+                const gameToJoin = activeInviteData.game;
+                db.ref('activeInvite').remove().catch(() => {});
+                hideFloatingInvite();
+                enterArena(gameToJoin);
+                triggerLiveToast("JOINED " + gameToJoin.toUpperCase() + " SUCCESSFULLY!");
+            }
+        }
+
+        // Setup real-time dynamic Firebase listener for active invites
+        db.ref('activeInvite').on('value', (snap) => {
+            const invite = snap.val();
+            if (invite && invite.target === myName && invite.sender !== myName) {
+                const now = Date.now();
+                const timestamp = invite.timestamp || now;
+                if (now - timestamp < 45000) { // 45 seconds validity window
+                    showFloatingInvite(invite);
+                    return;
+                }
+            }
+            hideFloatingInvite();
         });
 
         // Initialize Lucide Vectors layout icons
