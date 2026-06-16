@@ -17,6 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <!-- JSZip for instant, download-of-all-stickers-as-pack-in-one-click -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- DotLottie Web Component Support -->
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.14/dist/dotlottie-wc.js" type="module"></script>
 
     <script>
         // Configure Tailwind to support custom fonts
@@ -137,6 +139,25 @@
         }
         .animate-shake { animation: shake 0.3s ease-in-out; }
 
+        /* Subtle physical floating spring curves mimicking Framer-Motion dynamics */
+        @keyframes avatarSpringFloatActive {
+            0%, 100% { transform: translateY(0px) scale(1.04); filter: drop-shadow(0 0 4px rgba(255, 75, 114, 0.35)); }
+            50% { transform: translateY(-6px) scale(1.1); filter: drop-shadow(0 0 18px rgba(255, 75, 114, 0.75)); }
+        }
+        @keyframes avatarSpringFloatOnline {
+            0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 2px rgba(74, 222, 128, 0.15)); }
+            50% { transform: translateY(-3px) scale(1.03); filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.45)); }
+        }
+        .animate-avatar-turn {
+            animation: avatarSpringFloatActive 2.2s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 12px var(--glow-color) !important;
+        }
+        .animate-avatar-online {
+            animation: avatarSpringFloatOnline 3.6s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+            border-color: rgba(74, 222, 128, 0.4) !important;
+        }
+
         /* Premium scrollbar integration */
         ::-webkit-scrollbar {
             width: 6px;
@@ -192,32 +213,32 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-start p-4 select-none relative pb-12">
+<body class="flex flex-col items-center justify-start p-4 relative pb-12">
 
     <!-- Active floating particles canvas in background -->
     <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
 
     <!-- Floating Real-time Game Invitation Banner -->
-    <div id="floatingInviteNotification" class="hidden fixed top-4 inset-x-4 max-w-[340px] mx-auto z-50 glass-card rounded-2xl border-2 border-[var(--primary-color)] shadow-2xl p-4 space-y-3 bg-[#0c0514]/95 backdrop-blur-xl animate-bounce-slow">
-        <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-full border border-pink-500/30 overflow-hidden shrink-0 shadow-md relative">
-                <img id="inviteSenderAvatar" src="" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sender'">
-                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse border border-slate-900"></span>
+    <div id="floatingInviteNotification" class="hidden fixed top-4 inset-x-2 max-w-[280px] mx-auto z-50 glass-card bg-[#0d0617]/95 backdrop-blur-xl rounded-full border border-[var(--primary-color)]/40 shadow-2xl p-1 animate-floatUp select-none">
+        <div class="flex items-center justify-between gap-2.5 pl-2 pr-1">
+            <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-full border border-pink-500/20 overflow-hidden shrink-0 shadow relative">
+                    <img id="inviteSenderAvatar" src="" class="w-full h-full object-cover" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sender'">
+                </div>
+                <div class="min-w-0">
+                    <div id="inviteBannerDescription" class="text-[9.5px] text-stone-200 font-extrabold uppercase tracking-wide truncate">
+                        IMMU INVITING YOU!
+                    </div>
+                </div>
             </div>
-            <div class="flex-1 min-w-0">
-                <span class="text-[8px] text-[var(--primary-color)] font-extrabold tracking-widest block uppercase font-mono">LIVE GAME INVITATION</span>
-                <p id="inviteBannerDescription" class="text-[10px] text-stone-200 leading-normal uppercase tracking-wide font-black mt-0.5">
-                    IMMU IS WAITING FOR YOU TO JOIN!
-                </p>
+            <div class="flex items-center gap-1 shrink-0">
+                <button onclick="rejectRealtimeGameInvite()" title="Dismiss" class="w-7 h-7 bg-white/5 hover:bg-rose-500/20 rounded-full flex items-center justify-center transition-all cursor-pointer">
+                    <i data-lucide="x" class="w-3.5 h-3.5 text-stone-400 hover:text-rose-455"></i>
+                </button>
+                <button onclick="acceptRealtimeGameInvite()" class="h-7 px-3 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] hover:brightness-110 text-white font-black text-[9px] rounded-full tracking-widest uppercase transition-all hover:scale-105 duration-200 cursor-pointer flex items-center justify-center gap-0.5 shadow-md shadow-[var(--primary-color)]/20">
+                    JOIN
+                </button>
             </div>
-        </div>
-        <div class="flex gap-2 pt-0.5">
-            <button onclick="rejectRealtimeGameInvite()" class="flex-1 py-2 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-stone-500/30 rounded-xl text-[8px] text-stone-400 hover:text-white font-extrabold uppercase tracking-widest transition-all cursor-pointer flex items-center justify-center gap-1">
-                <i data-lucide="x" class="w-3 h-3 text-stone-400"></i> IGNORE
-            </button>
-            <button onclick="acceptRealtimeGameInvite()" class="flex-1 py-2 bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] text-white font-extrabold text-[8px] rounded-xl tracking-widest uppercase transition-all hover:scale-105 duration-200 cursor-pointer flex items-center justify-center gap-1 shadow-lg glow-primary">
-                <i data-lucide="play" class="w-3 h-3 text-white animate-pulse"></i> JOIN NOW
-            </button>
         </div>
     </div>
 
@@ -255,16 +276,28 @@
         <!-- ================= LOBBY DASHBOARD SCREEN ================= -->
         <div id="lobbyScreen" class="space-y-4 animate-popIn">
             
-            <!-- Aesthetic graphical center portal banner design -->
-            <div class="relative w-full h-44 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group cursor-pointer">
-                <img src="1000243508.jpg" alt="Portal Canvas" class="w-full h-full object-cover brightness-90 group-hover:scale-105 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/30 to-transparent flex flex-col justify-end p-5">
-                    <span class="text-[9px] text-[var(--accent-color)] font-extrabold tracking-widest uppercase mb-1 font-mono">
-                        REAL-TIME MULTIPLAYER
+            <!-- Aesthetic graphical center portal banner design with Premium Lottie Emoji Integration -->
+            <div class="relative w-full h-44 rounded-2xl overflow-hidden border border-white/5 bg-gradient-to-br from-[#120722] via-[#0b0512] to-[#1e0735] shadow-2xl flex items-center justify-between p-5 select-none group">
+                <!-- Glowing ambient background lights -->
+                <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-32 h-32 rounded-full bg-[var(--primary-color)] opacity-20 filter blur-2xl pointer-events-none"></div>
+                <div class="absolute bottom-4 right-6 w-24 h-24 rounded-full bg-[var(--accent-color)] opacity-10 filter blur-xl pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col justify-center max-w-[60%]">
+                    <span class="text-[9px] text-[var(--accent-color)] font-extrabold tracking-widest uppercase mb-1.5 font-mono flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                        LIVE ARENA ONLINE
                     </span>
-                    <h2 class="text-lg font-black font-display text-white uppercase tracking-wider drop-shadow-lg">
-                        SELECT YOUR CLASH ARENA
+                    <h2 class="text-base font-black font-display text-white uppercase tracking-wider leading-tight drop-shadow">
+                        CLASH ARENA PORTAL
                     </h2>
+                    <p class="text-[9px] text-stone-400 font-semibold uppercase mt-1 tracking-wide">
+                        CHOOSE YOUR MINI-GAME AND BEAT YOUR RIVALS
+                    </p>
+                </div>
+                
+                <!-- DotLottie Web Component Container -->
+                <div class="relative z-10 w-28 h-28 flex items-center justify-center shrink-0 scale-110 group-hover:scale-115 transition-transform duration-500">
+                    <dotlottie-wc src="https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie" style="width: 140px; height: 140px;" autoplay loop></dotlottie-wc>
                 </div>
             </div>
 
@@ -795,7 +828,7 @@
                 
                 <!-- Player A: Immu score card container -->
                 <div id="pScoreCard_immu" class="p-3 glass-card rounded-2xl relative transition-all duration-300 group/score">
-                    <div class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md">
+                    <div id="pAvatarContainer_immu" class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md transition-all duration-300">
                         <img src="1000242624.jpg" alt="Immu" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Immu'">
                         <!-- Active user online/offline status dot -->
                         <span id="pOnlineDot_immu" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-stone-600 transition-all"></span>
@@ -815,7 +848,7 @@
 
                 <!-- Player B: Sappii score card container -->
                 <div id="pScoreCard_sappii" class="p-3 glass-card rounded-2xl relative transition-all duration-300 group/score">
-                    <div class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md">
+                    <div id="pAvatarContainer_sappii" class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md transition-all duration-300">
                         <img src="1000242625.jpg" alt="Sappii" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sappii'">
                         <!-- Active user online/offline status dot -->
                         <span id="pOnlineDot_sappii" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-stone-600 transition-all"></span>
@@ -831,18 +864,13 @@
             </div>
 
             <!-- Inter-gameplay real-time notification invitation bar -->
-            <div id="gameplayInviteBanner" class="glass-card rounded-2xl p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 border border-dashed border-[var(--primary-color)]/30 bg-gradient-to-r from-[var(--primary-color)]/5 via-transparent to-transparent">
-                <div class="flex items-center gap-2.5 text-left w-full md:w-auto">
-                    <div class="p-2 bg-[var(--primary-color)]/10 rounded-xl text-[var(--primary-color)] shrink-0">
-                        <i data-lucide="bell-ring" class="w-4 h-4 animate-pulse"></i>
-                    </div>
-                    <div class="min-w-0">
-                        <span class="text-[8px] text-[var(--primary-color)] font-extrabold tracking-widest block uppercase font-mono">MULTIPLAYER INVITE</span>
-                        <span id="gameplayInviteBannerText" class="text-[9px] text-stone-300 font-extrabold uppercase tracking-widest block truncate">WASTING TIME WAITING FOR SAPPII? SEND INVITATION!</span>
-                    </div>
+            <div id="gameplayInviteBanner" class="hidden glass-card rounded-full p-1 pl-3.5 pr-1 flex items-center justify-between gap-3 border border-pink-500/10 bg-pink-500/5 max-w-full">
+                <div class="flex items-center gap-2 text-left min-w-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <span id="gameplayInviteBannerText" class="text-[9px] text-stone-300 font-extrabold uppercase tracking-widest truncate">SAPPII IS ONLINE</span>
                 </div>
-                <button onclick="sendRealtimeGameInvite()" class="w-full md:w-auto px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[9px] rounded-xl tracking-widest uppercase hover:brightness-110 hover:scale-102 active:scale-98 transition-all shrink-0 flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-[var(--glow-color)]">
-                    <i data-lucide="send" class="w-3.5 h-3.5 text-white"></i> SEND LIVE INVITE
+                <button onclick="sendRealtimeGameInvite()" class="px-3.5 py-1.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[8px] rounded-full tracking-widest uppercase hover:brightness-110 active:scale-95 transition-all shrink-0 flex items-center justify-center gap-1 cursor-pointer shadow">
+                    <i data-lucide="send" class="w-3 h-3 text-white"></i> INVITE
                 </button>
             </div>
 
@@ -1655,7 +1683,7 @@
             </div>
 
             <!-- Chat history logs container scrolling bottom-first -->
-            <div id="chatMessagesScroller" class="flex-1 overflow-y-auto py-3 space-y-3 px-1"></div>
+            <div id="chatMessagesScroller" class="flex-1 min-h-0 overflow-y-auto py-3 space-y-3 px-1"></div>
 
             <!-- typing notification container -->
             <div id="partnerTypingBox" class="hidden flex items-center gap-1.5 mr-auto pl-1 pb-1 select-none">
@@ -1671,25 +1699,88 @@
             <div class="pt-2 border-t border-white/5 shrink-0 relative mt-auto space-y-2">
                 
                 <!-- fast emojis trigger list drawer -->
-                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[260px] glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-xl p-2.5 flex flex-wrap gap-2 justify-center z-30 shadow-2xl">
-                    <button onclick="dispatchChatMessage('❤️')" class="text-xl hover:scale-125 transition-transform duration-100">❤️</button>
-                    <button onclick="dispatchChatMessage('🔥')" class="text-xl hover:scale-125 transition-transform duration-100">🔥</button>
-                    <button onclick="dispatchChatMessage('😂')" class="text-xl hover:scale-125 transition-transform duration-100">😂</button>
-                    <button onclick="dispatchChatMessage('🥺')" class="text-xl hover:scale-125 transition-transform duration-100">🥺</button>
-                    <button onclick="dispatchChatMessage('👍')" class="text-xl hover:scale-125 transition-transform duration-100">👍</button>
-                    <button onclick="dispatchChatMessage('👎')" class="text-xl hover:scale-125 transition-transform duration-100">👎</button>
-                    <button onclick="dispatchChatMessage('✨')" class="text-xl hover:scale-125 transition-transform duration-100">✨</button>
-                    <button onclick="dispatchChatMessage('💀')" class="text-xl hover:scale-125 transition-transform duration-100">💀</button>
-                    <button onclick="dispatchChatMessage('💯')" class="text-xl hover:scale-125 transition-transform duration-100">💯</button>
-                    <button onclick="dispatchChatMessage('👏')" class="text-xl hover:scale-125 transition-transform duration-100">👏</button>
+                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[320px] max-h-[220px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3 z-30 shadow-2xl border border-white/15 space-y-3">
+                    <!-- premium animated emojis row -->
+                    <div class="space-y-1.5 border-b border-white/5 pb-2">
+                        <span class="text-[8px] text-pink-400 font-extrabold tracking-widest block uppercase text-center font-mono">
+                            🔥 PREMIUM ANIMATED BLASTS 🔥
+                        </span>
+                        <div class="flex justify-center gap-3 pt-0.5">
+                            <button onclick="dispatchChatMessage('🔥')" class="relative w-9 h-9 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-amber-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🔥">
+                                <dotlottie-wc src="https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie" style="width: 28px; height: 28px;" autoplay loop></dotlottie-wc>
+                            </button>
+                            <button onclick="dispatchChatMessage('❤️')" class="relative w-9 h-9 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-rose-500/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated ❤️">
+                                <dotlottie-wc src="https://lottie.host/360d522f-8295-4cc8-bb7f-dc78eedf45e8/TROdKl1yz1.lottie" style="width: 28px; height: 28px;" autoplay loop></dotlottie-wc>
+                            </button>
+                            <button onclick="dispatchChatMessage('😂')" class="relative w-9 h-9 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-yellow-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 😂">
+                                <dotlottie-wc src="https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie" style="width: 28px; height: 28px;" autoplay loop></dotlottie-wc>
+                            </button>
+                            <button onclick="dispatchChatMessage('🎉')" class="relative w-9 h-9 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-purple-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🎉">
+                                <dotlottie-wc src="https://lottie.host/f9e4c6db-340c-4542-9eda-f3c20c861699/YcvmoFnAsT.lottie" style="width: 28px; height: 28px;" autoplay loop></dotlottie-wc>
+                            </button>
+                            <button onclick="dispatchChatMessage('🚀')" class="relative w-9 h-9 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-sky-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🚀">
+                                <dotlottie-wc src="https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie" style="width: 24px; height: 24px;" autoplay loop></dotlottie-wc>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- standard static emojis wrapper grid -->
+                    <div class="flex flex-wrap gap-2 justify-center pt-0.5">
+                        <button onclick="dispatchChatMessage('❤️')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">❤️</button>
+                        <button onclick="dispatchChatMessage('🔥')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🔥</button>
+                        <button onclick="dispatchChatMessage('😂')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">😂</button>
+                        <button onclick="dispatchChatMessage('🥺')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🥺</button>
+                        <button onclick="dispatchChatMessage('👍')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👍</button>
+                        <button onclick="dispatchChatMessage('👎')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👎</button>
+                        <button onclick="dispatchChatMessage('✨')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">✨</button>
+                        <button onclick="dispatchChatMessage('💀')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">💀</button>
+                    <button onclick="dispatchChatMessage('💯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💯</button>
+                    <button onclick="dispatchChatMessage('👏')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👏</button>
+                    <button onclick="dispatchChatMessage('😍')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😍</button>
+                    <button onclick="dispatchChatMessage('😘')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😘</button>
+                    <button onclick="dispatchChatMessage('🤪')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤪</button>
+                    <button onclick="dispatchChatMessage('😎')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😎</button>
+                    <button onclick="dispatchChatMessage('🤔')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤔</button>
+                    <button onclick="dispatchChatMessage('🤫')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤫</button>
+                    <button onclick="dispatchChatMessage('🥵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥵</button>
+                    <button onclick="dispatchChatMessage('🥶')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥶</button>
+                    <button onclick="dispatchChatMessage('🤩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤩</button>
+                    <button onclick="dispatchChatMessage('🤯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤯</button>
+                    <button onclick="dispatchChatMessage('🤡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤡</button>
+                    <button onclick="dispatchChatMessage('💩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💩</button>
+                    <button onclick="dispatchChatMessage('🎉')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎉</button>
+                    <button onclick="dispatchChatMessage('👀')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👀</button>
+                    <button onclick="dispatchChatMessage('🙈')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🙈</button>
+                    <button onclick="dispatchChatMessage('🍿')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🍿</button>
+                    <button onclick="dispatchChatMessage('🎵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎵</button>
+                    <button onclick="dispatchChatMessage('⚔️')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">⚔️</button>
+                    <button onclick="dispatchChatMessage('👑')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👑</button>
+                    <button onclick="dispatchChatMessage('🤖')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤖</button>
+                    <button onclick="dispatchChatMessage('🚀')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🚀</button>
+                    <button onclick="dispatchChatMessage('💡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💡</button>
+                    <button onclick="dispatchChatMessage('🎯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎯</button>
+                    <button onclick="dispatchChatMessage('🎲')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎲</button>
+                    <button onclick="dispatchChatMessage('🦾')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🦾</button>
                 </div>
 
-                <div class="flex gap-2 items-center bg-black/40 border border-white/5 rounded-full px-4.5 py-1 focus-within:border-[var(--primary-color)] transition-all">
-                    <button onclick="toggleQuickEmojis()" class="text-stone-400 hover:text-white transition-colors select-none cursor-pointer">
+                <!-- Reply preview indicator -->
+                <div id="chatReplyIndicator" class="hidden flex items-center justify-between bg-white/[0.04] border border-white/10 rounded-xl px-3.5 py-2 text-[10px] animate-slideIn">
+                    <div class="flex items-center gap-1.5 truncate text-stone-300">
+                        <i data-lucide="reply" class="w-3.5 h-3.5 text-[var(--accent-color)] shrink-0"></i>
+                        <span class="font-extrabold uppercase shrink-0 text-[var(--accent-color)]" id="replyIndicatorSender">REPLYING TO IMMU:</span>
+                        <span class="truncate font-semibold text-stone-400" id="replyIndicatorText">Hello world</span>
+                    </div>
+                    <button onclick="cancelChatReply()" class="p-1 hover:bg-white/10 rounded-lg text-stone-400 hover:text-white transition-all cursor-pointer shrink-0">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <div onclick="document.getElementById('chatInputMessage').focus()" class="flex gap-2 items-center bg-black/40 border border-white/5 rounded-full px-4.5 py-1 focus-within:border-[var(--primary-color)] transition-all cursor-text select-text">
+                    <button onclick="event.stopPropagation(); toggleQuickEmojis()" class="text-stone-400 hover:text-white transition-colors select-none cursor-pointer">
                         <i data-lucide="smile" class="w-4.5 h-4.5 text-[var(--accent-color)]"></i>
                     </button>
-                    <input type="text" id="chatInputMessage" placeholder="TYPE LOBBY MESSAGE..." class="flex-1 bg-transparent border-0 ring-0 focus:ring-0 outline-none text-xs font-semibold py-2.5 placeholder-stone-600 text-white">
-                    <button onclick="dispatchChatMessage()" class="p-2 bg-[var(--primary-color)] text-white hover:brightness-110 rounded-full transition-all cursor-pointer">
+                    <input type="text" id="chatInputMessage" placeholder="TYPE LOBBY MESSAGE..." class="flex-1 bg-transparent border-0 ring-0 focus:ring-0 outline-none text-xs font-semibold py-2.5 placeholder-stone-600 text-white select-text">
+                    <button onclick="event.stopPropagation(); dispatchChatMessage()" class="p-2 bg-[var(--primary-color)] text-white hover:brightness-110 rounded-full transition-all cursor-pointer">
                         <i data-lucide="send" class="w-3.5 h-3.5"></i>
                     </button>
                 </div>
@@ -2323,6 +2414,9 @@
                 }
                 scheduleBotMoves();
                 updateGameplayInviteBannerState();
+                if (typeof updateScoreboardAvatarAnimations === 'function') {
+                    updateScoreboardAvatarAnimations();
+                }
             });
         }
 
@@ -2366,6 +2460,58 @@
             drawer.classList.toggle('hidden');
         }
 
+        let activeReplyingMessageId = null;
+        let activeReplyingMessageData = null;
+
+        function setChatReply(key, sender, text) {
+            activeReplyingMessageId = key;
+            activeReplyingMessageData = { sender: sender, text: text };
+            
+            const indicator = document.getElementById('chatReplyIndicator');
+            const senderText = document.getElementById('replyIndicatorSender');
+            const previewText = document.getElementById('replyIndicatorText');
+            
+            if (indicator && senderText && previewText) {
+                senderText.innerText = `REPLYING TO ${sender.toUpperCase()}:`;
+                previewText.innerText = text;
+                indicator.classList.remove('hidden');
+            }
+            playSynthSound('toast');
+            
+            const input = document.getElementById('chatInputMessage');
+            if (input) {
+                input.focus();
+                input.placeholder = `REPLY TO ${sender.toUpperCase()}...`;
+            }
+        }
+
+        function cancelChatReply() {
+            activeReplyingMessageId = null;
+            activeReplyingMessageData = null;
+            
+            const indicator = document.getElementById('chatReplyIndicator');
+            if (indicator) {
+                indicator.classList.add('hidden');
+            }
+            const input = document.getElementById('chatInputMessage');
+            if (input) {
+                input.placeholder = "TYPE LOBBY MESSAGE...";
+            }
+        }
+
+        function scrollToChatMessage(key) {
+            const target = document.getElementById(`chatMsg_${key}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.classList.add('brightness-150', 'transition-all', 'duration-300');
+                setTimeout(() => {
+                    target.classList.remove('brightness-150');
+                }, 1200);
+            } else {
+                triggerLiveToast("MESSAGE NOT FOUND (DELICATELY EXPIRED OR REMOVED)");
+            }
+        }
+
         function isCharacterEmojiOnly(msg) {
             let str = (msg || '').trim().replace(/[\uFE0F\u200D\s]/g, '');
             if (!str) return false;
@@ -2403,20 +2549,48 @@
                 }
             }
 
-            db.ref('chatMessages').push({
+            const payload = {
                 sender: myName.toUpperCase(),
                 text: text,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
-            });
+            };
+
+            if (activeReplyingMessageId && activeReplyingMessageData) {
+                payload.replyTo = {
+                    id: activeReplyingMessageId,
+                    sender: activeReplyingMessageData.sender,
+                    text: activeReplyingMessageData.text
+                };
+            }
+
+            db.ref('chatMessages').push(payload);
 
             if(!explicitTextSymbol) chatInputNode.value = "";
             document.getElementById('quickEmojiDrawer').classList.add('hidden');
             db.ref(`typingStatus/${myName}`).set(false);
+            
+            cancelChatReply();
         }
 
         chatInputNode.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') dispatchChatMessage();
         });
+
+        // Premium DotLottie interactive emoji assets map configurations
+        const lottieEmojiMap = {
+            '🔥': 'https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie',
+            '❤️': 'https://lottie.host/360d522f-8295-4cc8-bb7f-dc78eedf45e8/TROdKl1yz1.lottie',
+            '😂': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
+            '🎉': 'https://lottie.host/f9e4c6db-340c-4542-9eda-f3c20c861699/YcvmoFnAsT.lottie',
+            '🚀': 'https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie'
+        };
+        const lottieEmojiGlowMap = {
+            '🔥': 'rgba(239, 68, 68, 0.75)',
+            '❤️': 'rgba(244, 63, 94, 0.75)',
+            '😂': 'rgba(251, 191, 36, 0.75)',
+            '🎉': 'rgba(168, 85, 247, 0.75)',
+            '🚀': 'rgba(56, 189, 248, 0.75)'
+        };
 
         // Sync Chat Message Logs real-time listener elements
         let isFirstBatchChatLoaded = false;
@@ -2492,26 +2666,72 @@
                     ? 'bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white rounded-2xl rounded-tr-none' 
                     : 'bg-white/10 text-stone-200 border border-white/5 rounded-2xl rounded-tl-none';
 
+                const escapedText = (data.text || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const actionsHtml = `
+                    <div class="hidden group-hover:flex absolute ${isMine ? '-left-18' : '-right-20'} top-1/2 -translate-y-1/2 items-center gap-1 z-20 bg-slate-950/90 px-1.5 py-1 rounded-xl border border-white/10 select-none shadow-xl scale-95 hover:scale-100 transition-all">
+                        <button onclick="setChatReply('${key}', '${data.sender}', '${escapedText}')" title="Reply" class="p-1.5 bg-black/50 hover:bg-[var(--primary-color)] rounded-lg text-stone-300 hover:text-white border border-white/5 transition-all cursor-pointer">
+                            <i data-lucide="reply" class="w-3.5 h-3.5"></i>
+                        </button>
+                        ${isMine ? `
+                            <button onclick="deleteChatMessage('${key}')" title="Delete" class="p-1.5 bg-black/50 hover:bg-rose-650 rounded-lg text-rose-400 hover:text-white border border-white/5 transition-all cursor-pointer">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+
                 if (isEmojiMsg) {
-                    messageRow.className += ` ${alignClass} py-1`;
+                    let replyBlockHtml = "";
+                    if (data.replyTo) {
+                        replyBlockHtml = `
+                            <div onclick="scrollToChatMessage('${data.replyTo.id}')" class="mb-1 pointer-events-auto cursor-pointer bg-white/5 hover:bg-white/10 rounded-lg p-1.5 text-[8.5px] text-white/50 flex items-center gap-1 max-w-[150px] truncate select-none border border-white/5 transition-all">
+                                <i data-lucide="reply" class="w-2.5 h-2.5 text-[var(--accent-color)] shrink-0"></i>
+                                <span class="font-extrabold uppercase text-[var(--accent-color)] shrink-0 text-[7px]">${data.replyTo.sender}:</span>
+                                <span class="truncate italic">${data.replyTo.text}</span>
+                            </div>
+                        `;
+                    }
+
+                    messageRow.className += ` ${alignClass} py-1 group relative`;
+                    
+                    let emojiDisplayHtml = `<div class="text-[44px] leading-none animate-emoji" title="Click to Copy">${data.text}</div>`;
+                    const trimmedText = data.text ? data.text.trim() : "";
+                    if (lottieEmojiMap[trimmedText]) {
+                        emojiDisplayHtml = `
+                            <div class="relative flex items-center justify-center -my-2 select-none" title="Lottie ${trimmedText} Blast">
+                                <dotlottie-wc src="${lottieEmojiMap[trimmedText]}" style="width: 72px; height: 72px;" autoplay loop></dotlottie-wc>
+                            </div>
+                        `;
+                    }
+
                     messageRow.innerHTML = `
                         <div class="text-[9px] text-stone-500 font-bold mb-0.5 px-1">${isMine ? 'YOU' : data.sender} • ${time}</div>
-                        <div class="text-[44px] leading-none animate-emoji" title="Click to Copy">${data.text}</div>
+                        <div class="relative flex flex-col ${isMine ? 'items-end' : 'items-start'}">
+                            ${replyBlockHtml}
+                            ${emojiDisplayHtml}
+                            ${actionsHtml}
+                        </div>
                         <div id="seen_container_${key}">${seenHtml}</div>
                     `;
                 } else {
-                    messageRow.className += ` ${alignClass}`;
+                    let replyBlockHtml = "";
+                    if (data.replyTo) {
+                        replyBlockHtml = `
+                            <div onclick="scrollToChatMessage('${data.replyTo.id}')" class="mb-1.5 pb-1.5 border-b border-white/10 text-[9px] text-white/50 flex items-center gap-1.5 max-w-full truncate cursor-pointer hover:text-white/80 select-none transition-all">
+                                <i data-lucide="reply" class="w-3 h-3 text-[var(--accent-color)] shrink-0"></i>
+                                <span class="font-extrabold uppercase text-[var(--accent-color)] shrink-0">${data.replyTo.sender}:</span>
+                                <span class="truncate italic">${data.replyTo.text}</span>
+                            </div>
+                        `;
+                    }
+
+                    messageRow.className += ` ${alignClass} group relative`;
                     messageRow.innerHTML = `
                         <div class="text-[9px] text-stone-500 font-bold mb-1 px-1 uppercase">${isMine ? 'YOU' : data.sender} • ${time}</div>
-                        <div class="px-4 py-2.5 max-w-[80%] ${cardColor} shadow-md text-xs font-semibold leading-relaxed break-words relative group cursor-pointer">
+                        <div class="px-4 py-2.5 max-w-[80%] ${cardColor} shadow-md text-xs font-semibold leading-relaxed break-words relative cursor-pointer font-sans select-text">
+                            ${replyBlockHtml}
                             <p>${data.text}</p>
-                            ${isMine ? `
-                                <div class="hidden group-hover:flex absolute -left-10 top-1/2 -translate-y-1/2 items-center gap-1">
-                                    <button onclick="deleteChatMessage('${key}')" class="p-1 bg-black/80 hover:bg-red-500 rounded text-red-400 hover:text-white border border-white/10 transition-all cursor-pointer">
-                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                                    </button>
-                                </div>
-                            ` : ''}
+                            ${actionsHtml}
                         </div>
                         <div id="seen_container_${key}" class="w-full">${seenHtml}</div>
                     `;
@@ -2522,10 +2742,21 @@
             lucide.createIcons();
             scrollToBottom('chatMessagesScroller');
 
-            if (data.text && data.text.includes('🔥') && isFirstBatchChatLoaded) {
-                setTimeout(() => {
-                    triggerFireSpreadAnimation(messageRow);
-                }, 100);
+            if (data.text && isFirstBatchChatLoaded) {
+                const trimmedText = data.text.trim();
+                const matchedEmoji = Object.keys(lottieEmojiMap).find(e => data.text.includes(e));
+                if (matchedEmoji) {
+                    setTimeout(() => {
+                        if (matchedEmoji === '🔥') {
+                            triggerFireSpreadAnimation(messageRow);
+                        }
+                        const lottieUrl = lottieEmojiMap[matchedEmoji];
+                        const glowVal = lottieEmojiGlowMap[matchedEmoji] || 'rgba(239, 68, 68, 0.75)';
+                        if (typeof triggerChatLottieBlast === 'function') {
+                            triggerChatLottieBlast(messageRow, lottieUrl, glowVal);
+                        }
+                    }, 100);
+                }
             }
 
             if (isFirstBatchChatLoaded && !isMine && !isSystem) {
@@ -2626,6 +2857,55 @@
                     fireParticle.remove();
                 }, 1400);
             }
+        }
+
+        // Beautiful rising, glowing Lottie Blast that mimics framer-motion physical springs
+        function triggerChatLottieBlast(anchorElement, lottieUrl, glowColor) {
+            const chatContainer = document.getElementById('chatMessagesScroller');
+            if (!chatContainer) return;
+
+            const rect = chatContainer.getBoundingClientRect();
+            let startX = rect.width / 2;
+            let startY = rect.height / 2;
+
+            if (anchorElement) {
+                const anchorRect = anchorElement.getBoundingClientRect();
+                startX = (anchorRect.left + anchorRect.width / 2) - rect.left;
+                startY = (anchorRect.top + anchorRect.height / 2) - rect.top;
+            }
+
+            // Bind start Y coordinates relative to scroll offset
+            const finalY = startY + chatContainer.scrollTop;
+
+            // Spawn dynamic dotlottie element rising upwards gracefully
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.left = `${startX}px`;
+            container.style.top = `${finalY}px`;
+            container.style.transform = 'translate(-50%, -50%) scale(0.1)';
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'none';
+            container.style.zIndex = '45';
+            container.style.transition = 'all 1.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            container.style.filter = `drop-shadow(0 0 12px ${glowColor})`;
+
+            container.innerHTML = `
+                <dotlottie-wc src="${lottieUrl}" style="width: 100px; height: 100px;" autoplay></dotlottie-wc>
+            `;
+
+            chatContainer.appendChild(container);
+
+            // Trigger reflow
+            const f = container.offsetHeight;
+
+            // Spring up and expand
+            container.style.transform = 'translate(-50%, -120px) scale(1.65)';
+            container.style.opacity = '0';
+
+            // Safely destroy
+            setTimeout(() => {
+                container.remove();
+            }, 1800);
         }
 
         // ================= MOVIE CINEMA GUESSING ARENA LOGIC =================
@@ -2801,6 +3081,45 @@
             triggerLiveToast("CINEMA BROADCAST COMMENCED!");
         }
 
+        function updateScoreboardAvatarAnimations() {
+            let activeTurnPlayer = null;
+
+            if (activeGame === 'movie' && typeof gameState !== 'undefined') {
+                activeTurnPlayer = gameState.turn;
+            } else if (activeGame === 'cards' && typeof cardsGameState !== 'undefined') {
+                activeTurnPlayer = cardsGameState.turn;
+            } else if (activeGame === 'code' && typeof codeGameState !== 'undefined') {
+                activeTurnPlayer = codeGameState.turn;
+            }
+
+            const players = ['immu', 'sappii', 'tharkuri'];
+            players.forEach(p => {
+                const avatarContainer = document.getElementById(`pAvatarContainer_${p}`);
+                if (!avatarContainer) return;
+
+                // Determine active turn
+                let hasTurn = false;
+                if (activeGame === 'word' && typeof wordGameState !== 'undefined') {
+                    if (wordGameState.status === "letter_phase") {
+                        if (p === 'immu' && !wordGameState.p1Letter) hasTurn = true;
+                        if (p === 'sappii' && !wordGameState.p2Letter) hasTurn = true;
+                    }
+                } else {
+                    hasTurn = (activeTurnPlayer === p);
+                }
+
+                const isOnline = !!(playersOnlineMap && playersOnlineMap[p]);
+
+                // Toggle animation classes
+                avatarContainer.classList.remove('animate-avatar-turn', 'animate-avatar-online');
+                if (hasTurn) {
+                    avatarContainer.classList.add('animate-avatar-turn');
+                } else if (isOnline) {
+                    avatarContainer.classList.add('animate-avatar-online');
+                }
+            });
+        }
+
         function refreshScoreboard() {
             if (activeGame === 'movie') {
                 if (typeof gameState !== 'undefined') {
@@ -2867,7 +3186,7 @@
                 if (renderTharkuri) {
                     middleCol.innerHTML = `
                         <div id="pScoreCard_tharkuri" class="p-3 bg-white/5 border ${isTharkuriTurn ? 'border-amber-400 shadow-lg shadow-amber-500/20 z-10 scale-105' : 'border-white/5'} rounded-2xl relative transition-all duration-300 group/tharkuri">
-                            <div class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md">
+                            <div id="pAvatarContainer_tharkuri" class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md transition-all duration-300">
                                 <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=${tharkuriProfileSeed}" alt="${tharkuriCustomName}" class="w-full h-full object-cover">
                                 <span id="pOnlineDot_tharkuri" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 ${playersOnlineMap['tharkuri'] ? 'bg-green-500 animate-pulse' : 'bg-stone-600'} transition-all"></span>
                             </div>
@@ -2887,6 +3206,7 @@
                     `;
                 }
             }
+            updateScoreboardAvatarAnimations();
         }
 
         db.ref('gameState').on('value', (snap) => {
@@ -8634,18 +8954,18 @@
 
             if (isPartnerOnline) {
                 if (bannerText) {
-                    bannerText.innerHTML = `${pNameLabel} IS <span class="text-green-400 font-extrabold animate-pulse">● ONLINE</span>! SEND AN INSTANT INVITATION PIN TO ALERT THEM.`;
+                    bannerText.innerHTML = `${pNameLabel}: <span class="text-green-400 font-extrabold animate-pulse">● ONLINE</span>`;
                 }
             } else {
                 if (bannerText) {
-                    bannerText.innerHTML = `${pNameLabel} IS <span class="text-stone-500 font-extrabold">○ OFFLINE</span>? SEND AN INSTANT NOTIFICATION BANNER NOW!`;
+                    bannerText.innerHTML = `${pNameLabel}: <span class="text-stone-500 font-bold">○ OFFLINE</span>`;
                 }
             }
         }
 
         function sendRealtimeGameInvite() {
             if (typeof activeGame === 'undefined' || activeGame === 'home' || activeGame === '') {
-                return triggerLiveToast("GO INTO A GAME TO SEND AN INVITATION!");
+                return triggerLiveToast("GO INTO A GAME!");
             }
             db.ref('activeInvite').set({
                 sender: myName,
@@ -8653,10 +8973,10 @@
                 game: activeGame,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
-                triggerLiveToast("📩 INVITE SENT TO " + partnerName.toUpperCase() + "!");
+                triggerLiveToast("INVITE SENT!");
                 playSynthSound('toast');
             }).catch(() => {
-                triggerLiveToast("ERROR TRANSMITTING INVITATION.");
+                triggerLiveToast("ERROR.");
             });
         }
 
@@ -8667,15 +8987,15 @@
             const gameText = invite.game ? invite.game.toUpperCase() : "GAME";
 
             let readableGame = gameText;
-            if (invite.game === 'movie') readableGame = "MOVIE GUESSING ROUND";
-            else if (invite.game === 'word') readableGame = "WORD SPEED RACE";
-            else if (invite.game === 'cards') readableGame = "CARD GAME ARENA";
-            else if (invite.game === 'code') readableGame = "GUESS THE CODE CHALLENGE";
-            else if (invite.game === 'songs') readableGame = "MUSIC LOUNGE & SONGS";
+            if (invite.game === 'movie') readableGame = "MOVIE";
+            else if (invite.game === 'word') readableGame = "WORD RACE";
+            else if (invite.game === 'cards') readableGame = "CARDS";
+            else if (invite.game === 'code') readableGame = "CODE";
+            else if (invite.game === 'songs') readableGame = "SONGS";
 
             const desc = document.getElementById('inviteBannerDescription');
             if (desc) {
-                desc.innerHTML = `${senderText} IS INVITING YOU TO JOIN THE <span class="text-[var(--primary-color)] font-extrabold">${readableGame}</span> NOW!`;
+                desc.innerHTML = `${senderText} INVITES: <span class="text-[var(--accent-color)] font-black">${readableGame}</span>`;
             }
 
             const avatar = document.getElementById('inviteSenderAvatar');
