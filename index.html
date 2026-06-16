@@ -1699,72 +1699,49 @@
             <div class="pt-1.5 border-t border-white/5 shrink-0 relative mt-auto space-y-2">
                 
                 <!-- fast emojis trigger list drawer -->
-                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[320px] max-h-[220px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3 z-30 shadow-2xl border border-white/15 space-y-3">
-                    <!-- premium animated emojis row -->
-                    <div class="space-y-1.5 border-b border-white/5 pb-2">
-                        <span class="text-[8px] text-pink-400 font-extrabold tracking-widest block uppercase text-center font-mono">
-                            🔥 PREMIUM ANIMATED BLASTS 🔥
-                        </span>
-                        <div class="flex justify-center gap-2 pt-0.5 flex-wrap">
-                            <button onclick="dispatchChatMessage('🔥')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-amber-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🔥">
-                                <dotlottie-wc src="https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie" style="width: 26px; height: 26px;" autoplay loop></dotlottie-wc>
-                            </button>
-                            <button onclick="dispatchChatMessage('❤️')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-rose-500/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated ❤️">
-                                <dotlottie-wc src="https://lottie.host/360d522f-8295-4cc8-bb7f-dc78eedf45e8/TROdKl1yz1.lottie" style="width: 26px; height: 26px;" autoplay loop></dotlottie-wc>
-                            </button>
-                            <button onclick="dispatchChatMessage('😂')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-yellow-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 😂">
-                                <dotlottie-wc src="https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie" style="width: 26px; height: 26px;" autoplay loop></dotlottie-wc>
-                            </button>
-                            <button onclick="dispatchChatMessage('🎉')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-purple-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🎉">
-                                <dotlottie-wc src="https://lottie.host/f9e4c6db-340c-4542-9eda-f3c20c861699/YcvmoFnAsT.lottie" style="width: 26px; height: 26px;" autoplay loop></dotlottie-wc>
-                            </button>
-                            <button onclick="dispatchChatMessage('🚀')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-sky-400/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 🚀">
-                                <dotlottie-wc src="https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie" style="width: 22px; height: 22px;" autoplay loop></dotlottie-wc>
-                            </button>
-                            <button onclick="dispatchChatMessage('😈')" class="relative w-8.5 h-8.5 hover:scale-115 hover:rotate-3 transition-transform duration-200 bg-white/5 border border-white/10 hover:border-violet-500/50 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group/btn" title="Send Animated 😈">
-                                <dotlottie-wc src="https://lottie.host/87fb6bce-2185-444d-9b81-dd3f66db78b4/F513tSQIpz.lottie" style="width: 26px; height: 26px;" autoplay loop></dotlottie-wc>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- standard static emojis wrapper grid -->
-                    <div class="flex flex-wrap gap-2 justify-center pt-0.5">
-                        <button onclick="dispatchChatMessage('❤️')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">❤️</button>
-                        <button onclick="dispatchChatMessage('🔥')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🔥</button>
-                        <button onclick="dispatchChatMessage('😂')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">😂</button>
+                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[320px] max-h-[220px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3.5 z-30 shadow-2xl border border-white/15">
+                    <span class="text-[8.5px] text-pink-400 font-extrabold tracking-widest block uppercase text-center font-mono mb-2">
+                        ✨ CLICK TO BLAST EMOJI ✨
+                    </span>
+                    <div class="flex flex-wrap gap-2.5 justify-center pt-0.5">
+                        <button onclick="dispatchChatMessage('🔥')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🔥 blast">🔥</button>
+                        <button onclick="dispatchChatMessage('❤️')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated ❤️ blast">❤️</button>
+                        <button onclick="dispatchChatMessage('😂')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😂 blast">😂</button>
+                        <button onclick="dispatchChatMessage('🎉')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🎉 blast">🎉</button>
+                        <button onclick="dispatchChatMessage('🚀')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🚀 blast">🚀</button>
+                        <button onclick="dispatchChatMessage('😈')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😈 blast">😈</button>
+                        <button onclick="dispatchChatMessage('💡')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 💡 blast">💡</button>
+                        <div class="w-full border-t border-white/5 my-1"></div>
                         <button onclick="dispatchChatMessage('🥺')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🥺</button>
                         <button onclick="dispatchChatMessage('👍')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👍</button>
                         <button onclick="dispatchChatMessage('👎')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👎</button>
                         <button onclick="dispatchChatMessage('✨')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">✨</button>
                         <button onclick="dispatchChatMessage('💀')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">💀</button>
-                        <button onclick="dispatchChatMessage('😈')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">😈</button>
                         <button onclick="dispatchChatMessage('💯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💯</button>
                         <button onclick="dispatchChatMessage('👏')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👏</button>
-                    <button onclick="dispatchChatMessage('😍')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😍</button>
-                    <button onclick="dispatchChatMessage('😘')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😘</button>
-                    <button onclick="dispatchChatMessage('🤪')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤪</button>
-                    <button onclick="dispatchChatMessage('😎')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😎</button>
-                    <button onclick="dispatchChatMessage('🤔')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤔</button>
-                    <button onclick="dispatchChatMessage('🤫')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤫</button>
-                    <button onclick="dispatchChatMessage('🥵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥵</button>
-                    <button onclick="dispatchChatMessage('🥶')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥶</button>
-                    <button onclick="dispatchChatMessage('🤩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤩</button>
-                    <button onclick="dispatchChatMessage('🤯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤯</button>
-                    <button onclick="dispatchChatMessage('🤡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤡</button>
-                    <button onclick="dispatchChatMessage('💩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💩</button>
-                    <button onclick="dispatchChatMessage('🎉')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎉</button>
-                    <button onclick="dispatchChatMessage('👀')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👀</button>
-                    <button onclick="dispatchChatMessage('🙈')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🙈</button>
-                    <button onclick="dispatchChatMessage('🍿')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🍿</button>
-                    <button onclick="dispatchChatMessage('🎵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎵</button>
-                    <button onclick="dispatchChatMessage('⚔️')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">⚔️</button>
-                    <button onclick="dispatchChatMessage('👑')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👑</button>
-                    <button onclick="dispatchChatMessage('🤖')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤖</button>
-                    <button onclick="dispatchChatMessage('🚀')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🚀</button>
-                    <button onclick="dispatchChatMessage('💡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💡</button>
-                    <button onclick="dispatchChatMessage('🎯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎯</button>
-                    <button onclick="dispatchChatMessage('🎲')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎲</button>
-                    <button onclick="dispatchChatMessage('🦾')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🦾</button>
+                        <button onclick="dispatchChatMessage('😍')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😍</button>
+                        <button onclick="dispatchChatMessage('😘')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😘</button>
+                        <button onclick="dispatchChatMessage('🤪')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤪</button>
+                        <button onclick="dispatchChatMessage('😎')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😎</button>
+                        <button onclick="dispatchChatMessage('🤔')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤔</button>
+                        <button onclick="dispatchChatMessage('🤫')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤫</button>
+                        <button onclick="dispatchChatMessage('🥵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥵</button>
+                        <button onclick="dispatchChatMessage('🥶')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥶</button>
+                        <button onclick="dispatchChatMessage('🤩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤩</button>
+                        <button onclick="dispatchChatMessage('🤯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤯</button>
+                        <button onclick="dispatchChatMessage('🤡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤡</button>
+                        <button onclick="dispatchChatMessage('💩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💩</button>
+                        <button onclick="dispatchChatMessage('👀')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👀</button>
+                        <button onclick="dispatchChatMessage('🙈')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🙈</button>
+                        <button onclick="dispatchChatMessage('🍿')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🍿</button>
+                        <button onclick="dispatchChatMessage('🎵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎵</button>
+                        <button onclick="dispatchChatMessage('⚔️')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">⚔️</button>
+                        <button onclick="dispatchChatMessage('👑')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👑</button>
+                        <button onclick="dispatchChatMessage('🤖')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤖</button>
+                        <button onclick="dispatchChatMessage('🎯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎯</button>
+                        <button onclick="dispatchChatMessage('🎲')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎲</button>
+                        <button onclick="dispatchChatMessage('🦾')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🦾</button>
+                    </div>
                 </div>
             </div>
 
@@ -2530,7 +2507,7 @@
             return segments.every(ch => /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(ch));
         }
 
-        function dispatchChatMessage(explicitTextSymbol = "") {
+        function dispatchChatMessage(explicitTextSymbol = "", isAnimatedLottie = false) {
             let text = explicitTextSymbol ? explicitTextSymbol : chatInputNode.value.trim();
             if (!text) return;
 
@@ -2566,6 +2543,10 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
+            if (isAnimatedLottie || (typeof lottieEmojiMap !== 'undefined' && lottieEmojiMap[text])) {
+                payload.isLottie = true;
+            }
+
             if (activeReplyingMessageId && activeReplyingMessageData) {
                 payload.replyTo = {
                     id: activeReplyingMessageId,
@@ -2590,19 +2571,21 @@
         // Premium DotLottie interactive emoji assets map configurations
         const lottieEmojiMap = {
             '🔥': 'https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie',
-            '❤️': 'https://lottie.host/360d522f-8295-4cc8-bb7f-dc78eedf45e8/TROdKl1yz1.lottie',
-            '😂': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
+            '❤️': 'https://lottie.host/40ce63af-0d28-4e9a-b75a-0cdc36ede9de/8d8DWO5UtR.lottie',
+            '😂': 'https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie',
             '🎉': 'https://lottie.host/f9e4c6db-340c-4542-9eda-f3c20c861699/YcvmoFnAsT.lottie',
-            '🚀': 'https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie',
-            '😈': 'https://lottie.host/87fb6bce-2185-444d-9b81-dd3f66db78b4/F513tSQIpz.lottie'
+            '🚀': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
+            '😈': 'https://lottie.host/87fb6bce-2185-444d-9b81-dd3f66db78b4/F513tSQIpz.lottie',
+            '💡': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie'
         };
         const lottieEmojiGlowMap = {
             '🔥': 'rgba(239, 68, 68, 0.75)',
             '❤️': 'rgba(244, 63, 94, 0.75)',
-            '😂': 'rgba(251, 191, 36, 0.75)',
+            '😂': 'rgba(56, 189, 248, 0.75)',
             '🎉': 'rgba(168, 85, 247, 0.75)',
-            '🚀': 'rgba(56, 189, 248, 0.75)',
-            '😈': 'rgba(139, 92, 246, 0.75)'
+            '🚀': 'rgba(251, 191, 36, 0.75)',
+            '😈': 'rgba(139, 92, 246, 0.75)',
+            '💡': 'rgba(253, 224, 71, 0.75)'
         };
 
         // Sync Chat Message Logs real-time listener elements
@@ -2701,7 +2684,7 @@
                     
                     let emojiDisplayHtml = `<div class="text-[44px] leading-none animate-emoji" title="Click to Copy">${data.text}</div>`;
                     const trimmedText = data.text ? data.text.trim() : "";
-                    if (lottieEmojiMap[trimmedText]) {
+                    if (data.isLottie && lottieEmojiMap[trimmedText]) {
                         emojiDisplayHtml = `
                             <div class="relative flex items-center justify-center -my-2 select-none animate-popIn" title="Lottie ${trimmedText} Blast">
                                 <dotlottie-wc src="${lottieEmojiMap[trimmedText]}" style="width: 72px; height: 72px;" autoplay loop></dotlottie-wc>
@@ -2774,7 +2757,7 @@
             if (data.text && isFirstBatchChatLoaded) {
                 const trimmedText = data.text.trim();
                 const matchedEmoji = Object.keys(lottieEmojiMap).find(e => data.text.includes(e));
-                if (matchedEmoji) {
+                if (matchedEmoji && data.isLottie) {
                     setTimeout(() => {
                         if (matchedEmoji === '🔥') {
                             triggerFireSpreadAnimation(messageRow);
