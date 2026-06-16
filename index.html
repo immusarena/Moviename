@@ -446,30 +446,20 @@
                 </span>
             </div>
 
-            <!-- Header banner with premium animated Lottie representation -->
-            <div class="relative w-full h-40 rounded-2xl overflow-hidden border border-white/5 bg-gradient-to-br from-[#16062a] via-[#09030f] to-[#2b0a47] shadow-2xl flex items-center justify-between p-5 select-none group">
-                <!-- Glowing ambient background lights -->
-                <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-32 h-32 rounded-full bg-pink-500/15 filter blur-3xl pointer-events-none"></div>
-                <div class="absolute bottom-4 right-10 w-24 h-24 rounded-full bg-indigo-500/10 filter blur-2xl pointer-events-none"></div>
-                
-                <div class="relative z-10 flex flex-col justify-center max-w-[60%]">
-                    <span class="text-[9px] text-pink-400 font-extrabold tracking-widest uppercase mb-1.5 font-mono flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></span>
-                        CO-OP ARENA ON-DUTY
-                    </span>
-                    <h2 class="text-base font-black font-display text-white uppercase tracking-wider leading-tight">
-                        SELECT WORKSPACE ARENA
-                    </h2>
-                    <p class="text-[9px] text-stone-400 font-semibold uppercase mt-1 tracking-wide">
-                        CHOOSE YOUR MINI-GAME AND BEAT YOUR RIVALS
-                    </p>
-                </div>
-                
-                <!-- DotLottie Web Component Container -->
-                <div class="relative z-10 w-32 h-32 flex items-center justify-center shrink-0 -mr-4 scale-125 group-hover:scale-130 transition-transform duration-500 overflow-hidden">
-                    <dotlottie-wc src="https://lottie.host/f651f587-c282-4ee8-b512-eb61e65126fc/YAHHfIGInb.lottie" style="width: 170px; height: 170px;" autoplay loop></dotlottie-wc>
+            <!-- Header banner with stylized grid background and icon overlay -->
+            <div onclick="document.getElementById('gamingBannerFileInput').click()" class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group cursor-pointer" title="Click to upload custom gaming banner">
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-purple-950/70 to-indigo-900/40 mix-blend-multiply z-10"></div>
+                <img id="gamingBannerImageNode" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80" referrerPolicy="no-referrer" class="w-full h-full object-cover brightness-75 duration-700 hover:scale-105 transform transition" alt="Gaming Banner">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
+                    <div class="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-[8px] font-black tracking-widest text-[#FF7694] border border-white/10 rounded-lg px-2.5 py-1 flex items-center gap-1 uppercase transition-all duration-200">
+                        <i data-lucide="camera" class="w-3.5 h-3.5 text-[#FF7694]"></i>
+                        CHANGE BANNER
+                    </div>
+                    <span class="text-[9px] text-[#FF7694] font-black tracking-widest block uppercase font-mono mb-1">CO-OP BATTLES</span>
+                    <h2 class="text-base font-black text-white uppercase tracking-wider font-display">SELECT WORKSPACE ARENA</h2>
                 </div>
             </div>
+            <input type="file" id="gamingBannerFileInput" class="hidden" accept="image/*">
 
             <!-- The THREE Interactive Game Boxes -->
             <div class="grid grid-cols-1 gap-4 font-sans">
@@ -1997,6 +1987,56 @@
         </div>
     </div>
 
+    <!-- ==================== PREMIUM THEMED LOTTIE GAMES LOADER OVERLAY ==================== -->
+    <div id="gameLoadingOverlay" class="hidden fixed inset-0 z-[9999] backdrop-blur-xl flex-col items-center justify-center p-6 text-center select-none transition-all duration-300" style="background: radial-gradient(circle at center, rgba(13,6,20,0.98) 0%, var(--bg-color) 100%);">
+        <!-- Core loader container wrapper -->
+        <div class="relative flex flex-col items-center max-w-sm w-full animate-floatUp">
+            
+            <!-- Dynamic themed ambient backdrop glows -->
+            <div class="absolute w-48 h-48 rounded-full bg-[var(--primary-color)]/20 filter blur-3xl opacity-80 animate-pulse"></div>
+            <div class="absolute -bottom-12 w-32 h-32 rounded-full bg-[var(--accent-color)]/10 filter blur-2xl opacity-60"></div>
+            
+            <!-- Interactive DotLottie player wrapper -->
+            <div class="relative z-10 w-72 h-72 flex items-center justify-center shrink-0">
+                <dotlottie-wc src="https://lottie.host/15fc5c85-5dcc-4ba8-9aa6-bc8b4bf70a58/9w4XKyEjdp.lottie" style="width: 280px; height: 280px;" autoplay loop></dotlottie-wc>
+            </div>
+            
+            <!-- Game Info & Progress Indicators -->
+            <div class="relative z-10 -mt-4 space-y-3.5 w-full">
+                <span class="text-[9px] text-[var(--accent-color)] font-extrabold tracking-[0.25em] uppercase font-mono block animate-pulse">
+                    INITIALIZING GAME GRID
+                </span>
+                <h2 id="loadingGameName" class="text-sm font-black tracking-widest text-white uppercase font-display">
+                    PREPARING SESSION
+                </h2>
+                <div class="flex items-center justify-center gap-1.5 py-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[var(--primary-color)] animate-ping"></span>
+                    <span id="loadingGameStatusText" class="text-[9px] text-stone-400 font-extrabold tracking-widest uppercase font-mono">
+                        ESTABLISHING REALTIME COMMS...
+                    </span>
+                </div>
+                
+                <!-- Premium designed dynamic Loading Progress Bar -->
+                <div class="w-48 h-1 bg-white/[0.04] rounded-full overflow-hidden mx-auto border border-white/5 relative">
+                    <div class="h-full bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] rounded-full animate-loadingBar w-0" id="loadingProgressBarNode"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @keyframes loadingBarProgress {
+        0% { width: 0%; }
+        15% { width: 25%; }
+        50% { width: 68%; }
+        75% { width: 88%; }
+        100% { width: 100%; }
+    }
+    .animate-loadingBar {
+        animation: loadingBarProgress 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    </style>
+
     <!-- ==================== CONTROLLER SCRIPTS LOGICS ==================== -->
     <script>
         // Data presets matrix
@@ -2272,82 +2312,119 @@
         }
 
         function enterArena(arenaType) {
-            activeGame = arenaType;
-            document.getElementById('lobbyScreen').classList.add('hidden');
-            const hub = document.getElementById('gamesHubScreen');
-            if (hub) hub.classList.add('hidden');
-            document.getElementById('gameplayScreen').classList.remove('hidden');
+            // Display loading overlay before starting any game
+            const overlay = document.getElementById('gameLoadingOverlay');
+            if (overlay) {
+                // Determine cute label matching user's loaded game
+                let displayGameLabel = "LOADING ARENA...";
+                if (arenaType === 'movie') displayGameLabel = "MOVIE GUESSING ROUND";
+                else if (arenaType === 'word') displayGameLabel = "WORD SPEED RACE";
+                else if (arenaType === 'code') displayGameLabel = "CODE SPECULATION MATRIX";
+                else if (arenaType === 'cards') displayGameLabel = "SPADES DECK ARENA";
+                else if (arenaType === 'songs') displayGameLabel = "CO-OP MUSIC LOUNGE";
 
-            // Setup Badge headers labels
-            const badge = document.getElementById('activeGameTitleBadge');
-            
-            // Hide all arenas first
-            document.getElementById('movieArena').classList.add('hidden');
-            document.getElementById('wordArena').classList.add('hidden');
-            document.getElementById('spadesArena').classList.add('hidden');
-            const codeNodeForHide = document.getElementById('codeArena');
-            if (codeNodeForHide) codeNodeForHide.classList.add('hidden');
-            const songsNode = document.getElementById('songsArena');
-            if (songsNode) songsNode.classList.add('hidden');
+                document.getElementById('loadingGameName').innerText = displayGameLabel;
 
-            // Reset labels Middle
-            const lblA = document.getElementById('scoreboardMiddleLabelA');
-            const lblB = document.getElementById('scoreboardMiddleLabelB');
-            if (lblA && lblB) {
-                lblA.innerText = "VS";
-                lblA.className = "text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono";
-                lblB.innerText = "CLASH";
-                lblB.className = "text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1";
+                // Restart progress bar animation
+                const progressBar = document.getElementById('loadingProgressBarNode');
+                if (progressBar) {
+                    progressBar.style.animation = 'none';
+                    progressBar.doubleReflow = progressBar.offsetHeight; // trigger reflow
+                    progressBar.style.animation = null;
+                }
+
+                // Show overlay
+                overlay.style.display = 'flex';
+                overlay.style.opacity = '1';
             }
 
-            if (activeGame === 'movie') {
-                badge.innerText = "MOVIE GUESSING";
-                badge.style.color = "var(--primary-color)";
-                document.getElementById('movieArena').classList.remove('hidden');
-                renderMovieScreen();
-            } else if (activeGame === 'word') {
-                badge.innerText = "WORD RACE";
-                badge.style.color = "var(--accent-color)";
-                document.getElementById('wordArena').classList.remove('hidden');
+            // Simulate loading latency of 1400ms for premium gaming feeling
+            setTimeout(() => {
+                activeGame = arenaType;
+                document.getElementById('lobbyScreen').classList.add('hidden');
+                const hub = document.getElementById('gamesHubScreen');
+                if (hub) hub.classList.add('hidden');
+                document.getElementById('gameplayScreen').classList.remove('hidden');
 
-                renderWordScreen();
-            } else if (activeGame === 'code') {
-                badge.innerText = "GUESS THE CODE CHALLENGE";
-                badge.style.color = "rgb(139, 92, 246)";
-                const codeNodeForShow = document.getElementById('codeArena');
-                if (codeNodeForShow) codeNodeForShow.classList.remove('hidden');
+                // Setup Badge headers labels
+                const badge = document.getElementById('activeGameTitleBadge');
                 
-                if (!codeGameState || !codeGameState.status || codeGameState.status === 'setup') {
-                    db.ref('codeGameState').set({ status: 'setup' });
-                }
-                renderCodeScreen();
-            } else if (activeGame === 'cards') {
-                badge.innerText = "Card Game Multiplayer";
-                badge.style.color = "amber-400";
-                document.getElementById('spadesArena').classList.remove('hidden');
+                // Hide all arenas first
+                document.getElementById('movieArena').classList.add('hidden');
+                document.getElementById('wordArena').classList.add('hidden');
+                document.getElementById('spadesArena').classList.add('hidden');
+                const codeNodeForHide = document.getElementById('codeArena');
+                if (codeNodeForHide) codeNodeForHide.classList.add('hidden');
+                const songsNode = document.getElementById('songsArena');
+                if (songsNode) songsNode.classList.add('hidden');
+
+                // Reset labels Middle
+                const lblA = document.getElementById('scoreboardMiddleLabelA');
+                const lblB = document.getElementById('scoreboardMiddleLabelB');
                 if (lblA && lblB) {
-                    lblA.innerText = "DECK";
-                    lblB.innerText = "LEFT";
+                    lblA.innerText = "VS";
+                    lblA.className = "text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono";
+                    lblB.innerText = "CLASH";
+                    lblB.className = "text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1";
                 }
-                
-                if (!cardsGameState || !cardsGameState.status || cardsGameState.status === 'setup') {
-                    db.ref('cardsGameState').set({ status: 'setup' });
+
+                if (activeGame === 'movie') {
+                    badge.innerText = "MOVIE GUESSING";
+                    badge.style.color = "var(--primary-color)";
+                    document.getElementById('movieArena').classList.remove('hidden');
+                    renderMovieScreen();
+                } else if (activeGame === 'word') {
+                    badge.innerText = "WORD RACE";
+                    badge.style.color = "var(--accent-color)";
+                    document.getElementById('wordArena').classList.remove('hidden');
+
+                    renderWordScreen();
+                } else if (activeGame === 'code') {
+                    badge.innerText = "GUESS THE CODE CHALLENGE";
+                    badge.style.color = "rgb(139, 92, 246)";
+                    const codeNodeForShow = document.getElementById('codeArena');
+                    if (codeNodeForShow) codeNodeForShow.classList.remove('hidden');
+                    
+                    if (!codeGameState || !codeGameState.status || codeGameState.status === 'setup') {
+                        db.ref('codeGameState').set({ status: 'setup' });
+                    }
+                    renderCodeScreen();
+                } else if (activeGame === 'cards') {
+                    badge.innerText = "Card Game Multiplayer";
+                    badge.style.color = "amber-400";
+                    document.getElementById('spadesArena').classList.remove('hidden');
+                    if (lblA && lblB) {
+                        lblA.innerText = "DECK";
+                        lblB.innerText = "LEFT";
+                    }
+                    
+                    if (!cardsGameState || !cardsGameState.status || cardsGameState.status === 'setup') {
+                        db.ref('cardsGameState').set({ status: 'setup' });
+                    }
+                    renderSpadesScreen();
+                } else if (activeGame === 'songs') {
+                    badge.innerText = "MUSIC LOUNGE";
+                    badge.style.color = "var(--primary-color)";
+                    if (songsNode) songsNode.classList.remove('hidden');
+                    if (lblA && lblB) {
+                        lblA.innerText = "🎵";
+                        lblA.className = "text-lg block tracking-normal";
+                        lblB.innerText = "JAMMING";
+                    }
+                    renderRecentlyPlayedUI();
                 }
-                renderSpadesScreen();
-            } else if (activeGame === 'songs') {
-                badge.innerText = "MUSIC LOUNGE";
-                badge.style.color = "var(--primary-color)";
-                if (songsNode) songsNode.classList.remove('hidden');
-                if (lblA && lblB) {
-                    lblA.innerText = "🎵";
-                    lblA.className = "text-lg block tracking-normal";
-                    lblB.innerText = "JAMMING";
+                refreshScoreboard();
+                scrollToBottom('chatMessagesScroller');
+                updateGameplayInviteBannerState();
+
+                // Smooth fade-out transition for overlay
+                if (overlay) {
+                    overlay.style.opacity = '0';
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                    }, 300);
                 }
-                renderRecentlyPlayedUI();
-            }
-            refreshScoreboard();
-            scrollToBottom('chatMessagesScroller');
-            updateGameplayInviteBannerState();
+            }, 1400);
         }
 
         function quitToLobby() {
