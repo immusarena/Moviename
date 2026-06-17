@@ -6415,20 +6415,18 @@
 
         // Delay slider event triggers till drop-release
         document.addEventListener('DOMContentLoaded', () => {
-            // Player-specific security layout configuration
-            if (myName !== 'immu') {
-                const pinCard = document.getElementById('pinSecurityConfigCard');
-                if (pinCard) {
-                    pinCard.remove();
-                }
-            } else {
-                // Keep access completely public and password-free for the other players in the database
-                try {
-                    db.ref('userPasscodes/sappii').remove();
-                    db.ref('userPasscodes/tharkuri').remove();
-                } catch(e) {
-                    console.error("Clean old passcodes error", e);
-                }
+            // Player-specific security layout configuration: pin configuration screen has been completely disabled and removed
+            const pinCard = document.getElementById('pinSecurityConfigCard');
+            if (pinCard) {
+                pinCard.remove();
+            }
+            // Keep access completely public and password-free for all players in the database
+            try {
+                db.ref('userPasscodes/immu').remove();
+                db.ref('userPasscodes/sappii').remove();
+                db.ref('userPasscodes/tharkuri').remove();
+            } catch(e) {
+                console.error("Clean old passcodes error", e);
             }
 
             // Setup custom gaming banner image load-on-start
@@ -10071,53 +10069,26 @@
             }
         });
 
-        // Realtime check lock passcode PIN status for the player profile link
+        // Realtime check lock passcode PIN status for the player profile link - LOCK/PIN BYPASSED & DISABLED COMPLETELY AS REQUESTED BY THE USER
         db.ref(`userPasscodes/${myName}`).on('value', (snap) => {
-            if (myName !== 'immu') {
-                // Pin option is solely reserved for immu, skip entirely for other profiles
-                serverLoadedPin = null;
-                hidePasscodeLockGate();
-                activatePresenceConnection();
-                return;
+            serverLoadedPin = null;
+            pinBypassed = true;
+            hidePasscodeLockGate();
+            activatePresenceConnection();
+            
+            // Clean up any old passcode entries silently in background
+            try {
+                db.ref(`userPasscodes/${myName}`).remove();
+            } catch(e) {}
+
+            const statusBadge = document.getElementById('pinStatusText');
+            if (statusBadge) {
+                statusBadge.innerText = "UNLOCKED / PUBLIC";
+                statusBadge.className = "text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider hidden";
             }
-            const pinVal = snap.val();
-            if (pinVal) {
-                serverLoadedPin = String(pinVal).trim();
-                
-                // Update lobby PIN status interactive UI elements
-                const statusBadge = document.getElementById('pinStatusText');
-                if (statusBadge) {
-                    statusBadge.innerText = "LOCKED / SECURED";
-                    statusBadge.className = "text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-black uppercase tracking-wider";
-                }
-                const btnToggle = document.getElementById('btnTogglePinLock');
-                if (btnToggle) {
-                    btnToggle.innerHTML = `<i data-lucide="unlock-keyhole" class="w-3.5 h-3.5 text-rose-450"></i> REMOVE SECURE LOCK`;
-                }
-
-                // If not already unlocked, trigger passcode entry gate modal overlay open
-                if (!pinBypassed) {
-                    showPasscodeLockGate();
-                } else {
-                    activatePresenceConnection();
-                }
-            } else {
-                serverLoadedPin = null;
-                
-                // Update lobby PIN status interactive UI elements
-                const statusBadge = document.getElementById('pinStatusText');
-                if (statusBadge) {
-                    statusBadge.innerText = "UNLOCKED / PUBLIC";
-                    statusBadge.className = "text-[8px] bg-red-500/10 border border-red-500/20 text-red-500 px-2 py-0.5 rounded-full font-black uppercase tracking-wider";
-                }
-                const btnToggle = document.getElementById('btnTogglePinLock');
-                if (btnToggle) {
-                    btnToggle.innerHTML = `<i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-450"></i> SECURE THIS LINK`;
-                }
-
-                // Empty passcode: reveal portal & announce presence automatically!
-                hidePasscodeLockGate();
-                activatePresenceConnection();
+            const btnToggle = document.getElementById('btnTogglePinLock');
+            if (btnToggle) {
+                btnToggle.classList.add('hidden');
             }
             if (typeof lucide !== 'undefined' && lucide.createIcons) {
                 lucide.createIcons();
