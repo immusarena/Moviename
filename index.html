@@ -473,7 +473,7 @@
             </div>
 
             <!-- PASSCODE / PIN SECURED ACCESS GATE CONFIGURATION CARD -->
-            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-3 font-sans relative overflow-hidden">
+            <div id="pinSecurityConfigCard" class="glass-card rounded-2xl p-5 shadow-2xl space-y-3 font-sans relative overflow-hidden">
                 <!-- Sleek bottom border highlight -->
                 <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 opacity-60"></div>
                 <div class="flex items-center justify-between">
@@ -1553,13 +1553,124 @@
                         <span id="musicVolValueLabel" class="text-[9px] text-stone-400 font-black font-mono w-6 text-right">80%</span>
                     </div>
 
-                    <!-- Dynamic Preset Playlist Section for Audio - Replaced with Recently Played List -->
-                    <div id="audioPlaylistSection" class="mt-4 text-left space-y-2 select-none">
-                        <div class="flex justify-between items-center pl-1 pr-1">
-                            <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block">RECENTLY PLAYED SOUNDTRACKS</span>
-                            <button onclick="clearRecentlyPlayedHistory()" class="text-[8px] text-stone-500 hover:text-rose-400 font-extrabold uppercase tracking-wider cursor-pointer transition-colors">CLEAR HISTORY</button>
+                    <!-- Premium Tabs for Jukebox, DJ Pad & Synced Ambiences -->
+                    <div class="flex bg-white/5 p-1 rounded-xl border border-white/5 select-none my-3">
+                        <button onclick="switchLoungeTab('jukebox')" id="loungeTabBtn_jukebox" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-md border border-pink-550">
+                            <i data-lucide="disc" class="w-3 h-3"></i> JUKEBOX
+                        </button>
+                        <button onclick="switchLoungeTab('djpad')" id="loungeTabBtn_djpad" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white">
+                            <i data-lucide="music-4" class="w-3 h-3"></i> DJ PAD
+                        </button>
+                        <button onclick="switchLoungeTab('vibe')" id="loungeTabBtn_vibe" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white">
+                            <i data-lucide="sparkles" class="w-3 h-3"></i> AMBIENCE
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Preset Playlist Section for Audio - Replaced with 3-tab dashboard -->
+                    <div id="audioPlaylistSection" class="mt-4 text-left space-y-4 select-none">
+                        <!-- Tab 1: JUKEBOX -->
+                        <div id="loungeTab_jukebox" class="space-y-3 text-left">
+                            <div class="space-y-2">
+                                <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block pl-1">PREM-CRAFTED CO-OP JUKEBOX</span>
+                                <div id="songsPresetGridList" class="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1"></div>
+                            </div>
+                            
+                            <div class="space-y-2 pt-2 border-t border-white/5">
+                                <div class="flex justify-between items-center pl-1 pr-1">
+                                    <span class="text-[9px] text-[#FF7694] font-black tracking-widest uppercase block">RECENTLY PLAYED SOUNDTRACKS</span>
+                                    <button onclick="clearRecentlyPlayedHistory()" class="text-[8px] text-stone-500 hover:text-rose-450 uppercase font-extrabold tracking-wider cursor-pointer transition-colors">CLEAR HISTORY</button>
+                                </div>
+                                <div id="recentlyPlayedGridList" class="grid grid-cols-1 gap-2 max-h-[120px] overflow-y-auto pr-1"></div>
+                            </div>
                         </div>
-                        <div id="recentlyPlayedGridList" class="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1"></div>
+
+                        <!-- Tab 2: DJ SOUNDBOARD -->
+                        <div id="loungeTab_djpad" class="hidden space-y-3 text-left">
+                            <div class="flex justify-between items-center pb-1 pl-1">
+                                <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block">MULTIPLAYER DJ SFX PAD</span>
+                                <span class="text-[8px] text-stone-500 font-extrabold font-mono uppercase tracking-wider">REALTIME JAM SYSTEM</span>
+                            </div>
+                            <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-1">
+                                Jam together! Tapping these synth pads triggers retro synthesized beats & visual rumbles on both you and your partner's devices instantly.
+                            </p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="triggerCoopDJBeat('beatdrop')" class="flex items-center gap-2 p-3 bg-blue-500/10 hover:bg-blue-500/20 active:scale-95 duration-150 border border-blue-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-2 rounded bg-blue-500/25 text-blue-400 group-hover:bg-blue-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">⚡</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">BEAT DROP</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">DEEP TECH BASS</span>
+                                    </div>
+                                </button>
+                                <button onclick="triggerCoopDJBeat('laser')" class="flex items-center gap-2 p-3 bg-pink-500/10 hover:bg-pink-500/20 active:scale-95 duration-150 border border-pink-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-2 rounded bg-pink-500/25 text-pink-400 group-hover:bg-pink-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🔫</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">RETRO LASER</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">SWEEP SYNTH</span>
+                                    </div>
+                                </button>
+                                <button onclick="triggerCoopDJBeat('chime')" class="flex items-center gap-2 p-3 bg-green-500/10 hover:bg-green-500/20 active:scale-95 duration-150 border border-green-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-1.5 rounded bg-green-500/25 text-green-400 group-hover:bg-green-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎐</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">DREAM CHIME</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">GLASS BELLS</span>
+                                    </div>
+                                </button>
+                                <button onclick="triggerCoopDJBeat('snare')" class="flex items-center gap-2 p-3 bg-purple-500/10 hover:bg-purple-500/20 active:scale-95 duration-150 border border-purple-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-2 rounded bg-purple-500/25 text-purple-400 group-hover:bg-purple-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🥁</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">TECH SNARE</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">NOISE SYNTH</span>
+                                    </div>
+                                </button>
+                                <button onclick="triggerCoopDJBeat('bass')" class="flex items-center gap-2 p-3 bg-amber-500/10 hover:bg-amber-500/20 active:scale-95 duration-150 border border-amber-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-2 rounded bg-amber-500/25 text-amber-400 group-hover:bg-amber-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎸</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">SUB BASS</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">WARM CHORD</span>
+                                    </div>
+                                </button>
+                                <button onclick="triggerCoopDJBeat('scratch')" class="flex items-center gap-2 p-3 bg-cyan-500/10 hover:bg-cyan-500/20 active:scale-95 duration-150 border border-cyan-500/20 rounded-xl text-left cursor-pointer group">
+                                    <span class="p-1 px-1.5 rounded bg-cyan-500/25 text-cyan-400 group-hover:bg-cyan-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎧</span>
+                                    <div>
+                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">VINYL CUT</span>
+                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">SCRATCH GLIDE</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: ROOM AMBIENCE -->
+                        <div id="loungeTab_vibe" class="hidden space-y-3 text-left">
+                            <div class="flex justify-between items-center pb-1 pl-1">
+                                <span class="text-[9px] text-[#FF4B72] font-black tracking-widest uppercase block">SYNC LOBBY ATMOSPHERE</span>
+                                <span id="syncedThemeBadge" class="text-[8px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded font-black font-mono tracking-wider uppercase">STARDUST</span>
+                            </div>
+                            <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-1">
+                                Shift the atmosphere of the entire portal together in real-time! Tapping a vibe preset applies premium color themes and custom canvas motion parameters to both users simultaneously.
+                            </p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="triggerSharedAmbienceMood('lofi_study')" class="p-3 bg-[#0c1015]/80 hover:bg-[#0c1015] border border-blue-500/35 hover:border-blue-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
+                                    <span class="text-[14px]">🌧️</span>
+                                    <span class="text-[10px] font-black text-blue-400 uppercase tracking-wide mt-2">RAINY STUDY</span>
+                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">COOL BLUE RAIN</span>
+                                </button>
+                                <button onclick="triggerSharedAmbienceMood('cyber_tokyo')" class="p-3 bg-[#0d011a]/80 hover:bg-[#0d011a] border border-fuchsia-500/35 hover:border-fuchsia-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
+                                    <span class="text-[14px]">🌌</span>
+                                    <span class="text-[10px] font-black text-fuchsia-400 uppercase tracking-wide mt-2">CYBER TOKYO</span>
+                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">NEON GLITCH</span>
+                                </button>
+                                <button onclick="triggerSharedAmbienceMood('cozy_fire')" class="p-3 bg-[#110402]/80 hover:bg-[#110402] border border-orange-500/35 hover:border-orange-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
+                                    <span class="text-[14px]">🔥</span>
+                                    <span class="text-[10px] font-black text-orange-400 uppercase tracking-wide mt-2">COZY FIREPLACE</span>
+                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">EMBERS UPWARD</span>
+                                </button>
+                                <button onclick="triggerSharedAmbienceMood('cosmic_dust')" class="p-3 bg-[#020211]/80 hover:bg-[#020211] border border-violet-500/35 hover:border-violet-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
+                                    <span class="text-[14px]">✨</span>
+                                    <span class="text-[10px] font-black text-violet-400 uppercase tracking-wide mt-2">COSMIC DUST</span>
+                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">STARDUST SPARK</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Co-op Synchronized Audio Stream Mode Selector - MX Player & VLC Style Audio Track Swapper -->
@@ -1764,63 +1875,193 @@
             <div class="pt-1.5 border-t border-white/5 shrink-0 relative mt-auto space-y-2">
                 
                 <!-- fast emojis trigger list drawer -->
-                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[320px] max-h-[220px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3.5 z-30 shadow-2xl border border-white/15">
-                    <span class="text-[8.5px] text-pink-400 font-extrabold tracking-widest block uppercase text-center font-mono mb-2">
-                        ✨ CLICK TO BLAST EMOJI ✨
-                    </span>
-                    <div class="flex flex-wrap gap-2.5 justify-center pt-0.5">
-                        <button onclick="dispatchChatMessage('🔥')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🔥 blast">🔥</button>
-                        <button onclick="dispatchChatMessage('❤️')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated ❤️ blast">❤️</button>
-                        <button onclick="dispatchChatMessage('😂')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😂 blast">😂</button>
-                        <button onclick="dispatchChatMessage('🎉')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🎉 blast">🎉</button>
-                        <button onclick="dispatchChatMessage('🚀')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🚀 blast">🚀</button>
-                        <button onclick="dispatchChatMessage('😈')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😈 blast">😈</button>
-                        <button onclick="dispatchChatMessage('💡')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 💡 blast">💡</button>
-                        <button onclick="dispatchChatMessage('🤨')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤨 blast">🤨</button>
-                        <button onclick="dispatchChatMessage('🤑')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤑 blast">🤑</button>
-                        <button onclick="dispatchChatMessage('😌')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😌 blast">😌</button>
-                        <button onclick="dispatchChatMessage('😉')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😉 blast">😉</button>
-                        <button onclick="dispatchChatMessage('😢')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😢 blast">😢</button>
-                        <button onclick="dispatchChatMessage('😊')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😊 blast">😊</button>
-                        <button onclick="dispatchChatMessage('🤩')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤩 blast">🤩</button>
-                        <button onclick="dispatchChatMessage('💯')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 💯 blast">💯</button>
-                        <button onclick="dispatchChatMessage('🤐')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤐 blast">🤐</button>
-                        <button onclick="dispatchChatMessage('👀')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 👀 blast">👀</button>
-                        <button onclick="dispatchChatMessage('🥰')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🥰 blast">🥰</button>
-                        <button onclick="dispatchChatMessage('😡')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😡 blast">😡</button>
-                        <button onclick="dispatchChatMessage('😘')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😘 blast">😘</button>
-                        <button onclick="dispatchChatMessage('🥶')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🥶 blast">🥶</button>
-                        <button onclick="dispatchChatMessage('🤤')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤤 blast">🤤</button>
-                        <button onclick="dispatchChatMessage('😱')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😱 blast">😱</button>
-                        <button onclick="dispatchChatMessage('😜')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😜 blast">😜</button>
-                        <button onclick="dispatchChatMessage('😋')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😋 blast">😋</button>
-                        <button onclick="dispatchChatMessage('😵')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😵 blast">😵</button>
-                        <div class="w-full border-t border-white/5 my-1"></div>
-                        <button onclick="dispatchChatMessage('🥺')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🥺</button>
-                        <button onclick="dispatchChatMessage('👍')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👍</button>
-                        <button onclick="dispatchChatMessage('👎')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👎</button>
-                        <button onclick="dispatchChatMessage('✨')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">✨</button>
-                        <button onclick="dispatchChatMessage('💀')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">💀</button>
-                        <button onclick="dispatchChatMessage('👏')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👏</button>
-                        <button onclick="dispatchChatMessage('😍')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😍</button>
-                        <button onclick="dispatchChatMessage('🤪')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤪</button>
-                        <button onclick="dispatchChatMessage('😎')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">😎</button>
-                        <button onclick="dispatchChatMessage('🤔')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤔</button>
-                        <button onclick="dispatchChatMessage('🤫')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤫</button>
-                        <button onclick="dispatchChatMessage('🥵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🥵</button>
-                        <button onclick="dispatchChatMessage('🤩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤩</button>
-                        <button onclick="dispatchChatMessage('🤯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤯</button>
-                        <button onclick="dispatchChatMessage('🤡')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤡</button>
-                        <button onclick="dispatchChatMessage('💩')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">💩</button>
-                        <button onclick="dispatchChatMessage('🙈')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🙈</button>
-                        <button onclick="dispatchChatMessage('🍿')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🍿</button>
-                        <button onclick="dispatchChatMessage('🎵')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎵</button>
-                        <button onclick="dispatchChatMessage('⚔️')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">⚔️</button>
-                        <button onclick="dispatchChatMessage('👑')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">👑</button>
-                        <button onclick="dispatchChatMessage('🤖')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🤖</button>
-                        <button onclick="dispatchChatMessage('🎯')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎯</button>
-                        <button onclick="dispatchChatMessage('🎲')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🎲</button>
-                        <button onclick="dispatchChatMessage('🦾')" class="text-xl hover:scale-125 transition-transform duration-100 cursor-pointer">🦾</button>
+                <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[340px] max-h-[260px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3 z-30 shadow-2xl border border-white/10 flex flex-col gap-2.5 animate-slideIn">
+                    <!-- Tab Headers -->
+                    <div class="flex border-b border-white/5 select-none shrink-0" id="emojiDrawerTabs">
+                        <button onclick="switchEmojiTab('lotties')" id="emojiTabBtn_lotties" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-pink-500 border-b-2 border-pink-500 pb-1.5 transition-all cursor-pointer">
+                            ⚡ BLASTS
+                        </button>
+                        <button onclick="switchEmojiTab('stickers')" id="emojiTabBtn_stickers" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer">
+                            👾 STICKERS
+                        </button>
+                        <button onclick="switchEmojiTab('more')" id="emojiTabBtn_more" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer">
+                            😀 MORE
+                        </button>
+                    </div>
+
+                    <!-- Tab Content: Lotties -->
+                    <div id="emojiTab_lotties" class="flex flex-wrap gap-1.5 justify-center py-1.5 overflow-y-auto max-h-[190px] scrollbar-thin">
+                        <button onclick="dispatchChatMessage('🔥')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🔥 blast">🔥</button>
+                        <button onclick="dispatchChatMessage('❤️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated ❤️ blast">❤️</button>
+                        <button onclick="dispatchChatMessage('😂')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😂 blast">😂</button>
+                        <button onclick="dispatchChatMessage('🎉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🎉 blast">🎉</button>
+                        <button onclick="dispatchChatMessage('🚀')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🚀 blast">🚀</button>
+                        <button onclick="dispatchChatMessage('😈')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😈 blast">😈</button>
+                        <button onclick="dispatchChatMessage('💡')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 💡 blast">💡</button>
+                        <button onclick="dispatchChatMessage('🤨')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤨 blast">🤨</button>
+                        <button onclick="dispatchChatMessage('🤑')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤑 blast">🤑</button>
+                        <button onclick="dispatchChatMessage('😌')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😌 blast">😌</button>
+                        <button onclick="dispatchChatMessage('😉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😉 blast">😉</button>
+                        <button onclick="dispatchChatMessage('😢')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😢 blast">😢</button>
+                        <button onclick="dispatchChatMessage('😊')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😊 blast">😊</button>
+                        <button onclick="dispatchChatMessage('🤩')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤩 blast">🤩</button>
+                        <button onclick="dispatchChatMessage('💯')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 💯 blast">💯</button>
+                        <button onclick="dispatchChatMessage('🤐')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤐 blast">🤐</button>
+                        <button onclick="dispatchChatMessage('👀')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 👀 blast">👀</button>
+                        <button onclick="dispatchChatMessage('🥰')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🥰 blast">🥰</button>
+                        <button onclick="dispatchChatMessage('😡')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😡 blast">😡</button>
+                        <button onclick="dispatchChatMessage('😘')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😘 blast">😘</button>
+                        <button onclick="dispatchChatMessage('🥶')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🥶 blast">🥶</button>
+                        <button onclick="dispatchChatMessage('🤤')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤤 blast">🤤</button>
+                        <button onclick="dispatchChatMessage('😱')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😱 blast">😱</button>
+                        <button onclick="dispatchChatMessage('😜')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😜 blast">😜</button>
+                        <button onclick="dispatchChatMessage('😋')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😋 blast">😋</button>
+                        <button onclick="dispatchChatMessage('😵')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😵 blast">😵</button>
+                    </div>  
+
+                    <!-- Tab Content: Custom Game-Themed Stickers -->
+                    <div id="emojiTab_stickers" class="hidden flex flex-col gap-1.5 py-1 overflow-y-auto max-h-[300px] scrollbar-thin">
+                        <span class="text-[7.5px] font-bold text-stone-500 uppercase tracking-widest text-center block mb-1">EPIC GAME-THEMED STICKERS</span>
+                        <div class="grid grid-cols-2 gap-1.5 p-0.5">
+                            <button onclick="dispatchChatMessage('[STICKER_SPADES]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-amber-500/10 hover:border-amber-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">♠️</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-amber-400 uppercase tracking-wider">CARDS MASTER</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">TRUMP ATTACK</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_SOLVER]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-pink-500/10 hover:border-pink-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">🎬</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-pink-400 uppercase tracking-wider">MOVIE GENIUS</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">SOLVER BADGE</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_SPEED]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-emerald-500/10 hover:border-emerald-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">⚡</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-emerald-400 uppercase tracking-wider">SPEED DEMON</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">LIGHTNING PACE</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_CODE]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-violet-500/10 hover:border-violet-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">💻</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-violet-400 uppercase tracking-wider">CODE MONARCH</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">MAIN HACKER</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_DJ]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-rose-500/10 hover:border-rose-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">🎧</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-rose-400 uppercase tracking-wider">SYNC JAMMER</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">BEAT DROP DJ</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_LEGEND]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-yellow-500/10 hover:border-yellow-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left group">
+                                <span class="text-lg">🏆</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-yellow-400 uppercase tracking-wider">CO-OP HERO</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">GOLD SYNERGY</span>
+                                </div>
+                            </button>
+                            <button onclick="dispatchChatMessage('[STICKER_VS]', true)" class="flex items-center gap-2 p-1.5 bg-stone-900/80 hover:bg-red-500/10 hover:border-red-500/30 border border-white/5 rounded-xl transition-all cursor-pointer text-left col-span-2 group">
+                                <span class="text-lg ml-1">⚔️</span>
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[7px] font-black text-red-500 uppercase tracking-wider">EPIC SHOWDOWN</span>
+                                    <span class="text-[5.5px] font-bold text-stone-400 uppercase tracking-wider">SABRES CLASH IN HEAVY RAGE</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Personal Sticker Maker Panel Section -->
+                        <div class="mt-2.5 pt-2.5 border-t border-white/10 flex flex-col gap-1.5 text-[8px] text-stone-400 font-extrabold font-mono tracking-wider">
+                            <span class="text-pink-400 text-center text-[7.5px] font-black uppercase tracking-widest block">🎨 REAL-TIME STICKER STYLE GENERATOR</span>
+                            <div class="space-y-1.5 mt-1 px-1">
+                                <!-- Title Input -->
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="shrink-0 text-stone-500 text-[7px]">TITLE:</span>
+                                    <input type="text" id="stickerMaker_title" placeholder="e.g. MONSTER MATCH" maxlength="20" class="flex-1 bg-stone-950 border border-white/5 rounded px-2 py-1 text-[8px] uppercase font-bold text-stone-100 tracking-widest focus:outline-none focus:border-pink-500 placeholder-stone-700">
+                                </div>
+                                <!-- Description Input -->
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="shrink-0 text-stone-500 text-[7px]">DESC:</span>
+                                    <input type="text" id="stickerMaker_desc" placeholder="e.g. CLEAN MVP STREAK" maxlength="30" class="flex-1 bg-stone-950 border border-white/5 rounded px-2 py-1 text-[8px] uppercase font-bold text-stone-100 tracking-wider focus:outline-none focus:border-pink-500 placeholder-stone-700">
+                                </div>
+                                <!-- Template Style Selector -->
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="shrink-0 text-stone-500 text-[7px]">STYLE:</span>
+                                    <select id="stickerMaker_style" class="flex-1 bg-stone-950 border border-white/5 rounded px-1.5 py-1 text-[8px] font-bold text-pink-400 tracking-wider focus:outline-none">
+                                        <option value="SPADES">♠️ SPADES (AMBER)</option>
+                                        <option value="SOLVER">🎬 MOVIE (PINK)</option>
+                                        <option value="SPEED">⚡ SPEED (EMERALD)</option>
+                                        <option value="CODE">💻 CODE (VIOLET)</option>
+                                        <option value="DJ">🎧 MUSIC (ROSE)</option>
+                                        <option value="LEGEND">🏆 HERO (YELLOW)</option>
+                                        <option value="VS">⚔️ CLASH (RED)</option>
+                                    </select>
+                                </div>
+                                <!-- Trigger Button -->
+                                <button onclick="sendCustomPersonalizedSticker()" class="w-full text-center py-1.5 mt-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-black rounded-lg cursor-pointer transition-all hover:scale-[1.01] hover:brightness-110 active:scale-95 uppercase tracking-widest text-[8px] shadow-sm">
+                                    ⚡ BLAST CUSTOM STICKER ⚡
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: More Standard Emojis (Wider Range!) -->
+                    <div id="emojiTab_more" class="hidden flex flex-wrap gap-1.5 justify-center py-1.5 overflow-y-auto max-h-[190px] scrollbar-thin">
+                        <button onclick="dispatchChatMessage('🥺')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🥺</button>
+                        <button onclick="dispatchChatMessage('👍')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👍</button>
+                        <button onclick="dispatchChatMessage('👎')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👎</button>
+                        <button onclick="dispatchChatMessage('✨')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">✨</button>
+                        <button onclick="dispatchChatMessage('💀')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">💀</button>
+                        <button onclick="dispatchChatMessage('👏')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👏</button>
+                        <button onclick="dispatchChatMessage('😍')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">😍</button>
+                        <button onclick="dispatchChatMessage('🤪')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤪</button>
+                        <button onclick="dispatchChatMessage('😎')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">😎</button>
+                        <button onclick="dispatchChatMessage('🤔')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤔</button>
+                        <button onclick="dispatchChatMessage('🤫')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤫</button>
+                        <button onclick="dispatchChatMessage('🥵')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🥵</button>
+                        <button onclick="dispatchChatMessage('🤩')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤩</button>
+                        <button onclick="dispatchChatMessage('🤯')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤯</button>
+                        <button onclick="dispatchChatMessage('🤡')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤡</button>
+                        <button onclick="dispatchChatMessage('💩')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">💩</button>
+                        <button onclick="dispatchChatMessage('🙈')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🙈</button>
+                        <button onclick="dispatchChatMessage('🍿')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🍿</button>
+                        <button onclick="dispatchChatMessage('🎵')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎵</button>
+                        <button onclick="dispatchChatMessage('⚔️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">⚔️</button>
+                        <button onclick="dispatchChatMessage('👑')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👑</button>
+                        <button onclick="dispatchChatMessage('🤖')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🤖</button>
+                        <button onclick="dispatchChatMessage('🎯')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎯</button>
+                        <button onclick="dispatchChatMessage('🎲')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎲</button>
+                        <button onclick="dispatchChatMessage('🦾')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🦾</button>
+                        
+                        <!-- Extra wider range of emojis -->
+                        <button onclick="dispatchChatMessage('🐱')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🐱</button>
+                        <button onclick="dispatchChatMessage('🦄')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🦄</button>
+                        <button onclick="dispatchChatMessage('👾')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👾</button>
+                        <button onclick="dispatchChatMessage('🎮')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎮</button>
+                        <button onclick="dispatchChatMessage('🎧')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎧</button>
+                        <button onclick="dispatchChatMessage('💿')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">💿</button>
+                        <button onclick="dispatchChatMessage('🎙️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎙️</button>
+                        <button onclick="dispatchChatMessage('🎨')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎨</button>
+                        <button onclick="dispatchChatMessage('🎬')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎬</button>
+                        <button onclick="dispatchChatMessage('🎟️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎟️</button>
+                        <button onclick="dispatchChatMessage('🏆')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🏆</button>
+                        <button onclick="dispatchChatMessage('🎖️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎖️</button>
+                        <button onclick="dispatchChatMessage('🥇')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🥇</button>
+                        <button onclick="dispatchChatMessage('🌟')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🌟</button>
+                        <button onclick="dispatchChatMessage('💥')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">💥</button>
+                        <button onclick="dispatchChatMessage('🍕')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🍕</button>
+                        <button onclick="dispatchChatMessage('🍔')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🍔</button>
+                        <button onclick="dispatchChatMessage('🍟')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🍟</button>
+                        <button onclick="dispatchChatMessage('🍩')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🍩</button>
+                        <button onclick="dispatchChatMessage('☕')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">☕</button>
+                        <button onclick="dispatchChatMessage('🌍')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🌍</button>
+                        <button onclick="dispatchChatMessage('👽')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👽</button>
+                        <button onclick="dispatchChatMessage('👻')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">👻</button>
+                        <button onclick="dispatchChatMessage('🎃')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none">🎃</button>
                     </div>
                 </div>
             </div>
@@ -2116,6 +2357,7 @@
         const urlArgs = new URLSearchParams(window.location.search);
         const myName = (urlArgs.get('u') || "immu").trim().toLowerCase();
         let partnerName = (myName === "immu") ? "sappii" : "immu";
+        var activeAmbientMood = 'stardust';
 
         let tharkuriCustomName = "THARKURI";
         let tharkuriProfileSeed = "Tharkuri";
@@ -2263,15 +2505,44 @@
             canvas.height = window.innerHeight;
             particles = [];
             let cap = Math.min(45, Math.floor((canvas.width * canvas.height) / 18000));
+            pColor1 = getComputedStyle(document.documentElement).getPropertyValue('--primary-color').trim();
+            pColor2 = getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+
             for (let i = 0; i < cap; i++) {
+                let speedX, speedY, size, op;
+                const moodType = (typeof activeAmbientMood !== 'undefined') ? activeAmbientMood : 'cosmic_dust';
+                
+                if (moodType === 'lofi_study') {
+                    speedX = (Math.random() * 0.1 - 0.05) - 0.35;
+                    speedY = Math.random() * 1.5 + 2.0; 
+                    size = Math.random() * 1.0 + 0.8;
+                    op = Math.random() * 0.35 + 0.15;
+                } else if (moodType === 'cyber_tokyo') {
+                    speedX = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 1.0 + 0.5);
+                    speedY = Math.random() * 0.1 - 0.05;
+                    size = Math.random() * 3.0 + 1.2;
+                    op = Math.random() * 0.45 + 0.15;
+                } else if (moodType === 'cozy_fire') {
+                    speedX = Math.random() * 0.3 - 0.15;
+                    speedY = -(Math.random() * 0.8 + 0.4); 
+                    size = Math.random() * 3.5 + 1.2;
+                    op = Math.random() * 0.6 + 0.2;
+                } else {
+                    speedX = Math.random() * 0.2 - 0.1;
+                    speedY = Math.random() * 0.2 - 0.1;
+                    size = Math.random() * 2.5 + 1.0;
+                    op = Math.random() * 0.5 + 0.15;
+                }
+
                 particles.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    sz: Math.random() * 2 + 1,
-                    dx: Math.random() * 0.3 - 0.15,
-                    dy: Math.random() * 0.3 - 0.15,
+                    sz: size,
+                    dx: speedX,
+                    dy: speedY,
                     col: Math.random() > 0.5 ? pColor1 : pColor2,
-                    op: Math.random() * 0.5 + 0.1
+                    op: op,
+                    phase: Math.random() * Math.PI * 2
                 });
             }
         }
@@ -2283,6 +2554,16 @@
             particles.forEach(p => {
                 p.x += p.dx;
                 p.y += p.dy;
+
+                const moodType = (typeof activeAmbientMood !== 'undefined') ? activeAmbientMood : 'cosmic_dust';
+                if (moodType === 'cozy_fire') {
+                    p.phase += 0.012;
+                    p.x += Math.sin(p.phase) * 0.12;
+                } else if (moodType === 'lofi_study') {
+                    p.phase += 0.02;
+                    p.dx = -0.35 + Math.sin(p.phase) * 0.04;
+                }
+
                 if (p.x < 0) p.x = canvas.width;
                 if (p.x > canvas.width) p.x = 0;
                 if (p.y < 0) p.y = canvas.height;
@@ -2291,11 +2572,21 @@
                 ctx.save();
                 ctx.globalAlpha = p.op;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
-                ctx.fillStyle = p.col;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = p.col;
-                ctx.fill();
+                
+                if (moodType === 'lofi_study') {
+                    ctx.lineTo(p.x, p.y);
+                    ctx.lineTo(p.x + p.dx * 6, p.y + p.dy * 6);
+                    ctx.strokeStyle = p.col;
+                    ctx.lineWidth = p.sz;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+                } else {
+                    ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+                    ctx.fillStyle = p.col;
+                    ctx.shadowBlur = moodType === 'cyber_tokyo' ? 12 : 6;
+                    ctx.shadowColor = p.col;
+                    ctx.fill();
+                }
                 ctx.restore();
             });
             requestAnimationFrame(animateCanvasParticles);
@@ -2380,7 +2671,7 @@
                 }
                 renderSpadesScreen();
             } else if (activeGame === 'songs') {
-                badge.innerText = "MUSIC LOUNGE";
+                badge.innerText = "MUSIC LOUNGE & CO-OP SANCTUARY";
                 badge.style.color = "var(--primary-color)";
                 if (songsNode) songsNode.classList.remove('hidden');
                 if (lblA && lblB) {
@@ -2389,6 +2680,8 @@
                     lblB.innerText = "JAMMING";
                 }
                 renderRecentlyPlayedUI();
+                renderSongsPresets();
+                switchLoungeTab('jukebox');
             }
             refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
@@ -2518,6 +2811,42 @@
         function toggleQuickEmojis() {
             const drawer = document.getElementById('quickEmojiDrawer');
             drawer.classList.toggle('hidden');
+            if (!drawer.classList.contains('hidden')) {
+                // Default to showing lotties when opened
+                switchEmojiTab('lotties');
+            }
+        }
+
+        function switchEmojiTab(tabName) {
+            const tabLotties = document.getElementById('emojiTab_lotties');
+            const tabStickers = document.getElementById('emojiTab_stickers');
+            const tabMore = document.getElementById('emojiTab_more');
+
+            if (tabLotties) tabLotties.classList.add('hidden');
+            if (tabStickers) tabStickers.classList.add('hidden');
+            if (tabMore) tabMore.classList.add('hidden');
+
+            const btnLotties = document.getElementById('emojiTabBtn_lotties');
+            const btnStickers = document.getElementById('emojiTabBtn_stickers');
+            const btnMore = document.getElementById('emojiTabBtn_more');
+
+            const inactiveCls = "flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer";
+            const activeCls = "flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-pink-500 border-b-2 border-pink-500 pb-1.5 transition-all cursor-pointer";
+
+            if (btnLotties) btnLotties.className = inactiveCls;
+            if (btnStickers) btnStickers.className = inactiveCls;
+            if (btnMore) btnMore.className = inactiveCls;
+
+            if (tabName === 'lotties') {
+                if (tabLotties) tabLotties.classList.remove('hidden');
+                if (btnLotties) btnLotties.className = activeCls;
+            } else if (tabName === 'stickers') {
+                if (tabStickers) tabStickers.classList.remove('hidden');
+                if (btnStickers) btnStickers.className = activeCls;
+            } else if (tabName === 'more') {
+                if (tabMore) tabMore.classList.remove('hidden');
+                if (btnMore) btnMore.className = activeCls;
+            }
         }
 
         let activeReplyingMessageId = null;
@@ -2583,8 +2912,34 @@
         function isCharacterEmojiOnly(msg) {
             let str = (msg || '').trim().replace(/[\uFE0F\u200D\s]/g, '');
             if (!str) return false;
+            // Also recognize custom game stickers as emoji-style single display
+            if (str.startsWith('[STICKER_') && str.endsWith(']')) return true;
+            if (str.startsWith('[CUSTOM_STICKER:') && str.endsWith(']')) return true;
             let segments = Array.from(str);
             return segments.every(ch => /[\p{Extended_Pictographic}\u2600-\u26FF\u2700-\u27BF]/u.test(ch));
+        }
+
+        function sendCustomPersonalizedSticker() {
+            const titleInput = document.getElementById('stickerMaker_title');
+            const descInput = document.getElementById('stickerMaker_desc');
+            const styleSelect = document.getElementById('stickerMaker_style');
+
+            if (!titleInput || !descInput || !styleSelect) return;
+
+            let titleStr = titleInput.value.trim().toUpperCase() || "CUSTOM STICKER";
+            let descStr = descInput.value.trim().toUpperCase() || "LUMINOUS SYNC";
+            let styleStr = styleSelect.value;
+
+            // Strip any characters that can break parsing
+            titleStr = titleStr.replace(/[|\]\[]/g, "");
+            descStr = descStr.replace(/[|\]\[]/g, "");
+
+            const rawMessageValue = `[CUSTOM_STICKER:${styleStr}|${titleStr}|${descStr}]`;
+            
+            // Dispatch and clear fields
+            dispatchChatMessage(rawMessageValue, true);
+            titleInput.value = "";
+            descInput.value = "";
         }
 
         function dispatchChatMessage(explicitTextSymbol = "", isAnimatedLottie = false) {
@@ -2623,7 +2978,7 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
-            if (isAnimatedLottie || (typeof lottieEmojiMap !== 'undefined' && lottieEmojiMap[text])) {
+            if (isAnimatedLottie || (typeof lottieEmojiMap !== 'undefined' && (lottieEmojiMap[text] || text.startsWith('[CUSTOM_STICKER:')))) {
                 payload.isLottie = true;
             }
 
@@ -2647,6 +3002,88 @@
         chatInputNode.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') dispatchChatMessage();
         });
+
+        // Custom Game-Themed Stickers Metadata Helper
+        function getStickerMeta(key) {
+            const defaultMeta = {
+                label: "LOBBY STICKER",
+                desc: "LUMINOUS SYNC",
+                gradient: "from-purple-500/30 to-purple-800/10",
+                borderColor: "border-purple-500/30 group-hover:border-purple-400/60",
+                textColor: "text-purple-400"
+            };
+
+            const stickers = {
+                '[STICKER_SPADES]': {
+                    label: "♠️ SPADES MASTER",
+                    desc: "FLAWLESS TRUMP PLAY",
+                    gradient: "from-amber-500/30 to-amber-700/10",
+                    borderColor: "border-amber-500/30 group-hover:border-amber-400/60",
+                    textColor: "text-amber-400"
+                },
+                '[STICKER_SOLVER]': {
+                    label: "🎬 MOVIE GENIUS",
+                    desc: "FIRST-TRY GUESSER",
+                    gradient: "from-pink-500/30 to-pink-700/10",
+                    borderColor: "border-pink-500/30 group-hover:border-pink-400/60",
+                    textColor: "text-pink-400"
+                },
+                '[STICKER_SPEED]': {
+                    label: "⚡ SPEED DEMON",
+                    desc: "LIGHTNING INBOUND",
+                    gradient: "from-emerald-500/30 to-emerald-700/10",
+                    borderColor: "border-emerald-500/30 group-hover:border-emerald-400/60",
+                    textColor: "text-emerald-400"
+                },
+                '[STICKER_CODE]': {
+                    label: "💻 CODE MONARCH",
+                    desc: "MAINFRAME HACKER",
+                    gradient: "from-violet-500/30 to-violet-700/10",
+                    borderColor: "border-violet-500/30 group-hover:border-violet-400/60",
+                    textColor: "text-violet-400"
+                },
+                '[STICKER_DJ]': {
+                    label: "🎧 DUO SYNC JAMMER",
+                    desc: "PERFECT RESONANCE",
+                    gradient: "from-rose-500/30 to-rose-700/10",
+                    borderColor: "border-rose-500/30 group-hover:border-rose-400/60",
+                    textColor: "text-rose-400"
+                },
+                '[STICKER_LEGEND]': {
+                    label: "🏆 CO-OP LEGEND",
+                    desc: "ULTIMATE SYNERGY",
+                    gradient: "from-yellow-400/30 to-yellow-600/10",
+                    borderColor: "border-yellow-500/30 group-hover:border-yellow-400/60",
+                    textColor: "text-yellow-400"
+                },
+                '[STICKER_VS]': {
+                    label: "⚔️ EPIC FIGHT",
+                    desc: "SABRES CLASHING",
+                    gradient: "from-red-500/30 to-red-700/10",
+                    borderColor: "border-red-500/30 group-hover:border-red-400/60",
+                    textColor: "text-red-400"
+                }
+            };
+
+            if (key.startsWith('[CUSTOM_STICKER:') && key.endsWith(']')) {
+                const inner = key.substring(16, key.length - 1);
+                const parts = inner.split('|');
+                const style = parts[0] || 'SPADES';
+                const label = (parts[1] || 'CUSTOM CARD').toUpperCase();
+                const desc = (parts[2] || 'LUMINOUS SYNC').toUpperCase();
+
+                const base = stickers['[STICKER_' + style + ']'] || defaultMeta;
+                return {
+                    label: label,
+                    desc: desc,
+                    gradient: base.gradient,
+                    borderColor: base.borderColor,
+                    textColor: base.textColor
+                };
+            }
+
+            return stickers[key] || defaultMeta;
+        }
 
         // Premium DotLottie interactive emoji assets map configurations
         const lottieEmojiMap = {
@@ -2676,7 +3113,16 @@
             '😱': 'https://lottie.host/cb180dad-3698-4482-b4d2-8873c2e341f1/SqkDVOATx3.lottie',
             '😜': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
             '😋': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
-            '😵': 'https://lottie.host/cb21d446-8410-4f06-887f-ff3ad47e3b42/mVPyn7491C.lottie'
+            '😵': 'https://lottie.host/cb21d446-8410-4f06-887f-ff3ad47e3b42/mVPyn7491C.lottie',
+
+            // Custom Game-Themed Stickers
+            '[STICKER_SPADES]': 'https://lottie.host/594a8ead-467d-478d-8bde-14d7a6a7ece7/l853nvu6yE.lottie',
+            '[STICKER_SOLVER]': 'https://lottie.host/cb180dad-3698-4482-b4d2-8873c2e341f1/SqkDVOATx3.lottie',
+            '[STICKER_SPEED]': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
+            '[STICKER_CODE]': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '[STICKER_DJ]': 'https://lottie.host/efc5d10c-5c70-4cc3-8761-208fda89fee1/Eo5T8X80vf.lottie',
+            '[STICKER_LEGEND]': 'https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie',
+            '[STICKER_VS]': 'https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie'
         };
         const lottieEmojiGlowMap = {
             '🔥': 'rgba(239, 68, 68, 0.75)',
@@ -2704,7 +3150,16 @@
             '😱': 'rgba(14, 165, 233, 0.75)',
             '😜': 'rgba(234, 179, 8, 0.75)',
             '😋': 'rgba(234, 179, 8, 0.75)',
-            '😵': 'rgba(139, 92, 246, 0.75)'
+            '😵': 'rgba(139, 92, 246, 0.75)',
+
+            // Custom Game-Themed Stickers Glows
+            '[STICKER_SPADES]': 'rgba(251, 191, 36, 0.75)',
+            '[STICKER_SOLVER]': 'rgba(236, 72, 153, 0.75)',
+            '[STICKER_SPEED]': 'rgba(52, 211, 153, 0.75)',
+            '[STICKER_CODE]': 'rgba(139, 92, 246, 0.75)',
+            '[STICKER_DJ]': 'rgba(244, 63, 94, 0.75)',
+            '[STICKER_LEGEND]': 'rgba(251, 191, 36, 0.75)',
+            '[STICKER_VS]': 'rgba(239, 68, 68, 0.75)'
         };
 
         // Sync Chat Message Logs real-time listener elements
@@ -2801,14 +3256,42 @@
 
                     messageRow.className += ` ${alignClass} py-1 group relative`;
                     
-                    let emojiDisplayHtml = `<div class="text-[44px] leading-none animate-emoji" title="Click to Copy">${data.text}</div>`;
+                    let emojiDisplayHtml = `
+                        <div class="relative flex items-center justify-center bg-[#0d0718]/80 backdrop-blur-md p-4.5 rounded-2xl border border-white/10 shadow-[0_12px_36px_rgba(0,0,0,0.6)] select-none animate-popIn w-[110px] h-[110px] group transition-all duration-300 hover:scale-115 hover:border-pink-500/40 active:scale-95" title="Copy ${data.text}">
+                            <div class="absolute inset-0.5 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-60 z-0"></div>
+                            <div class="absolute inset-3 rounded-full bg-pink-500/15 blur-xl opacity-30 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
+                            <div class="text-[42px] leading-none animate-emoji relative z-10 transition-transform group-hover:scale-110 duration-300 filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]">${data.text}</div>
+                        </div>
+                    `;
                     const trimmedText = data.text ? data.text.trim() : "";
-                    if (data.isLottie && lottieEmojiMap[trimmedText]) {
-                        emojiDisplayHtml = `
-                            <div class="relative flex items-center justify-center -my-5 select-none animate-popIn" title="Lottie ${trimmedText} Blast">
-                                <dotlottie-wc src="${lottieEmojiMap[trimmedText]}" style="width: 104px; height: 104px;" autoplay loop></dotlottie-wc>
-                            </div>
-                        `;
+                    
+                    let resolvedLottieSrc = lottieEmojiMap[trimmedText];
+                    let isCustom = trimmedText.startsWith('[CUSTOM_STICKER:') && trimmedText.endsWith(']');
+                    if (isCustom) {
+                        const styleVal = trimmedText.substring(16, trimmedText.length - 1).split('|')[0] || 'SPADES';
+                        resolvedLottieSrc = lottieEmojiMap['[STICKER_' + styleVal + ']'] || lottieEmojiMap['[STICKER_SPADES]'];
+                    }
+
+                    if (data.isLottie && resolvedLottieSrc) {
+                        if (trimmedText.startsWith('[') && trimmedText.endsWith(']')) {
+                            const stickerInfo = getStickerMeta(trimmedText);
+                            emojiDisplayHtml = `
+                                <div class="relative flex flex-col items-center bg-[#0d0718]/90 p-4.5 rounded-2xl border ${stickerInfo.borderColor} shadow-[0_12px_44px_rgba(0,0,0,0.65)] overflow-hidden select-none animate-popIn w-[160px] group transition-all duration-300 hover:scale-[1.08] active:scale-95">
+                                    <div class="absolute inset-0 bg-gradient-to-b ${stickerInfo.gradient} opacity-25"></div>
+                                    <div class="absolute inset-4 rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-300" style="background: ${lottieEmojiGlowMap[trimmedText] || 'rgba(236, 72, 153, 0.4)'}; z-index: 1;"></div>
+                                    <dotlottie-wc src="${resolvedLottieSrc}" style="width: 90px; height: 90px; z-index: 10;" autoplay loop></dotlottie-wc>
+                                    <span class="text-[8.5px] font-black tracking-widest text-center uppercase ${stickerInfo.textColor} mt-2 z-10">${stickerInfo.label}</span>
+                                    <span class="text-[6.5px] font-bold text-stone-400 mt-1.5 tracking-wider uppercase text-center leading-normal z-10">${stickerInfo.desc}</span>
+                                </div>
+                            `;
+                        } else {
+                            emojiDisplayHtml = `
+                                <div class="relative flex items-center justify-center -my-3 select-none animate-popIn group cursor-pointer transition-all duration-300 hover:scale-115" title="Lottie ${trimmedText} Blast" style="min-width: 104px; min-height: 104px;">
+                                    <div class="absolute inset-4 rounded-full opacity-35 blur-xl group-hover:opacity-75 transition-all duration-300 pointer-events-none" style="background: ${lottieEmojiGlowMap[trimmedText] || 'rgba(239, 68, 68, 0.4)'}; z-index: 1;"></div>
+                                    <dotlottie-wc src="${resolvedLottieSrc}" style="width: 108px; height: 108px; z-index: 10;" autoplay loop></dotlottie-wc>
+                                </div>
+                            `;
+                        }
                     }
 
                     messageRow.innerHTML = `
@@ -4871,6 +5354,299 @@
             };
         }
 
+        const AMBIENT_MOODS = {
+            'lofi_study': {
+                name: "🌧️ Lofi Rain Study",
+                vars: {
+                    '--bg-color': '#0c1015',
+                    '--card-bg': 'rgba(18, 25, 34, 0.72)',
+                    '--primary-color': '#3b82f6',
+                    '--secondary-color': '#60a5fa',
+                    '--accent-color': '#93c5fd',
+                    '--border-color': 'rgba(255, 255, 255, 0.08)',
+                    '--glow-color': 'rgba(37, 99, 235, 0.28)'
+                }
+            },
+            'cyber_tokyo': {
+                name: "🌌 Cyberpunk Tokyo",
+                vars: {
+                    '--bg-color': '#0d011a',
+                    '--card-bg': 'rgba(25, 4, 45, 0.74)',
+                    '--primary-color': '#f0abfc',
+                    '--secondary-color': '#e879f9',
+                    '--accent-color': '#c084fc',
+                    '--border-color': 'rgba(240, 171, 252, 0.1)',
+                    '--glow-color': 'rgba(240, 171, 252, 0.28)'
+                }
+            },
+            'cozy_fire': {
+                name: "🔥 Cozy Fireplace",
+                vars: {
+                    '--bg-color': '#110402',
+                    '--card-bg': 'rgba(34, 12, 8, 0.75)',
+                    '--primary-color': '#ea580c',
+                    '--secondary-color': '#f97316',
+                    '--accent-color': '#fed7aa',
+                    '--border-color': 'rgba(234, 88, 12, 0.08)',
+                    '--glow-color': 'rgba(234, 88, 12, 0.28)'
+                }
+            },
+            'cosmic_dust': {
+                name: "✨ Cosmic Stardust",
+                vars: {
+                    '--bg-color': '#020211',
+                    '--card-bg': 'rgba(8, 8, 35, 0.75)',
+                    '--primary-color': '#8b5cf6',
+                    '--secondary-color': '#ec4899',
+                    '--accent-color': '#10b981',
+                    '--border-color': 'rgba(139, 92, 246, 0.1)',
+                    '--glow-color': 'rgba(139, 92, 246, 0.28)'
+                }
+            }
+        };
+
+        function switchLoungeTab(tabName) {
+            const listJukebox = document.getElementById('loungeTab_jukebox');
+            const listDjpad = document.getElementById('loungeTab_djpad');
+            const listVibe = document.getElementById('loungeTab_vibe');
+
+            if (listJukebox) listJukebox.classList.add('hidden');
+            if (listDjpad) listDjpad.classList.add('hidden');
+            if (listVibe) listVibe.classList.add('hidden');
+
+            const btnJukebox = document.getElementById('loungeTabBtn_jukebox');
+            const btnDjpad = document.getElementById('loungeTabBtn_djpad');
+            const btnVibe = document.getElementById('loungeTabBtn_vibe');
+
+            const inactiveCls = "flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white";
+            const activeCls = "flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-md border border-pink-550";
+
+            if (btnJukebox) btnJukebox.className = inactiveCls;
+            if (btnDjpad) btnDjpad.className = inactiveCls;
+            if (btnVibe) btnVibe.className = inactiveCls;
+
+            if (tabName === 'jukebox') {
+                if (listJukebox) listJukebox.classList.remove('hidden');
+                if (btnJukebox) btnJukebox.className = activeCls;
+                renderSongsPresets();
+            } else if (tabName === 'djpad') {
+                if (listDjpad) listDjpad.classList.remove('hidden');
+                if (btnDjpad) btnDjpad.className = activeCls;
+            } else if (tabName === 'vibe') {
+                if (listVibe) listVibe.classList.remove('hidden');
+                if (btnVibe) btnVibe.className = activeCls;
+            }
+            if (window.lucide) window.lucide.createIcons();
+        }
+
+        function triggerCoopDJBeat(instrumentType) {
+            db.ref('coopSoundboardSync').set({
+                instrument: instrumentType,
+                triggeredBy: myName,
+                timestamp: Date.now()
+            });
+        }
+
+        function triggerSharedAmbienceMood(moodKey) {
+            db.ref('loungeAmbienceState').set({
+                moodKey: moodKey,
+                triggeredBy: myName,
+                timestamp: Date.now()
+            });
+        }
+
+        function applySharedAmbienceMood(moodKey, triggeredBy) {
+            const mood = AMBIENT_MOODS[moodKey];
+            if (!mood) return;
+
+            activeAmbientMood = moodKey;
+
+            // Apply style variables over document root
+            for (let [prop, val] of Object.entries(mood.vars)) {
+                document.documentElement.style.setProperty(prop, val);
+            }
+
+            // Sync text inside Atmosphere tab status badge
+            const synBadge = document.getElementById('syncedThemeBadge');
+            if (synBadge) {
+                synBadge.innerText = mood.name.replace(/^[^\s]+\s+/, '').toUpperCase();
+            }
+
+            // Re-init canvas sizes and color structures
+            if (typeof initCanvasParticlesColors === 'function') {
+                initCanvasParticlesColors();
+            }
+            if (typeof resizeCanvas === 'function') {
+                resizeCanvas();
+            }
+
+            const triggerUser = (triggeredBy || "System").toUpperCase();
+            triggerLiveToast(`🔮 LOUNGE ATMOSPHERE SHIFTED TO: ${mood.name.toUpperCase()} BY ${triggerUser}!`);
+        }
+
+        function playLocalDJSynth(type) {
+            try {
+                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtxClass) return;
+                const audioCtx = new AudioCtxClass();
+                const now = audioCtx.currentTime;
+
+                if (type === 'beatdrop') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(260, now);
+                    osc.frequency.exponentialRampToValueAtTime(45, now + 0.65);
+                    gain.gain.setValueAtTime(0.24, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+                    osc.start(now);
+                    osc.stop(now + 0.65);
+                } else if (type === 'laser') {
+                    const osc = audioCtx.createOscillator();
+                    const filter = audioCtx.createBiquadFilter();
+                    const gain = audioCtx.createGain();
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(850, now);
+                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.22);
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(1100, now);
+                    gain.gain.setValueAtTime(0.07, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                } else if (type === 'chime') {
+                    const chords = [440, 554.37, 659.25, 880];
+                    chords.forEach((freq, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now);
+                        const start = idx * 0.045;
+                        const dur = 0.75 - start;
+                        gain.gain.setValueAtTime(0, now);
+                        gain.gain.linearRampToValueAtTime(0.05, now + start + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + start + dur);
+                        osc.start(now + start);
+                        osc.stop(now + start + dur);
+                    });
+                } else if (type === 'snare') {
+                    const bufferSize = audioCtx.sampleRate * 0.18;
+                    const b = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const chanData = b.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        chanData[i] = Math.random() * 2 - 1;
+                    }
+                    const noise = audioCtx.createBufferSource();
+                    noise.buffer = b;
+                    const noiseFilt = audioCtx.createBiquadFilter();
+                    noiseFilt.type = 'bandpass';
+                    noiseFilt.frequency.value = 1000;
+                    const noiseGain = audioCtx.createGain();
+                    noiseGain.gain.setValueAtTime(0.12, now);
+                    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+                    noise.connect(noiseFilt);
+                    noiseFilt.connect(noiseGain);
+                    noiseGain.connect(audioCtx.destination);
+
+                    const snareOsc = audioCtx.createOscillator();
+                    const snareGain = audioCtx.createGain();
+                    snareOsc.type = 'triangle';
+                    snareOsc.frequency.setValueAtTime(180, now);
+                    snareOsc.frequency.exponentialRampToValueAtTime(95, now + 0.08);
+                    snareGain.gain.setValueAtTime(0.08, now);
+                    snareGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    snareOsc.connect(snareGain);
+                    snareGain.connect(audioCtx.destination);
+
+                    noise.start(now);
+                    snareOsc.start(now);
+                    snareOsc.stop(now + 0.15);
+                    noise.stop(now + 0.15);
+                } else if (type === 'bass') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const filter = audioCtx.createBiquadFilter();
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(65.41, now);
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(320, now);
+                    filter.frequency.exponentialRampToValueAtTime(75, now + 0.38);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+                    osc.start(now);
+                    osc.stop(now + 0.38);
+                } else if (type === 'scratch') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.linearRampToValueAtTime(750, now + 0.06);
+                    osc.frequency.linearRampToValueAtTime(180, now + 0.13);
+                    osc.frequency.linearRampToValueAtTime(580, now + 0.2);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.06, now + 0.13);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.20);
+                    osc.start(now);
+                    osc.stop(now + 0.20);
+                }
+            } catch (err) {
+                console.log("Audio synth error:", err);
+            }
+        }
+
+        function triggerLoungeDJVisualSparks(type, user) {
+            const vinyl = document.getElementById('musicVinylDisc');
+            if (vinyl) {
+                vinyl.classList.add('animate-shake');
+                setTimeout(() => vinyl.classList.remove('animate-shake'), 450);
+            }
+
+            const arena = document.getElementById('songsArena');
+            if (arena) {
+                const bubble = document.createElement('div');
+                const labelMap = {
+                    'beatdrop': '⚡ BEAT DROP',
+                    'laser': '🔫 LASER SWEEP',
+                    'chime': '🎐 DREAM CHIME',
+                    'snare': '🥁 TECH SNARE',
+                    'bass': '🎸 SUB BASS',
+                    'scratch': '🎧 VINYL CUT'
+                };
+                const emojiMap = {
+                    'beatdrop': '🔥',
+                    'laser': '👑',
+                    'chime': '💎',
+                    'snare': '🛸',
+                    'bass': '🌌',
+                    'scratch': '💥'
+                };
+                const formattedUser = (user || "Partner").toUpperCase();
+                const instrumentLabel = labelMap[type] || type.toUpperCase();
+                const decorativeEmoji = emojiMap[type] || "🎵";
+
+                bubble.className = "absolute left-1/2 -translate-x-1/2 bottom-36 bg-stone-950/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-pink-500/35 text-[9px] text-[#FF7694] font-black tracking-widest uppercase shadow-2xl z-40 animate-floatUp pointer-events-none flex items-center gap-1.5";
+                bubble.innerHTML = `<span>${decorativeEmoji}</span> ${formattedUser} JAMMED: <span class="text-white">${instrumentLabel}</span>`;
+                
+                arena.appendChild(bubble);
+                setTimeout(() => {
+                    bubble.classList.add('transition-all', 'duration-500', 'opacity-0', '-translate-y-8');
+                    setTimeout(() => bubble.remove(), 600);
+                }, 1650);
+            }
+        }
+
         const DYNAMIC_SONGS_PLAYLIST = [
             { title: "LEO - BADASS THEME", author: "Anirudh Ravichander", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
             { title: "MAANJAVE - ROMANCE HIT", author: "A.R. Rahman Melody", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
@@ -5560,6 +6336,27 @@
             }
         });
 
+        // ================= CO-OP MULTIPLAYER AMBIENCE & DJ SYNCHRONIZATION =================
+        db.ref('loungeAmbienceState').on('value', (snap) => {
+            const data = snap.val();
+            if (data && data.moodKey) {
+                applySharedAmbienceMood(data.moodKey, data.triggeredBy);
+            }
+        });
+
+        let lastHandledDJTimestamp = 0;
+        db.ref('coopSoundboardSync').on('value', (snap) => {
+            const data = snap.val();
+            if (data && data.timestamp && data.timestamp !== lastHandledDJTimestamp) {
+                lastHandledDJTimestamp = data.timestamp;
+                // Only trigger if active and generated in the last 6 seconds to prevent old action loading on startup
+                if (Date.now() - data.timestamp < 6000) {
+                    playLocalDJSynth(data.instrument);
+                    triggerLoungeDJVisualSparks(data.instrument, data.triggeredBy);
+                }
+            }
+        });
+
         // Time Updates helper
         function updateSeekBarAndLabels(node) {
             const range = document.getElementById('musicPlaybackSeekBar');
@@ -5618,6 +6415,22 @@
 
         // Delay slider event triggers till drop-release
         document.addEventListener('DOMContentLoaded', () => {
+            // Player-specific security layout configuration
+            if (myName !== 'immu') {
+                const pinCard = document.getElementById('pinSecurityConfigCard');
+                if (pinCard) {
+                    pinCard.remove();
+                }
+            } else {
+                // Keep access completely public and password-free for the other players in the database
+                try {
+                    db.ref('userPasscodes/sappii').remove();
+                    db.ref('userPasscodes/tharkuri').remove();
+                } catch(e) {
+                    console.error("Clean old passcodes error", e);
+                }
+            }
+
             // Setup custom gaming banner image load-on-start
             const gBannerImgNode = document.getElementById('gamingBannerImageNode');
             if (gBannerImgNode) {
@@ -7275,6 +8088,10 @@
         }
 
         function openChangePinModal() {
+            if (myName !== 'immu') {
+                triggerLiveToast("ERROR: ACCESS DENIED!");
+                return;
+            }
             document.getElementById('oldPinInputField').value = "";
             document.getElementById('newPinInputField').value = "";
             document.getElementById('confirmNewPinInputField').value = "";
@@ -7349,6 +8166,10 @@
         }
 
         function togglePinLockState() {
+            if (myName !== 'immu') {
+                triggerLiveToast("ERROR: ACCESS DENIED!");
+                return;
+            }
             if (serverLoadedPin) {
                 // To disable, verify current passcode
                 const promptVal = prompt("PLEASE ENTER YOUR CURRENT 4-DIGIT PIN TO MAKE THIS LINK PUBLIC:");
@@ -9217,8 +10038,12 @@
         // ================= REGISTER SECURED WEB LOBBY PERSISTENCE LISTENERS =================
 
         // Real-time connection feedback indicator listener for Firebase Realtime Database
+        let hasInitiallyConnected = false;
         db.ref('.info/connected').on('value', (snap) => {
             const isConnected = snap.val() === true;
+            if (isConnected) {
+                hasInitiallyConnected = true;
+            }
             const badge = document.getElementById('chatDbConnBadge');
             if (badge) {
                 if (isConnected) {
@@ -9227,7 +10052,10 @@
                 } else {
                     badge.className = "flex items-center gap-1 bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest text-red-500 transition-all duration-300 shrink-0 animate-shake";
                     badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping shrink-0"></span><span>DISCONNECTED</span>`;
-                    triggerLiveToast("WARNING: DATABASE CONNECTION INTERRUPTED!");
+                    // Only trigger toast warning if we had connected first and then lost the signal
+                    if (hasInitiallyConnected) {
+                        triggerLiveToast("WARNING: DATABASE CONNECTION INTERRUPTED!");
+                    }
                 }
             }
         });
@@ -9245,6 +10073,13 @@
 
         // Realtime check lock passcode PIN status for the player profile link
         db.ref(`userPasscodes/${myName}`).on('value', (snap) => {
+            if (myName !== 'immu') {
+                // Pin option is solely reserved for immu, skip entirely for other profiles
+                serverLoadedPin = null;
+                hidePasscodeLockGate();
+                activatePresenceConnection();
+                return;
+            }
             const pinVal = snap.val();
             if (pinVal) {
                 serverLoadedPin = String(pinVal).trim();
