@@ -116,6 +116,22 @@
             0% { transform: translateX(100%); opacity: 0; }
             100% { transform: translateX(0); opacity: 1; }
         }
+        @keyframes messageArrival {
+            0% {
+                transform: translateY(16px) scale(0.96);
+                opacity: 0;
+                filter: brightness(1.1);
+            }
+            60% {
+                transform: translateY(-2px) scale(1.01);
+                opacity: 0.95;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
         @keyframes emojiBlast {
             0% { transform: scale(0.2) rotate(-20deg); opacity: 0; }
             45% { transform: scale(1.4) rotate(15deg); }
@@ -130,6 +146,10 @@
         .animate-popIn { animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
         .animate-floatUp { animation: floatUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-slideIn { animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-message-arrival {
+            animation: messageArrival 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: center bottom;
+        }
         .animate-emoji { animation: emojiBlast 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, emojiFloat 2.5s ease-in-out infinite alternate 0.5s; }
 
         @keyframes shake {
@@ -245,6 +265,51 @@
     <!-- Dynamic Premium Backdrop Ambient Glow circles -->
     <div class="fixed top-1/4 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full bg-[var(--primary-color)] opacity-20 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
     <div class="fixed bottom-1/4 translate-y-1/2 left-1/2 -translate-x-1/2 w-[285px] h-[285px] rounded-full bg-[var(--accent-color)] opacity-10 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
+
+    <!-- Fireworks Celebration Overlay -->
+    <div id="movieFireworksOverlay" class="fixed inset-0 pointer-events-none z-50 flex items-center justify-center hidden bg-black/60 backdrop-blur-[2px] transition-all duration-500 opacity-0">
+        <!-- Canvas for dynamic particle fireworks -->
+        <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        
+        <div class="relative flex flex-col items-center justify-center pointer-events-auto z-10">
+            
+            <!-- Left burst (Lottie Confetti) -->
+            <div class="absolute -left-20 md:-left-40 top-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[350px] md:h-[350px] opacity-95 pointer-events-none z-10">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+            
+            <!-- Center master burst (Confetti) -->
+            <div class="w-[320px] h-[320px] md:w-[480px] md:h-[480px] pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+            
+            <!-- Right burst (Lottie Confetti) -->
+            <div class="absolute -right-20 md:-right-40 top-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[350px] md:h-[350px] opacity-95 pointer-events-none z-10">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+
+            <!-- Double Party Confetti blast! -->
+            <div class="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 320px; height: 320px;" autoplay loop></dotlottie-wc>
+            </div>
+
+            <!-- Successful Guess Card with beautiful animations -->
+            <div class="bg-black/95 backdrop-blur-2xl border border-yellow-500/30 rounded-2xl p-6 text-center shadow-2xl shadow-yellow-500/20 max-w-sm mx-4 transform scale-95 transition-all duration-500 z-20">
+                <div class="text-3xl mb-1 animate-bounce">🎉🏆🎥</div>
+                <h3 class="text-sm font-black tracking-widest text-[#f59e0b] uppercase font-display select-none">MOVIE SOLVED!</h3>
+                <p id="solvedMovieWinnerName" class="text-[11px] font-bold text-stone-200 mt-2 tracking-wider">SOMEONE CRACKED THE CODE!</p>
+                
+                <div class="mt-3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 font-sans relative overflow-hidden">
+                    <span class="text-[8px] text-stone-400 font-bold block uppercase tracking-widest mb-1">Guessed Movie</span>
+                    <p id="solvedMovieTitleText" class="text-sm md:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-500 tracking-widest uppercase select-all"></p>
+                </div>
+                
+                <button onclick="dismissFireworksCelebration()" class="mt-4 w-full py-1.5 bg-yellow-500/10 hover:bg-yellow-500/20 active:scale-95 border border-yellow-500/30 text-yellow-400 font-black text-[10px] uppercase tracking-widest rounded-lg transition-all cursor-pointer">
+                    AWESOME!
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Main dynamic app container wrapper limited to standard portable viewport -->
     <div class="w-full max-w-md my-4 space-y-4 z-10 transition-all duration-500 animate-floatUp">
@@ -1726,6 +1791,10 @@
                         <button onclick="dispatchChatMessage('😘')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😘 blast">😘</button>
                         <button onclick="dispatchChatMessage('🥶')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🥶 blast">🥶</button>
                         <button onclick="dispatchChatMessage('🤤')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 🤤 blast">🤤</button>
+                        <button onclick="dispatchChatMessage('😱')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😱 blast">😱</button>
+                        <button onclick="dispatchChatMessage('😜')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😜 blast">😜</button>
+                        <button onclick="dispatchChatMessage('😋')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😋 blast">😋</button>
+                        <button onclick="dispatchChatMessage('😵')" class="text-xl hover:scale-130 active:scale-95 transition-all cursor-pointer p-0.5 rounded" title="Send animated 😵 blast">😵</button>
                         <div class="w-full border-t border-white/5 my-1"></div>
                         <button onclick="dispatchChatMessage('🥺')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">🥺</button>
                         <button onclick="dispatchChatMessage('👍')" class="text-lg hover:scale-125 transition-transform duration-100 cursor-pointer">👍</button>
@@ -1913,12 +1982,12 @@
     </div>
 
     <!-- Live Toast messages popups -->
-    <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-50 transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
+    <div id="liveToastAlert" class="fixed top-5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] px-4 py-2.5 rounded-full text-black font-extrabold text-[10px] tracking-widest uppercase shadow-2xl z-[200] transform -translate-y-20 opacity-0 pointer-events-none transition-all duration-300"></div>
 
     <audio id="syncAudioPlayer" preload="none"></audio>
 
     <!-- ================= INSTAGRAM REELS INTERACTIVE VIEWER OVERLAY ================= -->
-    <div id="instagramReelsModal" class="hidden fixed inset-0 z-55 bg-black/95 backdrop-blur-xl flex items-center justify-center p-0 md:p-4 select-none">
+    <div id="instagramReelsModal" class="hidden fixed inset-0 z-[60] bg-black/95 backdrop-blur-xl flex items-center justify-center p-0 md:p-4 select-none">
         
         <!-- Main immersive smartphone frame container -->
         <div class="w-full h-full md:max-w-[430px] md:h-[90vh] md:max-h-[880px] bg-black md:rounded-3xl overflow-hidden shadow-[0_0_60px_rgba(255,75,114,0.35)] border border-white/5 relative flex flex-col">
@@ -1949,7 +2018,7 @@
             </div>
 
             <!-- Beautiful, high-end vertical bottom comments drawer inside smartphone view -->
-            <div id="reelCommentsDrawer" class="hidden absolute bottom-0 inset-x-0 bg-stone-950/95 backdrop-blur-2xl border-t border-white/10 rounded-t-3xl h-[60%] max-h-[480px] z-45 flex flex-col transition-all duration-300 transform translate-y-full select-none shadow-2xl">
+            <div id="reelCommentsDrawer" class="hidden absolute bottom-0 inset-x-0 bg-stone-950/95 backdrop-blur-2xl border-t border-white/10 rounded-t-3xl h-[60%] max-h-[480px] z-[70] flex flex-col transition-all duration-300 transform translate-y-full select-none shadow-2xl">
                 <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto my-3 shrink-0 cursor-pointer" onclick="closeReelCommentsDrawer()"></div>
                 <div class="flex justify-between items-center px-4.5 pb-2.5 border-b border-white/5 shrink-0 text-left">
                     <span class="text-[10px] text-[#FF7694] font-black tracking-widest uppercase font-mono flex items-center gap-1.5">
@@ -2602,7 +2671,12 @@
             '😡': 'https://lottie.host/f31047ba-7f73-482c-952b-28353942d059/TVe880G0r8.lottie',
             '😘': 'https://lottie.host/e7ccf18e-df95-475d-94fa-d3fa3b4938fd/5X9RlrJ7xD.lottie',
             '🥶': 'https://lottie.host/b4767f1f-b3ad-43c7-8dde-c8f604ed30d9/6vvSAy7ote.lottie',
-            '🤤': 'https://lottie.host/ed1842d5-c78f-4931-bef5-369b25b519be/8CZCngI0Vj.lottie'
+            '🤤': 'https://lottie.host/ed1842d5-c78f-4931-bef5-369b25b519be/8CZCngI0Vj.lottie',
+            '🥵': 'https://lottie.host/80e980ea-122e-4b6e-b39f-2da4c4424699/Cj20oOn597.lottie',
+            '😱': 'https://lottie.host/cb180dad-3698-4482-b4d2-8873c2e341f1/SqkDVOATx3.lottie',
+            '😜': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
+            '😋': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
+            '😵': 'https://lottie.host/cb21d446-8410-4f06-887f-ff3ad47e3b42/mVPyn7491C.lottie'
         };
         const lottieEmojiGlowMap = {
             '🔥': 'rgba(239, 68, 68, 0.75)',
@@ -2626,7 +2700,11 @@
             '😡': 'rgba(239, 68, 68, 0.75)',
             '😘': 'rgba(244, 63, 94, 0.75)',
             '🥶': 'rgba(56, 189, 248, 0.75)',
-            '🤤': 'rgba(234, 179, 8, 0.75)'
+            '🤤': 'rgba(234, 179, 8, 0.75)',
+            '😱': 'rgba(14, 165, 233, 0.75)',
+            '😜': 'rgba(234, 179, 8, 0.75)',
+            '😋': 'rgba(234, 179, 8, 0.75)',
+            '😵': 'rgba(139, 92, 246, 0.75)'
         };
 
         // Sync Chat Message Logs real-time listener elements
@@ -2653,7 +2731,7 @@
 
             const messageRow = document.createElement('div');
             messageRow.id = `chatMsg_${key}`;
-            messageRow.className = "flex flex-col w-full animate-slideIn";
+            messageRow.className = "flex flex-col w-full animate-message-arrival";
 
             const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -2815,6 +2893,22 @@
             if (isFirstBatchChatLoaded && !isMine && !isSystem) {
                 triggerLiveToast(`NEW MESSAGE: ${data.sender}`);
             }
+
+            if (isFirstBatchChatLoaded && isSystem && data.text && data.text.includes("SOLVED") && data.text.includes("CORRECTLY")) {
+                try {
+                    const text = data.text;
+                    const winnerMatch = text.match(/🎉\s+(\w+)\s+SOLVED/i);
+                    const movieMatch = text.match(/"([^"]+)"/);
+                    const winnerName = winnerMatch ? winnerMatch[1].trim() : "SOMEONE";
+                    const movieTitle = movieMatch ? movieMatch[1].trim() : "THE MOVIE";
+                    
+                    if (typeof triggerFireworksCelebration === "function") {
+                        triggerFireworksCelebration(winnerName, movieTitle);
+                    }
+                } catch (err) {
+                    console.error("Error triggering fireworks celebration:", err);
+                }
+            }
         });
 
         db.ref('chatMessages').on('child_changed', (snap) => {
@@ -2943,7 +3037,7 @@
             container.style.filter = `drop-shadow(0 0 12px ${glowColor})`;
 
             container.innerHTML = `
-                <dotlottie-wc src="${lottieUrl}" style="width: 100px; height: 100px;" autoplay></dotlottie-wc>
+                <dotlottie-wc src="${lottieUrl}" style="width: 300px; height: 300px;" autoplay></dotlottie-wc>
             `;
 
             chatContainer.appendChild(container);
@@ -3483,6 +3577,214 @@
             document.getElementById('movieGuesserAnswerInput').value = "";
             triggerLiveToast("SURRENDER RECOGNIZED!");
         }
+
+        let fireworksActive = false;
+        let fireworksCanvasLoopId = null;
+        let fireworksTimeoutId = null;
+
+        function startCanvasFireworks() {
+            const canvas = document.getElementById('fireworksCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            fireworksActive = true;
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            
+            // Clean up existing listener if template re-renders
+            if (canvas._cleanupResize) {
+                window.removeEventListener('resize', canvas._cleanupResize);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            canvas._cleanupResize = resizeCanvas;
+
+            const particles = [];
+            const rockets = [];
+
+            class Rocket {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height;
+                    this.targetY = Math.random() * (canvas.height * 0.55) + canvas.height * 0.1;
+                    this.speed = Math.random() * 4 + 7;
+                    this.color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+                    this.size = 2.5;
+                }
+                update() {
+                    this.y -= this.speed;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.speed = Math.random() * 5 + 1.5;
+                    this.friction = 0.95;
+                    this.gravity = 0.12;
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.015 + 0.012;
+                    this.size = Math.random() * 2 + 1.5;
+                }
+                update() {
+                    this.speed *= this.friction;
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed + this.gravity;
+                    this.alpha -= this.decay;
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.color;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            function explode(x, y, color) {
+                const count = 50;
+                for (let i = 0; i < count; i++) {
+                    particles.push(new Particle(x, y, color));
+                }
+            }
+
+            function tick() {
+                if (!fireworksActive) return;
+
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (Math.random() < 0.07 && rockets.length < 5) {
+                    rockets.push(new Rocket());
+                }
+
+                for (let i = rockets.length - 1; i >= 0; i--) {
+                    const r = rockets[i];
+                    r.update();
+                    r.draw();
+                    if (r.y <= r.targetY) {
+                        explode(r.x, r.y, r.color);
+                        rockets.splice(i, 1);
+                    }
+                }
+
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.update();
+                    p.draw();
+                    if (p.alpha <= 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+
+                fireworksCanvasLoopId = requestAnimationFrame(tick);
+            }
+
+            tick();
+        }
+
+        function stopCanvasFireworks() {
+            fireworksActive = false;
+            if (fireworksCanvasLoopId) {
+                cancelAnimationFrame(fireworksCanvasLoopId);
+                fireworksCanvasLoopId = null;
+            }
+            const canvas = document.getElementById('fireworksCanvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (canvas._cleanupResize) {
+                    window.removeEventListener('resize', canvas._cleanupResize);
+                }
+            }
+        }
+
+        function triggerFireworksCelebration(winner, movie) {
+            const overlay = document.getElementById('movieFireworksOverlay');
+            const winnerEl = document.getElementById('solvedMovieWinnerName');
+            const movieEl = document.getElementById('solvedMovieTitleText');
+
+            if (!overlay) return;
+
+            if (fireworksTimeoutId) {
+                clearTimeout(fireworksTimeoutId);
+                fireworksTimeoutId = null;
+            }
+
+            if (winnerEl) {
+                winnerEl.textContent = `${winner.toUpperCase()} CRACKED THE CODE! 🏆`;
+            }
+            if (movieEl) {
+                movieEl.textContent = movie.toUpperCase();
+            }
+
+            overlay.classList.remove('hidden');
+            overlay.classList.remove('pointer-events-none');
+            void overlay.offsetHeight; // force reflow
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+
+            const innerCard = overlay.querySelector('.transform');
+            if (innerCard) {
+                innerCard.classList.remove('scale-95');
+                innerCard.classList.add('scale-100');
+            }
+
+            // Start atmospheric dynamic fireworks
+            startCanvasFireworks();
+
+            fireworksTimeoutId = setTimeout(() => {
+                dismissFireworksCelebration();
+            }, 6500);
+        }
+
+        function dismissFireworksCelebration() {
+            const overlay = document.getElementById('movieFireworksOverlay');
+            if (!overlay) return;
+
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            overlay.classList.add('pointer-events-none');
+
+            const innerCard = overlay.querySelector('.transform');
+            if (innerCard) {
+                innerCard.classList.remove('scale-100');
+                innerCard.classList.add('scale-95');
+            }
+
+            if (fireworksTimeoutId) {
+                clearTimeout(fireworksTimeoutId);
+                fireworksTimeoutId = null;
+            }
+
+            // Stop dynamic fireworks
+            stopCanvasFireworks();
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 500);
+       }
 
         function movieAwardManualPoint(receiver) {
             const rx = receiver || partnerName;
