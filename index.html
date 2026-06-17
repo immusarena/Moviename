@@ -432,45 +432,7 @@
                 </button>
             </div>
 
-            <!-- Copier link widgets for quick player pairing -->
-            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-4 font-sans relative overflow-hidden">
-                <!-- Top neon ambient accent banner -->
-                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-[var(--accent-color)] via-[var(--primary-color)] to-amber-500 opacity-60"></div>
-                <span class="text-[9px] text-stone-400 font-extrabold tracking-widest block uppercase text-center font-mono">
-                    SHARE YOUR UNIQUE LOBBY REFS
-                </span>
-                <div class="grid grid-cols-1 gap-2.5">
-                    <button onclick="copyPairingRef('immu')" id="ref_immu" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-[var(--accent-color)] border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="shield" class="w-3.5 h-3.5 text-[var(--accent-color)] animate-pulse"></i>
-                            <span class="uppercase tracking-wide">IMMU KEY: ?u=immu</span>
-                        </div>
-                        <span class="text-[8.5px] text-[var(--accent-color)] group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-[var(--accent-color)]/5 border border-[var(--accent-color)]/10 rounded px-1.5 py-0.5">
-                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
-                        </span>
-                    </button>
-                    
-                    <button onclick="copyPairingRef('sappii')" id="ref_sappii" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-[var(--primary-color)] border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="heart" class="w-3.5 h-3.5 text-[var(--primary-color)] animate-ping-slow"></i>
-                            <span class="uppercase tracking-wide">SAPPII KEY: ?u=sappii</span>
-                        </div>
-                        <span class="text-[8.5px] text-[var(--primary-color)] group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-[var(--primary-color)]/5 border border-[var(--primary-color)]/10 rounded px-1.5 py-0.5">
-                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
-                        </span>
-                    </button>
-                    
-                    <button onclick="copyPairingRef('tharkuri')" id="ref_tharkuri" class="flex justify-between items-center p-3.5 bg-black/40 hover:bg-black/60 rounded-xl border-l-[3px] border-l-amber-500 border border-white/5 hover:border-white/10 text-xs font-bold text-stone-200 transition-all cursor-pointer group/ref">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="user" class="w-3.5 h-3.5 text-amber-500"></i>
-                            <span class="uppercase tracking-wide">THARKURI KEY: ?u=tharkuri</span>
-                        </div>
-                        <span class="text-[8.5px] text-amber-500 group-hover/ref:translate-x-0.5 transition-transform uppercase font-mono font-black flex items-center gap-1 bg-amber-500/5 border border-amber-500/10 rounded px-1.5 py-0.5">
-                            COPY <i data-lucide="copy" class="w-2.5 h-2.5"></i>
-                        </span>
-                    </button>
-                </div>
-            </div>
+
 
             <!-- PASSCODE / PIN SECURED ACCESS GATE CONFIGURATION CARD -->
             <div id="pinSecurityConfigCard" class="glass-card rounded-2xl p-5 shadow-2xl space-y-3 font-sans relative overflow-hidden">
@@ -1553,94 +1515,11 @@
                         <span id="musicVolValueLabel" class="text-[9px] text-stone-400 font-black font-mono w-6 text-right">80%</span>
                     </div>
 
-                    <!-- Premium Tabs for Jukebox, DJ Pad & Synced Ambiences -->
-                    <div class="flex bg-white/5 p-1 rounded-xl border border-white/5 select-none my-3">
-                        <button onclick="switchLoungeTab('jukebox')" id="loungeTabBtn_jukebox" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-md border border-pink-550">
-                            <i data-lucide="disc" class="w-3 h-3"></i> JUKEBOX
-                        </button>
-                        <button onclick="switchLoungeTab('djpad')" id="loungeTabBtn_djpad" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white">
-                            <i data-lucide="music-4" class="w-3 h-3"></i> DJ PAD
-                        </button>
-                        <button onclick="switchLoungeTab('vibe')" id="loungeTabBtn_vibe" class="flex-1 py-1.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white">
-                            <i data-lucide="sparkles" class="w-3 h-3"></i> AMBIENCE
-                        </button>
-                    </div>
-
-                    <!-- Dynamic Preset Playlist Section for Audio - Replaced with 3-tab dashboard -->
+                    <!-- Dynamic Preset Playlist Section for Audio - Sync Atmosphere Active -->
                     <div id="audioPlaylistSection" class="mt-4 text-left space-y-4 select-none">
-                        <!-- Tab 1: JUKEBOX -->
-                        <div id="loungeTab_jukebox" class="space-y-3 text-left">
-                            <div class="space-y-2">
-                                <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block pl-1">PREM-CRAFTED CO-OP JUKEBOX</span>
-                                <div id="songsPresetGridList" class="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1"></div>
-                            </div>
-                            
-                            <div class="space-y-2 pt-2 border-t border-white/5">
-                                <div class="flex justify-between items-center pl-1 pr-1">
-                                    <span class="text-[9px] text-[#FF7694] font-black tracking-widest uppercase block">RECENTLY PLAYED SOUNDTRACKS</span>
-                                    <button onclick="clearRecentlyPlayedHistory()" class="text-[8px] text-stone-500 hover:text-rose-450 uppercase font-extrabold tracking-wider cursor-pointer transition-colors">CLEAR HISTORY</button>
-                                </div>
-                                <div id="recentlyPlayedGridList" class="grid grid-cols-1 gap-2 max-h-[120px] overflow-y-auto pr-1"></div>
-                            </div>
-                        </div>
-
-                        <!-- Tab 2: DJ SOUNDBOARD -->
-                        <div id="loungeTab_djpad" class="hidden space-y-3 text-left">
-                            <div class="flex justify-between items-center pb-1 pl-1">
-                                <span class="text-[9px] text-[var(--accent-color)] font-black tracking-widest uppercase block">MULTIPLAYER DJ SFX PAD</span>
-                                <span class="text-[8px] text-stone-500 font-extrabold font-mono uppercase tracking-wider">REALTIME JAM SYSTEM</span>
-                            </div>
-                            <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-1">
-                                Jam together! Tapping these synth pads triggers retro synthesized beats & visual rumbles on both you and your partner's devices instantly.
-                            </p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="triggerCoopDJBeat('beatdrop')" class="flex items-center gap-2 p-3 bg-blue-500/10 hover:bg-blue-500/20 active:scale-95 duration-150 border border-blue-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-2 rounded bg-blue-500/25 text-blue-400 group-hover:bg-blue-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">⚡</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">BEAT DROP</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">DEEP TECH BASS</span>
-                                    </div>
-                                </button>
-                                <button onclick="triggerCoopDJBeat('laser')" class="flex items-center gap-2 p-3 bg-pink-500/10 hover:bg-pink-500/20 active:scale-95 duration-150 border border-pink-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-2 rounded bg-pink-500/25 text-pink-400 group-hover:bg-pink-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🔫</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">RETRO LASER</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">SWEEP SYNTH</span>
-                                    </div>
-                                </button>
-                                <button onclick="triggerCoopDJBeat('chime')" class="flex items-center gap-2 p-3 bg-green-500/10 hover:bg-green-500/20 active:scale-95 duration-150 border border-green-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-1.5 rounded bg-green-500/25 text-green-400 group-hover:bg-green-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎐</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">DREAM CHIME</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">GLASS BELLS</span>
-                                    </div>
-                                </button>
-                                <button onclick="triggerCoopDJBeat('snare')" class="flex items-center gap-2 p-3 bg-purple-500/10 hover:bg-purple-500/20 active:scale-95 duration-150 border border-purple-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-2 rounded bg-purple-500/25 text-purple-400 group-hover:bg-purple-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🥁</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">TECH SNARE</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">NOISE SYNTH</span>
-                                    </div>
-                                </button>
-                                <button onclick="triggerCoopDJBeat('bass')" class="flex items-center gap-2 p-3 bg-amber-500/10 hover:bg-amber-500/20 active:scale-95 duration-150 border border-amber-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-2 rounded bg-amber-500/25 text-amber-400 group-hover:bg-amber-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎸</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">SUB BASS</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">WARM CHORD</span>
-                                    </div>
-                                </button>
-                                <button onclick="triggerCoopDJBeat('scratch')" class="flex items-center gap-2 p-3 bg-cyan-500/10 hover:bg-cyan-500/20 active:scale-95 duration-150 border border-cyan-500/20 rounded-xl text-left cursor-pointer group">
-                                    <span class="p-1 px-1.5 rounded bg-cyan-500/25 text-cyan-400 group-hover:bg-cyan-550 group-hover:text-black font-extrabold text-[9px] tracking-widest">🎧</span>
-                                    <div>
-                                        <span class="block text-[10px] text-white font-extrabold uppercase leading-none">VINYL CUT</span>
-                                        <span class="text-[8px] text-stone-500 uppercase tracking-widest font-mono mt-1 block">SCRATCH GLIDE</span>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
 
                         <!-- Tab 3: ROOM AMBIENCE -->
-                        <div id="loungeTab_vibe" class="hidden space-y-3 text-left">
+                        <div id="loungeTab_vibe" class="space-y-3 text-left">
                             <div class="flex justify-between items-center pb-1 pl-1">
                                 <span class="text-[9px] text-[#FF4B72] font-black tracking-widest uppercase block">SYNC LOBBY ATMOSPHERE</span>
                                 <span id="syncedThemeBadge" class="text-[8px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded font-black font-mono tracking-wider uppercase">STARDUST</span>
@@ -1879,7 +1758,7 @@
                     <!-- Tab Headers -->
                     <div class="flex border-b border-white/5 select-none shrink-0" id="emojiDrawerTabs">
                         <button onclick="switchEmojiTab('lotties')" id="emojiTabBtn_lotties" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-pink-500 border-b-2 border-pink-500 pb-1.5 transition-all cursor-pointer">
-                            ⚡ BLASTS
+                            🐦 BIRDS
                         </button>
                         <button onclick="switchEmojiTab('stickers')" id="emojiTabBtn_stickers" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer">
                             👾 STICKERS
@@ -1891,32 +1770,15 @@
 
                     <!-- Tab Content: Lotties -->
                     <div id="emojiTab_lotties" class="flex flex-wrap gap-1.5 justify-center py-1.5 overflow-y-auto max-h-[190px] scrollbar-thin">
-                        <button onclick="dispatchChatMessage('🔥')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🔥 blast">🔥</button>
-                        <button onclick="dispatchChatMessage('❤️')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated ❤️ blast">❤️</button>
-                        <button onclick="dispatchChatMessage('😂')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😂 blast">😂</button>
-                        <button onclick="dispatchChatMessage('🎉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🎉 blast">🎉</button>
-                        <button onclick="dispatchChatMessage('🚀')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🚀 blast">🚀</button>
-                        <button onclick="dispatchChatMessage('😈')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😈 blast">😈</button>
-                        <button onclick="dispatchChatMessage('💡')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 💡 blast">💡</button>
-                        <button onclick="dispatchChatMessage('🤨')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤨 blast">🤨</button>
-                        <button onclick="dispatchChatMessage('🤑')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤑 blast">🤑</button>
-                        <button onclick="dispatchChatMessage('😌')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😌 blast">😌</button>
-                        <button onclick="dispatchChatMessage('😉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😉 blast">😉</button>
-                        <button onclick="dispatchChatMessage('😢')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😢 blast">😢</button>
-                        <button onclick="dispatchChatMessage('😊')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😊 blast">😊</button>
-                        <button onclick="dispatchChatMessage('🤩')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤩 blast">🤩</button>
-                        <button onclick="dispatchChatMessage('💯')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 💯 blast">💯</button>
-                        <button onclick="dispatchChatMessage('🤐')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤐 blast">🤐</button>
-                        <button onclick="dispatchChatMessage('👀')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 👀 blast">👀</button>
-                        <button onclick="dispatchChatMessage('🥰')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🥰 blast">🥰</button>
-                        <button onclick="dispatchChatMessage('😡')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😡 blast">😡</button>
-                        <button onclick="dispatchChatMessage('😘')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😘 blast">😘</button>
-                        <button onclick="dispatchChatMessage('🥶')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🥶 blast">🥶</button>
-                        <button onclick="dispatchChatMessage('🤤')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🤤 blast">🤤</button>
-                        <button onclick="dispatchChatMessage('😱')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😱 blast">😱</button>
-                        <button onclick="dispatchChatMessage('😜')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😜 blast">😜</button>
-                        <button onclick="dispatchChatMessage('😋')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😋 blast">😋</button>
-                        <button onclick="dispatchChatMessage('😵')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 😵 blast">😵</button>
+                        <button onclick="dispatchChatMessage('🐦')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐦 bird blast">🐦</button>
+                        <button onclick="dispatchChatMessage('🐤')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐤 bird blast">🐤</button>
+                        <button onclick="dispatchChatMessage('🐥')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐥 bird blast">🐥</button>
+                        <button onclick="dispatchChatMessage('🦜')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦜 bird blast">🦜</button>
+                        <button onclick="dispatchChatMessage('🦅')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦅 bird blast">🦅</button>
+                        <button onclick="dispatchChatMessage('🦉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦉 bird blast">🦉</button>
+                        <button onclick="dispatchChatMessage('🐧')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐧 bird blast">🐧</button>
+                        <button onclick="dispatchChatMessage('🦆')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦆 bird blast">🦆</button>
+                        <button onclick="dispatchChatMessage('🦢')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦢 bird blast">🦢</button>
                     </div>  
 
                     <!-- Tab Content: Custom Game-Themed Stickers -->
@@ -2583,8 +2445,6 @@
                 } else {
                     ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
                     ctx.fillStyle = p.col;
-                    ctx.shadowBlur = moodType === 'cyber_tokyo' ? 12 : 6;
-                    ctx.shadowColor = p.col;
                     ctx.fill();
                 }
                 ctx.restore();
@@ -2681,7 +2541,7 @@
                 }
                 renderRecentlyPlayedUI();
                 renderSongsPresets();
-                switchLoungeTab('jukebox');
+                switchLoungeTab('vibe');
             }
             refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
@@ -3085,81 +2945,28 @@
             return stickers[key] || defaultMeta;
         }
 
-        // Premium DotLottie interactive emoji assets map configurations
+        // Premium DotLottie interactive emoji assets map configurations - OPTIMIZED TO BIRD ONLY AS REQUESTED BY USER FOR LAG ELIMINATION
         const lottieEmojiMap = {
-            '🔥': 'https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie',
-            '❤️': 'https://lottie.host/1d836ba5-2529-479b-9c49-629ba36ced1c/8ey9uHAeQx.lottie',
-            '😂': 'https://lottie.host/d3b61e44-0deb-45d5-983f-e0692ebf2ea7/rZNuK78EsJ.lottie',
-            '🎉': 'https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie',
-            '🚀': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
-            '😈': 'https://lottie.host/87fb6bce-2185-444d-9b81-dd3f66db78b4/F513tSQIpz.lottie',
-            '💡': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🤨': 'https://lottie.host/bb0c245a-2603-4bda-baac-f12196032455/Qc9wAlqxuh.lottie',
-            '🤑': 'https://lottie.host/b388bed5-14fa-4fcb-8dd7-f616bf490215/3Wl0Cfl7Gi.lottie',
-            '😌': 'https://lottie.host/0bc94544-45e6-4174-b45d-043975126bfb/UfUEdXCUYK.lottie',
-            '😉': 'https://lottie.host/6dc3da02-50ec-4b06-8aba-e1593140a5fa/YeDGqtiwip.lottie',
-            '😢': 'https://lottie.host/a0c7f769-510b-47ba-b0e4-0bd71bca3612/b9iTeSnWgD.lottie',
-            '😊': 'https://lottie.host/c2a2f492-9b35-4104-8529-832104cee4ea/R0UHWSczxd.lottie',
-            '🤩': 'https://lottie.host/efc5d10c-5c70-4cc3-8761-208fda89fee1/Eo5T8X80vf.lottie',
-            '💯': 'https://lottie.host/594a8ead-467d-478d-8bde-14d7a6a7ece7/l853nvu6yE.lottie',
-            '🤐': 'https://lottie.host/fbd21086-4101-4749-8d3b-df2e458b0592/vT6XQRZ9tc.lottie',
-            '👀': 'https://lottie.host/72aa32dc-63bc-4801-89be-43e54785cd27/9OgInaErmr.lottie',
-            '🥰': 'https://lottie.host/228a8ca2-f1f5-4040-98a0-0b5d6a080eea/pM4Tvlfpvh.lottie',
-            '😡': 'https://lottie.host/f31047ba-7f73-482c-952b-28353942d059/TVe880G0r8.lottie',
-            '😘': 'https://lottie.host/e7ccf18e-df95-475d-94fa-d3fa3b4938fd/5X9RlrJ7xD.lottie',
-            '🥶': 'https://lottie.host/b4767f1f-b3ad-43c7-8dde-c8f604ed30d9/6vvSAy7ote.lottie',
-            '🤤': 'https://lottie.host/ed1842d5-c78f-4931-bef5-369b25b519be/8CZCngI0Vj.lottie',
-            '🥵': 'https://lottie.host/80e980ea-122e-4b6e-b39f-2da4c4424699/Cj20oOn597.lottie',
-            '😱': 'https://lottie.host/cb180dad-3698-4482-b4d2-8873c2e341f1/SqkDVOATx3.lottie',
-            '😜': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
-            '😋': 'https://lottie.host/7691f8bf-11c9-4bc2-8a50-0be95bcc1184/PMvcjxSHGD.lottie',
-            '😵': 'https://lottie.host/cb21d446-8410-4f06-887f-ff3ad47e3b42/mVPyn7491C.lottie',
-
-            // Custom Game-Themed Stickers
-            '[STICKER_SPADES]': 'https://lottie.host/594a8ead-467d-478d-8bde-14d7a6a7ece7/l853nvu6yE.lottie',
-            '[STICKER_SOLVER]': 'https://lottie.host/cb180dad-3698-4482-b4d2-8873c2e341f1/SqkDVOATx3.lottie',
-            '[STICKER_SPEED]': 'https://lottie.host/91b689c2-29c2-40d3-8813-396ede6f773d/rJCzlYwHRr.lottie',
-            '[STICKER_CODE]': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '[STICKER_DJ]': 'https://lottie.host/efc5d10c-5c70-4cc3-8761-208fda89fee1/Eo5T8X80vf.lottie',
-            '[STICKER_LEGEND]': 'https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie',
-            '[STICKER_VS]': 'https://lottie.host/b427ce79-aa0f-42bc-bc2f-eee9828ef84c/o0nR10XqjO.lottie'
+            '🐦': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🐤': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🐥': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🦜': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🦅': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🦉': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🐧': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🦆': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
+            '🦢': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie'
         };
         const lottieEmojiGlowMap = {
-            '🔥': 'rgba(239, 68, 68, 0.75)',
-            '❤️': 'rgba(244, 63, 94, 0.75)',
-            '😂': 'rgba(56, 189, 248, 0.75)',
-            '🎉': 'rgba(168, 85, 247, 0.75)',
-            '🚀': 'rgba(251, 191, 36, 0.75)',
-            '😈': 'rgba(139, 92, 246, 0.75)',
-            '💡': 'rgba(253, 224, 71, 0.75)',
-            '🤨': 'rgba(245, 158, 11, 0.75)',
-            '🤑': 'rgba(34, 197, 94, 0.75)',
-            '😌': 'rgba(251, 191, 36, 0.75)',
-            '😉': 'rgba(234, 179, 8, 0.75)',
-            '😢': 'rgba(14, 165, 233, 0.75)',
-            '😊': 'rgba(249, 115, 22, 0.75)',
-            '🤩': 'rgba(251, 191, 36, 0.75)',
-            '💯': 'rgba(239, 68, 68, 0.75)',
-            '🤐': 'rgba(251, 191, 36, 0.75)',
-            '👀': 'rgba(251, 191, 36, 0.75)',
-            '🥰': 'rgba(244, 63, 94, 0.75)',
-            '😡': 'rgba(239, 68, 68, 0.75)',
-            '😘': 'rgba(244, 63, 94, 0.75)',
-            '🥶': 'rgba(56, 189, 248, 0.75)',
-            '🤤': 'rgba(234, 179, 8, 0.75)',
-            '😱': 'rgba(14, 165, 233, 0.75)',
-            '😜': 'rgba(234, 179, 8, 0.75)',
-            '😋': 'rgba(234, 179, 8, 0.75)',
-            '😵': 'rgba(139, 92, 246, 0.75)',
-
-            // Custom Game-Themed Stickers Glows
-            '[STICKER_SPADES]': 'rgba(251, 191, 36, 0.75)',
-            '[STICKER_SOLVER]': 'rgba(236, 72, 153, 0.75)',
-            '[STICKER_SPEED]': 'rgba(52, 211, 153, 0.75)',
-            '[STICKER_CODE]': 'rgba(139, 92, 246, 0.75)',
-            '[STICKER_DJ]': 'rgba(244, 63, 94, 0.75)',
-            '[STICKER_LEGEND]': 'rgba(251, 191, 36, 0.75)',
-            '[STICKER_VS]': 'rgba(239, 68, 68, 0.75)'
+            '🐦': 'rgba(34, 197, 94, 0.75)',
+            '🐤': 'rgba(251, 191, 36, 0.75)',
+            '🐥': 'rgba(251, 191, 36, 0.75)',
+            '🦜': 'rgba(34, 197, 94, 0.75)',
+            '🦅': 'rgba(234, 179, 8, 0.75)',
+            '🦉': 'rgba(234, 179, 8, 0.75)',
+            '🐧': 'rgba(56, 189, 248, 0.75)',
+            '🦆': 'rgba(34, 197, 94, 0.75)',
+            '🦢': 'rgba(255, 255, 255, 0.75)'
         };
 
         // Sync Chat Message Logs real-time listener elements
@@ -10076,10 +9883,12 @@
             hidePasscodeLockGate();
             activatePresenceConnection();
             
-            // Clean up any old passcode entries silently in background
-            try {
-                db.ref(`userPasscodes/${myName}`).remove();
-            } catch(e) {}
+            // Clean up any old passcode entries silently in background only if they exist
+            if (snap.val() !== null) {
+                try {
+                    db.ref(`userPasscodes/${myName}`).remove();
+                } catch(e) {}
+            }
 
             const statusBadge = document.getElementById('pinStatusText');
             if (statusBadge) {
