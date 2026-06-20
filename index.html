@@ -416,20 +416,6 @@
                     </div>
                 </button>
 
-                <!-- Tech Hub Launcher -->
-                <button onclick="showTechHub()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-cyan-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(34,211,238,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
-                    <!-- Glass sheen reflection on hover -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    <div class="text-left relative z-10 space-y-0.5 pr-2">
-                        <span class="text-[9px] text-cyan-400 font-black tracking-widest block uppercase font-mono">UTILITIES & TOOLS</span>
-                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-cyan-400 transition-colors uppercase font-display">
-                            TECH
-                        </span>
-                    </div>
-                    <div class="p-2.5 bg-cyan-500/10 rounded-xl border border-cyan-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-cyan-400 shrink-0">
-                        <i data-lucide="cpu" class="w-5 h-5"></i>
-                    </div>
-                </button>
             </div>
 
 
@@ -557,282 +543,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- ================= TECH HUB SCREEN ================= -->
-        <div id="techHubScreen" class="hidden space-y-4 animate-popIn">
-            <!-- Back Header Navigation -->
-            <div class="flex justify-between items-center px-1">
-                <button onclick="showLobbyFromTechHub()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-[#FF7694] hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
-                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#FF7694]"></i>
-                    BACK TO LOBBY
-                </button>
-                <span class="text-[9px] bg-white/5 border border-white/10 text-stone-300 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
-                    TECH ZONE
-                </span>
-            </div>
-
-            <!-- Tech Header Banner -->
-            <div class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                <!-- Ambient Dark Tech Background Gradient overlay -->
-                <div class="absolute inset-0 bg-gradient-to-tr from-cyan-950/80 via-purple-950/70 to-blue-900/40 mix-blend-multiply z-10"></div>
-                <img src="kali_banner.svg" class="w-full h-full object-cover brightness-75 transform transition-transform duration-700 hover:scale-105" alt="Tech Banner" onerror="this.src='https://images.wallpapersden.com/image/download/kali-linux-red-logo_bWlpZ2uUmZqaraWkpJRmbmdlrWZlbWY.jpg'">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
-                    <span class="text-[9px] text-cyan-400 font-black tracking-widest block uppercase font-mono mb-1">UTILITY BOX</span>
-                    <h2 class="text-base font-black text-white uppercase tracking-wider font-display">TECH CORE TOOLS</h2>
-                </div>
-            </div>
-
-            <!-- Launcher list for TECH tools -->
-            <div class="grid grid-cols-1 gap-4 font-sans">
-                <!-- Stickers Converter box -->
-                <div onclick="showStickersScreen()" class="p-5 glass-card border-l-4 border-l-cyan-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(34,211,238,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
-                    <div class="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-cyan-500/5 to-transparent pointer-events-none"></div>
-                    <div class="flex justify-between items-center relative z-10 w-full">
-                        <div class="space-y-1.5 pr-2">
-                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
-                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
-                                STICKERS
-                            </h3>
-                        </div>
-                        <div class="p-2.5 bg-cyan-500/10 rounded-xl border border-cyan-500/20 group-hover:border-cyan-400/40 group-hover:scale-105 transition-all">
-                            <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400 transition-transform duration-300 group-hover:rotate-12"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= STICKERS SCREEN ================= -->
-        <div id="stickersScreen" class="hidden space-y-4 animate-popIn">
-            <!-- Back Header Navigation -->
-            <div class="flex justify-between items-center px-1">
-                <button onclick="showTechHubFromStickers()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-[#FF7694] hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
-                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#FF7694]"></i>
-                    TECH HUB
-                </button>
-                <span class="text-[9px] bg-white/5 border border-white/10 text-cyan-400 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
-                    CONVERTER ACTIVE
-                </span>
-            </div>
-
-            <!-- Main Applet Glassmorphism Card -->
-            <div class="glass-card rounded-2xl p-5 shadow-2xl space-y-5">
-                <div class="flex items-center gap-2 pb-2.5 border-b border-white/5">
-                    <div class="p-2 bg-cyan-500/10 rounded-xl border border-cyan-500/20">
-                        <i data-lucide="smile" class="w-4 h-4 text-cyan-400"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xs font-black tracking-widest text-white uppercase font-display leading-none mb-0.5">TELEGRAM CONVERTER</h2>
-                        <span class="text-[8.5px] text-stone-500 font-extrabold uppercase block tracking-wider leading-none">CONVERT STICKERS SECURELY IN 512x512 WEBP</span>
-                    </div>
-                </div>
-
-                <!-- Input to load packing details -->
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center pl-0.5">
-                        <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block">TELEGRAM STICKER LINK OR NAME</span>
-                        <button onclick="toggleTelegramTokenField()" class="text-[8px] text-cyan-400/75 hover:text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer">
-                            <i data-lucide="key" class="w-2.5 h-2.5"></i> CONFIG TOKEN
-                        </button>
-                    </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="stickerPackLinkInput" placeholder="PASTE LINK OR PACK NAME (E.G. PEPE)..." class="flex-1 bg-black/40 border border-white/5 focus:border-cyan-500 rounded-xl px-3 py-2.5 text-[10px] text-white placeholder-stone-600 outline-none uppercase font-semibold tracking-wide transition-all">
-                        <button onclick="loadTelegramPackAction()" class="px-3.5 py-2.5 bg-cyan-500 hover:bg-cyan-600 text-slate-950 font-black text-[9px] rounded-xl tracking-widest uppercase hover:brightness-110 active:scale-98 transition-all shrink-0 flex items-center gap-1 cursor-pointer">
-                            LOAD <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                        </button>
-                    </div>
-                    <!-- Telegram custom token input (initially hidden or collapsed nicely) -->
-                    <div id="telegramTokenSettingsDiv" class="hidden p-3 bg-black/50 border border-white/5 rounded-xl space-y-1.5 animate-fadeIn">
-                        <span class="text-[8px] text-stone-400 font-bold uppercase tracking-wider block">ENTER TELEGRAM BOT TOKEN (FROM @BOTFATHER):</span>
-                        <input type="password" id="telegramCustomBotTokenInput" placeholder="PASTE BOT_TOKEN HERE..." class="w-full bg-black/65 border border-white/5 focus:border-cyan-500 rounded-xl px-3 py-2 text-[9px] text-stone-300 placeholder-stone-700 outline-none font-mono tracking-wide transition-all" value="" onchange="saveTelegramCustomToken()">
-                        <p class="text-[7.5px] text-stone-500 font-mono leading-relaxed uppercase">
-                            * LEAVE BLANK TO USE BUILT-IN FALLBACK TOKEN. ANY FREE TELEGRAM BOT TOKEN CONNECTS SECURELY TO THE OFFICIAL TELEGRAM STICKERS CDN.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Fast preset collections selection -->
-                <div class="space-y-2 pt-1">
-                    <span class="text-[8.5px] text-stone-500 font-black tracking-widest uppercase block pl-0.5">OR EXPLORE PRESET TARGET PACKS</span>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="selectPresetStickerPack('pepe')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
-                            <span class="text-lg">🐸</span>
-                            <div class="min-w-0">
-                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">PEPE CLASSIC</span>
-                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
-                            </div>
-                        </button>
-                        <button onclick="selectPresetStickerPack('anime')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
-                            <span class="text-lg">🌸</span>
-                            <div class="min-w-0">
-                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">CHIBI ANIME</span>
-                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
-                            </div>
-                        </button>
-                        <button onclick="selectPresetStickerPack('gaming')" class="p-2 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
-                            <span class="text-lg">🎮</span>
-                            <div class="min-w-0">
-                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">PIXEL ARENA</span>
-                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
-                            </div>
-                        </button>
-                        <button onclick="selectPresetStickerPack('cats')" class="p-[7px] bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500/40 border border-white/5 rounded-xl text-left transition-all cursor-pointer group flex items-center gap-2">
-                            <span class="text-lg">🐱</span>
-                            <div class="min-w-0 flex-1">
-                                <span class="text-[9px] font-black uppercase text-white block truncate leading-none">FUNNY CATS</span>
-                                <span class="text-[7.5px] text-stone-500 font-mono">8 STICKERS</span>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Custom Direct Drag-and-Drop Image Uploader Box -->
-                <div class="relative pt-1">
-                    <div id="stickerUploadDropzone" class="border-2 border-dashed border-white/10 hover:border-cyan-500/50 bg-black/30 hover:bg-black/50 rounded-xl p-5 text-center cursor-pointer transition-all duration-300">
-                        <input type="file" id="stickerFileInput" class="hidden" accept="image/*" multiple>
-                        <div class="w-10 h-10 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto mb-2 text-cyan-400 group-hover:scale-110 transition-transform">
-                            <i data-lucide="upload-cloud" class="w-5 h-5 animate-pulse"></i>
-                        </div>
-                        <p class="text-[10px] font-black tracking-widest text-stone-200 uppercase">UPLOADS DIRECT RAW IMAGES</p>
-                        <p class="text-[8px] text-stone-500 font-mono uppercase mt-1">PNG, WEBP, JPEG, ETC. (ANY ASSET SIZE)</p>
-                    </div>
-                </div>
-
-                <!-- Currently loaded preview items grid -->
-                <div id="loadedStickersArea" class="hidden space-y-3.5 pt-1.5">
-                    <div class="flex justify-between items-center px-0.5">
-                        <span class="text-[8.5px] text-cyan-400 font-black tracking-widest uppercase block" id="stickersCountLabel">LOADED PACK STICKERS (0)</span>
-                        <button onclick="resetStickerPackQueue()" class="text-[8px] text-[#FF7694] hover:text-white font-extrabold uppercase tracking-wide flex items-center gap-0.5 transition-colors cursor-pointer">
-                            <i data-lucide="trash-2" class="w-3 h-3 text-[#FF7694]"></i> RESET QUEUE
-                        </button>
-                    </div>
-                    
-                    <!-- stickers grid selection -->
-                    <div id="stickersDisplayGrid" class="grid grid-cols-4 gap-2.5 max-h-[170px] overflow-y-auto p-1 bg-black/40 border border-white/5 rounded-xl">
-                        <!-- stickers populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- Configs Controls Parameter Panel -->
-                <div class="p-3.5 bg-white/5 border border-white/5 rounded-xl space-y-3.5 font-sans">
-                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest block uppercase">PACK FORMAT PROPERTIES</span>
-                    
-                    <div class="space-y-2.5">
-                        <label class="flex items-center justify-between cursor-pointer select-none">
-                            <span class="text-[9px] text-stone-300 font-extrabold uppercase">ADD 16PX TRANSPARENT MARGIN</span>
-                            <input type="checkbox" id="stickerPaddingCheckbox" checked onchange="regenerateActiveStickerCanvas()" class="rounded bg-black/60 border-white/10 text-cyan-500 focus:ring-0 w-3.5 h-3.5 cursor-pointer accent-cyan-500">
-                        </label>
-                        <label class="flex items-center justify-between cursor-pointer select-none">
-                            <span class="text-[9px] text-stone-300 font-extrabold uppercase">FORCE SQUARE (512x512 SCALE)</span>
-                            <input type="checkbox" id="stickerForceSquareCheckbox" checked onchange="regenerateActiveStickerCanvas()" class="rounded bg-black/60 border-white/10 text-cyan-500 focus:ring-0 w-3.5 h-3.5 cursor-pointer accent-cyan-500">
-                        </label>
-                    </div>
-
-                    <div class="border-t border-white/5 pt-3.5 space-y-3">
-                        <span class="text-[8.5px] text-emerald-400 font-black tracking-widest block uppercase flex items-center gap-1">
-                            <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-400"></i> WHATSAPP STICKER PACK SETTINGS
-                        </span>
-                        <div class="space-y-2">
-                            <div>
-                                <label class="text-[7.5px] text-stone-400 font-bold block uppercase mb-1 font-mono">WA PACK CUSTOM NAME</label>
-                                <input type="text" id="whatsappPackNameInput" value="TEAM HUB PRO STICKERS" placeholder="E.G. PEPE THE FROG..." class="w-full bg-black/50 border border-emerald-500/15 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-[9px] text-emerald-300 uppercase font-semibold outline-none tracking-wide transition-all">
-                            </div>
-                            <div>
-                                <label class="text-[7.5px] text-stone-400 font-bold block uppercase mb-1 font-mono">PACK PUBLISHER / CREATOR</label>
-                                <input type="text" id="whatsappPackPublisherInput" value="MOHAMED IMRAN" placeholder="YOUR NAME..." class="w-full bg-black/50 border border-emerald-500/15 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-[9px] text-stone-200 uppercase font-semibold outline-none tracking-wide transition-all">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Whatsapp Bubble simulated Preview and export panel -->
-                <div id="stickerFinalExportArea" class="hidden space-y-4 pt-1.5">
-                    <span class="text-[8.5px] text-cyan-400 font-black tracking-widest block uppercase pl-0.5">REAL-TIME WHATSAPP PREVIEW</span>
-                    
-                    <!-- Bubble display -->
-                    <div class="relative w-full rounded-xl overflow-hidden shadow-inner flex flex-col items-center justify-center p-4 min-h-[180px]" style="background-image: radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px); background-size: 16px 16px; background-color: #0c141a; border: 1px solid rgba(255,255,255,0.04);">
-                        <!-- background custom grid mockup wallpaper -->
-                        <div class="absolute inset-0 z-0 bg-repeat opacity-5 pointer-events-none brightness-75"></div>
-                        
-                        <!-- simulated Chat Bubble container -->
-                        <div class="relative z-10 bg-[#005c4b] text-white px-3 py-2 rounded-2xl rounded-tr-none max-w-[80%] shadow-lg border border-[#005c4b]/50 select-none animate-popIn flex flex-col items-center">
-                            <!-- tail -->
-                            <div class="absolute -right-1.5 top-0 w-3.5 h-3.5 bg-[#005c4b] shadow-md rounded-bl-3xl" style="clip-path: polygon(0 0, 100% 0, 0 100%);"></div>
-                            
-                            <!-- Sticker canvas actual wrapper -->
-                            <div class="p-1 flex items-center justify-center relative w-32 h-32 md:w-36 md:h-36">
-                                <canvas id="stickerRenderTargetCanvas" class="w-full h-full object-contain"></canvas>
-                                <video id="stickerRenderTargetVideo" class="w-full h-full object-contain absolute inset-0 hidden" autoplay loop muted playsinline webkit-playsinline></video>
-                            </div>
-                            
-                            <!-- status time label -->
-                            <div class="w-full text-right text-[7.5px] text-[#8696a0] mt-1 pr-1 font-mono">
-                                10:42 PM ✓✓
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Individual and pack export/sharing action triggers -->
-                    <div class="space-y-2.5">
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="shareActiveStickerWebpAction()" class="py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:brightness-110 text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1 cursor-pointer" title="Share current active sticker directly">
-                                <i data-lucide="share-2" class="w-3.5 h-3.5 text-slate-950"></i> SHARE SINGLE
-                            </button>
-                            <button onclick="shareCompleteWastickersPackAction()" class="py-3 bg-gradient-to-r from-[#ef4444] to-[#f43f5e] hover:brightness-110 text-white font-black text-[9px] tracking-widest uppercase rounded-xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1 cursor-pointer" title="Share entire sticker pack (.wastickers) to WhatsApp">
-                                <i data-lucide="send" class="w-3.5 h-3.5 text-white"></i> SHARE FULL PACK
-                            </button>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="copyStickerToClipboard()" class="py-2.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 font-extrabold text-[9px] tracking-widest uppercase border border-cyan-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
-                                <i data-lucide="copy" class="w-3.5 h-3.5"></i> COPY IMAGES
-                            </button>
-                            <button onclick="downloadActiveStickerWebpAction()" class="py-2.5 bg-white/5 hover:bg-white/10 text-white font-extrabold text-[9px] tracking-widest uppercase border border-white/5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
-                                <i data-lucide="download" class="w-3.5 h-3.5"></i> DOWNLOAD `.WEBP`
-                            </button>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="downloadAllStickersAsZipAction()" class="py-2.5 bg-cyan-500 hover:bg-cyan-600 hover:text-white text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1">
-                                <i data-lucide="archive" class="w-3.5 h-3.5"></i> DOWNLOAD `.ZIP`
-                            </button>
-                            <button onclick="downloadAllStickersAsWastickersAction()" class="py-2.5 bg-emerald-500 hover:bg-emerald-600 hover:text-white text-slate-950 font-black text-[9px] tracking-widest uppercase rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1" title="Import perfectly formatted custom sticker pack on Android & iOS instantly">
-                                <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> DOWNLOAD `.WASTICKERS`
-                            </button>
-                        </div>
-
-                        <button onclick="downloadAllStickersSequentially()" class="w-full py-2 bg-stone-900 hover:bg-stone-850 text-stone-400 hover:text-stone-300 font-bold text-[8.5px] tracking-wider uppercase border border-white/5 rounded-lg transition-all cursor-pointer">
-                            DOWNLOAD COMPLETE SET AS SINGLE `.WEBP` FILES
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Step-by-Step Installation Instruction Panel -->
-                <div class="p-4 bg-emerald-500/5 hover:bg-emerald-500/10 border border-emerald-500/10 hover:border-emerald-500/20 rounded-xl space-y-2.5 transition-all">
-                    <span class="text-[9px] text-[#4ade80] font-black tracking-widest block uppercase font-mono pl-0.5">🌟 DIRECT METHOD (NO EXTERNAL APP REQUIRED!):</span>
-                    <div class="text-[9px] text-stone-300 space-y-2 leading-relaxed font-semibold uppercase">
-                        <div class="flex items-start gap-1.5 text-stone-400">
-                            <span class="text-[#4ade80] font-bold font-mono">1.</span>
-                            <span class="text-stone-300">GENERATE OR SELECT YOUR DESIRED STICKER ABOVE.</span>
-                        </div>
-                        <div class="flex items-start gap-1.5 text-stone-400">
-                            <span class="text-[#4ade80] font-bold font-mono">2.</span>
-                            <span class="text-stone-300">TAP <strong class="text-emerald-400">"DIRECT SHARE TO WHATSAPP"</strong> AND CHOOSE YOUR CONTACT (OR CHATTER WINDOW).</span>
-                        </div>
-                        <div class="flex items-start gap-1.5 text-stone-400">
-                            <span class="text-[#4ade80] font-bold font-mono">3.</span>
-                            <span class="text-stone-300">OR JUST TAP <strong class="text-cyan-400">"COPY IMAGES"</strong> AND PASTE IT (CTRL+V) DIRECTLY INTO ANY WHATSAPP WEB OR APP CHAT BOX!</span>
-                        </div>
-                        <div class="flex items-start gap-1.5 text-stone-400">
-                            <span class="text-[#4ade80] font-bold font-mono">4.</span>
-                            <span class="text-stone-100">ONCE SENT IN WHATSAPP, <strong class="text-emerald-400">SIMPLY TAP THE STICKER MESSAGE</strong> AND CLICK <strong class="text-[#4ade80]">"ADD TO FAVORITES"</strong>. IT IS NOW PERMANENTLY SAVED!</span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -1516,40 +1226,10 @@
                     </div>
 
                     <!-- Dynamic Preset Playlist Section for Audio - Sync Atmosphere Active -->
-                    <div id="audioPlaylistSection" class="mt-4 text-left space-y-4 select-none">
+                    <div id="audioPlaylistSection" class="mt-4 text-left space-y-4 select-none hidden">
 
                         <!-- Tab 3: ROOM AMBIENCE -->
-                        <div id="loungeTab_vibe" class="space-y-3 text-left">
-                            <div class="flex justify-between items-center pb-1 pl-1">
-                                <span class="text-[9px] text-[#FF4B72] font-black tracking-widest uppercase block">SYNC LOBBY ATMOSPHERE</span>
-                                <span id="syncedThemeBadge" class="text-[8px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 px-2 py-0.5 rounded font-black font-mono tracking-wider uppercase">STARDUST</span>
-                            </div>
-                            <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-1">
-                                Shift the atmosphere of the entire portal together in real-time! Tapping a vibe preset applies premium color themes and custom canvas motion parameters to both users simultaneously.
-                            </p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="triggerSharedAmbienceMood('lofi_study')" class="p-3 bg-[#0c1015]/80 hover:bg-[#0c1015] border border-blue-500/35 hover:border-blue-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
-                                    <span class="text-[14px]">🌧️</span>
-                                    <span class="text-[10px] font-black text-blue-400 uppercase tracking-wide mt-2">RAINY STUDY</span>
-                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">COOL BLUE RAIN</span>
-                                </button>
-                                <button onclick="triggerSharedAmbienceMood('cyber_tokyo')" class="p-3 bg-[#0d011a]/80 hover:bg-[#0d011a] border border-fuchsia-500/35 hover:border-fuchsia-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
-                                    <span class="text-[14px]">🌌</span>
-                                    <span class="text-[10px] font-black text-fuchsia-400 uppercase tracking-wide mt-2">CYBER TOKYO</span>
-                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">NEON GLITCH</span>
-                                </button>
-                                <button onclick="triggerSharedAmbienceMood('cozy_fire')" class="p-3 bg-[#110402]/80 hover:bg-[#110402] border border-orange-500/35 hover:border-orange-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
-                                    <span class="text-[14px]">🔥</span>
-                                    <span class="text-[10px] font-black text-orange-400 uppercase tracking-wide mt-2">COZY FIREPLACE</span>
-                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">EMBERS UPWARD</span>
-                                </button>
-                                <button onclick="triggerSharedAmbienceMood('cosmic_dust')" class="p-3 bg-[#020211]/80 hover:bg-[#020211] border border-violet-500/35 hover:border-violet-400 active:scale-95 duration-150 rounded-xl text-left cursor-pointer flex flex-col justify-between">
-                                    <span class="text-[14px]">✨</span>
-                                    <span class="text-[10px] font-black text-violet-400 uppercase tracking-wide mt-2">COSMIC DUST</span>
-                                    <span class="text-[8px] text-stone-500 uppercase font-mono mt-0.5 block">STARDUST SPARK</span>
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Removed Room Ambience Lounge Atmosphere selection to prevent issues and startup lag -->
                     </div>
 
                     <!-- Co-op Synchronized Audio Stream Mode Selector - MX Player & VLC Style Audio Track Swapper -->
@@ -1757,28 +1437,12 @@
                 <div id="quickEmojiDrawer" class="hidden absolute bottom-[105%] left-0 w-full max-w-[340px] max-h-[260px] overflow-y-auto scrollbar-thin glass-card bg-[#0b0512]/95 backdrop-blur-xl rounded-2xl p-3 z-30 shadow-2xl border border-white/10 flex flex-col gap-2.5 animate-slideIn">
                     <!-- Tab Headers -->
                     <div class="flex border-b border-white/5 select-none shrink-0" id="emojiDrawerTabs">
-                        <button onclick="switchEmojiTab('lotties')" id="emojiTabBtn_lotties" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-pink-500 border-b-2 border-pink-500 pb-1.5 transition-all cursor-pointer">
-                            🐦 BIRDS
-                        </button>
-                        <button onclick="switchEmojiTab('stickers')" id="emojiTabBtn_stickers" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer">
+                        <button onclick="switchEmojiTab('stickers')" id="emojiTabBtn_stickers" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-pink-500 border-b-2 border-pink-500 pb-1.5 transition-all cursor-pointer">
                             👾 STICKERS
                         </button>
                         <button onclick="switchEmojiTab('more')" id="emojiTabBtn_more" class="flex-1 py-1 text-[8px] font-black tracking-wider uppercase text-stone-400 hover:text-white transition-all border-b-2 border-transparent pb-1.5 cursor-pointer">
                             😀 MORE
                         </button>
-                    </div>
-
-                    <!-- Tab Content: Lotties -->
-                    <div id="emojiTab_lotties" class="flex flex-wrap gap-1.5 justify-center py-1.5 overflow-y-auto max-h-[190px] scrollbar-thin">
-                        <button onclick="dispatchChatMessage('🐦')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐦 bird blast">🐦</button>
-                        <button onclick="dispatchChatMessage('🐤')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐤 bird blast">🐤</button>
-                        <button onclick="dispatchChatMessage('🐥')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐥 bird blast">🐥</button>
-                        <button onclick="dispatchChatMessage('🦜')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦜 bird blast">🦜</button>
-                        <button onclick="dispatchChatMessage('🦅')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦅 bird blast">🦅</button>
-                        <button onclick="dispatchChatMessage('🦉')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦉 bird blast">🦉</button>
-                        <button onclick="dispatchChatMessage('🐧')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🐧 bird blast">🐧</button>
-                        <button onclick="dispatchChatMessage('🦆')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦆 bird blast">🦆</button>
-                        <button onclick="dispatchChatMessage('🦢')" class="w-[36px] h-[36px] text-lg flex items-center justify-center bg-stone-900/40 hover:bg-[#FF7694]/10 border border-white/5 hover:border-[#FF7694]/30 rounded-lg transition-all duration-150 hover:scale-[1.18] active:scale-90 cursor-pointer select-none" title="Send animated 🦢 bird blast">🦢</button>
                     </div>  
 
                     <!-- Tab Content: Custom Game-Themed Stickers -->
@@ -2374,12 +2038,7 @@
                 let speedX, speedY, size, op;
                 const moodType = (typeof activeAmbientMood !== 'undefined') ? activeAmbientMood : 'cosmic_dust';
                 
-                if (moodType === 'lofi_study') {
-                    speedX = (Math.random() * 0.1 - 0.05) - 0.35;
-                    speedY = Math.random() * 1.5 + 2.0; 
-                    size = Math.random() * 1.0 + 0.8;
-                    op = Math.random() * 0.35 + 0.15;
-                } else if (moodType === 'cyber_tokyo') {
+                if (moodType === 'cyber_tokyo') {
                     speedX = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 1.0 + 0.5);
                     speedY = Math.random() * 0.1 - 0.05;
                     size = Math.random() * 3.0 + 1.2;
@@ -2421,9 +2080,6 @@
                 if (moodType === 'cozy_fire') {
                     p.phase += 0.012;
                     p.x += Math.sin(p.phase) * 0.12;
-                } else if (moodType === 'lofi_study') {
-                    p.phase += 0.02;
-                    p.dx = -0.35 + Math.sin(p.phase) * 0.04;
                 }
 
                 if (p.x < 0) p.x = canvas.width;
@@ -2435,18 +2091,9 @@
                 ctx.globalAlpha = p.op;
                 ctx.beginPath();
                 
-                if (moodType === 'lofi_study') {
-                    ctx.lineTo(p.x, p.y);
-                    ctx.lineTo(p.x + p.dx * 6, p.y + p.dy * 6);
-                    ctx.strokeStyle = p.col;
-                    ctx.lineWidth = p.sz;
-                    ctx.lineCap = 'round';
-                    ctx.stroke();
-                } else {
-                    ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
-                    ctx.fillStyle = p.col;
-                    ctx.fill();
-                }
+                ctx.arc(p.x, p.y, p.sz, 0, Math.PI * 2);
+                ctx.fillStyle = p.col;
+                ctx.fill();
                 ctx.restore();
             });
             requestAnimationFrame(animateCanvasParticles);
@@ -2541,7 +2188,6 @@
                 }
                 renderRecentlyPlayedUI();
                 renderSongsPresets();
-                switchLoungeTab('vibe');
             }
             refreshScoreboard();
             scrollToBottom('chatMessagesScroller');
@@ -2672,8 +2318,8 @@
             const drawer = document.getElementById('quickEmojiDrawer');
             drawer.classList.toggle('hidden');
             if (!drawer.classList.contains('hidden')) {
-                // Default to showing lotties when opened
-                switchEmojiTab('lotties');
+                // Default to showing stickers when opened
+                switchEmojiTab('stickers');
             }
         }
 
@@ -2945,35 +2591,21 @@
             return stickers[key] || defaultMeta;
         }
 
-        // Premium DotLottie interactive emoji assets map configurations - OPTIMIZED TO BIRD ONLY AS REQUESTED BY USER FOR LAG ELIMINATION
-        const lottieEmojiMap = {
-            '🐦': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🐤': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🐥': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🦜': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🦅': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🦉': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🐧': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🦆': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie',
-            '🦢': 'https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie'
-        };
-        const lottieEmojiGlowMap = {
-            '🐦': 'rgba(34, 197, 94, 0.75)',
-            '🐤': 'rgba(251, 191, 36, 0.75)',
-            '🐥': 'rgba(251, 191, 36, 0.75)',
-            '🦜': 'rgba(34, 197, 94, 0.75)',
-            '🦅': 'rgba(234, 179, 8, 0.75)',
-            '🦉': 'rgba(234, 179, 8, 0.75)',
-            '🐧': 'rgba(56, 189, 248, 0.75)',
-            '🦆': 'rgba(34, 197, 94, 0.75)',
-            '🦢': 'rgba(255, 255, 255, 0.75)'
-        };
+        // Premium DotLottie interactive emoji assets map configurations - CLEARED COMPLETELY TO REMOVE ALL ANIMATED EMOJIS
+        const lottieEmojiMap = {};
+        const lottieEmojiGlowMap = {};
 
         // Sync Chat Message Logs real-time listener elements
         let isFirstBatchChatLoaded = false;
-        db.ref('chatMessages').once('value', () => { isFirstBatchChatLoaded = true; });
+        db.ref('chatMessages').limitToLast(40).once('value', () => { 
+            isFirstBatchChatLoaded = true; 
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                lucide.createIcons();
+            }
+            scrollToBottom('chatMessagesScroller');
+        });
 
-        db.ref('chatMessages').on('child_added', (snap) => {
+        db.ref('chatMessages').limitToLast(40).on('child_added', (snap) => {
             const data = snap.val();
             const key = snap.key;
             if(!data) return;
@@ -3160,8 +2792,12 @@
             }
 
             box.appendChild(messageRow);
-            lucide.createIcons();
-            scrollToBottom('chatMessagesScroller');
+            if (isFirstBatchChatLoaded) {
+                if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                    lucide.createIcons();
+                }
+                scrollToBottom('chatMessagesScroller');
+            }
 
             if (data.text && isFirstBatchChatLoaded) {
                 const trimmedText = data.text.trim();
@@ -3201,7 +2837,7 @@
             }
         });
 
-        db.ref('chatMessages').on('child_changed', (snap) => {
+        db.ref('chatMessages').limitToLast(40).on('child_changed', (snap) => {
             const data = snap.val();
             const key = snap.key;
             if(!data) return;
@@ -3222,7 +2858,7 @@
             }
         });
 
-        db.ref('chatMessages').on('child_removed', (snap) => {
+        db.ref('chatMessages').limitToLast(40).on('child_removed', (snap) => {
             const row = document.getElementById(`chatMsg_${snap.key}`);
             if (row) row.remove();
         });
@@ -5162,18 +4798,6 @@
         }
 
         const AMBIENT_MOODS = {
-            'lofi_study': {
-                name: "🌧️ Lofi Rain Study",
-                vars: {
-                    '--bg-color': '#0c1015',
-                    '--card-bg': 'rgba(18, 25, 34, 0.72)',
-                    '--primary-color': '#3b82f6',
-                    '--secondary-color': '#60a5fa',
-                    '--accent-color': '#93c5fd',
-                    '--border-color': 'rgba(255, 255, 255, 0.08)',
-                    '--glow-color': 'rgba(37, 99, 235, 0.28)'
-                }
-            },
             'cyber_tokyo': {
                 name: "🌌 Cyberpunk Tokyo",
                 vars: {
@@ -5263,10 +4887,14 @@
         }
 
         function applySharedAmbienceMood(moodKey, triggeredBy) {
-            const mood = AMBIENT_MOODS[moodKey];
+            let key = moodKey;
+            if (!key || !AMBIENT_MOODS[key]) {
+                key = 'cosmic_dust';
+            }
+            const mood = AMBIENT_MOODS[key];
             if (!mood) return;
 
-            activeAmbientMood = moodKey;
+            activeAmbientMood = key;
 
             // Apply style variables over document root
             for (let [prop, val] of Object.entries(mood.vars)) {
@@ -5542,7 +5170,7 @@
         });
 
         // Listen for recently played soundtrack history
-        db.ref('recentlyPlayed').on('value', (snap) => {
+        db.ref('recentlyPlayed').limitToLast(15).on('value', (snap) => {
             const val = snap.val();
             localRecentlyPlayed = [];
             if (val) {
@@ -6144,12 +5772,15 @@
         });
 
         // ================= CO-OP MULTIPLAYER AMBIENCE & DJ SYNCHRONIZATION =================
+        // Removed real-time loungeAmbienceState listener to prevent startup lag as requested by user
+        /*
         db.ref('loungeAmbienceState').on('value', (snap) => {
             const data = snap.val();
             if (data && data.moodKey) {
                 applySharedAmbienceMood(data.moodKey, data.triggeredBy);
             }
         });
+        */
 
         let lastHandledDJTimestamp = 0;
         db.ref('coopSoundboardSync').on('value', (snap) => {
@@ -6227,25 +5858,34 @@
             if (pinCard) {
                 pinCard.remove();
             }
-            // Keep access completely public and password-free for all players in the database
-            try {
-                db.ref('userPasscodes/immu').remove();
-                db.ref('userPasscodes/sappii').remove();
-                db.ref('userPasscodes/tharkuri').remove();
-            } catch(e) {
-                console.error("Clean old passcodes error", e);
-            }
 
-            // Setup custom gaming banner image load-on-start
-            const gBannerImgNode = document.getElementById('gamingBannerImageNode');
-            if (gBannerImgNode) {
-                const savedBanner = localStorage.getItem('customGamingBanner');
-                if (savedBanner) {
-                    gBannerImgNode.src = savedBanner;
-                } else {
-                    gBannerImgNode.src = 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80';
+            // Defer non-critical and potentially blocking operations to allow instant DOM paint
+            setTimeout(() => {
+                // Keep access completely public and password-free for all players in the database
+                try {
+                    db.ref('userPasscodes/immu').remove();
+                    db.ref('userPasscodes/sappii').remove();
+                    db.ref('userPasscodes/tharkuri').remove();
+                } catch(e) {
+                    console.error("Clean old passcodes error", e);
                 }
-            }
+
+                // Setup custom gaming banner image load-on-start
+                const gBannerImgNode = document.getElementById('gamingBannerImageNode');
+                if (gBannerImgNode) {
+                    const savedBanner = localStorage.getItem('customGamingBanner');
+                    if (savedBanner) {
+                        gBannerImgNode.src = savedBanner;
+                    } else {
+                        gBannerImgNode.src = 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80';
+                    }
+                }
+
+                // Load saved custom Telegram Bot Token if any
+                if (typeof loadTelegramCustomToken === 'function') {
+                    loadTelegramCustomToken();
+                }
+            }, 60);
 
             const bannerUploader = document.getElementById('gamingBannerFileInput');
             if (bannerUploader) {
@@ -6256,6 +5896,7 @@
                         reader.onload = function(evt) {
                             const base64 = evt.target.result;
                             localStorage.setItem('customGamingBanner', base64);
+                            const gBannerImgNode = document.getElementById('gamingBannerImageNode');
                             if (gBannerImgNode) {
                                 gBannerImgNode.src = base64;
                             }
@@ -6282,11 +5923,6 @@
                         triggerLiveToast("SEEK CHRONO SYNCED!");
                     }
                 });
-            }
-
-            // Load saved custom Telegram Bot Token if any
-            if (typeof loadTelegramCustomToken === 'function') {
-                loadTelegramCustomToken();
             }
         });
 
@@ -8841,24 +8477,8 @@
             ]
         };
 
-        function showTechHub() {
-            document.getElementById('lobbyScreen').classList.add('hidden');
-            const h = document.getElementById('techHubScreen');
-            if (h) h.classList.remove('hidden');
-            triggerLiveToast("WARPING TO TECH TOOLS");
-        }
-
-        function showLobbyFromTechHub() {
-            const h = document.getElementById('techHubScreen');
-            if (h) {
-                h.classList.add('hidden');
-            }
-            document.getElementById('lobbyScreen').classList.remove('hidden');
-        }
-
         function showStickersScreen() {
-            const h = document.getElementById('techHubScreen');
-            if (h) h.classList.add('hidden');
+            document.getElementById('lobbyScreen').classList.add('hidden');
             const stk = document.getElementById('stickersScreen');
             if (stk) {
                 stk.classList.remove('hidden');
@@ -8869,11 +8489,10 @@
             selectPresetStickerPack('pepe');
         }
 
-        function showTechHubFromStickers() {
+        function showLobbyFromStickers() {
             const stk = document.getElementById('stickersScreen');
             if (stk) stk.classList.add('hidden');
-            const h = document.getElementById('techHubScreen');
-            if (h) h.classList.remove('hidden');
+            document.getElementById('lobbyScreen').classList.remove('hidden');
         }
 
         function selectPresetStickerPack(categoryKey) {
