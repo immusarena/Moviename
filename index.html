@@ -5376,13 +5376,33 @@
             if (upcomingQueue && upcomingQueue.length > 0) {
                 playNextFromQueue();
             } else {
-                db.ref('musicState').update({
-                    status: 'paused',
-                    seekTime: activeNode.duration || 0,
-                    sentTime: Date.now(),
-                    triggeredBy: 'SYSTEM_END'
-                });
-                triggerLiveToast("MEDIA PLAYBACK COMPLETED!");
+                // Autoplay next preset song if this is a preset song and no queue items exist
+                const isVideo = (musicState.mediaType === 'video');
+                const playlist = isVideo ? DYNAMIC_MOVIES_PLAYLIST : DYNAMIC_SONGS_PLAYLIST;
+                let currentIndex = playlist.findIndex(s => s.url === musicState.trackUrl);
+                if (currentIndex !== -1) {
+                    let nextIndex = (currentIndex + 1) % playlist.length;
+                    const targetTrack = playlist[nextIndex];
+                    db.ref('musicState').set({
+                        trackUrl: targetTrack.url,
+                        trackTitle: targetTrack.title,
+                        trackAuthor: targetTrack.author,
+                        mediaType: isVideo ? 'video' : 'audio',
+                        status: 'playing',
+                        seekTime: 0,
+                        sentTime: Date.now(),
+                        triggeredBy: 'SYSTEM_AUTOPLAY'
+                    });
+                    triggerLiveToast(`AUTOPLAYING NEXT PRESET: ${targetTrack.title}`);
+                } else {
+                    db.ref('musicState').update({
+                        status: 'paused',
+                        seekTime: activeNode.duration || 0,
+                        sentTime: Date.now(),
+                        triggeredBy: 'SYSTEM_END'
+                    });
+                    triggerLiveToast("MEDIA PLAYBACK COMPLETED!");
+                }
             }
         }
 
@@ -6243,7 +6263,7 @@
             });
         }
 
-        async function playPlaylistItemImmediately(songUrl, title, addedBy) {
+        async function playPlaylistItemImmediately(songUrl, title, addedBy, songId) {
             let targetUrl = songUrl;
             let mType = detectMediaType(songUrl, 'audio');
             
@@ -6270,6 +6290,27 @@
                 triggeredBy: myName
             });
             triggerLiveToast(`PLAY TRACK: ${title}`);
+
+            // Automatically queue all subsequent tracks in this playlist to enable autoplaying next tracks
+            const songs = getActivePlaylistSongs();
+            const currentIdx = songs.findIndex(s => s.id === songId || s.url === songUrl);
+            if (currentIdx !== -1 && currentIdx < songs.length - 1) {
+                db.ref('mediaQueue').remove().then(() => {
+                    for (let i = currentIdx + 1; i < songs.length; i++) {
+                        const song = songs[i];
+                        const songType = detectMediaType(song.url, 'audio');
+                        db.ref('mediaQueue').push({
+                            url: song.url,
+                            title: song.title,
+                            mediaType: songType,
+                            addedBy: song.addedBy || myName,
+                            timestamp: Date.now() + i
+                        });
+                    }
+                });
+            } else {
+                db.ref('mediaQueue').remove();
+            }
         }
 
         function getActivePlaylistSongs() {
@@ -6441,7 +6482,7 @@
                 songRow.className = "p-2 bg-black/30 border border-white/5 rounded-xl flex items-center justify-between gap-2 hover:border-white/10 transition-all";
 
                 songRow.innerHTML = `
-                    <div class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer" onclick="playPlaylistItemImmediately('${song.url}', '${song.title}', '${song.addedBy}')">
+                    <div class="flex items-center gap-2 min-w-0 flex-1 cursor-pointer" onclick="playPlaylistItemImmediately('${song.url}', \`${song.title.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`, '${song.addedBy}', '${song.id}')">
                         <button class="w-6 h-6 rounded bg-pink-500/10 hover:bg-pink-500 hover:text-black flex items-center justify-center text-pink-400 font-black transition-colors shrink-0 cursor-pointer">
                             <i data-lucide="play" class="w-3 h-3 fill-current pl-[1px]"></i>
                         </button>
