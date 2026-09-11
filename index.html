@@ -1266,6 +1266,1167 @@
                             <!-- Clickable Video Uploader Button for Your Name video clip -->
                             <div class="mt-4 text-center">
                                 <button onclick="document.getElementById('vinylCenterVideoFileInput').click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ec4899]/10 hover:bg-[#ec4899]/20 border border-[#ec4899]/25 hover:border-[#ec4899]/40 rounded-xl text-[9px] font-bold uppercase tracking-widest text-[#f472b6] transition-all cursor-pointer shadow-sm">
+                                               0% { transform: scale(0.92); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideIn {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes messageArrival {
+            0% {
+                transform: translateY(16px) scale(0.96);
+                opacity: 0;
+                filter: brightness(1.1);
+            }
+            60% {
+                transform: translateY(-2px) scale(1.01);
+                opacity: 0.95;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+                filter: brightness(1);
+            }
+        }
+        @keyframes emojiBlast {
+            0% { transform: scale(0.2) rotate(-20deg); opacity: 0; }
+            45% { transform: scale(1.4) rotate(15deg); }
+            75% { transform: scale(0.9) rotate(-10deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(4deg); }
+        }
+
+        .animate-popIn { animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .animate-floatUp { animation: floatUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slideIn { animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-message-arrival {
+            animation: messageArrival 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform-origin: center bottom;
+        }
+        .animate-emoji { animation: emojiBlast 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, emojiFloat 2.5s ease-in-out infinite alternate 0.5s; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+
+        /* Subtle physical floating spring curves mimicking Framer-Motion dynamics */
+        @keyframes avatarSpringFloatActive {
+            0%, 100% { transform: translateY(0px) scale(1.04); filter: drop-shadow(0 0 4px rgba(255, 75, 114, 0.35)); }
+            50% { transform: translateY(-6px) scale(1.1); filter: drop-shadow(0 0 18px rgba(255, 75, 114, 0.75)); }
+        }
+        @keyframes avatarSpringFloatOnline {
+            0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 2px rgba(74, 222, 128, 0.15)); }
+            50% { transform: translateY(-3px) scale(1.03); filter: drop-shadow(0 0 10px rgba(74, 222, 128, 0.45)); }
+        }
+        .animate-avatar-turn {
+            animation: avatarSpringFloatActive 2.2s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 12px var(--glow-color) !important;
+        }
+        .animate-avatar-online {
+            animation: avatarSpringFloatOnline 3.6s cubic-bezier(0.25, 0.8, 0.25, 1) infinite;
+            border-color: rgba(74, 222, 128, 0.4) !important;
+        }
+
+        /* Premium scrollbar integration */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+
+        /* Styling for visual spades cards in trick-taking game */
+        .spades-card {
+            aspect-ratio: 2.3 / 3.2;
+            perspective: 1000px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .spades-card:hover {
+            transform: translateY(-12px) scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6), 0 0 15px var(--glow-color);
+            z-index: 30;
+        }
+        
+        /* Rotating class animation */
+        @keyframes rotatingDisc {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .anim-rotate-disc {
+            animation: rotatingDisc 8s linear infinite;
+        }
+
+        /* Instagram Reels Snap Scroll & Custom Layout Styles */
+        .scrollbar-none {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        .scrollbar-none::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+        
+        @keyframes marqueeScroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .animate-marquee {
+            animation: marqueeScroll 15s linear infinite;
+        }
+    
+
+/* ===== PREMIUM CINEMA PLAYER ===== */
+.vp{position:relative;background:#000;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.65);}
+.vp:fullscreen{border-radius:0;border:none;display:flex;flex-direction:column;justify-content:center;}
+.vp-stage{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
+.vp:fullscreen .vp-stage{aspect-ratio:auto;flex:1;min-height:0;}
+.vp-stage video{width:100%;height:100%;object-fit:contain;background:#000;display:block;}
+
+.vp-veil{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.2) 40%,rgba(0,0,0,.7) 100%);transition:opacity .25s;cursor:pointer;}
+.vp-veil.hide{opacity:0;pointer-events:none;}
+.vp-big{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);
+  border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .2s;color:#fff;}
+.vp-big:hover{border-color:var(--primary-color);background:var(--glow-color);transform:scale(1.06);}
+
+.vp-tag{position:absolute;top:12px;left:12px;z-index:3;display:flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:4px 10px;border-radius:20px;
+  font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#d6d3d1;font-family:'JetBrains Mono',monospace;}
+.vp-tag .d{width:6px;height:6px;border-radius:50%;background:var(--primary-color);}
+.vp-tag.live .d{animation:vpblink 1.6s ease-in-out infinite;}
+@keyframes vpblink{50%{opacity:.2}}
+
+.vp-spin{position:absolute;z-index:3;width:36px;height:36px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.15);border-top-color:var(--primary-color);animation:vpspin .8s linear infinite;display:none;}
+.vp-spin.on{display:block}
+@keyframes vpspin{to{transform:rotate(360deg)}}
+
+.vp-flash{position:absolute;z-index:4;top:50%;left:50%;width:74px;height:74px;border-radius:50%;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;
+  color:#fff;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.8);}
+.vp-flash.go{animation:vppop .55s ease-out;}
+@keyframes vppop{0%{opacity:1;transform:translate(-50%,-50%) scale(.75)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+
+.vp-deck{background:linear-gradient(to top,rgba(8,4,14,.96),rgba(8,4,14,.85));padding:10px 14px 12px;
+  border-top:1px solid rgba(255,255,255,.06);}
+.vp:fullscreen .vp-deck{position:absolute;left:0;right:0;bottom:0;border:none;padding:22px 26px 18px;
+  background:linear-gradient(to top,rgba(0,0,0,.92),rgba(0,0,0,.4) 70%,transparent);transition:opacity .25s,transform .25s;}
+.vp:fullscreen.idle .vp-deck{opacity:0;transform:translateY(10px);pointer-events:none;}
+.vp:fullscreen.idle{cursor:none;}
+
+.vp-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.vp-time{font-size:9.5px;font-weight:800;color:#a8a29e;font-family:'JetBrains Mono',monospace;width:48px;flex-shrink:0;}
+.vp-time.end{text-align:right;}
+.vp-bar{position:relative;flex:1;height:16px;cursor:pointer;touch-action:none;display:flex;align-items:center;}
+.vp-track{position:absolute;left:0;right:0;height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden;}
+.vp-buf{position:absolute;inset:0 auto 0 0;width:0;background:rgba(255,255,255,.22);}
+.vp-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));}
+.vp-knob{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;background:#fff;
+  transform:translate(-50%,-50%) scale(.85);box-shadow:0 0 0 0 var(--glow-color);transition:transform .15s,box-shadow .15s;}
+.vp-bar:hover .vp-knob,.vp-bar.drag .vp-knob{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 0 5px var(--glow-color);}
+.vp-tip{position:absolute;bottom:20px;transform:translateX(-50%);background:#0d0718;border:1px solid rgba(255,255,255,.12);
+  padding:3px 7px;border-radius:6px;font-size:9.5px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;
+  opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;}
+.vp-bar:hover .vp-tip,.vp-bar.drag .vp-tip{opacity:1;}
+
+.vp-ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.vp-l,.vp-r{display:flex;align-items:center;gap:2px;}
+.vp-b{background:none;border:none;color:#a8a29e;cursor:pointer;width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.vp-b:hover{color:#fff;background:rgba(255,255,255,.08);}
+.vp-b.main{width:36px;height:36px;color:#fff;}
+.vp-b[hidden]{display:none;}
+.vp-vol{-webkit-appearance:none;appearance:none;width:0;opacity:0;height:3px;border-radius:3px;
+  background:rgba(255,255,255,.2);cursor:pointer;transition:width .2s,opacity .2s;}
+.vp-volwrap:hover .vp-vol,.vp-vol:focus{width:66px;opacity:1;margin:0 6px;}
+.vp-vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:#fff;}
+
+.vp-menuwrap{position:relative;}
+.vp-pill{background:none;border:none;color:#a8a29e;font-size:9.5px;font-weight:900;letter-spacing:.06em;
+  text-transform:uppercase;font-family:'JetBrains Mono',monospace;padding:6px 9px;border-radius:8px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap;}
+.vp-pill:hover{color:#fff;background:rgba(255,255,255,.08);}
+.vp-pill .v{color:#fff;}
+.vp-menu{position:absolute;bottom:40px;right:0;min-width:170px;max-height:230px;overflow-y:auto;
+  background:rgba(13,7,24,.97);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:5px;display:none;flex-direction:column;z-index:40;box-shadow:0 16px 40px rgba(0,0,0,.7);}
+.vp-menu.open{display:flex;}
+.vp-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:8px;
+  font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#a8a29e;background:none;border:none;
+  cursor:pointer;text-align:left;width:100%;transition:all .15s;}
+.vp-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.vp-item.on{color:var(--primary-color);}
+.vp-item .ck{opacity:0;}
+.vp-item.on .ck{opacity:1;}
+.vp-note{padding:8px 10px;font-size:8.5px;line-height:1.5;color:#78716c;text-transform:uppercase;letter-spacing:.04em;font-weight:700;}
+
+@media (max-width:640px){
+  .vp-deck{padding:8px 10px 10px;}
+  .vp-time{width:42px;font-size:9px;}
+  .vp-pill{padding:6px 6px;}
+}
+</style>
+</head>
+<body class="flex flex-col items-center justify-start p-4 relative pb-12">
+
+    <!-- Active floating particles canvas in background -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Floating Real-time Game Invitation Banner -->
+    <div id="floatingInviteNotification" class="hidden fixed top-4 inset-x-2 max-w-[280px] mx-auto z-50 glass-card bg-[#0d0617]/95 backdrop-blur-xl rounded-full border border-[var(--primary-color)]/40 shadow-2xl p-1 animate-floatUp select-none">
+        <div class="flex items-center justify-between gap-2.5 pl-2 pr-1">
+            <div class="flex items-center gap-2 min-w-0">
+                <div class="w-7 h-7 rounded-full border border-pink-500/20 overflow-hidden shrink-0 shadow relative">
+                    <img id="inviteSenderAvatar" src="" class="w-full h-full object-cover" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sender'">
+                </div>
+                <div class="min-w-0">
+                    <div id="inviteBannerDescription" class="text-[9.5px] text-stone-200 font-extrabold uppercase tracking-wide truncate">
+                        IMMU INVITING YOU!
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+                <button onclick="rejectRealtimeGameInvite()" title="Dismiss" class="w-7 h-7 bg-white/5 hover:bg-rose-500/20 rounded-full flex items-center justify-center transition-all cursor-pointer">
+                    <i data-lucide="x" class="w-3.5 h-3.5 text-stone-400 hover:text-rose-455"></i>
+                </button>
+                <button onclick="acceptRealtimeGameInvite()" class="h-7 px-3 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] hover:brightness-110 text-white font-black text-[9px] rounded-full tracking-widest uppercase transition-all hover:scale-105 duration-200 cursor-pointer flex items-center justify-center gap-0.5 shadow-md shadow-[var(--primary-color)]/20">
+                    JOIN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Premium Backdrop Ambient Glow circles -->
+    <div class="fixed top-1/4 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[340px] h-[340px] rounded-full bg-[var(--primary-color)] opacity-20 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
+    <div class="fixed bottom-1/4 translate-y-1/2 left-1/2 -translate-x-1/2 w-[285px] h-[285px] rounded-full bg-[var(--accent-color)] opacity-10 filter blur-[90px] pointer-events-none z-0 transition-all duration-1000"></div>
+
+    <!-- Fireworks Celebration Overlay -->
+    <div id="movieFireworksOverlay" class="fixed inset-0 pointer-events-none z-50 flex items-center justify-center hidden bg-black/60 backdrop-blur-[2px] transition-all duration-500 opacity-0">
+        <!-- Canvas for dynamic particle fireworks -->
+        <canvas id="fireworksCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+        
+        <div class="relative flex flex-col items-center justify-center pointer-events-auto z-10">
+            
+            <!-- Left burst (Lottie Confetti) -->
+            <div class="absolute -left-20 md:-left-40 top-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[350px] md:h-[350px] opacity-95 pointer-events-none z-10">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+            
+            <!-- Center master burst (Confetti) -->
+            <div class="w-[320px] h-[320px] md:w-[480px] md:h-[480px] pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+            
+            <!-- Right burst (Lottie Confetti) -->
+            <div class="absolute -right-20 md:-right-40 top-1/2 -translate-y-1/2 w-[250px] h-[250px] md:w-[350px] md:h-[350px] opacity-95 pointer-events-none z-10">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 100%; height: 100%;" autoplay loop></dotlottie-wc>
+            </div>
+
+            <!-- Double Party Confetti blast! -->
+            <div class="absolute inset-0 pointer-events-none z-10 flex items-center justify-center">
+                <dotlottie-wc src="https://lottie.host/316ed582-43e1-4c05-8ee8-715cc8730b2e/kPDKvaarQU.lottie" style="width: 320px; height: 320px;" autoplay loop></dotlottie-wc>
+            </div>
+
+            <!-- Successful Guess Card with beautiful animations -->
+            <div class="bg-black/95 backdrop-blur-2xl border border-yellow-500/30 rounded-2xl p-6 text-center shadow-2xl shadow-yellow-500/20 max-w-sm mx-4 transform scale-95 transition-all duration-500 z-20">
+                <div class="text-3xl mb-1 animate-bounce">🎉🏆🎥</div>
+                <h3 class="text-sm font-black tracking-widest text-[#f59e0b] uppercase font-display select-none">MOVIE SOLVED!</h3>
+                <p id="solvedMovieWinnerName" class="text-[11px] font-bold text-stone-200 mt-2 tracking-wider">SOMEONE CRACKED THE CODE!</p>
+                
+                <div class="mt-3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 font-sans relative overflow-hidden">
+                    <span class="text-[8px] text-stone-400 font-bold block uppercase tracking-widest mb-1">Guessed Movie</span>
+                    <p id="solvedMovieTitleText" class="text-sm md:text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-500 tracking-widest uppercase select-all"></p>
+                </div>
+                
+                <button onclick="dismissFireworksCelebration()" class="mt-4 w-full py-1.5 bg-yellow-500/10 hover:bg-yellow-500/20 active:scale-95 border border-yellow-500/30 text-yellow-400 font-black text-[10px] uppercase tracking-widest rounded-lg transition-all cursor-pointer">
+                    AWESOME!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main dynamic app container wrapper limited to standard portable viewport -->
+    <div class="w-full max-w-md my-4 space-y-4 z-10 transition-all duration-500 animate-floatUp">
+
+        <!-- Header Top Dashboard Menu Bar -->
+        <header class="flex justify-between items-center glass-card px-4 py-3.5 rounded-2xl shadow-xl select-none relative overflow-hidden">
+            <!-- Sleek Glowing Line -->
+            <div class="absolute top-0 inset-x-0 h-[1.5px] bg-gradient-to-r from-[var(--primary-color)] via-[var(--accent-color)] to-[var(--secondary-color)] opacity-70"></div>
+            
+            <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 bg-[var(--accent-color)] rounded-full animate-pulse shadow-lg shadow-[var(--glow-color)] shrink-0"></span>
+                <div class="flex flex-col">
+                    <h1 class="text-xs font-black font-display tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] uppercase">
+                        IMMU'S PORTAL
+                    </h1>
+                    <span class="text-[8px] text-[var(--accent-color)] font-mono tracking-widest uppercase font-black mt-0.5 flex items-center gap-1">
+                        <i data-lucide="shield" class="w-2.5 h-2.5 animate-spin-slow"></i>
+                        ROLE: <span id="hdrRoleBadgeText" class="text-white bg-white/5 border border-white/10 px-1.5 py-0.5 rounded font-bold">IMMU</span>
+                    </span>
+                </div>
+            </div>
+            <!-- Interactive Theme toggle rotating elegant gradient presets -->
+            <button onclick="cyclePremiumTheme()" class="flex items-center gap-1.5 bg-white/5 border border-white/5 hover:border-[var(--primary-color)] text-[9px] text-white font-black px-3 py-2 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer">
+                <i data-lucide="palette" class="w-3.5 h-3.5 text-[var(--accent-color)]"></i>
+                THEME
+            </button>
+        </header>
+
+        <!-- ================= LOBBY DASHBOARD SCREEN ================= -->
+        <div id="lobbyScreen" class="space-y-4 animate-popIn">
+            
+            <!-- Aesthetic graphical center portal banner design with Premium Lottie Emoji Integration -->
+            <div class="relative w-full h-44 rounded-2xl overflow-hidden border border-white/5 bg-gradient-to-br from-[#120722] via-[#0b0512] to-[#1e0735] shadow-2xl flex items-center justify-between p-5 select-none group">
+                <!-- Glowing ambient background lights -->
+                <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-32 h-32 rounded-full bg-[var(--primary-color)] opacity-20 filter blur-2xl pointer-events-none"></div>
+                <div class="absolute bottom-4 right-6 w-24 h-24 rounded-full bg-[var(--accent-color)] opacity-10 filter blur-xl pointer-events-none"></div>
+                
+                <div class="relative z-10 flex flex-col justify-center max-w-[60%]">
+                    <span class="text-[9px] text-[var(--accent-color)] font-extrabold tracking-widest uppercase mb-1.5 font-mono flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent-color)] animate-pulse"></span>
+                        LIVE ARENA ONLINE
+                    </span>
+                    <h2 class="text-base font-black font-display text-white uppercase tracking-wider leading-tight drop-shadow">
+                        CLASH ARENA PORTAL
+                    </h2>
+                    <p class="text-[9px] text-stone-400 font-semibold uppercase mt-1 tracking-wide">
+                        CHOOSE YOUR MINI-GAME AND BEAT YOUR RIVALS
+                    </p>
+                </div>
+                
+                <!-- DotLottie Web Component Container -->
+                <div class="relative z-10 w-28 h-28 flex items-center justify-center shrink-0 scale-110 group-hover:scale-115 transition-transform duration-500">
+                    <dotlottie-wc src="https://lottie.host/e5a5583a-6c8e-4f23-8436-7f4077bf5cb7/THfba5qhqo.lottie" style="width: 140px; height: 140px;" autoplay loop></dotlottie-wc>
+                </div>
+            </div>
+
+            <!-- List of game portals -->
+            <div class="space-y-4 font-sans">
+                <!-- Play Games Launcher -->
+                <button onclick="showGamesHub()" class="w-full flex items-center justify-between p-5 bg-gradient-to-r from-indigo-600/50 via-purple-600/50 to-indigo-700/50 hover:from-indigo-600/70 hover:to-purple-700/75 border-l-4 border-l-indigo-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(129,140,248,0.3)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10 space-y-1 pr-2">
+                        <span class="text-[9px] text-indigo-300 font-extrabold tracking-widest block uppercase font-mono">CHALLENGE ARENAS</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-indigo-200 transition-colors uppercase font-display">
+                            GAMES
+                        </span>
+                    </div>
+                    <div class="p-2.5 bg-indigo-500/15 rounded-xl border border-indigo-400/20 group-hover:scale-105 transition-all text-indigo-300 group-hover:text-white shrink-0">
+                        <i data-lucide="gamepad-2" class="w-5 h-5 animate-pulse"></i>
+                    </div>
+                </button>
+
+                <!-- Co-op music lounge Launcher -->
+                <button onclick="enterArena('songs')" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-rose-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(244,63,94,0.2)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10 space-y-0.5 pr-2">
+                        <span class="text-[9px] text-rose-400 font-black tracking-widest block uppercase font-mono">CO-OP MUSIC LOUNGE</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-rose-400 transition-colors uppercase font-display">
+                            MUSIC LOUNGE
+                        </span>
+                    </div>
+                    <div class="p-2.5 bg-rose-500/10 rounded-xl border border-rose-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-rose-400 shrink-0">
+                        <i data-lucide="music" class="w-5 h-5"></i>
+                    </div>
+                </button>
+
+                <!-- Instagram Reels Launcher -->
+                <button onclick="openReelsViewer()" class="w-full flex items-center justify-between p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(236,72,153,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden">
+                    <!-- Glass sheen reflection on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                    <div class="text-left relative z-10 space-y-0.5 pr-2">
+                        <span class="text-[9px] text-pink-400 font-black tracking-widest block uppercase font-mono">INSTAGRAM INTERACTION</span>
+                        <span class="text-sm font-extrabold text-white tracking-wide group-hover:text-pink-400 transition-colors uppercase font-display">
+                            REELS
+                        </span>
+                    </div>
+                    <div class="relative flex items-center justify-center shrink-0">
+                        <div class="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20 group-hover:scale-105 transition-all text-stone-400 group-hover:text-pink-400">
+                            <i data-lucide="clapperboard" class="w-5 h-5"></i>
+                        </div>
+                        <span id="reelsCountBadge" class="hidden absolute -top-2.5 -right-1.5 bg-gradient-to-tr from-pink-500 to-rose-600 text-[8.5px] font-mono font-black text-white px-1.5 py-0.5 rounded-full border border-black/50 min-w-[18px] text-center shadow-lg animate-bounce">0</span>
+                    </div>
+                </button>
+
+            </div>
+
+
+
+            <!-- PASSCODE / PIN SECURED ACCESS GATE CONFIGURATION CARD -->
+            <div id="pinSecurityConfigCard" class="glass-card rounded-2xl p-5 shadow-2xl space-y-3 font-sans relative overflow-hidden">
+                <!-- Sleek bottom border highlight -->
+                <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 opacity-60"></div>
+                <div class="flex items-center justify-between">
+                    <span class="text-[9px] text-stone-300 font-extrabold tracking-widest uppercase font-mono">
+                        LINK PIN SECURITY
+                    </span>
+                    <span id="pinStatusText" class="text-[8px] bg-red-500/10 border border-red-500/20 text-red-500 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                        UNLOCKED / PUBLIC
+                    </span>
+                </div>
+                <p class="text-[8.5px] text-stone-400 leading-relaxed uppercase tracking-widest pl-0.5">
+                    Prevent unauthorized users from entering this interface by locking your custom profile link under a secure 4-digit PIN lock.
+                </p>
+                <div class="flex gap-2.5 pt-1">
+                    <button onclick="openChangePinModal()" class="flex-1 py-2.5 bg-white/5 hover:bg-pink-500/10 border border-white/5 hover:border-pink-500/30 rounded-xl text-[9px] text-stone-300 hover:text-white font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                        <i data-lucide="key" class="w-3.5 h-3.5 text-pink-400"></i> EDIT SECURITY PIN
+                    </button>
+                    <button id="btnTogglePinLock" onclick="togglePinLockState()" class="flex-1 py-2.5 bg-white/5 hover:bg-emerald-500/10 border border-white/5 hover:border-emerald-500/30 rounded-xl text-[9px] text-stone-300 hover:text-white font-extrabold uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5">
+                        <i data-lucide="lock" class="w-3.5 h-3.5 text-emerald-400"></i> SECURE THIS LINK
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= GAMES HUB SCREEN ================= -->
+        <div id="gamesHubScreen" class="hidden space-y-4 animate-popIn">
+            <!-- Back Header Navigation -->
+            <div class="flex justify-between items-center px-1">
+                <button onclick="showLobbyFromGamesHub()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-pink-500 hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-pink-500"></i>
+                    BACK TO LOBBY
+                </button>
+                <span class="text-[9px] bg-white/5 border border-white/10 text-stone-300 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
+                    GAMES ZONE
+                </span>
+            </div>
+
+            <!-- Header banner with stylized grid background and icon overlay -->
+            <div onclick="document.getElementById('gamingBannerFileInput').click()" class="relative w-full h-36 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group cursor-pointer" title="Click to upload custom gaming banner">
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-950/80 via-purple-950/70 to-indigo-900/40 mix-blend-multiply z-10"></div>
+                <img id="gamingBannerImageNode" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80" referrerPolicy="no-referrer" class="w-full h-full object-cover brightness-75 duration-700 hover:scale-105 transform transition" alt="Gaming Banner">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0d0614] via-black/40 to-transparent flex flex-col justify-end p-5 z-20">
+                    <div class="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-[8px] font-black tracking-widest text-[#FF7694] border border-white/10 rounded-lg px-2.5 py-1 flex items-center gap-1 uppercase transition-all duration-200">
+                        <i data-lucide="camera" class="w-3.5 h-3.5 text-[#FF7694]"></i>
+                        CHANGE BANNER
+                    </div>
+                    <span class="text-[9px] text-[#FF7694] font-black tracking-widest block uppercase font-mono mb-1">CO-OP BATTLES</span>
+                    <h2 class="text-base font-black text-white uppercase tracking-wider font-display">SELECT WORKSPACE ARENA</h2>
+                </div>
+            </div>
+            <input type="file" id="gamingBannerFileInput" class="hidden" accept="image/*">
+
+            <!-- The THREE Interactive Game Boxes -->
+            <div class="grid grid-cols-1 gap-4 font-sans">
+                <!-- Movie Guessing Game Box -->
+                <div onclick="enterArena('movie')" class="p-5 glass-card border-l-4 border-l-pink-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(236,72,153,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-pink-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-pink-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-pink-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse"></span>
+                                MOVIE GUESSING ROUND
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-pink-500/10 rounded-xl border border-pink-500/20 group-hover:border-pink-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="film" class="w-5 h-5 text-pink-500 transition-transform duration-300 group-hover:rotate-12"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Speed Race Box -->
+                <div onclick="enterArena('word')" class="p-5 glass-card border-l-4 border-l-emerald-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(74,222,128,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-emerald-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                WORD SPEED RACE
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20 group-hover:border-emerald-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="zap" class="w-5 h-5 text-emerald-400 transition-transform duration-300 group-hover:scale-110"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Game Box -->
+                <div onclick="enterArena('cards')" class="p-5 glass-card border-l-4 border-l-amber-400 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(251,191,36,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-amber-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                CARD GAME
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-amber-500/10 rounded-xl border border-amber-500/20 group-hover:border-amber-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="layers" class="w-5 h-5 text-amber-400 transition-transform duration-300 group-hover:translate-y-[-2px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guess the Code Challenge Box -->
+                <div onclick="enterArena('code')" class="p-5 glass-card border-l-4 border-l-violet-500 hover:-translate-y-1.5 hover:shadow-[0_15px_30px_rgba(139,92,246,0.25)] rounded-2xl transition-all duration-300 shadow-lg cursor-pointer group relative overflow-hidden flex flex-col justify-between">
+                    <div class="absolute inset-0 bg-gradient-to-r from-violet-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="absolute right-0 bottom-0 top-0 w-24 bg-gradient-to-l from-violet-500/5 to-transparent pointer-events-none"></div>
+                    <div class="flex justify-between items-center relative z-10 w-full">
+                        <div class="space-y-1.5 pr-2">
+                            <h3 class="text-xs font-black text-white tracking-wide uppercase font-display group-hover:text-violet-400 transition-colors flex items-center gap-1.5">
+                                <span class="inline-block w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+                                GUESS THE CODE CHALLENGE
+                            </h3>
+                        </div>
+                        <div class="p-2.5 bg-violet-500/10 rounded-xl border border-violet-500/20 group-hover:border-violet-400/40 group-hover:scale-105 transition-all">
+                            <i data-lucide="key-round" class="w-5 h-5 text-violet-400 transition-transform duration-300 group-hover:rotate-12"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= MULTIPLAYER GAMEPLAY PARENT CANVAS ================= -->
+        <div id="gameplayScreen" class="hidden space-y-4 animate-popIn">
+            
+            <!-- Global Back LOBBY Navigation header row -->
+            <div class="flex justify-between items-center px-1">
+                <button onclick="quitToLobby()" class="flex items-center gap-1.5 text-[10px] font-black tracking-widest text-[#FF7694] hover:text-white uppercase transition-all hover:scale-105 cursor-pointer">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-[#FF7694]"></i>
+                    LOBBY
+                </button>
+                <span id="activeGameTitleBadge" class="text-[9px] bg-white/5 border border-white/10 text-stone-300 font-extrabold px-3.5 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-md">
+                    GAME ACTIVE
+                </span>
+            </div>
+
+            <!-- Real-time Score Panel visually tracking players -->
+            <div class="grid grid-cols-3 gap-3 items-center select-none shrink-0 text-center">
+                
+                <!-- Player A: Immu score card container -->
+                <div id="pScoreCard_immu" class="p-3 glass-card rounded-2xl relative transition-all duration-300 group/score">
+                    <div id="pAvatarContainer_immu" class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md transition-all duration-300">
+                        <img src="1000242624.jpg" alt="Immu" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Immu'">
+                        <!-- Active user online/offline status dot -->
+                        <span id="pOnlineDot_immu" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-stone-600 transition-all"></span>
+                    </div>
+                    <span class="text-[10px] font-black text-stone-300 tracking-wider block">IMMU</span>
+                    <div class="flex items-center justify-center gap-1.5 mt-0.5 select-none touch-manipulation">
+                        <button onclick="decrementPlayerScore('immu')" class="opacity-40 md:opacity-0 group-hover/score:opacity-100 hover:scale-110 active:scale-95 text-[10px] text-stone-400 hover:text-red-400 font-bold bg-white/5 border border-white/10 hover:border-red-500/30 rounded-full w-4 h-4 flex items-center justify-center cursor-pointer transition-all duration-200" title="Decrease Score">-</button>
+                        <span id="pScoreDigit_immu" class="text-xl font-black text-[var(--accent-color)] font-display mt-0.5">0</span>
+                        <button onclick="incrementPlayerScore('immu')" class="opacity-40 md:opacity-0 group-hover/score:opacity-100 hover:scale-110 active:scale-95 text-[10px] text-stone-400 hover:text-emerald-400 font-bold bg-white/5 border border-white/10 hover:border-emerald-500/30 rounded-full w-4 h-4 flex items-center justify-center cursor-pointer transition-all duration-200" title="Increase Score">+</button>
+                    </div>
+                </div>
+
+                <div id="scoreboardMiddleCol" class="text-center">
+                    <span id="scoreboardMiddleLabelA" class="text-[9px] text-stone-500 font-bold block tracking-widest uppercase font-mono">VS</span>
+                    <span id="scoreboardMiddleLabelB" class="text-[10px] text-stone-400 font-extrabold tracking-widest uppercase font-display block mt-1">CLASH</span>
+                </div>
+
+                <!-- Player B: Sappii score card container -->
+                <div id="pScoreCard_sappii" class="p-3 glass-card rounded-2xl relative transition-all duration-300 group/score">
+                    <div id="pAvatarContainer_sappii" class="relative mx-auto w-12 h-12 rounded-full border border-white/10 overflow-hidden mb-1.5 shadow-md transition-all duration-300">
+                        <img src="1000242625.jpg" alt="Sappii" class="w-full h-full object-cover pb-0" onerror="this.src='https://api.dicebear.com/7.x/pixel-art/svg?seed=Sappii'">
+                        <!-- Active user online/offline status dot -->
+                        <span id="pOnlineDot_sappii" class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-slate-900 bg-stone-600 transition-all"></span>
+                    </div>
+                    <span class="text-[10px] font-black text-stone-300 tracking-wider block">SAPPII</span>
+                    <div class="flex items-center justify-center gap-1.5 mt-0.5 select-none touch-manipulation">
+                        <button onclick="decrementPlayerScore('sappii')" class="opacity-40 md:opacity-0 group-hover/score:opacity-100 hover:scale-110 active:scale-95 text-[10px] text-stone-400 hover:text-red-400 font-bold bg-white/5 border border-white/10 hover:border-red-500/30 rounded-full w-4 h-4 flex items-center justify-center cursor-pointer transition-all duration-200" title="Decrease Score">-</button>
+                        <span id="pScoreDigit_sappii" class="text-xl font-black text-[var(--primary-color)] font-display mt-0.5">0</span>
+                        <button onclick="incrementPlayerScore('sappii')" class="opacity-40 md:opacity-0 group-hover/score:opacity-100 hover:scale-110 active:scale-95 text-[10px] text-stone-400 hover:text-emerald-400 font-bold bg-white/5 border border-white/10 hover:border-emerald-500/30 rounded-full w-4 h-4 flex items-center justify-center cursor-pointer transition-all duration-200" title="Increase Score">+</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Inter-gameplay real-time notification invitation bar -->
+            <div id="gameplayInviteBanner" class="hidden glass-card rounded-full p-1 pl-3.5 pr-1 flex items-center justify-between gap-3 border border-pink-500/10 bg-pink-500/5 max-w-full">
+                <div class="flex items-center gap-2 text-left min-w-0">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                    <span id="gameplayInviteBannerText" class="text-[9px] text-stone-300 font-extrabold uppercase tracking-widest truncate">SAPPII IS ONLINE</span>
+                </div>
+                <button onclick="sendRealtimeGameInvite()" class="px-3.5 py-1.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[8px] rounded-full tracking-widest uppercase hover:brightness-110 active:scale-95 transition-all shrink-0 flex items-center justify-center gap-1 cursor-pointer shadow">
+                    <i data-lucide="send" class="w-3 h-3 text-white"></i> INVITE
+                </button>
+            </div>
+
+            <!-- ================= MOVIE SCREEN BOARD GAME ================= -->
+            <div id="movieArena" class="hidden space-y-4">
+                
+                <!-- Lobby choices trigger panel for Movie Guessing -->
+                <div id="boxMovieSetup" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
+                        MOVIE GUESSING ROUND
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider">CHOOSE PLAYER COUNT TO ACTIVATE THE LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startMovieGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startMovieGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Game Setter phase visual wrapper -->
+                <div id="boxMovieSetter" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-4">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5">
+                        <div>
+                            <h3 class="text-xs font-black tracking-widest text-[#FF7694] uppercase">CHOOSE THE CINEMA</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] bg-[var(--primary-color)]/20 text-[var(--primary-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">SETTER</span>
+                            <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>
+                                QUIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 space-y-3">
+                        <input type="text" id="movieDraftInput" placeholder="WRITE TAMIL MOVIE ..." class="w-full bg-transparent outline-none border-0 text-center text-sm font-black text-white uppercase tracking-wider placeholder-stone-600" oninput="onDraftMovieUpdate()" list="presetDatalist">
+                        <datalist id="presetDatalist"></datalist>
+
+                        <div class="pt-2 border-t border-white/5 text-center">
+                            <span class="text-[8px] text-stone-500 font-extrabold uppercase tracking-widest block mb-0.5">TRANSLITERATED REAL-TIME:</span>
+                            <span id="translationPreviewText" class="text-sm font-black text-[var(--accent-color)] uppercase tracking-wider">TYPE IN ENGLISH</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <button onclick="suggestRandomMovie()" class="w-full sm:w-auto px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl flex items-center justify-center gap-1.5 uppercase transition-all">
+                            <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>RANDOM
+                        </button>
+                        <input type="text" id="secretMovieClueInput" placeholder="OPTIONAL CLUE (E.G. HERO NAME)" class="w-full flex-1 bg-black/30 border border-white/5 rounded-xl px-4 py-3.5 text-xs text-white placeholder-stone-600 outline-none uppercase font-bold tracking-wider">
+                        <button onclick="startMovieGuessing()" class="w-full sm:w-auto px-5 py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl uppercase tracking-widest shadow-xl flex items-center justify-center gap-1.5 hover:brightness-110">
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>START
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Setter waiting visual placeholder -->
+                <div id="boxMovieWaitingSetter" class="hidden glass-card rounded-2xl p-8 text-center space-y-4">
+                    <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto animate-bounce">
+                        <i data-lucide="loader" class="w-6 h-6 text-[var(--accent-color)] animate-spin"></i>
+                    </div>
+                    <p id="movieWaitingSetterMessage" class="text-xs text-stone-400 uppercase tracking-widest font-black">PARTNER RUNNING DECISION MATRIX...</p>
+                    <div class="pt-2 border-t border-white/5 flex justify-center">
+                        <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Movie Guessing Active layout view -->
+                <div id="boxMovieGuesser" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-5">
+                    <div class="flex justify-between items-center pb-2 border-b border-white/5">
+                        <h3 class="text-xs font-black tracking-widest text-[var(--accent-color)] uppercase">GUESS THE CINEMA</h3>
+                        <div class="flex items-center gap-2">
+                            <span id="movieGuesserTurnBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono">GUESSING</span>
+                            <button onclick="confirmResetMovie()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>
+                                QUIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Syllable letter panels containing gaps -->
+                    <div id="movieLetterPlaceholder" class="flex flex-wrap justify-center gap-2 items-center text-center py-2 min-h-[44px]"></div>
+
+                    <div class="flex justify-center">
+                        <span id="movieCharCounter" class="text-[9px] bg-white/5 border border-white/5 text-stone-400 font-extrabold px-3 py-1 rounded font-mono">0 LETTERS</span>
+                    </div>
+
+                    <!-- clue indicator panel -->
+                    <div id="movieClueBoard" class="hidden p-3.5 bg-white/5 border border-white/5 rounded-xl flex items-center gap-2">
+                        <span class="text-xs font-black text-[var(--primary-color)] uppercase font-display shrink-0">HINT:</span>
+                        <p id="movieClueLabel" class="text-xs text-stone-300 font-bold uppercase tracking-wider"></p>
+                    </div>
+
+                    <!-- active keyboard keys for guessing user -->
+                    <div id="guesserFormsRow" class="hidden space-y-3">
+                        <input type="text" id="movieGuesserAnswerInput" placeholder="TYPE YOUR ANSWER IN TAMILISH / ENGLISH..." class="w-full bg-black/40 border border-white/5 focus:border-[var(--primary-color)] rounded-xl px-4 py-3.5 text-center text-sm font-extrabold text-white placeholder-stone-600 outline-none uppercase tracking-widest transition-all">
+                        <div class="flex gap-2">
+                            <button onclick="submitGuesserAnswer()" class="flex-1 py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-xs rounded-xl tracking-widest uppercase shadow-lg flex items-center justify-center gap-1">
+                                <i data-lucide="check-square" class="w-4 h-4"></i>SUBMIT ANSWER
+                            </button>
+                            <button onclick="giveUpMovieRound()" class="px-5 py-3.5 bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white rounded-xl font-bold text-xs border border-white/10 uppercase font-mono">
+                                GIVE UP
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- host monitoring controls indicators -->
+                    <div id="movieSettersFeedbackRow" class="hidden pt-3 border-t border-white/5 space-y-4 text-center">
+                        <div class="text-xs text-stone-400 font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                            <span>SECRET ANSWER:</span>
+                            <span id="movieSecretAnswerText" class="text-[var(--primary-color)] font-black text-sm">NOT SET</span>
+                        </div>
+                        <div class="flex gap-2 flex-col sm:flex-row justify-center">
+                            <button onclick="getHintFromGemini()" id="geminiHintBtn" class="px-4 py-2.5 bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/25 text-[var(--accent-color)] border border-[var(--accent-color)]/20 hover:border-[var(--accent-color)]/50 rounded-xl font-black text-[10px] tracking-widest uppercase flex items-center justify-center gap-1.5 transition-all">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-pulse"></i>ASK GEMINI ROBOT CLUE
+                            </button>
+                            <button onclick="movieAwardManualPoint()" class="px-4 py-2.5 bg-white/5 hover:bg-white/10 text-stone-400 hover:text-white border border-white/10 rounded-xl font-black text-[10px] tracking-widest uppercase transition-all">
+                                AWARD PARTNER POINT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= WORD SPEED RACE GAME ================= -->
+            <div id="wordArena" class="hidden space-y-4">
+                
+                <!-- Lobby choices trigger panel for Word speed race -->
+                <div id="boxWordLobbyChoices" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
+                        WORD SPEED RACE
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider">CHOOSE PLAYER COUNT TO ACTIVATE THE LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startWordGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startWordGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- choose setup criteria visual boards -->
+                <div id="boxWordSetup" class="glass-card rounded-2xl p-6 shadow-2xl space-y-4 text-center">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5 text-left">
+                        <div>
+                            <h3 class="text-xs font-black tracking-widest text-[#FF7694] uppercase flex items-center gap-1">
+                                <i data-lucide="zap" class="w-4 h-4 text-[var(--accent-color)]"></i>WORD RACE SETUP
+                            </h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span id="wordRoundStageBadge" class="text-[9px] bg-[var(--accent-color)]/20 text-[var(--accent-color)] px-2 py-0.5 rounded font-black tracking-wider uppercase">LOCKED</span>
+                            <button onclick="confirmResetWord()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2 py-0.5 rounded-lg uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>QUIT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- lock letter selector inputs panel -->
+                    <div id="wordLockForm" class="space-y-4">
+                        <div class="p-5 bg-black/40 border border-white/5 rounded-xl inline-block">
+                            <span class="text-[9px] text-stone-500 font-extrabold uppercase tracking-widest block mb-2">LOCK IN AN ALPHABET (A-Z)</span>
+                            <input type="text" id="wordSetupLockInput" maxlength="1" placeholder="?" class="w-16 h-16 text-center text-4xl bg-white/5 border border-white/10 focus:border-[var(--primary-color)] text-white font-black rounded-2xl outline-none uppercase transition-all">
+                        </div>
+                        <button onclick="sumbitWordSetupLetter()" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-xs rounded-xl tracking-widest uppercase shadow-lg flex items-center justify-center gap-1 cursor-pointer">
+                            <i data-lucide="lock" class="w-4 h-4"></i>LOCK IN SELECTION
+                        </button>
+                    </div>
+
+                    <!-- letter loading overlay waiting widget -->
+                    <div id="wordWaitingLock" class="hidden p-6 space-y-3">
+                        <div class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto animate-bounce">
+                            <i data-lucide="help-circle" class="w-5 h-5 text-stone-500"></i>
+                        </div>
+                        <p class="text-xs text-stone-400 font-black uppercase tracking-widest">WAITING FOR COMPETITOR RESPONSE</p>
+                        <p class="text-[10px] text-stone-500 font-bold uppercase tracking-wider">YOUR SUBMISSION: <span id="wordSetupLockDisplay" class="text-[var(--accent-color)] font-mono font-black text-lg ml-0.5">A</span></p>
+                    </div>
+
+                    <!-- decision directions layout matrix -->
+                    <div id="wordSequenceSelection" class="hidden space-y-3">
+                        <span class="text-[10px] bg-green-500/10 text-[var(--accent-color)] border border-green-500/20 px-3 py-1 rounded font-black block uppercase tracking-wider">BOTH SELECTS DONE! CONFIGURE RACE SELECTION</span>
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <button onclick="setWordRaceArrangement('forward')" class="p-4 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center">
+                                <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider">FORWARD ALIGN</span>
+                                <span id="wordDirLabelA" class="text-xl font-black text-[var(--accent-color)] uppercase tracking-normal">A → B</span>
+                            </button>
+                            <button onclick="setWordRaceArrangement('reverse')" class="p-4 bg-gradient-to-br from-white/5 to-white/10 hover:from-[var(--primary-color)]/25 hover:to-[var(--secondary-color)]/25 border border-white/5 text-center rounded-xl space-y-1 transition-all flex flex-col items-center">
+                                <span class="text-[8px] text-stone-500 font-black uppercase tracking-wider">REVERSE ALIGN</span>
+                                <span id="wordDirLabelB" class="text-xl font-black text-[var(--primary-color)] uppercase tracking-normal">B → A</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Word Racing Game Board -->
+                <div id="boxWordActiveRace" class="hidden glass-card rounded-2xl p-6 border-2 border-[var(--accent-color)] shadow-2xl space-y-4">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5">
+                        <h3 class="text-xs font-black tracking-widest text-[var(--accent-color)] uppercase flex items-center gap-1">
+                            <i data-lucide="zap" class="w-4 h-4 text-[var(--accent-color)] animate-bounce"></i>FAST DICTIONARY SPELLING RACE
+                        </h3>
+                        <button onclick="confirmResetWord()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
+                        </button>
+                    </div>
+
+                    <div class="py-4 bg-black/40 rounded-xl border border-white/5 flex justify-center items-center gap-4 text-center">
+                        <div>
+                            <span class="text-[8px] text-stone-500 block uppercase tracking-widest font-mono">STARTS WITH</span>
+                            <span id="wordStartLetterLabel" class="text-3xl font-black text-[var(--accent-color)] tracking-normal">A</span>
+                        </div>
+                        <span class="text-stone-600 font-sans tracking-tight text-lg">---</span>
+                        <div>
+                            <span class="text-[8px] text-stone-500 block uppercase tracking-widest font-mono">ENDS WITH</span>
+                            <span id="wordEndLetterLabel" class="text-3xl font-black text-[var(--primary-color)] tracking-normal">Z</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <input type="text" id="wordSpellInput" placeholder="WRITE THE FASTEST PERFECT WORD..." class="w-full bg-black/45 border border-white/5 focus:border-[var(--accent-color)] text-white text-center text-sm font-extrabold outline-none px-4 py-3.5 rounded-xl uppercase tracking-widest focus:bg-black/70 transition-all">
+                        
+                        <div class="flex gap-2">
+                            <button onclick="submitWordRaceAnswer()" class="flex-1 py-3.5 bg-gradient-to-r from-[var(--accent-color)] to-[#22c55e] text-black font-black text-xs rounded-xl tracking-widest uppercase transition-all shadow-lg flex items-center justify-center gap-1 cursor-pointer hover:scale-101">
+                                <i data-lucide="bolt" class="w-4 h-4 fill-current"></i>SUBMIT RACE WATERFALL
+                            </button>
+                            <button onclick="skipWordRaceRound()" class="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-stone-400 hover:text-white font-bold text-xs rounded-xl uppercase transition-all">
+                                SKIP
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= SPADES CARD MULTIPLAYER GAME ================= -->
+            <div id="spadesArena" class="hidden space-y-4">
+                
+                <!-- Lobby choices trigger panel -->
+                <div id="boxSpadesSetup" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] tracking-widest uppercase font-display">
+                        CARD GAME
+                    </h2>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startMultiplayerSpades(2)" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-[var(--glow-color)] flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startMultiplayerSpades(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-[var(--accent-color)] text-[var(--accent-color)] font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Finished state podium summary -->
+                <div id="boxSpadesFinished" class="hidden glass-card rounded-2xl p-8 text-center space-y-5 animate-popIn">
+                    <div class="w-14 h-14 bg-[var(--accent-color)]/10 text-[var(--accent-color)] rounded-full flex items-center justify-center mx-auto">
+                        <i data-lucide="trophy" class="w-7 h-7"></i>
+                    </div>
+                    <h2 class="text-lg font-black text-white uppercase tracking-widest font-display">CARD GAME CHAMPION!</h2>
+                    <p id="spadesWinnersRank" class="text-sm font-black text-[var(--accent-color)] tracking-wider">🏆 WINNER DETECTED</p>
+
+                    <div id="spadesFinishedSummaryGrid" class="grid grid-cols-2 gap-4 max-w-xs mx-auto py-2"></div>
+
+                    <button onclick="confirmResetSpades()" class="w-full py-3.5 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white font-black text-xs rounded-xl tracking-widest uppercase cursor-pointer">
+                        RESET CARDS BOARD
+                    </button>
+                </div>
+
+                <!-- Shuffling state view -->
+                <div id="boxSpadesShuffling" class="hidden glass-card rounded-2xl p-6 text-center space-y-6 animate-popIn border border-dashed border-amber-500/20 max-w-sm mx-auto">
+                    <div class="relative w-24 h-24 mx-auto flex items-center justify-center">
+                        <div class="absolute inset-0 rounded-full border border-amber-400/30 animate-spin" style="animation-duration: 4s;"></div>
+                        <div class="absolute inset-2 rounded-full border border-dashed border-rose-500/20 animate-spin" style="animation-duration: 2s; animation-direction: reverse;"></div>
+                        
+                        <div class="relative w-12 h-16 bg-gradient-to-br from-amber-500 to-rose-600 rounded-xl shadow-2xl flex items-center justify-center transform -rotate-6 animate-pulse">
+                            <i data-lucide="shuffle" class="w-5 h-5 text-white animate-bounce"></i>
+                            <div class="absolute -right-2 top-1 w-12 h-16 bg-neutral-900 border border-white/10 rounded-xl shadow-lg transform rotate-12 -z-10 flex items-center justify-center">
+                                <span class="text-[10px] text-rose-500">♠️</span>
+                            </div>
+                            <div class="absolute -left-2 top-2 w-12 h-16 bg-neutral-900 border border-white/10 rounded-xl shadow-lg transform -rotate-12 -z-20 flex items-center justify-center">
+                                <span class="text-[10px] text-amber-500">♥️</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <h2 class="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-rose-400 to-amber-300 tracking-widest uppercase font-display">
+                            HUMAN SHUFFLE ENGINE
+                        </h2>
+                        <p class="text-[9px] text-stone-400 font-extrabold uppercase tracking-widest font-mono">
+                            Riffling, overhanding & stripping the cards
+                        </p>
+                    </div>
+
+                    <!-- Step checklist mimicking physical human feel -->
+                    <div class="bg-black/60 border border-white/5 rounded-xl p-3.5 text-left font-mono text-[8px] leading-relaxed space-y-2.5 text-stone-300">
+                        <div id="shuffleStep1" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep1Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">1. Human Cut & Half Split...</span>
+                        </div>
+                        <div id="shuffleStep2" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep2Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">2. Thumbs riffle-merge cards...</span>
+                        </div>
+                        <div id="shuffleStep3" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep3Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">3. Overhand clumps strip-mixing...</span>
+                        </div>
+                        <div id="shuffleStep4" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep4Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">4. Sift & Riffle interlace round #2...</span>
+                        </div>
+                        <div id="shuffleStep5" class="flex items-center gap-2 text-stone-600 transition-colors duration-300">
+                            <i id="shuffleStep5Icon" data-lucide="circle" class="w-3.5 h-3.5"></i>
+                            <span class="tracking-wide uppercase">5. Pure randomized dealer deal...</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between items-center text-[9px] font-bold font-mono tracking-wider text-amber-400/80">
+                            <span>SHUFFLING CARDS Thoroughly...</span>
+                            <span id="shufflePercentText">0%</span>
+                        </div>
+                        <div class="w-full bg-stone-900 h-1.5 rounded-full overflow-hidden border border-white/5">
+                            <div id="shuffleProgressBar" class="bg-gradient-to-r from-amber-500 via-rose-500 to-amber-400 h-full w-0 transition-all duration-250"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active trick taking gaming table arena elements -->
+                <div id="boxSpadesPlayBoard" class="hidden glass-card rounded-2xl p-4 space-y-4">
+                    
+                    <!-- Shared Action Controls bar (available to everyone) -->
+                    <div class="flex justify-between items-center gap-2 px-1 pb-1">
+                        <button onclick="confirmResetSpades()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>
+                            QUIT MATCH
+                        </button>
+                        
+                        <!-- Immu Spy Eye Controller (visible only to Immu) -->
+                        <div id="immuCheatControlWrapper" class="hidden">
+                            <button onclick="toggleImmuCheatMode()" id="immuCheatToggleBtn" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/25 hover:border-rose-500 text-[9px] text-[#FF7694] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                                <i data-lucide="eye-off" class="w-3.5 h-3.5 text-[#FF7694]"></i>
+                                SNEAK EYE: OFF
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Scoring status panel grid -->
+                    <div id="spadesPlayerStatsRow" class="flex flex-wrap gap-2.5 justify-center select-none text-center"></div>
+
+                    <!-- Table board area displaying trick elements -->
+                    <div class="py-6 bg-gradient-to-b from-neutral-900/90 to-black border border-white/10 relative flex flex-col items-center justify-center min-h-[160px] shadow-inner rounded-2xl overflow-hidden space-y-4 group">
+                        <!-- Holographic Circular Deck Felt Grid Interface -->
+                        <div class="absolute w-36 h-36 rounded-full border border-dashed border-white/5 group-hover:border-white/10 group-hover:scale-105 transition-all duration-700 pointer-events-none flex items-center justify-center">
+                            <div class="w-24 h-24 rounded-full border border-double border-white/5 pointer-events-none"></div>
+                        </div>
+                        <div id="spadesTrickDischargedDeck" class="flex justify-center items-center gap-5 relative z-10"></div>
+                        <span id="spadesDryBoardPlaceholder" class="hidden text-[10px] text-stone-500 font-extrabold tracking-widest uppercase relative z-10">
+                            TABLE IS EMPTY -- PLAY ANY CARD
+                        </span>
+                        <span id="spadesActiveLedSuitIcon" class="hidden text-[9px] bg-white/10 border border-white/10 text-[var(--accent-color)] px-3 py-1 rounded-full uppercase tracking-wider font-black relative z-10 shadow-lg glow-accent"></span>
+                    </div>
+
+                    <!-- Directives and indicators guides on current turn -->
+                    <div class="text-center font-display select-none space-y-2">
+                        <span id="spadesTurnDirectionsText" class="text-[11px] font-black tracking-wide uppercase animate-pulse">MATCH LEAD SUIT IF YOU HAVE IT</span>
+                        <div id="vettuKuduBtnContainer" class="hidden flex justify-center pb-1">
+                            <button onclick="concedeSpadesVettu()" class="flex items-center gap-1.5 bg-rose-500/15 border border-rose-500/30 hover:bg-rose-500/25 text-rose-400 font-extrabold text-[9.5px] px-3.5 py-2 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-lg">
+                                <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-rose-400 animate-pulse"></i>
+                                ⚔️ VETTU KUDU (GIVE CUT)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Deck visual wrapper visual columns scroll bar -->
+                    <div class="space-y-1.5 select-none text-left">
+                        <span class="text-[9px] text-stone-500 font-extrabold tracking-widest block uppercase font-mono pl-1">YOUR HAND PALETTE</span>
+                        <div id="spadesPlayerDeckHand" class="flex gap-1.5 overflow-x-auto pb-3 pt-1 scrollbar-thin"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= GUESS THE CODE CHALLENGE ================= -->
+            <div id="codeArena" class="hidden space-y-4">
+                
+                <!-- Lobby Selection Section -->
+                <div id="boxCodeSetup" class="glass-card rounded-2xl p-6 text-center space-y-4">
+                    <h2 class="text-base font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400 tracking-widest uppercase font-display select-none">
+                        GUESS THE CODE CHALLENGE
+                    </h2>
+                    <p class="text-[9px] text-stone-500 font-extrabold uppercase tracking-wider select-none">CHOOSE PLAYER COUNT FOR THE MATCH LOBBY</p>
+
+                    <div class="flex gap-3 max-w-xs mx-auto">
+                        <button onclick="startCodeGameSetup(2)" class="w-full py-3.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg shadow-violet-500/20 flex items-center justify-center gap-1 hover:brightness-110 cursor-pointer active:scale-95 transition-all">
+                            <i data-lucide="users" class="w-3.5 h-3.5"></i>2 PLAYERS
+                        </button>
+                        <button onclick="startCodeGameSetup(3)" class="w-full py-3.5 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-violet-400 text-violet-400 font-black text-[10px] rounded-xl tracking-widest uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-95">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 animate-pulse"></i>3 PLAYERS
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Lock Setup View -->
+                <div id="boxCodeLock" class="hidden glass-card rounded-2xl p-6 shadow-2xl space-y-4">
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5">
+                        <h3 class="text-xs font-black tracking-widest text-violet-400 uppercase flex items-center gap-1">
+                            <i data-lucide="lock" class="w-4 h-4"></i>SET SECRET CODE
+                        </h3>
+                        <button onclick="confirmResetCode()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-2.5 py-1 rounded-xl uppercase tracking-wider transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3 h-3 text-rose-400"></i>QUIT
+                        </button>
+                    </div>
+
+                    <div class="p-4 bg-black/40 rounded-xl border border-white/5 text-center space-y-3">
+                        <span class="text-[8.5px] text-stone-500 font-black tracking-widest uppercase block">ENTER YOUR 4-DIGIT UNIQUE CODE (0-9)</span>
+                        <div class="flex justify-center gap-1">
+                            <input type="password" maxlength="4" id="codeLockInputField" placeholder="••••" class="w-36 bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-center text-xl font-bold font-mono tracking-widest text-[var(--accent-color)] outline-none focus:border-violet-500 transition-all uppercase">
+                        </div>
+                        <button onclick="submitSecretCodeLock()" class="w-full py-3 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-[10px] rounded-xl tracking-widest uppercase shadow-lg hover:brightness-110 active:scale-95 transition-all cursor-pointer">
+                            LOCK SECRET CODE
+                        </button>
+                    </div>
+
+                    <!-- Lock progress status list -->
+                    <div class="bg-black/20 border border-white/5 rounded-xl p-3.5 space-y-2 text-xs">
+                        <span class="text-[8.5px] text-stone-500 font-extrabold tracking-widest block uppercase font-mono pl-0.5">READY STATES</span>
+                        <div class="grid grid-cols-3 gap-2 text-center" id="codeLockStatesGrid">
+                            <!-- Populated dynamically: IMMU [LOCKED]/[WAITING], etc -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Game view -->
+                <div id="boxCodeActivePlay" class="hidden space-y-4">
+                    <!-- Head Control -->
+                    <div class="flex justify-between items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-violet-400 animate-ping"></span>
+                            <span class="text-[10px] text-violet-300 font-black tracking-widest uppercase font-mono" id="codeGameplayTurnBadge">PLAYER TURN</span>
+                        </div>
+                        <button onclick="confirmResetCode()" class="flex items-center gap-1.5 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 font-extrabold text-[9px] px-3 py-1.5 rounded-xl uppercase tracking-widest transition-all hover:scale-105 duration-200 cursor-pointer shadow-md">
+                            <i data-lucide="flag" class="w-3.5 h-3.5 text-rose-400"></i>QUIT MATCH
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 animate-popIn">
+                        <!-- Play action pane -->
+                        <div class="md:col-span-5 glass-card rounded-2xl p-5 space-y-4">
+                            <div class="pb-2 border-b border-white/5 flex justify-between items-center">
+                                <h3 class="text-xs font-black tracking-widest text-[#FF7694] uppercase">LAUNCH PROBE</h3>
+                                <button onclick="toggleCheatSecretEye()" id="cheatSecretEyeBtn" class="text-[8px] text-amber-500/80 hover:text-amber-400 uppercase font-black tracking-widest bg-amber-500/10 border border-amber-500/20 rounded px-2 py-0.5">SNEAK CODE</button>
+                            </div>
+
+                            <div class="space-y-3.5">
+                                <div class="space-y-1.5">
+                                    <label class="text-[8px] text-stone-500 font-extrabold uppercase tracking-wider block pl-0.5">SELECT PLANET TARGET</label>
+                                    <select id="codeTargetSelect" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-[10px] text-white font-extrabold outline-none uppercase font-mono">
+                                        <!-- targets populated here on turn/load -->
+                                    </select>
+                                </div>
+
+                                <div class="space-y-1.5">
+                                    <label class="text-[8px] text-stone-500 font-extrabold uppercase tracking-wider block pl-0.5">ENTER YOUR 4-DIGIT SPECULATION</label>
+                                    <input type="text" maxlength="4" placeholder="1234" id="codeGuessInputField" class="w-full bg-black/55 border border-white/10 text-center text-xl font-bold tracking-widest font-mono text-[var(--accent-color)] rounded-xl py-3 outline-none focus:border-violet-500 uppercase">
+                                </div>
+
+                                <button onclick="submitCodeGuessAction()" id="btnCodeSubmitGuess" class="w-full py-3.5 bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white font-black text-xs rounded-xl tracking-widest uppercase flex items-center justify-center gap-1.5 cursor-pointer shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                    <i data-lucide="satellite" class="w-4 h-4 text-white"></i>PROBE CODEWAY
+                                </button>
+
+                                <button onclick="askGeminiCodeHint()" id="btnGeminiCodeHint" class="w-full py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-violet-300 font-black text-[10px] rounded-xl tracking-widest uppercase flex items-center justify-center gap-1.5 cursor-pointer transition-all">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-violet-400 animate-pulse"></i>ASK GEMINI ROBOT CLUE
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Decoded grid matrix and logs -->
+                        <div class="md:col-span-7 glass-card rounded-2xl p-5 flex flex-col h-[340px]">
+                            <span class="text-[8.5px] text-stone-500 font-black tracking-widest block uppercase font-mono pb-2 border-b border-white/5 pl-0.5 mb-2 shrink-0">DEDUCTION MATRIX LOGS</span>
+                            <div class="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin" id="codeDeductionLogsScroller">
+                                <!-- list of guess rows -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= CO-OP MEDIA LOUNGE ARENA ================= -->
+            <div id="songsArena" class="hidden space-y-4">
+                <div class="glass-card rounded-2xl p-6 shadow-2xl space-y-5 text-center relative overflow-hidden">
+                    <!-- Ambient Glow Line -->
+                    <div class="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 opacity-80"></div>
+                    
+                    <div class="flex justify-between items-center pb-2.5 border-b border-white/5 text-left">
+                        <div>
+                            <h3 id="mediaArenaTitleHeader" class="text-xs font-black tracking-widest text-rose-400 uppercase flex items-center gap-1.5 animate-pulse">
+                                <i data-lucide="music" class="w-4 h-4 text-rose-400"></i>CO-OP MEDIA LOUNGE
+                            </h3>
+                        </div>
+                        <span id="musicPlaybackStatusBadge" onclick="forceManualSync()" class="text-[9px] bg-rose-500/20 text-rose-400 px-2.5 py-1 rounded font-black tracking-wider uppercase font-mono cursor-pointer hover:bg-rose-500/35 transition-all" title="Click to manually force precise real-time synchronization">LIVE SYNCED</span>
+                    </div>
+
+                    <!-- Media mode toggle selection segment -->
+                    <div class="flex bg-black/50 p-1 rounded-xl border border-white/5 max-w-[280px] mx-auto select-none">
+                        <button onclick="setMediaLoungeMode('audio')" id="mediaModeBtn_audio" class="flex-1 py-1.5 px-2.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer bg-gradient-to-r from-pink-500 to-rose-600 text-white shadow-md">
+                            <i data-lucide="music" class="w-3.5 h-3.5"></i> AUDIO
+                        </button>
+                        <button onclick="setMediaLoungeMode('video')" id="mediaModeBtn_video" class="flex-1 py-1.5 px-2.5 rounded-lg text-[9px] font-black tracking-widest uppercase transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer text-stone-400 hover:text-white">
+                            <i data-lucide="video" class="w-3.5 h-3.5"></i> CINEMA
+                        </button>
+                    </div>
+
+                    <!-- Audio Media Lounge View -->
+                    <div id="mediaLoungeAudioWrapper" class="space-y-4">
+                        <!-- Vinyl/Gramophone Record Visualized Element -->
+                        <div class="flex flex-col items-center justify-center py-4 relative">
+                            <div id="musicVinylDisc" class="w-32 h-32 rounded-full bg-gradient-to-br from-neutral-950 via-stone-900 to-black border-[7px] border-neutral-800 shadow-[0_12px_35px_rgba(0,0,0,0.9)] relative flex items-center justify-center transition-transform duration-1000 ease-linear overflow-hidden">
+                                <!-- Subtle glowing outline -->
+                                <div class="absolute inset-0.5 rounded-full border border-white/5 pointer-events-none"></div>
+                                <!-- Grooves -->
+                                <div class="absolute inset-2.5 rounded-full border border-stone-800/60"></div>
+                                <div class="absolute inset-6 rounded-full border border-stone-800/40"></div>
+                                <div class="absolute inset-10 rounded-full border border-stone-800/20"></div>
+                                <!-- Center Video Label -->
+                                <div class="w-14 h-14 rounded-full bg-black/85 overflow-hidden relative flex items-center justify-center border-2 border-stone-700 shadow-inner z-10">
+                                    <video id="vinylCenterVideoPlayer" class="w-full h-full object-cover rounded-full" loop muted playsinline autoplay src="https://assets.mixkit.co/videos/preview/mixkit-starry-night-sky-background-blur-924-large.mp4"></video>
+                                    <!-- A small center spindle pin hole -->
+                                    <div class="absolute w-2.5 h-2.5 rounded-full bg-[#0a0512] border border-white/20 shadow-md pointer-events-none z-20"></div>
+                                </div>
+                            </div>
+
+                            <!-- Stylized Floating Tone Arm -->
+                            <div id="musicVinylArm" class="absolute top-1 right-1/3 w-10 h-16 origin-top pointer-events-none transition-transform duration-500 transform rotate-[-15deg]">
+                                <svg class="w-full h-full text-stone-400 fill-current" viewBox="0 0 24 48">
+                                    <path d="M12 4 L14 4 L14 28 L10 32 L10 40 L6 42 L6 44 L14 42" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <circle cx="12" cy="4" r="3" class="text-stone-500"/>
+                                </svg>
+                            </div>
+                            
+                            <!-- Soundwave animation bars -->
+                            <div class="flex gap-1 h-6 items-end mt-4 animate-fadeIn" id="audioEqualizerBars">
+                                <span class="w-1 bg-rose-500 rounded-full h-1 transition-all duration-150"></span>
+                                <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 20ms"></span>
+                                <span class="w-1 bg-rose-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 40ms"></span>
+                                <span class="w-1 bg-amber-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 60ms"></span>
+                                <span class="w-1 bg-emerald-400 rounded-full h-1 transition-all duration-150" style="transition-delay: 80ms"></span>
+                                <span class="w-1 bg-pink-500 rounded-full h-1 transition-all duration-150" style="transition-delay: 100ms"></span>
+                            </div>
+
+                            <!-- Clickable Video Uploader Button for Your Name video clip -->
+                            <div class="mt-4 text-center">
+                                <button onclick="document.getElementById('vinylCenterVideoFileInput').click()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ec4899]/10 hover:bg-[#ec4899]/20 border border-[#ec4899]/25 hover:border-[#ec4899]/40 rounded-xl text-[9px] font-bold uppercase tracking-widest text-[#f472b6] transition-all cursor-pointer shadow-sm">
                                     <i data-lucide="video" class="w-3.5 h-3.5 text-pink-400 shrink-0"></i> LOAD "YOUR NAME" / CUSTOM CENTRE VIDEO
                                 </button>
                                 <input type="file" id="vinylCenterVideoFileInput" accept="video/*" class="hidden" onchange="handleVinylCenterVideoUpload(event)">
