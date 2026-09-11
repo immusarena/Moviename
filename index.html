@@ -10107,4 +10107,433 @@
 })();
 </script>
 </body>
+    <!-- ══════════════════════════════════════════════════════════════
+     PREMIUM CINEMA PLAYER  ·  drop-in upgrade
+     Paste this whole block just before </body> in index.html.
+     Nothing else needs editing — it rebuilds the cinema wrapper
+     around your existing #syncVideoPlayer element at runtime, so
+     Firebase sync, hlsInstance and every helper keep working.
+     ══════════════════════════════════════════════════════════ -->
+<style>
+.vp{position:relative;background:#000;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.06);}
+.vp:fullscreen{border-radius:0;border:none;display:flex;flex-direction:column;justify-content:center;}
+.vp-stage{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;}
+.vp:fullscreen .vp-stage{aspect-ratio:auto;flex:1;min-height:0;}
+.vp-stage video{width:100%;height:100%;object-fit:contain;background:#000;display:block;cursor:pointer;}
+
+.vp-veil{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(0,0,0,.2) 40%,rgba(0,0,0,.72) 100%);transition:opacity .25s;cursor:pointer;}
+.vp-veil.hide{opacity:0;pointer-events:none;}
+.vp-big{width:66px;height:66px;border-radius:50%;background:rgba(0,0,0,.35);backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:#fff;}
+.vp-big:hover{border-color:var(--primary-color);background:var(--glow-color);transform:scale(1.06);}
+
+.vp-top{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:12px 14px;background:linear-gradient(to bottom,rgba(0,0,0,.65),transparent);pointer-events:none;}
+.vp-title{min-width:0;font-size:10.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.vp-tag{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:4px 10px;border-radius:20px;font-size:8.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#d6d3d1;font-family:'JetBrains Mono',monospace;white-space:nowrap;flex-shrink:0;}
+.vp-tag .d{width:6px;height:6px;border-radius:50%;background:var(--primary-color);}
+.vp-tag.live .d{animation:vpblink 1.6s ease-in-out infinite;}
+@keyframes vpblink{50%{opacity:.2}}
+
+.vp-spin{position:absolute;z-index:3;width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.15);border-top-color:var(--primary-color);animation:vpspin .8s linear infinite;display:none;}
+.vp-spin.on{display:block}
+@keyframes vpspin{to{transform:rotate(360deg)}}
+
+.vp-flash{position:absolute;z-index:4;top:50%;left:50%;width:74px;height:74px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;color:#fff;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.8);}
+.vp-flash.go{animation:vppop .55s ease-out;}
+@keyframes vppop{0%{opacity:1;transform:translate(-50%,-50%) scale(.75)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4)}}
+
+.vp-deck{background:linear-gradient(to top,rgba(8,4,14,.97),rgba(8,4,14,.86));padding:10px 14px 12px;border-top:1px solid rgba(255,255,255,.06);}
+.vp:fullscreen .vp-deck{position:absolute;left:0;right:0;bottom:0;border:none;padding:22px 26px 18px;background:linear-gradient(to top,rgba(0,0,0,.92),rgba(0,0,0,.4) 70%,transparent);transition:opacity .25s,transform .25s;}
+.vp:fullscreen.idle .vp-deck,.vp:fullscreen.idle .vp-top{opacity:0;transform:translateY(10px);pointer-events:none;}
+.vp:fullscreen.idle{cursor:none;}
+
+.vp-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.vp-time{font-size:9.5px;font-weight:800;color:#a8a29e;font-family:'JetBrains Mono',monospace;width:48px;flex-shrink:0;}
+.vp-time.end{text-align:right;}
+.vp-bar{position:relative;flex:1;height:16px;cursor:pointer;touch-action:none;display:flex;align-items:center;}
+.vp-track{position:absolute;left:0;right:0;height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden;}
+.vp-buf{position:absolute;inset:0 auto 0 0;width:0;background:rgba(255,255,255,.22);}
+.vp-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));}
+.vp-knob{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;background:#fff;transform:translate(-50%,-50%) scale(.85);box-shadow:0 0 0 0 var(--glow-color);transition:transform .15s,box-shadow .15s;}
+.vp-bar:hover .vp-knob,.vp-bar.drag .vp-knob{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 0 5px var(--glow-color);}
+.vp-tip{position:absolute;bottom:20px;transform:translateX(-50%);background:#0d0718;border:1px solid rgba(255,255,255,.12);padding:3px 7px;border-radius:6px;font-size:9.5px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;opacity:0;pointer-events:none;transition:opacity .15s;white-space:nowrap;}
+.vp-bar:hover .vp-tip,.vp-bar.drag .vp-tip{opacity:1;}
+
+.vp-ctrl{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.vp-l,.vp-r{display:flex;align-items:center;gap:2px;}
+.vp-b{background:none;border:none;color:#a8a29e;cursor:pointer;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.vp-b:hover{color:#fff;background:rgba(255,255,255,.08);}
+.vp-b.main{width:36px;height:36px;color:#fff;}
+.vp-b[hidden]{display:none;}
+.vp-volwrap{display:flex;align-items:center;}
+.vp-vol{-webkit-appearance:none;appearance:none;width:0;opacity:0;height:3px;border-radius:3px;background:rgba(255,255,255,.2);cursor:pointer;transition:width .2s,opacity .2s;}
+.vp-volwrap:hover .vp-vol,.vp-vol:focus{width:66px;opacity:1;margin:0 6px;}
+.vp-vol::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:#fff;}
+.vp-vol::-moz-range-thumb{width:10px;height:10px;border:none;border-radius:50%;background:#fff;}
+
+.vp-menuwrap{position:relative;}
+.vp-pill{background:none;border:none;color:#a8a29e;font-size:9.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;padding:6px 9px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap;max-width:120px;}
+.vp-pill:hover{color:#fff;background:rgba(255,255,255,.08);}
+.vp-pill .v{color:#fff;overflow:hidden;text-overflow:ellipsis;}
+.vp-menu{position:absolute;bottom:40px;right:0;min-width:170px;max-height:230px;overflow-y:auto;background:rgba(13,7,24,.97);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:5px;display:none;flex-direction:column;z-index:40;box-shadow:0 16px 40px rgba(0,0,0,.7);}
+.vp-menu.open{display:flex;}
+.vp-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#a8a29e;background:none;border:none;cursor:pointer;text-align:left;width:100%;transition:all .15s;}
+.vp-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.vp-item.on{color:var(--primary-color);}
+.vp-item .ck{opacity:0;}
+.vp-item.on .ck{opacity:1;}
+.vp-note{padding:8px 10px;font-size:8.5px;line-height:1.55;color:#78716c;text-transform:uppercase;letter-spacing:.04em;font-weight:700;}
+
+@media (max-width:640px){
+  .vp-deck{padding:8px 10px 10px;}
+  .vp-time{width:42px;font-size:9px;}
+  .vp-pill{padding:6px 6px;max-width:78px;}
+  .vp-title{font-size:9.5px;}
+}
+</style>
+
+<script>
+/* ===== PREMIUM CINEMA PLAYER CONTROLLER =====
+   Play / pause / seek go through musicState, so both players stay in sync.
+   Volume, speed and fullscreen stay local. */
+(function () {
+  function boot() {
+    var wrap = document.getElementById('mediaLoungeVideoWrapper');
+    var V = document.getElementById('syncVideoPlayer');
+    if (!wrap || !V || document.getElementById('vpRoot')) return;
+
+    /* --- build the shell around the EXISTING video node --- */
+    var shell = document.createElement('div');
+    shell.className = 'vp';
+    shell.id = 'vpRoot';
+    shell.innerHTML =
+      '<div class="vp-stage" id="vpStage">' +
+        '<div class="vp-top">' +
+          '<div class="vp-title" id="vpTitle">NO CINEMA ACTIVE</div>' +
+          '<div class="vp-tag" id="vpTag"><span class="d"></span><span id="vpTagText">READY</span></div>' +
+        '</div>' +
+        '<div class="vp-spin" id="vpSpin"></div>' +
+        '<div class="vp-flash" id="vpFlash"></div>' +
+        '<div class="vp-veil" id="vpVeil"><button class="vp-big" id="vpBig" aria-label="Play">' +
+          '<i data-lucide="play" class="w-6 h-6 fill-current"></i></button></div>' +
+      '</div>' +
+      '<div class="vp-deck" id="vpDeck">' +
+        '<div class="vp-row">' +
+          '<span class="vp-time" id="vpCur">0:00</span>' +
+          '<div class="vp-bar" id="vpBar" role="slider" tabindex="0" aria-label="Seek">' +
+            '<div class="vp-track"><div class="vp-buf" id="vpBuf"></div><div class="vp-fill" id="vpFill"></div></div>' +
+            '<div class="vp-knob" id="vpKnob"></div><div class="vp-tip" id="vpTip">0:00</div>' +
+          '</div>' +
+          '<span class="vp-time end" id="vpEnd">0:00</span>' +
+        '</div>' +
+        '<div class="vp-ctrl">' +
+          '<div class="vp-l">' +
+            '<button class="vp-b" id="vpBack" title="Back 10s"><i data-lucide="rotate-ccw" class="w-4 h-4"></i></button>' +
+            '<button class="vp-b main" id="vpPlay" title="Play"><i data-lucide="play" id="vpPlayIcon" class="w-5 h-5 fill-current"></i></button>' +
+            '<button class="vp-b" id="vpFwd" title="Forward 10s"><i data-lucide="rotate-cw" class="w-4 h-4"></i></button>' +
+            '<div class="vp-volwrap">' +
+              '<button class="vp-b" id="vpMute" title="Mute"><i data-lucide="volume-2" id="vpVolIcon" class="w-4 h-4"></i></button>' +
+              '<input type="range" class="vp-vol" id="vpVol" min="0" max="1" step="0.01" value="0.8">' +
+            '</div>' +
+          '</div>' +
+          '<div class="vp-r">' +
+            '<div class="vp-menuwrap"><button class="vp-pill" id="vpSpeedPill"><span class="v" id="vpSpeedVal">1x</span></button><div class="vp-menu" id="vpSpeedMenu"></div></div>' +
+            '<div class="vp-menuwrap"><button class="vp-pill" id="vpAudioPill"><i data-lucide="volume-2" class="w-3 h-3"></i><span class="v" id="vpAudioVal">AUDIO</span></button><div class="vp-menu" id="vpAudioMenu"></div></div>' +
+            '<div class="vp-menuwrap"><button class="vp-pill" id="vpQualPill"><i data-lucide="monitor" class="w-3 h-3"></i><span class="v" id="vpQualVal">AUTO</span></button><div class="vp-menu" id="vpQualMenu"></div></div>' +
+            '<button class="vp-b" id="vpPip" title="Picture in picture" hidden><i data-lucide="picture-in-picture-2" class="w-4 h-4"></i></button>' +
+            '<button class="vp-b" id="vpFs" title="Fullscreen"><i data-lucide="maximize" class="w-4 h-4"></i></button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+
+    wrap.innerHTML = '';
+    wrap.className = 'hidden py-1';
+    wrap.appendChild(shell);
+    /* move the original node in — identity preserved, so every existing
+       reference (hls attachMedia, musicState listener, sync helpers) holds */
+    V.removeAttribute('onclick');
+    V.className = '';
+    V.setAttribute('playsinline', '');
+    V.setAttribute('webkit-playsinline', '');
+    document.getElementById('vpStage').insertBefore(V, document.getElementById('vpStage').firstChild);
+
+    var g = function (id) { return document.getElementById(id); };
+    var dragging = false;
+    function icons() { if (window.lucide) lucide.createIcons(); }
+    function fmt(s) {
+      if (!isFinite(s) || s < 0) s = 0;
+      s = Math.floor(s);
+      var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+      var p = function (n) { return n < 10 ? '0' + n : n; };
+      return h ? h + ':' + p(m) + ':' + p(x) : m + ':' + p(x);
+    }
+    function state() { return (typeof musicState !== 'undefined' && musicState) ? musicState : {}; }
+    function hlsRef() { return (typeof hlsInstance !== 'undefined') ? hlsInstance : null; }
+    function say(m) { if (typeof triggerLiveToast === 'function') triggerLiveToast(m); }
+
+    /* ---------- play / pause ---------- */
+    function toggle() {
+      if (!state().trackUrl) return say("PASTE A CINEMA LINK FIRST!");
+      if (typeof toggleMusicPlaybackSync === 'function') toggleMusicPlaybackSync();
+    }
+    function flash(playing) {
+      var f = g('vpFlash');
+      f.innerHTML = '<i data-lucide="' + (playing ? 'play' : 'pause') + '" class="w-6 h-6 fill-current"></i>';
+      icons();
+      f.classList.remove('go'); void f.offsetWidth; f.classList.add('go');
+    }
+    function setPlayIcon(p) {
+      g('vpPlayIcon').setAttribute('data-lucide', p ? 'pause' : 'play');
+      g('vpVeil').classList.toggle('hide', p);
+      g('vpTag').classList.toggle('live', p);
+      icons();
+    }
+    g('vpPlay').onclick = toggle;
+    g('vpBig').onclick = function (e) { e.stopPropagation(); toggle(); };
+    g('vpVeil').onclick = toggle;
+    V.addEventListener('click', function () { flash(V.paused); toggle(); });
+    V.addEventListener('dblclick', function () { g('vpFs').click(); });
+    V.addEventListener('play', function () { setPlayIcon(true); tag(); });
+    V.addEventListener('pause', function () { setPlayIcon(false); tag(); });
+    V.addEventListener('waiting', function () { g('vpSpin').classList.add('on'); });
+    V.addEventListener('playing', function () { g('vpSpin').classList.remove('on'); });
+    V.addEventListener('canplay', function () { g('vpSpin').classList.remove('on'); });
+
+    /* ---------- seeking: broadcast so both jump together ---------- */
+    function pushSeek(t) {
+      if (!isFinite(V.duration)) return;
+      t = Math.max(0, Math.min(V.duration, t));
+      V.currentTime = t;
+      if (typeof db !== 'undefined') {
+        db.ref('musicState').update({ seekTime: t, sentTime: Date.now(), triggeredBy: myName });
+      }
+    }
+    g('vpBack').onclick = function () { pushSeek(V.currentTime - 10); };
+    g('vpFwd').onclick = function () { pushSeek(V.currentTime + 10); };
+
+    var bar = g('vpBar');
+    function pct(e) {
+      var r = bar.getBoundingClientRect();
+      return Math.max(0, Math.min(1, (e.clientX - r.left) / r.width));
+    }
+    function paint() {
+      var d = V.duration, p = (isFinite(d) && d > 0) ? V.currentTime / d : 0;
+      g('vpFill').style.width = g('vpKnob').style.left = (p * 100) + '%';
+      if (V.buffered.length && isFinite(d) && d > 0) {
+        g('vpBuf').style.width = (V.buffered.end(V.buffered.length - 1) / d * 100) + '%';
+      }
+      g('vpCur').textContent = fmt(V.currentTime);
+    }
+    V.addEventListener('timeupdate', function () { if (!dragging) paint(); });
+    V.addEventListener('progress', paint);
+    V.addEventListener('loadedmetadata', function () {
+      g('vpEnd').textContent = fmt(V.duration);
+      paint(); tag(); buildAudio(); buildQual();
+    });
+    bar.addEventListener('pointerdown', function (e) {
+      if (!isFinite(V.duration)) return;
+      dragging = true; bar.classList.add('drag'); bar.setPointerCapture(e.pointerId);
+      var p = pct(e);
+      g('vpFill').style.width = g('vpKnob').style.left = (p * 100) + '%';
+      g('vpCur').textContent = fmt(p * V.duration);
+    });
+    bar.addEventListener('pointermove', function (e) {
+      if (!isFinite(V.duration)) return;
+      var p = pct(e);
+      g('vpTip').style.left = (p * 100) + '%';
+      g('vpTip').textContent = fmt(p * V.duration);
+      if (dragging) {
+        g('vpFill').style.width = g('vpKnob').style.left = (p * 100) + '%';
+        g('vpCur').textContent = fmt(p * V.duration);
+      }
+    });
+    bar.addEventListener('pointerup', function (e) {
+      if (!dragging) return;
+      dragging = false; bar.classList.remove('drag');
+      pushSeek(pct(e) * V.duration);
+      say("SEEK SYNCED WITH PARTNER!");
+    });
+    bar.addEventListener('pointercancel', function () { dragging = false; bar.classList.remove('drag'); });
+    bar.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { pushSeek(V.currentTime + 5); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { pushSeek(V.currentTime - 5); e.preventDefault(); }
+    });
+
+    /* ---------- volume (local only) ---------- */
+    var vol = g('vpVol');
+    vol.value = V.volume || 0.8;
+    function volIcon() {
+      var n = (V.muted || V.volume === 0) ? 'volume-x' : (V.volume < 0.5 ? 'volume-1' : 'volume-2');
+      g('vpVolIcon').setAttribute('data-lucide', n); icons();
+    }
+    vol.oninput = function () {
+      V.volume = parseFloat(vol.value);
+      V.muted = V.volume === 0;
+      var main = document.getElementById('musicPlaybackLocalVolume');
+      if (main && typeof onLocalVolumeChange === 'function') {
+        main.value = Math.round(V.volume * 100);
+        onLocalVolumeChange(main.value);
+      }
+      volIcon();
+    };
+    g('vpMute').onclick = function () {
+      V.muted = !V.muted;
+      vol.value = V.muted ? 0 : V.volume;
+      volIcon();
+    };
+    volIcon();
+
+    /* ---------- menus ---------- */
+    function closeAll(keep) {
+      ['vpSpeedMenu', 'vpAudioMenu', 'vpQualMenu'].forEach(function (id) {
+        if (id !== keep) g(id).classList.remove('open');
+      });
+    }
+    [['vpSpeedPill', 'vpSpeedMenu'], ['vpAudioPill', 'vpAudioMenu'], ['vpQualPill', 'vpQualMenu']].forEach(function (p) {
+      g(p[0]).onclick = function (e) { e.stopPropagation(); closeAll(p[1]); g(p[1]).classList.toggle('open'); };
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.vp-menuwrap')) closeAll();
+    });
+    function fill(id, items, active, pick, note) {
+      var m = g(id); m.innerHTML = '';
+      if (!items.length) { m.innerHTML = '<div class="vp-note">' + (note || 'NOT AVAILABLE') + '</div>'; return; }
+      items.forEach(function (it, i) {
+        var b = document.createElement('button');
+        b.className = 'vp-item' + (i === active ? ' on' : '');
+        b.innerHTML = '<span>' + it.label + '</span><span class="ck">✓</span>';
+        b.onclick = function (e) { e.stopPropagation(); pick(it); m.classList.remove('open'); };
+        m.appendChild(b);
+      });
+      if (note) {
+        var n = document.createElement('div');
+        n.className = 'vp-note'; n.textContent = note;
+        m.appendChild(n);
+      }
+    }
+
+    var SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 2];
+    function buildSpeed() {
+      fill('vpSpeedMenu', SPEEDS.map(function (s) { return { label: s + 'X', v: s }; }),
+        SPEEDS.indexOf(V.playbackRate),
+        function (it) { V.playbackRate = it.v; g('vpSpeedVal').textContent = it.v + 'x'; buildSpeed(); });
+    }
+
+    function buildAudio() {
+      var act = (state().selectedAudioTrackIndex !== undefined) ? state().selectedAudioTrackIndex : 0;
+      var H = hlsRef();
+      var pick = function (it) {
+        if (typeof selectVideoAudioTrack === 'function') selectVideoAudioTrack(it.i);
+        g('vpAudioVal').textContent = it.label;
+        setTimeout(buildAudio, 200);
+      };
+      if (H && H.audioTracks && H.audioTracks.length) {
+        var its = H.audioTracks.map(function (t, i) {
+          return { label: (t.name || t.lang || ('TRACK ' + (i + 1))).toUpperCase(), i: i };
+        });
+        fill('vpAudioMenu', its, act, pick);
+        g('vpAudioVal').textContent = (its[act] && its[act].label) || 'AUDIO';
+        return;
+      }
+      if (V.audioTracks && V.audioTracks.length > 1) {
+        var arr = [];
+        for (var i = 0; i < V.audioTracks.length; i++) {
+          arr.push({ label: (V.audioTracks[i].label || V.audioTracks[i].language || ('TRACK ' + (i + 1))).toUpperCase(), i: i });
+        }
+        fill('vpAudioMenu', arr, act, pick);
+        g('vpAudioVal').textContent = (arr[act] && arr[act].label) || 'AUDIO';
+        return;
+      }
+      g('vpAudioVal').textContent = 'AUDIO';
+      fill('vpAudioMenu', [], 0, function () {},
+        'ONE TRACK ONLY. BROWSERS CANNOT SWITCH MKV AUDIO — USE AN HLS (.M3U8) SOURCE FOR DUAL AUDIO.');
+    }
+
+    function buildQual() {
+      var H = hlsRef();
+      if (H && H.levels && H.levels.length > 1) {
+        var its = [{ label: 'AUTO', i: -1 }].concat(H.levels.map(function (l, i) {
+          return { label: (l.height ? l.height + 'P' : Math.round(l.bitrate / 1000) + 'K'), i: i };
+        }));
+        var act = H.autoLevelEnabled ? 0 : its.findIndex(function (x) { return x.i === H.currentLevel; });
+        fill('vpQualMenu', its, act < 0 ? 0 : act, function (it) {
+          H.currentLevel = it.i; g('vpQualVal').textContent = it.label; setTimeout(buildQual, 200);
+        });
+        if (H.autoLevelEnabled) {
+          var h = H.levels[H.currentLevel] && H.levels[H.currentLevel].height;
+          g('vpQualVal').textContent = h ? 'AUTO ' + h + 'P' : 'AUTO';
+        }
+        return;
+      }
+      g('vpQualVal').textContent = V.videoHeight ? V.videoHeight + 'P' : 'SOURCE';
+      fill('vpQualMenu', [], 0, function () {},
+        'SINGLE QUALITY FILE. LEVELS APPEAR ONLY FOR HLS STREAMS.');
+    }
+
+    function tag() {
+      var s = state(), b = [];
+      if (V.videoHeight) b.push(V.videoHeight + 'P');
+      if (hlsRef()) b.push('HLS');
+      b.push(V.paused ? 'PAUSED' : 'LIVE SYNC');
+      g('vpTagText').textContent = b.join(' · ');
+      g('vpTitle').textContent = s.trackTitle || 'NO CINEMA ACTIVE';
+    }
+
+    /* ---------- pip + fullscreen ---------- */
+    if (document.pictureInPictureEnabled) {
+      g('vpPip').hidden = false;
+      g('vpPip').onclick = function () {
+        if (document.pictureInPictureElement) document.exitPictureInPicture();
+        else V.requestPictureInPicture().catch(function () { say("PIP UNAVAILABLE!"); });
+      };
+    }
+    g('vpFs').onclick = function () {
+      if (document.fullscreenElement) { document.exitFullscreen(); return; }
+      if (shell.requestFullscreen) shell.requestFullscreen().catch(function () {});
+      else if (shell.webkitRequestFullscreen) shell.webkitRequestFullscreen();
+      else if (V.webkitEnterFullscreen) V.webkitEnterFullscreen();
+      else say("FULLSCREEN BLOCKED!");
+    };
+    document.addEventListener('fullscreenchange', function () {
+      g('vpFs').innerHTML = '<i data-lucide="' + (document.fullscreenElement ? 'minimize' : 'maximize') + '" class="w-4 h-4"></i>';
+      icons();
+    });
+    var idle;
+    function wake() {
+      shell.classList.remove('idle');
+      clearTimeout(idle);
+      idle = setTimeout(function () {
+        if (document.fullscreenElement && !V.paused) shell.classList.add('idle');
+      }, 2600);
+    }
+    shell.addEventListener('mousemove', wake);
+    shell.addEventListener('touchstart', wake, { passive: true });
+
+    /* ---------- keyboard, only while the cinema tab is open ---------- */
+    document.addEventListener('keydown', function (e) {
+      if (wrap.classList.contains('hidden')) return;
+      if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+      var k = e.key.toLowerCase();
+      if (k === ' ' || k === 'k') { e.preventDefault(); flash(V.paused); toggle(); }
+      else if (k === 'arrowright') pushSeek(V.currentTime + 10);
+      else if (k === 'arrowleft') pushSeek(V.currentTime - 10);
+      else if (k === 'm') g('vpMute').click();
+      else if (k === 'f') g('vpFs').click();
+      else if (k === 'p' && !g('vpPip').hidden) g('vpPip').click();
+    });
+
+    /* keep menus and title fresh when the shared state changes */
+    if (typeof db !== 'undefined') {
+      db.ref('musicState').on('value', function () {
+        setTimeout(function () { buildAudio(); buildQual(); tag(); }, 400);
+      });
+    }
+
+    buildSpeed(); setPlayIcon(!V.paused ? true : false); tag(); buildAudio(); buildQual(); icons();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
+</script>
+
 </html>
