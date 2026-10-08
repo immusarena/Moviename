@@ -3,3 +3,8 @@ npm-debug.log
 .git
 .gitignore
 *.md
+.claude
+.mcp.json
+skills-lock.json
+docker-compose.yml
+deploy.sh
